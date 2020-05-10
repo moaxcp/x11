@@ -4,7 +4,7 @@ import java.util.Objects;
 import lombok.NonNull;
 import lombok.Value;
 
-import static com.github.moaxcp.x11client.Strings.requireNonBlank;
+import static com.github.moaxcp.x11client.ParametersCheck.requireNonBlank;
 
 /**
  * Class representing an X11 display name. A DisplayName may represent a network socket or a unix socket connection. The
