@@ -1,5 +1,10 @@
 package com.github.moaxcp.x11client;
 
+import java.io.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import lombok.*;
 
 import static com.github.moaxcp.x11client.ParametersCheck.requireNonBlank;
@@ -77,5 +82,76 @@ public class XAuthority {
     this.displayNumber = displayNumber;
     this.protocolName = requireNonBlank("protocolName", protocolName);
     this.protocolData = requireNonEmpty("protocolData", protocolData);
+  }
+
+  public static Optional<XAuthority> read(DataInput in) {
+    try {
+      Family family = Family.getByCode(in.readUnsignedShort());
+      int dataLength = in.readUnsignedShort();
+      byte[] address = readBytes(in, dataLength);
+      int number = Integer.parseInt(in.readUTF());
+      String name = in.readUTF();
+      dataLength = in.readUnsignedShort();
+      byte[] data = readBytes(in, dataLength);
+      return Optional.of(new XAuthority(family, address, number, name, data));
+    } catch (IOException ex) {
+      return Optional.empty();
+    }
+  }
+
+  private static byte[] readBytes(DataInput in, int length) throws IOException {
+    byte[] bytes = new byte[length];
+    in.readFully(bytes);
+    return bytes;
+  }
+
+  public static Optional<XAuthority> getAuthority(List<XAuthority> authorities, String hostName) {
+    for (int i = 0; i < authorities.size(); i++) {
+      XAuthority auth = authorities.get(i);
+      try {
+        switch(auth.getFamily()) {
+          case WILD:
+            return Optional.of(auth);
+          default:
+            InetAddress authAddress = InetAddress.getByName(new String(auth.getAddress(), StandardCharsets.UTF_8));
+            InetAddress hostNameAddress = InetAddress.getByName(hostName);
+            if(authAddress.equals(hostNameAddress)) {
+              return Optional.of(auth);
+            }
+            break;
+        }
+      } catch (UnknownHostException ex) {
+        throw new UncheckedIOException(ex);
+      }
+    }
+    return Optional.empty();
+  }
+
+  /**
+   * Returns the XAuthority file for the current environment. First the XAUTHORITY environment variable is checked. If
+   * XAUTHORITY is not set or empty the .XAuthority file in the user's home is returned.
+   * @return XAuthority file to use for the current environment
+   */
+  public static File getXAuthorityFile() {
+    String authFilename = System.getenv("XAUTHORITY");
+    if (authFilename == null || authFilename.equals("")) {
+      authFilename = System.getProperty("user.home") + File.separatorChar + ".Xauthority";
+    }
+    return new File(authFilename);
+  }
+
+  public static List<XAuthority> getAuthorities(File file) {
+    List<XAuthority> authorities = new ArrayList<>();
+    try (DataInputStream in = new DataInputStream(new FileInputStream(file))) {
+      Optional<XAuthority> read = read(in);
+      while(read.isPresent()) {
+        XAuthority current = read.get();
+        authorities.add(current);
+        read = read(in);
+      }
+    } catch(IOException ex) {
+      throw new UncheckedIOException(ex);
+    }
+    return authorities;
   }
 }
