@@ -53,4 +53,52 @@ public class DisplayNameTest {
     assertThat(name.getDisplayNumber()).isEqualTo(12);
     assertThat(name.getScreenNumber()).isEqualTo(2);
   }
+
+  @Test
+  void isForNetworkSocket_true() {
+    DisplayName name = new DisplayName("hostName:0");
+    assertThat(name.isForNetworkSocket()).isTrue();
+  }
+
+  @Test
+  void isForNetworkSocket_false() {
+    DisplayName name = new DisplayName(":0");
+    assertThat(name.isForNetworkSocket()).isFalse();
+  }
+
+  @Test
+  void getPort() {
+    DisplayName name = new DisplayName(":1");
+    assertThat(name.getPort()).isEqualTo(6001);
+  }
+
+  @Test
+  void isForUnixSocket_true() {
+    DisplayName name = new DisplayName(":1.1");
+    assertThat(name.isForUnixSocket()).isTrue();
+  }
+
+  @Test
+  void isForUnixSocket_false() {
+    DisplayName name = new DisplayName("hostName:1.1");
+    assertThat(name.isForUnixSocket()).isFalse();
+  }
+
+  @Test
+  void getSocketFileName() {
+    DisplayName name = new DisplayName(":1.1");
+    assertThat(name.getSocketFileName()).isEqualTo("/tmp/.X11-unix/X1");
+  }
+
+  @Test
+  void toString_network() {
+    DisplayName name = new DisplayName("hostName:12.3");
+    assertThat(name.toString()).isEqualTo("hostName:12.3");
+  }
+
+  @Test
+  void toString_unix() {
+    DisplayName name = new DisplayName(":12.3");
+    assertThat(name.toString()).isEqualTo(":12.3");
+  }
 }
