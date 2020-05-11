@@ -17,6 +17,10 @@ public class DisplayName {
   int displayNumber;
   int screenNumber;
 
+  public static DisplayName standard() {
+    return new DisplayName(System.getenv("DISPLAY"));
+  }
+
   /**
    * Creates a new display name. A network display name includes a hostName ("host:0.0"). A unix display name does not
    * have a hostName (":0"). The convention is "${hostName}:${displayNumber}.${screenNumber}".

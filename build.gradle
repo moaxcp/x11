@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'io.freefair.lombok' version '5.0.1'
+    id 'org.unbroken-dome.test-sets' version '3.0.1'
 }
 
 java {
@@ -13,13 +14,23 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.kohlschutter.junixsocket:junixsocket-core:2.3.2'
     testImplementation 'org.assertj:assertj-core:3.16.0'
     testImplementation 'org.mockito:mockito-core:3.3.3'
+    testCompile 'org.mockito:mockito-junit-jupiter:3.3.3'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
 }
 
+testSets {
+    integrationTest
+}
+
 test {
+    useJUnitPlatform()
+}
+
+integrationTest {
     useJUnitPlatform()
 }

@@ -73,7 +73,7 @@ public class XAuthority {
    * @throws NullPointerException if any parameter is null.
    * @throws IllegalArgumentException if displayNumber is < 0 or protocolName is empty.
    */
-  public XAuthority(@NonNull Family family, @NonNull byte[] address, int displayNumber, @NonNull String protocolName, @NonNull byte[] protocolData) {
+  XAuthority(@NonNull Family family, @NonNull byte[] address, int displayNumber, @NonNull String protocolName, @NonNull byte[] protocolData) {
     this.family = family;
     this.address = requireNonEmpty("address", address);
     if(displayNumber < 0) {
@@ -105,23 +105,24 @@ public class XAuthority {
     return bytes;
   }
 
-  public static Optional<XAuthority> getAuthority(List<XAuthority> authorities, String hostName) {
+  public static Optional<XAuthority> getAuthority(List<XAuthority> authorities, DisplayName displayName) throws UnknownHostException {
     for (int i = 0; i < authorities.size(); i++) {
       XAuthority auth = authorities.get(i);
-      try {
-        switch(auth.getFamily()) {
-          case WILD:
+      switch(auth.getFamily()) {
+        case WILD:
+          return Optional.of(auth);
+        default:
+          InetAddress authAddress = InetAddress.getByName(new String(auth.getAddress(), StandardCharsets.UTF_8));
+          InetAddress hostNameAddress;
+          if(displayName.getHostName() == null || displayName.getHostName().equals("localhost")) {
+            hostNameAddress = InetAddress.getLocalHost();
+          } else {
+            hostNameAddress = InetAddress.getByName(displayName.getHostName());
+          }
+          if(authAddress.equals(hostNameAddress)) {
             return Optional.of(auth);
-          default:
-            InetAddress authAddress = InetAddress.getByName(new String(auth.getAddress(), StandardCharsets.UTF_8));
-            InetAddress hostNameAddress = InetAddress.getByName(hostName);
-            if(authAddress.equals(hostNameAddress)) {
-              return Optional.of(auth);
-            }
-            break;
-        }
-      } catch (UnknownHostException ex) {
-        throw new UncheckedIOException(ex);
+          }
+          break;
       }
     }
     return Optional.empty();
