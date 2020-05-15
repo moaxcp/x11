@@ -1,8 +1,7 @@
 package com.github.moaxcp.x11client;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.Socket;
+import java.net.*;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -17,8 +16,8 @@ public class X11Connection implements AutoCloseable {
   private final DisplayName displayName;
   private final XAuthority xAuthority;
   private final Socket socket;
-  private final DataInputStream in;
-  private final DataOutputStream out;
+  private final X11InputStream in;
+  private final X11OutputStream out;
 
   /**
    * Creates an X11Connection with displayName and connects to x11 using the provided socket. The socket must match
@@ -31,39 +30,34 @@ public class X11Connection implements AutoCloseable {
     this.displayName = displayName;
     this.xAuthority = xAuthority;
     this.socket = socket;
-    in = new DataInputStream(socket.getInputStream());
-    out = new DataOutputStream(socket.getOutputStream());
-    sendByteOrder();
-    writeCard16(11);
-    writeCard16(0);
-    writeString8(xAuthority.getProtocolName());
-    writeString8(xAuthority.getProtocolData());
+    in = new X11InputStream(new DataInputStream(socket.getInputStream()));
+    out = new X11OutputStream(new DataOutputStream(socket.getOutputStream()));
+    sendConnectionSetup();
+    int result = in.readInt8();
+    switch(result) {
+      case 0: //failure
+        ConnectionFailure failure = ConnectionFailure.readFailure(in);
+        throw new ConnectionFailureException(failure);
+      case 1: //success
+        break;
+      case 2: //authenticate
+        break;
+    }
+  }
+
+  private void sendConnectionSetup() throws IOException {
+    out.writeByte('B');
+    out.writeByte(0);
+    out.writeCard16(11);
+    out.writeCard16(0);
+    out.writeCard16(xAuthority.getProtocolName().length());
+    out.writeCard16(xAuthority.getProtocolData().length);
+    out.writeCard16(0);
+    out.writeString8(xAuthority.getProtocolName());
+    out.writePad(xAuthority.getProtocolName().length());
+    out.writeString8(xAuthority.getProtocolData());
+    out.writePad(xAuthority.getProtocolData().length);
     out.flush();
-    int result = readInt8();
-  }
-
-  private int readInt8() throws IOException {
-    return in.readUnsignedByte();
-  }
-
-  private void writeString8(byte[] protocolData) throws IOException {
-    out.write(protocolData);
-  }
-
-  private void writeString8(String value) throws IOException {
-    out.writeUTF(value);
-  }
-
-  private void writeCard16(int value) throws IOException {
-    out.writeShort(value);
-  }
-
-  private int readCard16() throws IOException {
-    return in.readUnsignedShort();
-  }
-
-  private void sendByteOrder() throws IOException {
-    out.write('B');
   }
 
   /**
@@ -98,6 +92,14 @@ public class X11Connection implements AutoCloseable {
 
   @Override
   public void close() throws IOException {
-    socket.close();
+    try {
+      out.close();
+    } finally {
+      try {
+        in.close();
+      } finally {
+        socket.close();
+      }
+    }
   }
 }
