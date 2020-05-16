@@ -11,8 +11,6 @@ import static com.github.moaxcp.x11client.X11Connection.connect;
 import static com.github.moaxcp.x11client.XAuthority.Family.LOCAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,25 +51,89 @@ public class X11ConnectionTest {
   }
 
   @Test
-  void constructor() throws IOException {
-    InputStream in = mock(InputStream.class);
-    OutputStream out = mock(OutputStream.class);
+  void constructor_ConnectionFailure() throws IOException {
+    byte[] inBytes = new byte[]{0, 5, 0, 11, 0, 0, 0, 0, 'H', 'e', 'l', 'l', 'o', 0, 0, 0};
+    ByteArrayInputStream in = new ByteArrayInputStream(inBytes);
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
     when(socket.getInputStream()).thenReturn(in);
     when(socket.getOutputStream()).thenReturn(out);
 
-    when(in.read()).thenReturn(1);
+    DisplayName name = new DisplayName(":0");
+    ConnectionFailureException exception = assertThrows(ConnectionFailureException.class, () -> new X11Connection(name, xAuthority, socket));
+
+    assertThat(exception.getFailure()).isEqualTo(new ConnectionFailure(11, 0, "Hello"));
+    assertThat(out.toByteArray()).containsExactly(
+        'B',
+        0,
+        0, 11,
+        0, 0,
+        0, xAuthority.getProtocolName().length(),
+        0, xAuthority.getProtocolData().length,
+        0, 0,
+        'M', 'I', 'T', '-', 'M', 'A', 'G', 'I', 'C', '-', 'C', 'O', 'O', 'K', 'I', 'E', '-', '1',
+        0, 0,
+        1, 2, 3,
+        0
+    );
+  }
+
+  @Test
+  void constructor_Authenticate() throws IOException {
+    byte[] inBytes = new byte[] {2};
+    ByteArrayInputStream in = new ByteArrayInputStream(inBytes);
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+    when(socket.getInputStream()).thenReturn(in);
+    when(socket.getOutputStream()).thenReturn(out);
+
+    DisplayName name = new DisplayName(":0");
+    UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class, () -> new X11Connection(name, xAuthority, socket));
+
+    assertThat(exception).hasMessage("authenticate not supported");
+    assertThat(out.toByteArray()).containsExactly(
+        'B',
+        0,
+        0, 11,
+        0, 0,
+        0, xAuthority.getProtocolName().length(),
+        0, xAuthority.getProtocolData().length,
+        0, 0,
+        'M', 'I', 'T', '-', 'M', 'A', 'G', 'I', 'C', '-', 'C', 'O', 'O', 'K', 'I', 'E', '-', '1',
+        0, 0,
+        1, 2, 3,
+        0
+    );
+  }
+
+  @Test
+  void constructor_Success() throws IOException {
+    byte[] inBytes = new byte[] {1};
+    ByteArrayInputStream in = new ByteArrayInputStream(inBytes);
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+    when(socket.getInputStream()).thenReturn(in);
+    when(socket.getOutputStream()).thenReturn(out);
 
     DisplayName name = new DisplayName(":0");
     X11Connection connection = new X11Connection(name, xAuthority, socket);
 
-    then(out).should().write('B');
-    then(out).should().write(0);
-    then(out).should().write(0);
-    then(out).should().write(11);
-
     assertThat(connection.getDisplayName()).isEqualTo(name);
     assertThat(connection.getXAuthority()).isEqualTo(xAuthority);
     assertThat(connection.getSocket()).isEqualTo(socket);
+
+    assertThat(out.toByteArray()).containsExactly(
+        'B',
+        0,
+        0, 11,
+        0, 0,
+        0, xAuthority.getProtocolName().length(),
+        0, xAuthority.getProtocolData().length,
+        0, 0,
+        'M', 'I', 'T', '-', 'M', 'A', 'G', 'I', 'C', '-', 'C', 'O', 'O', 'K', 'I', 'E', '-', '1',
+        0, 0,
+        1, 2, 3,
+        0
+    );
   }
 }

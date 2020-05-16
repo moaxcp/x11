@@ -55,6 +55,13 @@ public class X11InputStreamTest {
     assertThat(value).isEqualTo(-1);
   }
 
+  @Test
+  void readString8() throws IOException {
+    X11InputStream in = makeInputStream('H', 'e', 'l', 'l', 'o');
+    String value = in.readString8(5);
+    assertThat(value).isEqualTo("Hello");
+  }
+
   private X11InputStream makeInputStream(int... values) {
     byte[] bytes = new byte[values.length];
     for(int i = 0; i < values.length; i++) {

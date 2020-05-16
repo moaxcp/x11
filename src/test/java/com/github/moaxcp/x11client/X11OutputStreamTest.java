@@ -64,4 +64,20 @@ public class X11OutputStreamTest {
         .hasSize(4)
         .containsExactly(255, 255, 255, 255);
   }
+
+  @Test
+  void writeString8() throws IOException {
+    out.writeString8("Hello");
+    assertThat(byteOut.toByteArray())
+        .hasSize(5)
+        .containsExactly('H', 'e', 'l', 'l', 'o');
+  }
+
+  @Test
+  void writeString8Bytes() throws IOException {
+    out.writeString8(new byte[] {'H', 'e', 'l', 'l', 'o'});
+    assertThat(byteOut.toByteArray())
+        .hasSize(5)
+        .containsExactly('H', 'e', 'l', 'l', 'o');
+  }
 }
