@@ -30,8 +30,8 @@ public class X11Connection implements AutoCloseable {
     this.displayName = displayName;
     this.xAuthority = xAuthority;
     this.socket = socket;
-    in = new X11InputStream(new DataInputStream(socket.getInputStream()));
-    out = new X11OutputStream(new DataOutputStream(socket.getOutputStream()));
+    in = new X11InputStream(socket.getInputStream());
+    out = new X11OutputStream(socket.getOutputStream());
     sendConnectionSetup();
     int result = in.readInt8();
     switch(result) {
@@ -41,7 +41,7 @@ public class X11Connection implements AutoCloseable {
       case 1: //success
         break;
       case 2: //authenticate
-        break;
+        throw new UnsupportedOperationException("authenticate not supported");
     }
   }
 

@@ -1,21 +1,41 @@
 package com.github.moaxcp.x11client;
 
-import java.io.DataInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class X11InputStream {
   private final DataInputStream in;
-  public X11InputStream(DataInputStream in) {
-    this.in = in;
+
+  public X11InputStream(InputStream inputStream) {
+    in = new DataInputStream(inputStream);
+  }
+
+  public int readByte() throws IOException {
+    return in.readUnsignedByte();
   }
 
   public int readInt8() throws IOException {
+    return in.readByte();
+  }
+
+  public int readInt16() throws IOException {
+    return in.readShort();
+  }
+
+  public int readInt32() throws IOException {
+    return in.readInt();
+  }
+
+  public int readCard8() throws IOException {
     return in.readUnsignedByte();
   }
 
   public int readCard16() throws IOException {
     return in.readUnsignedShort();
+  }
+
+  public int readCard32() throws IOException {
+    return in.readInt();
   }
 
   public String readString8(int length) throws IOException {
@@ -38,5 +58,4 @@ public class X11InputStream {
   public void close() throws IOException {
     in.close();
   }
-
 }

@@ -60,11 +60,15 @@ public class X11ConnectionTest {
     when(socket.getInputStream()).thenReturn(in);
     when(socket.getOutputStream()).thenReturn(out);
 
+    when(in.read()).thenReturn(1);
 
     DisplayName name = new DisplayName(":0");
     X11Connection connection = new X11Connection(name, xAuthority, socket);
 
     then(out).should().write('B');
+    then(out).should().write(0);
+    then(out).should().write(0);
+    then(out).should().write(11);
 
     assertThat(connection.getDisplayName()).isEqualTo(name);
     assertThat(connection.getXAuthority()).isEqualTo(xAuthority);
