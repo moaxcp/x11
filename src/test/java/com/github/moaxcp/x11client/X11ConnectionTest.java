@@ -115,12 +115,21 @@ public class X11ConnectionTest {
     when(socket.getInputStream()).thenReturn(in);
     when(socket.getOutputStream()).thenReturn(out);
 
+    ConnectionSuccess success = ConnectionSuccess.builder()
+        .protocolMajorVersion(11)
+        .protocolMinorVersion(0)
+        .releaseNumber(7)
+        .resourceIdBase(10)
+        .resourceIdMask(1111)
+        .motionBufferSize(12)
+        .build();
+
     DisplayName name = new DisplayName(":0");
     X11Connection connection = new X11Connection(name, xAuthority, socket);
 
     assertThat(connection.getDisplayName()).isEqualTo(name);
     assertThat(connection.getXAuthority()).isEqualTo(xAuthority);
-    assertThat(connection.getSocket()).isEqualTo(socket);
+    assertThat(connection.getConnectionSuccess()).isEqualTo(success);
 
     assertThat(out.toByteArray()).containsExactly(
         'B',

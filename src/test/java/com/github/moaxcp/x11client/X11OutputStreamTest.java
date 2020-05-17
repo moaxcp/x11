@@ -1,10 +1,11 @@
 package com.github.moaxcp.x11client;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 public class X11OutputStreamTest {
   private ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -79,5 +80,29 @@ public class X11OutputStreamTest {
     assertThat(byteOut.toByteArray())
         .hasSize(5)
         .containsExactly('H', 'e', 'l', 'l', 'o');
+  }
+
+  @Test
+  void writePad() throws IOException {
+    out.writePad(9);
+    assertThat(byteOut.toByteArray())
+        .hasSize(3)
+        .containsExactly(0, 0, 0);
+  }
+
+  @Test
+  void flush() throws IOException {
+    OutputStream origin = mock(OutputStream.class);
+    X11OutputStream out = new X11OutputStream(origin);
+    out.flush();
+    then(origin).should().flush();
+  }
+
+  @Test
+  void close() throws IOException {
+    OutputStream origin = mock(OutputStream.class);
+    X11OutputStream out = new X11OutputStream(origin);
+    out.close();
+    then(origin).should().close();
   }
 }

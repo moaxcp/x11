@@ -38,11 +38,6 @@ public class ParametersCheckTest {
     assertThat(value).isEqualTo("A");
   }
 
-
-
-
-
-
   @Test
   void requireNonEmpty_bytes_fails_with_null_name() {
     NullPointerException exception = assertThrows(NullPointerException.class, () -> requireNonEmpty(null, new byte[]{1}));

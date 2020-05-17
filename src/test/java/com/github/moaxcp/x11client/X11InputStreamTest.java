@@ -2,10 +2,23 @@ package com.github.moaxcp.x11client;
 
 import java.io.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+@ExtendWith(MockitoExtension.class)
 public class X11InputStreamTest {
+  @Captor
+  ArgumentCaptor<byte[]> captor;
+
   @Test
   void readByte() throws IOException {
     X11InputStream in = makeInputStream(255);
@@ -60,6 +73,40 @@ public class X11InputStreamTest {
     X11InputStream in = makeInputStream('H', 'e', 'l', 'l', 'o');
     String value = in.readString8(5);
     assertThat(value).isEqualTo("Hello");
+  }
+
+  @Test
+  void readBytes() throws IOException {
+    X11InputStream in = makeInputStream(1, 2, 3, 4);
+    byte[] bytes = in.readBytes(4);
+    assertThat(bytes).containsExactly(1, 2, 3, 4);
+  }
+
+  @Test
+  void readBytes_wrongLength() throws IOException {
+    InputStream origin = mock(InputStream.class);
+    X11InputStream in = new X11InputStream(origin);
+    when(origin.read(any())).thenReturn(2);
+    IllegalStateException exception = assertThrows(IllegalStateException.class, () -> in.readBytes(4));
+    assertThat(exception).hasMessage("could not read all bytes for length: \"4\"");
+  }
+
+  @Test
+  void readPad() throws IOException {
+    InputStream origin = mock(InputStream.class);
+    X11InputStream in = new X11InputStream(origin);
+    when(origin.read(any(), eq(0), eq(3))).thenReturn(3);
+    in.readPad(9);
+    then(origin).should().read(captor.capture(), eq(0), eq(3));
+    assertThat(captor.getValue()).hasSize(3);
+  }
+
+  @Test
+  void close() throws IOException {
+    InputStream origin = mock(InputStream.class);
+    X11InputStream in = new X11InputStream(origin);
+    in.close();
+    then(origin).should().close();
   }
 
   private X11InputStream makeInputStream(int... values) {

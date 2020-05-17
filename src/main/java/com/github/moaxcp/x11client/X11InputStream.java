@@ -39,11 +39,12 @@ public class X11InputStream {
   }
 
   public String readString8(int length) throws IOException {
-    byte[] bytes = readBytes(new byte[length]);
+    byte[] bytes = readBytes(length);
     return new String(bytes, StandardCharsets.US_ASCII);
   }
 
-  public byte[] readBytes(byte[] bytes) throws IOException {
+  public byte[] readBytes(int length) throws IOException {
+    byte[] bytes = new byte[length];
     int read = in.read(bytes);
     if(read != bytes.length) {
       throw new IllegalStateException("could not read all bytes for length: \"" + bytes.length + "\"");
@@ -52,7 +53,7 @@ public class X11InputStream {
   }
 
   public void readPad(int forLength) throws IOException {
-    byte[] pad = readBytes(new byte[(4 - forLength % 4) % 4]);
+    readBytes((4 - forLength % 4) % 4);
   }
 
   public void close() throws IOException {

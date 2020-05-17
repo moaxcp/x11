@@ -1,7 +1,9 @@
 package com.github.moaxcp.x11client;
 
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -11,10 +13,14 @@ import org.newsclub.net.unix.AFUNIXSocketAddress;
 
 import static com.github.moaxcp.x11client.XAuthority.*;
 
-@Getter
 public class X11Connection implements AutoCloseable {
+  @Getter
   private final DisplayName displayName;
+  @Getter
   private final XAuthority xAuthority;
+  @Getter
+  private final ConnectionSuccess connectionSuccess;
+
   private final Socket socket;
   private final X11InputStream in;
   private final X11OutputStream out;
@@ -39,8 +45,10 @@ public class X11Connection implements AutoCloseable {
         ConnectionFailure failure = ConnectionFailure.readFailure(in);
         throw new ConnectionFailureException(failure);
       case 1: //success
+        connectionSuccess = ConnectionSuccess.readSuccess(in);
         break;
       case 2: //authenticate
+      default:
         throw new UnsupportedOperationException("authenticate not supported");
     }
   }
