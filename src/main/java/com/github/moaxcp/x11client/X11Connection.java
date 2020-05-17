@@ -32,7 +32,7 @@ public class X11Connection implements AutoCloseable {
    * @param socket for x11 server represented by displayName
    * @throws NullPointerException if any parameter is null
    */
-  public X11Connection(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority, @NonNull Socket socket) throws IOException {
+  X11Connection(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority, @NonNull Socket socket) throws IOException {
     this.displayName = displayName;
     this.xAuthority = xAuthority;
     this.socket = socket;
@@ -42,15 +42,23 @@ public class X11Connection implements AutoCloseable {
     int result = in.readInt8();
     switch(result) {
       case 0: //failure
-        ConnectionFailure failure = ConnectionFailure.readFailure(in);
+        ConnectionFailure failure = ConnectionFailure.readFailure(getX11Input());
         throw new ConnectionFailureException(failure);
       case 1: //success
-        connectionSuccess = ConnectionSuccess.readSuccess(in);
+        connectionSuccess = ConnectionSuccess.readSuccess(getX11Input());
         break;
       case 2: //authenticate
       default:
         throw new UnsupportedOperationException("authenticate not supported");
     }
+  }
+
+  public X11Input getX11Input() {
+    return in;
+  }
+
+  public X11Output getX11Output() {
+    return out;
   }
 
   private void sendConnectionSetup() throws IOException {

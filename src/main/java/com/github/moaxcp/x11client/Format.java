@@ -9,7 +9,7 @@ public class Format {
   int bitsPerPixel;
   int scanlinePad;
 
-  public static Format readFormat(X11InputStream in) throws IOException {
+  public static Format readFormat(X11Input in) throws IOException {
     int depth = in.readCard8();
     int bitsPerPixel = in.readCard8();
     int scanlinePad = in.readCard8();

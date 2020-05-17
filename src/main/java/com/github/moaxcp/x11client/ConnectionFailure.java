@@ -9,7 +9,7 @@ public class ConnectionFailure {
   int protocolMinorVersion;
   String reason;
 
-  public static ConnectionFailure readFailure(X11InputStream in) throws IOException {
+  public static ConnectionFailure readFailure(X11Input in) throws IOException {
     int reasonLength = in.readInt8();
     int majorVersion = in.readCard16();
     int minorVersion = in.readCard16();

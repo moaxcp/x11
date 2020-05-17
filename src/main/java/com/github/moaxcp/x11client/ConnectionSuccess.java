@@ -29,7 +29,7 @@ public class ConnectionSuccess {
   @Singular
   List<Screen> screens;
 
-  public static ConnectionSuccess readSuccess(X11InputStream in) throws IOException {
+  public static ConnectionSuccess readSuccess(X11Input in) throws IOException {
     in.readByte();
     ConnectionSuccessBuilder builder = ConnectionSuccess.builder();
     builder.protocolMajorVersion(in.readCard16())
