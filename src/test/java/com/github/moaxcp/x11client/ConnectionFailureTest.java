@@ -4,12 +4,19 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class ConnectionFailureTest {
+
+  @Test
+  void constructor_nullReason() {
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> new ConnectionFailure(11, 0, null));
+    assertThat(exception).hasMessage("reason is marked non-null but is null");
+  }
   @Test
   void readFailure() throws IOException {
-    X11InputStream in = mock(X11InputStream.class);
+    X11Input in = mock(X11Input.class);
     when(in.readInt8()).thenReturn(5);
     when(in.readCard16()).thenReturn(11, 0, 0);
     when(in.readString8(5)).thenReturn("Hello");

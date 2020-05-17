@@ -1,13 +1,14 @@
 package com.github.moaxcp.x11client;
 
 import java.io.IOException;
+import lombok.NonNull;
 import lombok.Value;
 
 @Value
 public class ConnectionFailure {
   int protocolMajorVersion;
   int protocolMinorVersion;
-  String reason;
+  @NonNull String reason;
 
   public static ConnectionFailure readFailure(X11Input in) throws IOException {
     int reasonLength = in.readInt8();

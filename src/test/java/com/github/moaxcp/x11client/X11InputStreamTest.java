@@ -86,7 +86,7 @@ public class X11InputStreamTest {
   void readBytes_wrongLength() throws IOException {
     InputStream origin = mock(InputStream.class);
     X11InputStream in = new X11InputStream(origin);
-    when(origin.read(any())).thenReturn(2);
+    when(origin.read(any(), eq(0), eq(4))).thenReturn(2);
     IllegalStateException exception = assertThrows(IllegalStateException.class, () -> in.readBytes(4));
     assertThat(exception).hasMessage("could not read all bytes for length: \"4\"");
   }
