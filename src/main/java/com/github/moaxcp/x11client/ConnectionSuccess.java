@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.*;
 
 import static com.github.moaxcp.x11client.Format.readFormat;
+import static com.github.moaxcp.x11client.Screen.readScreen;
 
 @Value
 @Builder
@@ -55,6 +56,10 @@ public class ConnectionSuccess {
     for(int i = 0; i < numberOfFormats; i++) {
       Format format = readFormat(in);
       builder.format(format);
+    }
+    for(int i = 0; i < numberOfScreens; i++) {
+      Screen screen = readScreen(in);
+      builder.screen(screen);
     }
     return builder.build();
 

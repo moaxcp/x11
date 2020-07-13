@@ -1,0 +1,27 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+gradlePlugin {
+    plugins {
+        simplePlugin {
+            id = 'com.github.moaxcp.x11protocol'
+            implementationClass = 'com.github.moaxcp.x11protocol.X11ProtocolPlugin'
+        }
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    testImplementation platform("org.spockframework:spock-bom:2.0-M1-groovy-2.5")
+    testImplementation "org.spockframework:spock-core"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
