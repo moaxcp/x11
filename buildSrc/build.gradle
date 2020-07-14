@@ -20,6 +20,7 @@ test {
 }
 
 dependencies {
+    implementation 'com.squareup:javapoet:1.13.0'
     testImplementation platform("org.spockframework:spock-bom:2.0-M1-groovy-2.5")
     testImplementation "org.spockframework:spock-core"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
