@@ -2,7 +2,7 @@ package com.github.moaxcp.x11protocol
 
 import com.squareup.javapoet.*
 import groovy.util.slurpersupport.GPathResult
-import org.gradle.internal.impldep.com.google.common.base.CaseFormat
+import com.google.common.base.CaseFormat
 
 class ProtocolGenerator {
     InputStream inputStream

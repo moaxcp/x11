@@ -11,11 +11,13 @@ class GenerateX11ProtocolTask extends DefaultTask {
     final DirectoryProperty xcbXmls = project.objects.directoryProperty()
 
     @OutputDirectory
-    final DirectoryProperty output = project.objects.directoryProperty()
+    final DirectoryProperty outputSrc = project.objects.directoryProperty()
 
     @TaskAction
     def writeSource() {
-        File out = project.file(output + "Out.java")
-        out.write("hello")
+        xcbXmls.get().asFileTree.each {
+            ProtocolGenerator gen = new ProtocolGenerator(inputStream: it.newInputStream(), outputSrc: outputSrc.get().asFile, basePackage: 'com.github.moaxcp.x11client.protocol')
+            gen.generate()
+        }
     }
 }

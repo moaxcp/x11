@@ -35,3 +35,8 @@ test {
 integrationTest {
     useJUnitPlatform()
 }
+
+x11Protocol {
+    outputSrc = file('build/generated/sources')
+    xcbXmls = file('src/main/xcbXmls')
+}
