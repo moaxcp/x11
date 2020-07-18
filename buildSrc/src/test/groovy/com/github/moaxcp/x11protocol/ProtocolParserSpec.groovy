@@ -10,6 +10,7 @@ class ProtocolParserSpec extends Specification {
         <struct name="Class">
             <field type="CARD8" name="class"/>
             <field type="INT32" name="a"/>
+            <field type="sync:INT64" name="b"/>
         </struct>
     ''')
 
@@ -39,7 +40,7 @@ class ProtocolParserSpec extends Specification {
         List<FieldSpec> result = parser.parseFields(structXml)
 
         then:
-        result.collectEntries { [(it.name):it.type.toString()] } == ['clazz':'package.byte', 'a':'package.int']
+        result.collectEntries { [(it.name):it.type.toString()] } == ['clazz':'package.byte', 'a':'package.int', 'b':'package.long']
     }
 
     void 'parse struct has name'() {

@@ -15,11 +15,13 @@ class ProtocolParser {
     ParseResult parse() {
         ParseResult result = new ParseResult()
         GPathResult xml = new XmlSlurper().parse(file)
-        result.packageName = basePackage + (String) xml.header
+        result.packageName = basePackage + '.' + (String) xml.@header
         packageName = result.packageName
         Map<String, String> typeDefs = parseTypeDefs(xml)
         conventions.putAllTypes(typeDefs)
-        List<TypeSpec> types = xml.struct.collect { parseStruct(it) }
+        List<TypeSpec> types = xml.struct
+            .findAll { !conventions.filterName((String) it.@name) }
+            .collect { parseStruct(it) }
         result.javaTypes.put('struct', types)
         return result
     }

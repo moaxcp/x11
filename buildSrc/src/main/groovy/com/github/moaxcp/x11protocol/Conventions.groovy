@@ -15,13 +15,24 @@ class Conventions {
         'INT32': 'int',
         'BOOL': 'boolean',
         'BYTE': 'byte',
+        'INT64': 'long',
+        'sync:INT64': 'long',
+
+        'STR': 'String',
 
         'CHARINFO': 'CharInfo',
-        'FONTPROP': 'FontProp',
         'COLORITEM': 'ColorItem',
+        'FONTPROP': 'FontProp',
         'TIMECOORD': 'TimeCoord',
-        'VISUALTYPE': 'VisualType'
+        'VISUALTYPE': 'VisualType',
+        'WAITCONDITION': 'WaitCondition'
     ]
+
+    private final List<String> nameFilter = ['STR', 'INT64']
+
+    boolean filterName(String name) {
+        nameFilter.contains(name)
+    }
 
     void putAllTypes(Map<String, String> types) {
         x11ToJavaType.putAll(types)
