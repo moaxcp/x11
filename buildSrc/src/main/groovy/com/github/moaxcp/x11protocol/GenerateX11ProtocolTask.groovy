@@ -16,7 +16,7 @@ class GenerateX11ProtocolTask extends DefaultTask {
     @TaskAction
     def writeSource() {
         xcbXmls.get().asFileTree.each {
-            ProtocolGenerator gen = new ProtocolGenerator(inputStream: it.newInputStream(), outputSrc: outputSrc.get().asFile, basePackage: 'com.github.moaxcp.x11client.protocol')
+            ProtocolGenerator gen = new ProtocolGenerator(inputXml: it, outputSrc: outputSrc.get().asFile, basePackage: 'com.github.moaxcp.x11client.protocol')
             gen.generate()
         }
     }
