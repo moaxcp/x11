@@ -6,7 +6,7 @@ class Conventions {
     /**
      * hard-coded conversions of x11 types to java types
      */
-    private final Map<String, String> x11ToJavaType = [
+    private static final Map<String, String> x11ToJavaType = [
         'CARD8': 'byte',
         'CARD16': 'short',
         'CARD32': 'int',
@@ -28,17 +28,18 @@ class Conventions {
         'WAITCONDITION': 'WaitCondition'
     ]
 
-    private final List<String> nameFilter = ['STR', 'INT64']
+    private static final List<String> typeFilter = ['STR', 'INT64']
 
-    boolean filterName(String name) {
-        nameFilter.contains(name)
+    /**
+     * types to filter when parsing. These types will not be converted to a new class.
+     * @param name
+     * @return
+     */
+    static boolean filterType(String name) {
+        typeFilter.contains(name)
     }
 
-    void putAllTypes(Map<String, String> types) {
-        x11ToJavaType.putAll(types)
-    }
-
-    String getX11ToJavaType(String x11Type) {
+    static String getX11ToJavaType(String x11Type) {
         if(x11ToJavaType.containsKey(x11Type)) {
             return x11ToJavaType.get(x11Type)
         }
@@ -50,15 +51,20 @@ class Conventions {
         } else {
             javaType = x11Type
         }
-        x11ToJavaType.put(x11Type, javaType)
 
         return javaType
     }
 
-    String convertX11VariableNameToJava(String x11Name) {
+    static String convertX11VariableNameToJava(String x11Name) {
         String converted =  CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, x11Name)
         if(converted == 'class') {
             return 'clazz'
+        }
+        if(converted == 'default') {
+            return 'defaultValue'
+        }
+        if(converted == 'new') {
+            return 'newValue'
         }
         return converted
     }

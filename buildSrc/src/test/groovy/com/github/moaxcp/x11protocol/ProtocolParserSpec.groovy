@@ -45,7 +45,7 @@ class ProtocolParserSpec extends Specification {
 
     void 'parse struct has name'() {
         when:
-        TypeSpec result = parser.parseStruct(structXml)
+        TypeSpec result = parser.parseType(structXml)
 
         then:
         result.name == 'Class'

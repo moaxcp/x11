@@ -10,29 +10,50 @@ class ProtocolParser {
     String packageName
     String basePackage
     File file
-    private final Conventions conventions = new Conventions()
+    private final ParseResult result = new ParseResult()
+    private ImportResult importResult = new ImportResult()
+    private boolean parsed
 
     ParseResult parse() {
-        ParseResult result = new ParseResult()
+        if(parsed) {
+            throw new IllegalStateException("already parsed")
+        }
+        parsed = true
         GPathResult xml = new XmlSlurper().parse(file)
-        result.packageName = basePackage + '.' + (String) xml.@header
+        result.xcbType = xml.@header
+        result.packageName = basePackage + '.' + result.xcbType
         packageName = result.packageName
-        Map<String, String> typeDefs = parseTypeDefs(xml)
-        conventions.putAllTypes(typeDefs)
-        List<TypeSpec> types = xml.struct
-            .findAll { !conventions.filterName((String) it.@name) }
-            .collect { parseStruct(it) }
-        result.javaTypes.put('struct', types)
+        setupImports()
+        putAllTypeDefs(xml)
+        ['struct', 'union', 'request', 'event', 'error'].each {
+            addType(xml, it)
+        }
         return result
     }
 
-    Map<String, String> parseTypeDefs(GPathResult xml) {
+    private void addType(GPathResult xml, String type) {
+        Map<String, TypeSpec> types = xml."$type"
+            .findAll { !Conventions.filterType((String) it.@name) }
+            .collectEntries { [((String) it.@name): parseType((GPathResult) it)] }
+        result.javaTypes.putAll(types)
+    }
+
+    private void putAllTypeDefs(GPathResult xml) {
+        Map<String, String> typeDefs = parseTypeDefs(xml)
+        result.putAllDefinedTypes(typeDefs)
+    }
+
+    private void setupImports() {
+        importResult = new ImportParser(basePackage: basePackage, file: file).parse()
+    }
+
+    static Map<String, String> parseTypeDefs(GPathResult xml) {
         Map<String, String> types = [:]
         types.putAll(xml.xidtype.collectEntries {
             [((String) it.@name):'int']
         })
         types.putAll(xml.typedef.collectEntries {
-            [((String) it.@newname):conventions.getX11ToJavaType((String) it.@oldname)]
+            [((String) it.@newname):Conventions.getX11ToJavaType((String) it.@oldname)]
         })
         types.putAll(xml.xidunion.collectEntries {
             [((String) it.@name):'int']
@@ -41,17 +62,46 @@ class ProtocolParser {
         return types
     }
 
-    TypeSpec parseStruct(GPathResult struct) {
-        TypeSpec.Builder builder = TypeSpec.classBuilder(conventions.getX11ToJavaType((String) struct.@name))
-        List<FieldSpec> fields = parseFields(struct)
+    private TypeSpec parseType(GPathResult type) {
+        String typeName = Conventions.getX11ToJavaType((String) type.@name)
+        TypeSpec.Builder builder = TypeSpec.classBuilder(typeName)
+        List<FieldSpec> fields = parseFields(type)
         builder.addFields(fields)
         return builder.build();
     }
 
-    List<FieldSpec> parseFields(GPathResult node) {
+    private TypeName getTypeName(String typePackage, String type) {
+        if(!type) {
+            return null
+        }
+        ClassName.get(typePackage, type)
+    }
+
+    private List<FieldSpec> parseFields(GPathResult node) {
         return node.field.collect {
-            TypeName typeName = ClassName.get(packageName, conventions.getX11ToJavaType((String) it.@type))
-            FieldSpec.builder(typeName, conventions.convertX11VariableNameToJava((String) it.@name)).build()
+            String nodeType = it.@type
+            TypeName typeName = getTypeName(packageName, result.getDefinedType(nodeType))
+            if(!typeName) {
+                typeName = getTypeName(packageName, importResult.definedTypes.get(nodeType))
+            }
+            if(!typeName) {
+                importResult.x11ToJavaTypes.find { packageEntry ->
+                    it.value.find { Map<String, String> packageConversion ->
+                        if (packageConversion.key == nodeType) {
+                            type = packageConversion.value
+                            TypeName tyeName = ClassName.get(packageEntry.key, packageConversion.value)
+                            return true
+                        }
+                        return false
+                    }
+                    return false
+                }
+            }
+            if(!typeName) {
+                String type = Conventions.getX11ToJavaType(nodeType)
+                typeName = ClassName.get(packageName, type)
+            }
+            FieldSpec.builder(typeName, Conventions.convertX11VariableNameToJava((String) it.@name)).build()
         }
     }
 }

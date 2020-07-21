@@ -13,7 +13,7 @@ class ProtocolGenerator {
     }
 
     void createClasses(ParseResult result) {
-        result.javaTypes.values()*.each {
+        result.javaTypes.values().each {
             def javaFile = JavaFile.builder(result.packageName, it).build()
             javaFile.writeTo(outputSrc)
         }
