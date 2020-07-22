@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
+import groovy.transform.Memoized
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.Node
 
@@ -41,10 +42,15 @@ class X11Parser {
     }
 
     private void parseImport(Node node) {
+        X11Result importResult = cachedParseImport(node)
+        result.imports.put(importResult.header, importResult)
+    }
+
+    @Memoized
+    private X11Result cachedParseImport(Node node) {
         String name = node.text()
         File importFile = new File(result.file.parent + File.separator + name + '.xml')
-        X11Result importResult = parse(importFile)
-        result.imports.put(name, importResult)
+        return parse(importFile)
     }
 
     private void parseXidtype(Node node) {

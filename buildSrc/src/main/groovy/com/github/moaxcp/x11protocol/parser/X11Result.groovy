@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
-
+import groovy.transform.Memoized
 import groovy.util.slurpersupport.Node
 
 class X11Result {
@@ -24,6 +24,7 @@ class X11Result {
     Map<String, Node> eventCopies = [:]
     Map<String, Node> requests = [:]
 
+    @Memoized
     Tuple2<String, String> resolveType(String type) {
         Tuple2<String, String> resolved = resolveTypeRecursive(type)
 
