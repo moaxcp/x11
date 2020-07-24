@@ -37,8 +37,8 @@ class X11Parser {
         result.extensionXName = xml.@"extension-xname"
         result.extensionName = xml.@"extension-name"
         result.extensionMultiword = xml.@"extenion-multiword"
-        result.majorVersion = ((String) xml.@"major-version") ?: 0
-        result.minorVersion = ((String) xml.@"minor-version") ?: 0
+        result.majorVersion = ((String) xml.@"major-version") ? Integer.valueOf((String) xml.@"major-version") : 0
+        result.minorVersion = ((String) xml.@"major-version") ? Integer.valueOf((String) xml.@"minor-version") : 0
     }
 
     private void parseImport(Node node) {
@@ -91,6 +91,10 @@ class X11Parser {
 
     private void parseEventcopy(Node node) {
         result.eventCopies.put((String) node.attributes().get('name'), node)
+    }
+
+    private void parseEventstruct(Node node) {
+        //todo process eventstruct
     }
 
     private void parseRequest(Node node) {

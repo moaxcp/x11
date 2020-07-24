@@ -26,7 +26,18 @@ class X11Result {
 
     @Memoized
     Tuple2<String, String> resolveType(String type) {
-        Tuple2<String, String> resolved = resolveTypeRecursive(type)
+        Tuple2<String, String> resolved = null
+        if(type.contains(':')) {
+            String specificImport = type.substring(0, type.indexOf(':'))
+            String actualType = type.substring(type.indexOf(':') + 1)
+            if(header == specificImport) {
+                resolved = resolveLocal(actualType)
+            } else {
+                resolved = imports.get(specificImport).resolveTypeRecursive(actualType)
+            }
+        } else {
+            resolved = resolveTypeRecursive(type)
+        }
 
         if(!resolved) {
             throw new IllegalArgumentException("could not resolve $type")
@@ -45,8 +56,11 @@ class X11Result {
             return fromImport
         }
 
-        type = resolveTypeDef(type) ?: type
+        return resolveLocal(type)
+    }
 
+    private Tuple2<String, String> resolveLocal(String type) {
+        type = resolveTypeDef(type) ?: type
 
         Tuple2<String, String> fromObjects = [structs, unions, enums, errors, errorCopies, events, eventCopies, requests].collect {
             it.containsKey(type) ? new Tuple2<>(header, type) : null
@@ -63,13 +77,25 @@ class X11Result {
             type = 'CARD32'
         }
 
-        switch(type) {
+        switch (type) {
+            case 'BOOL':
+                return new Tuple2<>('primative', 'BOOL')
             case 'BYTE':
                 return new Tuple2<>('primative', 'BYTE')
             case 'INT8':
                 return new Tuple2<>('primative', 'INT8')
+            case 'INT16':
+                return new Tuple2<>('primative', 'INT16')
+            case 'INT32':
+                return new Tuple2<>('primative', 'INT32')
+            case 'CARD8':
+                return new Tuple2<>('primative', 'CARD8')
+            case 'CARD16':
+                return new Tuple2<>('primative', 'CARD16')
             case 'CARD32':
                 return new Tuple2<>('primative', 'CARD32')
+            case 'CARD64':
+                return new Tuple2<>('primative', 'CARD64')
             case 'float':
                 return new Tuple2<>('primative', 'float')
             case 'double':
@@ -88,5 +114,6 @@ class X11Result {
         if(!nextType) {
             return resultType
         }
+        return nextType
     }
 }
