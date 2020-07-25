@@ -37,6 +37,6 @@ integrationTest {
 }
 
 x11Protocol {
-    outputSrc = file('build/generated/sources')
+    outputSrc = file('build/generated/xproto')
     xcbXmls = file('src/main/xcbXmls')
 }

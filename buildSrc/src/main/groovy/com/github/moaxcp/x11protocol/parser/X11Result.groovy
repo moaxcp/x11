@@ -26,7 +26,7 @@ class X11Result {
 
     @Memoized
     Tuple2<String, String> resolveType(String type) {
-        Tuple2<String, String> resolved = null
+        Tuple2<String, String> resolved
         if(type.contains(':')) {
             String specificImport = type.substring(0, type.indexOf(':'))
             String actualType = type.substring(type.indexOf(':') + 1)
@@ -100,6 +100,10 @@ class X11Result {
                 return new Tuple2<>('primative', 'float')
             case 'double':
                 return new Tuple2<>('primative', 'double')
+            case 'char':
+                return new Tuple2<>('primative', 'char')
+            case 'void':
+                return new Tuple2<>('primative', 'void')
             default:
                 return null
         }

@@ -39,6 +39,7 @@ class JavaResultSpec extends Specification {
         'CARD8'  || ClassName.get('',  'byte')
         'CARD16' || ClassName.get('',  'short')
         'CARD32' || ClassName.get('',  'int')
+        'char'   || ClassName.get('', 'char')
         'POINT'  || ClassName.get('com.github.moaxcp.x11protocol.xproto', 'Point')
         'CreateContext' || ClassName.get('com.github.moaxcp.x11protocol.glx', 'CreateContext')
         'WINDOW' || ClassName.get('',  'int')

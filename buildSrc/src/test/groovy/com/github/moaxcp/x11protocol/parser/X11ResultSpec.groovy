@@ -18,6 +18,7 @@ class X11ResultSpec extends Specification {
         'FLOAT64'  || 'primative' | 'double'
         'DRAWABLE' || 'primative' | 'CARD32'
         'POINT'    || 'xproto'    | 'POINT'
+        'void'     || 'primative' | 'void'
         'Generic'  || 'glx'       | 'Generic'
     }
 }

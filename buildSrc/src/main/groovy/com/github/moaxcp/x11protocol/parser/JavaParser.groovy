@@ -3,6 +3,7 @@ package com.github.moaxcp.x11protocol.parser
 import com.github.moaxcp.x11protocol.Conventions
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import groovy.util.slurpersupport.Node
@@ -83,28 +84,38 @@ class JavaParser {
         TypeSpec.Builder builder = TypeSpec.classBuilder(className)
         List<FieldSpec> fields = xml.children()
             .collect { Node it ->
-                if(it.name() == 'field') {
-                    TypeName typeName = getFieldTypeName((String) it.attributes().get('type'))
-                    FieldSpec.builder(typeName, Conventions.convertX11VariableNameToJava((String) it.attributes().get('name'))).addModifiers(Modifier.PRIVATE).build()
-                } else if(it.name() == 'exprfield') {
-                    TypeName typeName = getFieldTypeName((String) it.attributes().get('type'))
-                    FieldSpec.builder(typeName, Conventions.convertX11VariableNameToJava((String) it.attributes().get('name'))).addModifiers(Modifier.PRIVATE).build()
-                } else if(it.name() == 'pad') {
-                    //not a field
-                } else if(it.name() == 'list') {
-                    //todo add a list of type
-                } else if(it.name() == 'switch') {
-                    //todo add switch
-                } else if(it.name() == 'doc') {
-                    //todo doc
-                } else if(it.name() == 'reply') {
-                    //should not parse reply
-                } else if(it.name() == 'required_start_align') {
-                    //should not parse reply
-                } else if(it.name() == 'fd') {
-                    //todo fd
-                } else {
-                    throw new IllegalArgumentException("cannot parse node ${it.name()}")
+                switch(it.name()) {
+                    case 'field':
+                        TypeName typeName = getFieldTypeName((String) it.attributes().get('type'))
+                        String variableName = Conventions.convertX11VariableNameToJava((String) it.attributes().get('name'))
+                        return FieldSpec.builder(typeName, variableName)
+                            .addModifiers(Modifier.PRIVATE).build()
+                    case 'exprfield':
+                        TypeName typeName = getFieldTypeName((String) it.attributes().get('type'))
+                        String variableName = Conventions.convertX11VariableNameToJava((String) it.attributes().get('name'))
+                        return FieldSpec.builder(typeName, variableName)
+                            .addModifiers(Modifier.PRIVATE).build()
+                    case 'pad':
+                        return null
+                    case 'list':
+                        TypeName typeName = getFieldTypeName((String) it.attributes().get('type'))
+                        String variableName = Conventions.convertX11VariableNameToJava((String) it.attributes().get('name'))
+                        ParameterizedTypeName paramType = ParameterizedTypeName.get(ClassName.get(List.class), typeName)
+                        return FieldSpec.builder(paramType, variableName).
+                            addModifiers(Modifier.PRIVATE).build()
+                    case 'switch':
+                        return null
+                    case 'doc':
+                        return null
+                    case 'reply':
+                        return null
+                    case 'required_start_align':
+                        return null
+                    case 'fd':
+                        return null
+                    default:
+                        throw new IllegalArgumentException("cannot parse node ${it.name()}")
+
                 }
             }.findAll { it }
         builder.addFields(fields)
