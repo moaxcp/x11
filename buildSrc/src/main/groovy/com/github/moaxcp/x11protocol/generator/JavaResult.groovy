@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11protocol.parser
+package com.github.moaxcp.x11protocol.generator
 
 import com.squareup.javapoet.TypeSpec
 

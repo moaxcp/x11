@@ -1,24 +1,27 @@
-package com.github.moaxcp.x11protocol.parser
+package com.github.moaxcp.x11protocol.generator
 
 import com.squareup.javapoet.ClassName
 import spock.lang.Specification
 
-class JavaResultSpec extends Specification {
+class JavaParserSpec extends Specification {
     def 'parse class name'() {
         expect:
         JavaParser.getClassName(x11Name) == javaName
 
         where:
-        x11Name  || javaName
-        'BOOL'   || 'boolean'
-        'BYTE'   || 'byte'
-        'INT8'   || 'byte'
-        'INT16'  || 'short'
-        'INT32'  || 'int'
-        'CARD8'  || 'byte'
-        'CARD16' || 'short'
-        'CARD32' || 'int'
-        'POINT'  || 'Point'
+        x11Name          || javaName
+        'BOOL'           || 'boolean'
+        'BYTE'           || 'byte'
+        'INT8'           || 'byte'
+        'INT16'          || 'short'
+        'INT32'          || 'int'
+        'CARD8'          || 'byte'
+        'CARD16'         || 'short'
+        'CARD32'         || 'int'
+        'CARD64'         || 'long'
+        'POINT'          || 'Point'
+        'class'          || 'clazz'
+        'CommonBehavior' || 'CommonBehavior'
     }
 
     def 'parse field type name glx'() {

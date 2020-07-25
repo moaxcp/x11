@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11protocol.parser
+package com.github.moaxcp.x11protocol.generator
 
 import groovy.transform.Memoized
 import groovy.util.slurpersupport.Node

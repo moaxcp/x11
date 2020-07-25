@@ -1,6 +1,6 @@
-package com.github.moaxcp.x11protocol.parser
+package com.github.moaxcp.x11protocol.generator
 
-import com.github.moaxcp.x11protocol.Conventions
+
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.ParameterizedTypeName
@@ -8,7 +8,7 @@ import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import groovy.util.slurpersupport.Node
 
-import javax.lang.model.element.Modifier
+import javax.lang.model.element.Modifier 
 
 class JavaParser {
     private String basePackage
@@ -84,43 +84,55 @@ class JavaParser {
         TypeSpec.Builder builder = TypeSpec.classBuilder(className)
         List<FieldSpec> fields = xml.children()
             .collect { Node it ->
-                switch(it.name()) {
-                    case 'field':
-                        TypeName typeName = getFieldTypeName((String) it.attributes().get('type'))
-                        String variableName = Conventions.convertX11VariableNameToJava((String) it.attributes().get('name'))
-                        return FieldSpec.builder(typeName, variableName)
-                            .addModifiers(Modifier.PRIVATE).build()
-                    case 'exprfield':
-                        TypeName typeName = getFieldTypeName((String) it.attributes().get('type'))
-                        String variableName = Conventions.convertX11VariableNameToJava((String) it.attributes().get('name'))
-                        return FieldSpec.builder(typeName, variableName)
-                            .addModifiers(Modifier.PRIVATE).build()
-                    case 'pad':
-                        return null
-                    case 'list':
-                        TypeName typeName = getFieldTypeName((String) it.attributes().get('type'))
-                        String variableName = Conventions.convertX11VariableNameToJava((String) it.attributes().get('name'))
-                        ParameterizedTypeName paramType = ParameterizedTypeName.get(ClassName.get(List.class), typeName)
-                        return FieldSpec.builder(paramType, variableName).
-                            addModifiers(Modifier.PRIVATE).build()
-                    case 'switch':
-                        return null
-                    case 'doc':
-                        return null
-                    case 'reply':
-                        return null
-                    case 'required_start_align':
-                        return null
-                    case 'fd':
-                        return null
-                    default:
-                        throw new IllegalArgumentException("cannot parse node ${it.name()}")
-
-                }
+                getField(it)
             }.findAll { it }
         builder.addFields(fields)
         .addModifiers(Modifier.PUBLIC)
         return builder.build()
+    }
+    
+    FieldSpec getField(Node node) {
+        switch(node.name()) {
+            case 'field':
+                return getNormalField(node)
+            case 'exprfield':
+                return getNormalField(node)
+            case 'list':
+                Tuple2<TypeName, String> field = getTypeAndVariableName(node)
+                ParameterizedTypeName paramType = ParameterizedTypeName.get(ClassName.get(List.class), field.getFirst())
+                return FieldSpec.builder(paramType, field.getSecond()).
+                    addModifiers(Modifier.PRIVATE).build()
+            case 'fd':
+                return null
+            case 'switch':
+                return null
+            case 'doc':
+                return null
+            case 'pad':
+                return null
+            case 'reply':
+                return null
+            case 'required_start_align':
+                return null
+            default:
+                throw new IllegalArgumentException("cannot parse node ${node.name()}")
+        }
+    }
+
+    FieldSpec getNormalField(Node node) {
+        Tuple2<TypeName, String> field = getTypeAndVariableName(node)
+        return FieldSpec.builder(field.getFirst(), field.getSecond())
+            .addModifiers(Modifier.PRIVATE).build()
+    }
+
+    Tuple2<TypeName, String> getTypeAndVariableName(Node node) {
+        TypeName typeName = getFieldTypeName(node)
+        String variableName = Conventions.convertX11VariableNameToJava((String) node.attributes().get('name'))
+        return new Tuple2<>(typeName, variableName)
+    }
+
+    TypeName getFieldTypeName(Node node) {
+        getFieldTypeName((String) node.attributes().get('type'))
     }
 
     TypeName getFieldTypeName(String type) {

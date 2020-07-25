@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11protocol
+package com.github.moaxcp.x11protocol.generator
 
 import com.google.common.base.CaseFormat
 
@@ -59,6 +59,9 @@ class Conventions {
         String converted =  CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, x11Name)
         if(converted == 'class') {
             return 'clazz'
+        }
+        if(converted == 'private') {
+            return 'xPrivate'
         }
         if(converted == 'default') {
             return 'defaultValue'
