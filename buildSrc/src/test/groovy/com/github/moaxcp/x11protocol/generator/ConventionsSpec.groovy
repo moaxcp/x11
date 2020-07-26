@@ -4,30 +4,35 @@ package com.github.moaxcp.x11protocol.generator
 import spock.lang.Specification
 
 class ConventionsSpec extends Specification {
-    Conventions conventions = new Conventions()
+    def 'parse class name'() {
+        expect:
+        Conventions.getClassName(x11Name) == javaName
+
+        where:
+        x11Name          || javaName
+        '1'              || 'One'
+        '8Bits'              || 'EightBits'
+        'POINT'          || 'Point'
+        'CommonBehavior' || 'CommonBehavior'
+    }
+    def 'parse enum name'() {
+        expect:
+        Conventions.getEnumName(x11Name) == javaName
+
+        where:
+        x11Name          || javaName
+        '1'              || 'ONE'
+        '8Bits'          || 'EIGHT_BITS'
+        '32Bits'         || 'THIRTY_TWO_BITS'
+    }
 
     void 'hard-coded convention with CARD32'() {
         expect:
-        'int' == conventions.getX11ToJavaType('CARD32')
-    }
-
-    void 'all-caps x11Type is converted with RECTANGLE'() {
-        expect:
-        'Rectangle' == conventions.getX11ToJavaType('RECTANGLE')
-    }
-
-    void 'clazz x11Type is converted from class'() {
-        expect:
-        'clazz' == conventions.getX11ToJavaType('class')
-    }
-
-    void 'ConfigureNotify x11Type is not converted'() {
-        expect:
-        'ConfigureNotify' == conventions.getX11ToJavaType('ConfigureNotify')
+        'int' == Conventions.x11PrimativeToJavaPrimative('CARD32')
     }
 
     void 'convert x11 variable name to java variable name'() {
         expect:
-        'overrideRedirect' == conventions.convertX11VariableNameToJava('override_redirect')
+        'overrideRedirect' == Conventions.convertX11VariableNameToJava('override_redirect')
     }
 }

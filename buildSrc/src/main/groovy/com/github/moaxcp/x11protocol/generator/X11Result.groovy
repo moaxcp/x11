@@ -22,6 +22,7 @@ class X11Result {
     Map<String, Node> errorCopies = [:]
     Map<String, Node> events = [:]
     Map<String, Node> eventCopies = [:]
+    Map<String, Node> eventStructs = [:]
     Map<String, Node> requests = [:]
 
     @Memoized
@@ -62,7 +63,7 @@ class X11Result {
     private Tuple2<String, String> resolveLocal(String type) {
         type = resolveTypeDef(type) ?: type
 
-        Tuple2<String, String> fromObjects = [structs, unions, enums, errors, errorCopies, events, eventCopies, requests].collect {
+        Tuple2<String, String> fromObjects = [structs, unions, enums, errors, errorCopies, events, eventCopies, eventStructs, requests].collect {
             it.containsKey(type) ? new Tuple2<>(header, type) : null
         }.find { it }
         if(fromObjects) {
@@ -96,6 +97,8 @@ class X11Result {
                 return new Tuple2<>('primative', 'CARD32')
             case 'CARD64':
                 return new Tuple2<>('primative', 'CARD64')
+            case 'fd':
+                return new Tuple2<>('primative', 'fd')
             case 'float':
                 return new Tuple2<>('primative', 'float')
             case 'double':

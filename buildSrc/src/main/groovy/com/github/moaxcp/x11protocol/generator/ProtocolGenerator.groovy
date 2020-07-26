@@ -2,6 +2,7 @@ package com.github.moaxcp.x11protocol.generator
 
 
 import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.TypeSpec
 
 class ProtocolGenerator {
     File inputXml

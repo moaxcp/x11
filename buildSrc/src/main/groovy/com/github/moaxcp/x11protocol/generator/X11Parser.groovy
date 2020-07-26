@@ -94,7 +94,7 @@ class X11Parser {
     }
 
     private void parseEventstruct(Node node) {
-        //todo process eventstruct
+        result.eventStructs.put((String) node.attributes().get('name'), node)
     }
 
     private void parseRequest(Node node) {

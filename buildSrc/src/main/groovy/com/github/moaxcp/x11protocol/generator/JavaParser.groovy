@@ -3,6 +3,7 @@ package com.github.moaxcp.x11protocol.generator
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
@@ -28,28 +29,32 @@ class JavaParser {
         parseErrorCopies(x11Result.errorCopies)
         parseEvents(x11Result.events)
         parseEventCopies(x11Result.eventCopies)
+        parseEventStructs(x11Result.eventStructs)
         parseRequests(x11Result.requests)
         return result
     }
 
     void parseStructsWithUnions(Map<String, Node> structs, Map<String, Node> unions) {
         structs.each { entry ->
-            String className = getClassName(entry.key)
+            String className = Conventions.getClassName(entry.key)
             result.javaTypes.put(entry.key, parseType(className, entry.value))
         }
         unions.each { entry ->
-            String className = getClassName(entry.key)
+            String className = Conventions.getClassName(entry.key)
             result.javaTypes.put(entry.key, parseType(className, entry.value))
         }
     }
 
     void parseEnums(Map<String, Node> enums) {
-        //todo
+        enums.each { entry ->
+            String enumName = Conventions.getClassName(entry.key)
+            result.javaTypes.put(entry.key, parseEnum(enumName, entry.value))
+        }
     }
 
     void parseErrors(Map<String, Node> errors) {
         errors.each { entry ->
-            String className = getClassName(entry.key)
+            String className = Conventions.getClassName(entry.key)
             result.javaTypes.put(entry.key, parseType(className, entry.value))
         }
     }
@@ -60,7 +65,7 @@ class JavaParser {
 
     void parseEvents(Map<String, Node> events) {
         events.each { entry ->
-            String className = getClassName(entry.key)
+            String className = Conventions.getClassName(entry.key)
             result.javaTypes.put(entry.key, parseType(className, entry.value))
         }
     }
@@ -69,9 +74,17 @@ class JavaParser {
         //todo
     }
 
+    void parseEventStructs(Map<String, Node> eventStructs) {
+        eventStructs.each { entry ->
+            String className= Conventions.getClassName(entry.key)
+            TypeSpec type = TypeSpec.interfaceBuilder(className).build()
+            result.javaTypes.put(entry.key, type)
+        }
+    }
+
     void parseRequests(Map<String, Node> requests) {
         requests.each { entry ->
-            String className = getClassName(entry.key)
+            String className = Conventions.getClassName(entry.key)
             result.javaTypes.put(entry.key, parseType(className, entry.value))
             Node reply = (Node) entry.value.childNodes().find {Node it -> it.name() == 'reply'}
             if(reply) {
@@ -80,12 +93,114 @@ class JavaParser {
         }
     }
 
+    TypeSpec parseEnum(String enumName, Node node) {
+        if(isBitMaskEnum(node)) {
+            return parseValueMaskEnum(enumName, node)
+        }
+        TypeSpec.Builder builder = TypeSpec.enumBuilder(enumName)
+        builder.addSuperinterface(ClassName.get(basePackage, 'IntValue'))
+        builder.addField(FieldSpec.builder(TypeName.INT, 'value', Modifier.PRIVATE).build())
+        builder.addMethod(MethodSpec.constructorBuilder()
+            .addParameter(TypeName.INT, 'value')
+            .addStatement("this.\$N = \$N", 'value', 'value')
+            .build())
+        builder.addMethod(MethodSpec.methodBuilder('getValue')
+            .addAnnotation(Override)
+            .addModifiers(Modifier.PUBLIC)
+            .addStatement("return value")
+            .returns(TypeName.INT)
+            .build())
+
+        node.childNodes().each { Node it ->
+            switch(it.name()) {
+                case 'item':
+                    String itemName = Conventions.getEnumName((String) it.attributes().get('name'))
+                    builder.addEnumConstant(itemName, TypeSpec.anonymousClassBuilder("\$L", getEnumItemValue(it)).build())
+                    break
+                case 'doc':
+                    return
+                    break
+                default:
+                    throw new IllegalArgumentException("cannot parse node ${it.name()}")
+            }
+        }
+        builder.addModifiers(Modifier.PUBLIC)
+        return builder.build()
+    }
+
+    TypeSpec parseValueMaskEnum(String enumName, Node node) {
+        TypeSpec.Builder builder = TypeSpec.enumBuilder(enumName)
+        builder.addSuperinterface(ClassName.get(basePackage, 'ValueMask'))
+        builder.addField(FieldSpec.builder(TypeName.INT, 'mask', Modifier.PRIVATE).build())
+        builder.addMethod(MethodSpec.constructorBuilder()
+            .addParameter(TypeName.INT, "mask")
+            .addStatement("this.\$N = \$N", "mask", "mask")
+            .build())
+        builder.addMethod(MethodSpec.methodBuilder('getMask')
+            .addAnnotation(Override)
+            .addModifiers(Modifier.PUBLIC)
+            .addStatement("return mask")
+            .returns(TypeName.INT)
+            .build())
+
+        node.childNodes().each { Node it ->
+            switch(it.name()) {
+                case 'item':
+                    String itemName = Conventions.getEnumName((String) it.attributes().get('name'))
+                        builder.addEnumConstant(itemName, TypeSpec.anonymousClassBuilder("\$L", getEnumItemValue(it)).build())
+                    break
+                case 'doc':
+                    return
+                    break
+                default:
+                    throw new IllegalArgumentException("cannot parse node ${it.name()}")
+            }
+        }
+        builder.addModifiers(Modifier.PUBLIC)
+        return builder.build()
+
+    }
+
+    boolean isBitMaskEnum(Node node) {
+        return node.childNodes().find {Node child ->
+            child.childNodes().find { it.name() == 'bit' }
+        }
+    }
+
+    String getEnumItemValue(Node node) {
+        def first = node.children().get(0)
+        if(first instanceof String) {
+            return first
+        }
+        Node firstNode = (Node) first
+        int value
+        switch(firstNode.name()) {
+            case 'value':
+                return node.text()
+            case 'bit':
+                value = ((Node) node.children().get(0)).text().toInteger()
+                return getMask(value)
+            default:
+                throw new IllegalArgumentException("could not find value for item $node")
+        }
+    }
+
+    String getMask(int bit) {
+        if(bit > 32) {
+            throw new IllegalArgumentException("bit $bit not supported")
+        }
+        StringBuilder builder = new StringBuilder('0b1')
+        for(int i = 0; i < bit; i++) {
+            builder.append('0')
+        }
+        return builder.toString()
+    }
+
     TypeSpec parseType(String className, Node xml) {
         TypeSpec.Builder builder = TypeSpec.classBuilder(className)
-        List<FieldSpec> fields = xml.children()
-            .collect { Node it ->
-                getField(it)
-            }.findAll { it }
+        List<FieldSpec> fields = xml.childNodes().collect { Node it ->
+            getField(it)
+        }.findAll { it }
         builder.addFields(fields)
         .addModifiers(Modifier.PUBLIC)
         return builder.build()
@@ -98,10 +213,7 @@ class JavaParser {
             case 'exprfield':
                 return getNormalField(node)
             case 'list':
-                Tuple2<TypeName, String> field = getTypeAndVariableName(node)
-                ParameterizedTypeName paramType = ParameterizedTypeName.get(ClassName.get(List.class), field.getFirst())
-                return FieldSpec.builder(paramType, field.getSecond()).
-                    addModifiers(Modifier.PRIVATE).build()
+                return getListField(node)
             case 'fd':
                 return null
             case 'switch':
@@ -117,6 +229,16 @@ class JavaParser {
             default:
                 throw new IllegalArgumentException("cannot parse node ${node.name()}")
         }
+    }
+
+    private FieldSpec getListField(Node node) {
+        Tuple2<TypeName, String> field = getTypeAndVariableName(node)
+        if(field.getFirst().isPrimitive()) {
+            return null
+        }
+        ParameterizedTypeName paramType = ParameterizedTypeName.get(ClassName.get(List.class), field.getFirst())
+        return FieldSpec.builder(paramType, field.getSecond()).
+            addModifiers(Modifier.PRIVATE).build()
     }
 
     FieldSpec getNormalField(Node node) {
@@ -138,42 +260,8 @@ class JavaParser {
     TypeName getFieldTypeName(String type) {
         Tuple2<String, String> tuple = x11Result.resolveType(type)
         if(tuple.first() == 'primative') {
-            return ClassName.get('', getClassName(tuple.getSecond()))
+            return Conventions.x11PrimativeToJavaTypeName(tuple.getSecond())
         }
-        return ClassName.get(basePackage + '.' + tuple.getFirst(), getClassName(tuple.getSecond()))
-    }
-
-    static String getClassName(String x11Name) {
-        switch(x11Name) {
-            case 'BOOL':
-                return 'boolean'
-            case 'BYTE':
-                return 'byte'
-            case 'INT8':
-                return 'byte'
-            case 'INT16':
-                return 'short'
-            case 'INT32':
-                return 'int'
-            case 'CARD8':
-                return 'byte'
-            case 'CARD16':
-                return 'short'
-            case 'CARD32':
-                return 'int'
-            case 'CARD64':
-                return 'long'
-        }
-
-        String javaType
-        if(x11Name == x11Name.toUpperCase()) {
-            javaType = x11Name.substring(0, 1) + x11Name.substring(1).toLowerCase()
-        } else if(x11Name == 'class') {
-            javaType = 'clazz'
-        } else {
-            javaType = x11Name
-        }
-
-        return javaType
+        return ClassName.get(basePackage + '.' + tuple.getFirst(), Conventions.getClassName(tuple.getSecond()))
     }
 }
