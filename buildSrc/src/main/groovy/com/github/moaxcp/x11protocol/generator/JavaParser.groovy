@@ -210,6 +210,12 @@ class JavaParser {
         List<FieldSpec> fields = getFields(xml)
         builder.addFields(fields)
         .addModifiers(Modifier.PUBLIC)
+        if(fields) {
+            builder.addAnnotation(ClassName.get('lombok', 'Builder'))
+            builder.addAnnotation(ClassName.get('lombok', 'NoArgsConstructor'))
+            builder.addAnnotation(ClassName.get('lombok', 'AllArgsConstructor'))
+            builder.addAnnotation(ClassName.get('lombok', 'Data'))
+        }
         return builder
     }
 
