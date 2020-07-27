@@ -148,4 +148,42 @@ class X11Result {
         }
         return nextType
     }
+
+    Node findError(String x11Name) {
+        Node node = imports.inject(null) { Node value, entry ->
+            if(value) {
+                return value
+            }
+            entry.value.errors.get(x11Name)
+        }
+        if(node) {
+            return node
+        }
+
+        node = errors.get(x11Name)
+
+        if(!node) {
+            throw new IllegalArgumentException("could not find error $x11Name")
+        }
+        return node
+    }
+
+    Node findEvent(String x11Name) {
+        Node node = imports.inject(null) { Node value, entry ->
+            if(value) {
+                return value
+            }
+            entry.value.events.get(x11Name)
+        }
+        if(node) {
+            return node
+        }
+
+        node = events.get(x11Name)
+
+        if(!node) {
+            throw new IllegalArgumentException("could not find events $x11Name")
+        }
+        return node
+    }
 }

@@ -23,69 +23,120 @@ class JavaParser {
     JavaResult parse() {
         result = new JavaResult()
         result.packageName = basePackage + '.' + x11Result.header
-        parseStructsWithUnions(x11Result.structs, x11Result.unions)
-        parseEnums(x11Result.enums)
-        parseErrors(x11Result.errors)
-        parseErrorCopies(x11Result.errorCopies)
-        parseEvents(x11Result.events)
-        parseEventCopies(x11Result.eventCopies)
-        parseEventStructs(x11Result.eventStructs)
-        parseRequests(x11Result.requests)
+        parseStructs()
+        parseUnions()
+        parseEnums()
+        parseErrors()
+        parseErrorCopies()
+        parseEvents()
+        parseEventCopies()
+        parseEventStructs()
+        parseRequests()
         return result
     }
 
-    void parseStructsWithUnions(Map<String, Node> structs, Map<String, Node> unions) {
-        structs.each { entry ->
+    void parseStructs() {
+        x11Result.structs.each { entry ->
             String className = Conventions.getStructJavaName(entry.key)
             result.structs.put(entry.key, parseType(className, entry.value))
         }
-        unions.each { entry ->
+    }
+
+    void parseUnions() {
+        x11Result.unions.each { entry ->
             String className = Conventions.getUnionJavaName(entry.key)
             result.unions.put(entry.key, parseType(className, entry.value))
         }
     }
 
-    void parseEnums(Map<String, Node> enums) {
-        enums.each { entry ->
+    void parseEnums() {
+        x11Result.enums.each { entry ->
             String enumName = Conventions.getEnumJavaName(entry.key)
             result.enums.put(entry.key, parseEnum(enumName, entry.value))
         }
     }
 
-    void parseErrors(Map<String, Node> errors) {
-        errors.each { entry ->
+    void parseErrors() {
+        x11Result.errors.each { entry ->
             String className = Conventions.getErrorJavaName(entry.key)
-            result.errors.put(entry.key, parseType(className, entry.value))
+            TypeSpec.Builder builder = parseType(className, entry.value)
+            builder.addField(FieldSpec.builder(TypeName.INT, 'CODE')
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .initializer('$L', entry.value.attributes().get('number'))
+                .build())
+            result.errors.put(entry.key, builder)
         }
     }
 
-    void parseErrorCopies(Map<String, Node> errorCopies) {
-        //todo
+    void parseErrorCopies() {
+        x11Result.errorCopies.each { entry ->
+            String className = Conventions.getErrorJavaName(entry.key)
+            String errorName = entry.value.attributes().get('ref')
+            Node errorNode = x11Result.findError(errorName)
+            TypeSpec.Builder builder = TypeSpec.classBuilder(className)
+            builder.addField(FieldSpec.builder(TypeName.INT, 'CODE')
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .initializer('$L', entry.value.attributes().get('number'))
+                .build())
+            List<FieldSpec> fields = errorNode.childNodes().collect { Node it ->
+                getField(it)
+            }.findAll { it }
+            builder.addFields(fields)
+                .addModifiers(Modifier.PUBLIC)
+
+            result.errors.put(entry.key, builder)
+        }
     }
 
-    void parseEvents(Map<String, Node> events) {
-        events.each { entry ->
+    void parseEvents() {
+        x11Result.events.each { entry ->
             String className = Conventions.getEventJavaName(entry.key)
-            result.events.put(entry.key, parseType(className, entry.value))
+            TypeSpec.Builder builder = parseType(className, entry.value)
+            builder.addField(FieldSpec.builder(TypeName.INT, 'CODE')
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .initializer('$L', entry.value.attributes().get('number'))
+                .build())
+            result.events.put(entry.key, builder)
         }
     }
 
-    void parseEventCopies(Map<String, Node> errorCopies) {
-        //todo
+    void parseEventCopies() {
+        x11Result.eventCopies.each { entry ->
+            String className = Conventions.getEventJavaName(entry.key)
+            String eventName = entry.value.attributes().get('ref')
+            Node eventNode = x11Result.findEvent(eventName)
+            TypeSpec.Builder builder = TypeSpec.classBuilder(className)
+            builder.addField(FieldSpec.builder(TypeName.INT, 'CODE')
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .initializer('$L', entry.value.attributes().get('number'))
+                .build())
+            List<FieldSpec> fields = eventNode.childNodes().collect { Node it ->
+                getField(it)
+            }.findAll { it }
+            builder.addFields(fields)
+                .addModifiers(Modifier.PUBLIC)
+
+            result.events.put(entry.key, builder)
+        }
     }
 
-    void parseEventStructs(Map<String, Node> eventStructs) {
-        eventStructs.each { entry ->
+    void parseEventStructs() {
+        x11Result.eventStructs.each { entry ->
             String className= Conventions.getEventStructJavaName(entry.key)
             TypeSpec.Builder type = TypeSpec.interfaceBuilder(className)
             result.eventStructs.put(entry.key, type)
         }
     }
 
-    void parseRequests(Map<String, Node> requests) {
-        requests.each { entry ->
+    void parseRequests() {
+        x11Result.requests.each { entry ->
             String className = Conventions.getRequestJavaName(entry.key)
-            result.requests.put(entry.key, parseType(className, entry.value))
+            TypeSpec.Builder builder = parseType(className, entry.value)
+            builder.addField(FieldSpec.builder(TypeName.INT, 'OPCODE')
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .initializer('$L', entry.value.attributes().get('opcode'))
+                .build())
+            result.requests.put(entry.key, builder)
             Node reply = (Node) entry.value.childNodes().find {Node it -> it.name() == 'reply'}
             if(reply) {
                 result.replies.put(entry.key, parseType(Conventions.getReplyJavaName(entry.key), entry.value))
