@@ -145,9 +145,6 @@ class JavaParser {
     }
 
     TypeSpec.Builder parseEnum(String enumName, Node node) {
-        if(isBitMaskEnum(node)) {
-            return parseValueMaskEnum(enumName, node)
-        }
         TypeSpec.Builder builder = TypeSpec.enumBuilder(enumName)
         builder.addSuperinterface(ClassName.get(basePackage, 'IntValue'))
         builder.addField(FieldSpec.builder(TypeName.INT, 'value', Modifier.PRIVATE).build())
@@ -177,45 +174,6 @@ class JavaParser {
         }
         builder.addModifiers(Modifier.PUBLIC)
         return builder
-    }
-
-    TypeSpec.Builder parseValueMaskEnum(String enumName, Node node) {
-        TypeSpec.Builder builder = TypeSpec.enumBuilder(enumName)
-        builder.addSuperinterface(ClassName.get(basePackage, 'ValueMask'))
-        builder.addField(FieldSpec.builder(TypeName.INT, 'mask', Modifier.PRIVATE).build())
-        builder.addMethod(MethodSpec.constructorBuilder()
-            .addParameter(TypeName.INT, "mask")
-            .addStatement("this.\$N = \$N", "mask", "mask")
-            .build())
-        builder.addMethod(MethodSpec.methodBuilder('getMask')
-            .addAnnotation(Override)
-            .addModifiers(Modifier.PUBLIC)
-            .addStatement("return mask")
-            .returns(TypeName.INT)
-            .build())
-
-        node.childNodes().each { Node it ->
-            switch(it.name()) {
-                case 'item':
-                    String itemName = Conventions.getEnumValueName((String) it.attributes().get('name'))
-                        builder.addEnumConstant(itemName, TypeSpec.anonymousClassBuilder("\$L", getEnumItemValue(it)).build())
-                    break
-                case 'doc':
-                    return
-                    break
-                default:
-                    throw new IllegalArgumentException("cannot parse node ${it.name()}")
-            }
-        }
-        builder.addModifiers(Modifier.PUBLIC)
-        return builder
-
-    }
-
-    boolean isBitMaskEnum(Node node) {
-        return node.childNodes().find {Node child ->
-            child.childNodes().find { it.name() == 'bit' }
-        }
     }
 
     String getEnumItemValue(Node node) {

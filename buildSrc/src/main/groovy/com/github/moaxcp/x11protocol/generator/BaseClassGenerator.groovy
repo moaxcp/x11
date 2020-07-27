@@ -13,7 +13,6 @@ class BaseClassGenerator {
 
     void generate() {
         generateIntValue()
-        generateValueMask()
     }
 
     void generateIntValue() {
@@ -23,24 +22,13 @@ class BaseClassGenerator {
                 .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
                 .returns(TypeName.INT)
                 .build())
-            .build()
-        JavaFile.builder(basePackage, intValue).build().writeTo(outputSrc)
-    }
-
-    void generateValueMask() {
-        TypeSpec valueMask = TypeSpec.interfaceBuilder('ValueMask')
-            .addModifiers(Modifier.PUBLIC)
-            .addMethod(MethodSpec.methodBuilder('getMask')
-                .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
-                .returns(TypeName.INT)
-                .build())
             .addMethod(MethodSpec.methodBuilder('mask')
                 .addParameter(TypeName.INT, 'value')
                 .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
                 .returns(TypeName.INT)
-                .addStatement('return value | getMask()')
+                .addStatement('return value | getValue()')
                 .build())
             .build()
-        JavaFile.builder(basePackage, valueMask).build().writeTo(outputSrc)
+        JavaFile.builder(basePackage, intValue).build().writeTo(outputSrc)
     }
 }
