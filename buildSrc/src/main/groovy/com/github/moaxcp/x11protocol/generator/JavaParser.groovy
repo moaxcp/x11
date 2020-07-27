@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11protocol.generator
 
-
+import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.MethodSpec
@@ -249,12 +249,16 @@ class JavaParser {
 
     TypeSpec.Builder parseType(String className, Node xml) {
         TypeSpec.Builder builder = TypeSpec.classBuilder(className)
-        List<FieldSpec> fields = xml.childNodes().collect { Node it ->
-            getField(it)
-        }.findAll { it }
+        List<FieldSpec> fields = getFields(xml)
         builder.addFields(fields)
         .addModifiers(Modifier.PUBLIC)
         return builder
+    }
+
+    List<FieldSpec> getFields(Node node) {
+        node.childNodes().collect { Node it ->
+            getField(it)
+        }.findAll { it }
     }
     
     FieldSpec getField(Node node) {
@@ -266,7 +270,7 @@ class JavaParser {
             case 'list':
                 return getListField(node)
             case 'fd':
-                return null
+                return getFd(node)
             case 'switch':
                 return null
             case 'doc':
@@ -284,8 +288,13 @@ class JavaParser {
 
     private FieldSpec getListField(Node node) {
         Tuple2<TypeName, String> field = getTypeAndVariableName(node)
+        if(field.getFirst() == TypeName.CHAR) {
+            return FieldSpec.builder(String.class, field.getSecond(), Modifier.PRIVATE).build()
+        }
         if(field.getFirst().isPrimitive()) {
-            return null
+            ArrayTypeName arrayName = ArrayTypeName.of(field.getFirst())
+            return FieldSpec.builder(arrayName, field.second)
+                .addModifiers(Modifier.PRIVATE).build()
         }
         ParameterizedTypeName paramType = ParameterizedTypeName.get(ClassName.get(List.class), field.getFirst())
         return FieldSpec.builder(paramType, field.getSecond()).
@@ -296,6 +305,11 @@ class JavaParser {
         Tuple2<TypeName, String> field = getTypeAndVariableName(node)
         return FieldSpec.builder(field.getFirst(), field.getSecond())
             .addModifiers(Modifier.PRIVATE).build()
+    }
+
+    FieldSpec getFd(Node node) {
+        String variableName = Conventions.convertX11VariableNameToJava((String) node.attributes().get('name'))
+        return FieldSpec.builder(TypeName.INT, variableName, Modifier.PRIVATE).build()
     }
 
     Tuple2<TypeName, String> getTypeAndVariableName(Node node) {
