@@ -36,26 +36,26 @@ class JavaParser {
 
     void parseStructsWithUnions(Map<String, Node> structs, Map<String, Node> unions) {
         structs.each { entry ->
-            String className = Conventions.getClassName(entry.key)
-            result.javaTypes.put(entry.key, parseType(className, entry.value))
+            String className = Conventions.getStructJavaName(entry.key)
+            result.structs.put(entry.key, parseType(className, entry.value))
         }
         unions.each { entry ->
-            String className = Conventions.getClassName(entry.key)
-            result.javaTypes.put(entry.key, parseType(className, entry.value))
+            String className = Conventions.getUnionJavaName(entry.key)
+            result.unions.put(entry.key, parseType(className, entry.value))
         }
     }
 
     void parseEnums(Map<String, Node> enums) {
         enums.each { entry ->
-            String enumName = Conventions.getClassName(entry.key)
-            result.javaTypes.put(entry.key, parseEnum(enumName, entry.value))
+            String enumName = Conventions.getEnumJavaName(entry.key)
+            result.enums.put(entry.key, parseEnum(enumName, entry.value))
         }
     }
 
     void parseErrors(Map<String, Node> errors) {
         errors.each { entry ->
-            String className = Conventions.getClassName(entry.key)
-            result.javaTypes.put(entry.key, parseType(className, entry.value))
+            String className = Conventions.getErrorJavaName(entry.key)
+            result.errors.put(entry.key, parseType(className, entry.value))
         }
     }
 
@@ -65,8 +65,8 @@ class JavaParser {
 
     void parseEvents(Map<String, Node> events) {
         events.each { entry ->
-            String className = Conventions.getClassName(entry.key)
-            result.javaTypes.put(entry.key, parseType(className, entry.value))
+            String className = Conventions.getEventJavaName(entry.key)
+            result.events.put(entry.key, parseType(className, entry.value))
         }
     }
 
@@ -76,24 +76,24 @@ class JavaParser {
 
     void parseEventStructs(Map<String, Node> eventStructs) {
         eventStructs.each { entry ->
-            String className= Conventions.getClassName(entry.key)
-            TypeSpec type = TypeSpec.interfaceBuilder(className).build()
-            result.javaTypes.put(entry.key, type)
+            String className= Conventions.getEventStructJavaName(entry.key)
+            TypeSpec.Builder type = TypeSpec.interfaceBuilder(className)
+            result.eventStructs.put(entry.key, type)
         }
     }
 
     void parseRequests(Map<String, Node> requests) {
         requests.each { entry ->
-            String className = Conventions.getClassName(entry.key)
-            result.javaTypes.put(entry.key, parseType(className, entry.value))
+            String className = Conventions.getRequestJavaName(entry.key)
+            result.requests.put(entry.key, parseType(className, entry.value))
             Node reply = (Node) entry.value.childNodes().find {Node it -> it.name() == 'reply'}
             if(reply) {
-                result.javaTypes.put(entry.key + 'Reply', parseType(className + 'Reply', entry.value))
+                result.replies.put(entry.key, parseType(Conventions.getReplyJavaName(entry.key), entry.value))
             }
         }
     }
 
-    TypeSpec parseEnum(String enumName, Node node) {
+    TypeSpec.Builder parseEnum(String enumName, Node node) {
         if(isBitMaskEnum(node)) {
             return parseValueMaskEnum(enumName, node)
         }
@@ -114,7 +114,7 @@ class JavaParser {
         node.childNodes().each { Node it ->
             switch(it.name()) {
                 case 'item':
-                    String itemName = Conventions.getEnumName((String) it.attributes().get('name'))
+                    String itemName = Conventions.getEnumValueName((String) it.attributes().get('name'))
                     builder.addEnumConstant(itemName, TypeSpec.anonymousClassBuilder("\$L", getEnumItemValue(it)).build())
                     break
                 case 'doc':
@@ -125,10 +125,10 @@ class JavaParser {
             }
         }
         builder.addModifiers(Modifier.PUBLIC)
-        return builder.build()
+        return builder
     }
 
-    TypeSpec parseValueMaskEnum(String enumName, Node node) {
+    TypeSpec.Builder parseValueMaskEnum(String enumName, Node node) {
         TypeSpec.Builder builder = TypeSpec.enumBuilder(enumName)
         builder.addSuperinterface(ClassName.get(basePackage, 'ValueMask'))
         builder.addField(FieldSpec.builder(TypeName.INT, 'mask', Modifier.PRIVATE).build())
@@ -146,7 +146,7 @@ class JavaParser {
         node.childNodes().each { Node it ->
             switch(it.name()) {
                 case 'item':
-                    String itemName = Conventions.getEnumName((String) it.attributes().get('name'))
+                    String itemName = Conventions.getEnumValueName((String) it.attributes().get('name'))
                         builder.addEnumConstant(itemName, TypeSpec.anonymousClassBuilder("\$L", getEnumItemValue(it)).build())
                     break
                 case 'doc':
@@ -157,7 +157,7 @@ class JavaParser {
             }
         }
         builder.addModifiers(Modifier.PUBLIC)
-        return builder.build()
+        return builder
 
     }
 
@@ -196,14 +196,14 @@ class JavaParser {
         return builder.toString()
     }
 
-    TypeSpec parseType(String className, Node xml) {
+    TypeSpec.Builder parseType(String className, Node xml) {
         TypeSpec.Builder builder = TypeSpec.classBuilder(className)
         List<FieldSpec> fields = xml.childNodes().collect { Node it ->
             getField(it)
         }.findAll { it }
         builder.addFields(fields)
         .addModifiers(Modifier.PUBLIC)
-        return builder.build()
+        return builder
     }
     
     FieldSpec getField(Node node) {
@@ -258,10 +258,10 @@ class JavaParser {
     }
 
     TypeName getFieldTypeName(String type) {
-        Tuple2<String, String> tuple = x11Result.resolveType(type)
-        if(tuple.first() == 'primative') {
-            return Conventions.x11PrimativeToJavaTypeName(tuple.getSecond())
+        Tuple3<String, String, String> tuple = x11Result.resolveType(type)
+        if(tuple.getSecond() == 'primative') {
+            return Conventions.x11PrimativeToJavaTypeName(tuple.getThird())
         }
-        return ClassName.get(basePackage + '.' + tuple.getFirst(), Conventions.getClassName(tuple.getSecond()))
+        return ClassName.get(basePackage + '.' + tuple.getFirst(), Conventions."get${tuple.second.capitalize()}JavaName"(tuple.getThird()))
     }
 }

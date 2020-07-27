@@ -26,8 +26,8 @@ class X11Result {
     Map<String, Node> requests = [:]
 
     @Memoized
-    Tuple2<String, String> resolveType(String type) {
-        Tuple2<String, String> resolved
+    Tuple3<String, String, String> resolveType(String type) {
+        Tuple3<String, String, String> resolved
         if(type.contains(':')) {
             String specificImport = type.substring(0, type.indexOf(':'))
             String actualType = type.substring(type.indexOf(':') + 1)
@@ -46,8 +46,8 @@ class X11Result {
         return resolved
     }
 
-    private Tuple2<String, String> resolveTypeRecursive(String type) {
-        Tuple2<String, String> fromImport = imports.values().collect {
+    private Tuple3<String, String, String> resolveTypeRecursive(String type) {
+        Tuple3<String, String, String> fromImport = imports.values().collect {
             it.resolveTypeRecursive(type)
         }.find {
             it
@@ -60,12 +60,10 @@ class X11Result {
         return resolveLocal(type)
     }
 
-    private Tuple2<String, String> resolveLocal(String type) {
+    private Tuple3<String, String, String> resolveLocal(String type) {
         type = resolveTypeDef(type) ?: type
 
-        Tuple2<String, String> fromObjects = [structs, unions, enums, errors, errorCopies, events, eventCopies, eventStructs, requests].collect {
-            it.containsKey(type) ? new Tuple2<>(header, type) : null
-        }.find { it }
+        Tuple3<String, String, String> fromObjects = resolveFromObjects(type)
         if(fromObjects) {
             return fromObjects
         }
@@ -80,36 +78,63 @@ class X11Result {
 
         switch (type) {
             case 'BOOL':
-                return new Tuple2<>('primative', 'BOOL')
+                return new Tuple3<>('xproto', 'primative', 'BOOL')
             case 'BYTE':
-                return new Tuple2<>('primative', 'BYTE')
+                return new Tuple3<>('xproto', 'primative', 'BYTE')
             case 'INT8':
-                return new Tuple2<>('primative', 'INT8')
+                return new Tuple3<>('xproto', 'primative', 'INT8')
             case 'INT16':
-                return new Tuple2<>('primative', 'INT16')
+                return new Tuple3<>('xproto', 'primative', 'INT16')
             case 'INT32':
-                return new Tuple2<>('primative', 'INT32')
+                return new Tuple3<>('xproto', 'primative', 'INT32')
             case 'CARD8':
-                return new Tuple2<>('primative', 'CARD8')
+                return new Tuple3<>('xproto', 'primative', 'CARD8')
             case 'CARD16':
-                return new Tuple2<>('primative', 'CARD16')
+                return new Tuple3<>('xproto', 'primative', 'CARD16')
             case 'CARD32':
-                return new Tuple2<>('primative', 'CARD32')
+                return new Tuple3<>('xproto', 'primative', 'CARD32')
             case 'CARD64':
-                return new Tuple2<>('primative', 'CARD64')
+                return new Tuple3<>('xproto', 'primative', 'CARD64')
             case 'fd':
-                return new Tuple2<>('primative', 'fd')
+                return new Tuple3<>('xproto', 'primative', 'fd')
             case 'float':
-                return new Tuple2<>('primative', 'float')
+                return new Tuple3<>('xproto', 'primative', 'float')
             case 'double':
-                return new Tuple2<>('primative', 'double')
+                return new Tuple3<>('xproto', 'primative', 'double')
             case 'char':
-                return new Tuple2<>('primative', 'char')
+                return new Tuple3<>('xproto', 'primative', 'char')
             case 'void':
-                return new Tuple2<>('primative', 'void')
+                return new Tuple3<>('xproto', 'primative', 'void')
             default:
                 return null
         }
+    }
+
+    Tuple3<String, String, String> resolveFromObjects(String type) {
+        return [
+            struct:structs.keySet(),
+            union:unions.keySet(),
+            enum:enums.keySet(),
+            error:errors.keySet(),
+            errorCopy:errorCopies.keySet(),
+            event:events.keySet(),
+            eventCopy:eventCopies.keySet(),
+            eventStruct:eventStructs.keySet(),
+            request:requests.keySet()
+        ].inject(null) { result, entry ->
+            if(result) {
+                return result
+            }
+            resolveFromObjects(type, entry.key, entry.value)
+        }
+    }
+
+    Tuple3<String, String, String> resolveFromObjects(String type, String objectName, Set<String> names) {
+        String name = names.find { it == type }
+        if(name) {
+            return new Tuple3<>(header, objectName, type)
+        }
+        return null
     }
 
     String resolveTypeDef(String type) {

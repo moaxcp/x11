@@ -25,8 +25,8 @@ class JavaParserSpec extends Specification {
         'CARD16'        || TypeName.SHORT
         'CARD32'        || TypeName.INT
         'char'          || TypeName.CHAR
-        'POINT'         || ClassName.get('com.github.moaxcp.x11protocol.xproto', 'Point')
-        'CreateContext' || ClassName.get('com.github.moaxcp.x11protocol.glx', 'CreateContext')
+        'POINT'         || ClassName.get('com.github.moaxcp.x11protocol.xproto', 'PointStruct')
+        'CreateContext' || ClassName.get('com.github.moaxcp.x11protocol.glx', 'CreateContextRequest')
         'WINDOW'        || TypeName.INT
         'glx:CONTEXT'   || TypeName.INT
         'xproto:WINDOW' || TypeName.INT
@@ -42,7 +42,7 @@ class JavaParserSpec extends Specification {
 
         where:
         x11Name  || javaName
-        'PermamentLockBehavior'  || ClassName.get('com.github.moaxcp.x11protocol.xkb', 'DefaultBehavior')
+        'PermamentLockBehavior'  || ClassName.get('com.github.moaxcp.x11protocol.xkb', 'DefaultBehaviorStruct')
     }
 
     def 'parse field type name xinput'() {
@@ -55,6 +55,6 @@ class JavaParserSpec extends Specification {
 
         where:
         x11Name  || javaName
-        'EventForSend'  || ClassName.get('com.github.moaxcp.x11protocol.xinput', 'EventForSend')
+        'EventForSend'  || ClassName.get('com.github.moaxcp.x11protocol.xinput', 'EventForSendEventStruct')
     }
 }

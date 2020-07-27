@@ -8,17 +8,17 @@ class X11ResultSpec extends Specification {
         X11Result result = X11Parser.parse(new File('../src/main/xcbXmls/glx.xml'))
 
         expect:
-        result.resolveType(type) == new Tuple2<>(group, resolved)
+        result.resolveType(type) == new Tuple3<>(group, x11Type, resolved)
 
         where:
-        type       || group       | resolved
-        'BYTE'     || 'primative' | 'BYTE'
-        'PIXMAP'   || 'primative' | 'CARD32'
-        'FLOAT32'  || 'primative' | 'float'
-        'FLOAT64'  || 'primative' | 'double'
-        'DRAWABLE' || 'primative' | 'CARD32'
-        'POINT'    || 'xproto'    | 'POINT'
-        'void'     || 'primative' | 'void'
-        'Generic'  || 'glx'       | 'Generic'
+        type       || group       | x11Type     | resolved
+        'BYTE'     || 'xproto'    | 'primative' | 'BYTE'
+        'PIXMAP'   || 'xproto'    | 'primative' | 'CARD32'
+        'FLOAT32'  || 'xproto'    | 'primative' | 'float'
+        'FLOAT64'  || 'xproto'    | 'primative' | 'double'
+        'DRAWABLE' || 'xproto'    | 'primative' | 'CARD32'
+        'POINT'    || 'xproto'    | 'struct'    | 'POINT'
+        'void'     || 'xproto'    | 'primative' | 'void'
+        'Generic'  || 'glx'       | 'error'    | 'Generic'
     }
 }

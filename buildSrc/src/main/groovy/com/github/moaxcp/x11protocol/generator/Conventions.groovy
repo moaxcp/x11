@@ -82,7 +82,39 @@ class Conventions {
         return converted
     }
 
-    static String getClassName(String x11Name) {
+    static String getStructJavaName(String x11Name) {
+        return getJavaName(x11Name) + 'Struct'
+    }
+
+    static String getUnionJavaName(String x11Name) {
+        return getJavaName(x11Name) + 'Union'
+    }
+
+    static String getEnumJavaName(String x11Name) {
+        return getJavaName(x11Name) + 'Enum'
+    }
+
+    static String getErrorJavaName(String x11Name) {
+        return getJavaName(x11Name) + 'Error'
+    }
+
+    static String getEventJavaName(String x11Name) {
+        return getJavaName(x11Name) + 'Event'
+    }
+
+    static String getEventStructJavaName(String x11Name) {
+        return getJavaName(x11Name) + 'EventStruct'
+    }
+
+    static String getRequestJavaName(String x11Name) {
+        return getJavaName(x11Name) + 'Request'
+    }
+
+    static String getReplyJavaName(String x11Name) {
+        return getJavaName(x11Name) + 'Reply'
+    }
+
+    static String getJavaName(String x11Name) {
         String startNumbers = x11Name.find('^\\d+')
         if(startNumbers) {
             String remainingString = x11Name.substring(startNumbers.length())
@@ -98,7 +130,7 @@ class Conventions {
         return x11Name
     }
 
-    static String getEnumName(String x11Name) {
-        CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, getClassName(x11Name))
+    static String getEnumValueName(String x11Name) {
+        CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, getJavaName(x11Name))
     }
 }

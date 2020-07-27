@@ -6,18 +6,18 @@ import spock.lang.Specification
 class ConventionsSpec extends Specification {
     def 'parse class name'() {
         expect:
-        Conventions.getClassName(x11Name) == javaName
+        Conventions.getJavaName(x11Name) == javaName
 
         where:
         x11Name          || javaName
         '1'              || 'One'
-        '8Bits'              || 'EightBits'
+        '8Bits'          || 'EightBits'
         'POINT'          || 'Point'
         'CommonBehavior' || 'CommonBehavior'
     }
     def 'parse enum name'() {
         expect:
-        Conventions.getEnumName(x11Name) == javaName
+        Conventions.getEnumValueName(x11Name) == javaName
 
         where:
         x11Name          || javaName
