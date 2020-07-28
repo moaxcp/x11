@@ -1,15 +1,9 @@
 package com.github.moaxcp.x11protocol.generator
 
-import com.squareup.javapoet.ArrayTypeName
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.ParameterizedTypeName
-import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeSpec
+import com.squareup.javapoet.*
+import static com.squareup.javapoet.MethodSpec.methodBuilder
 import groovy.util.slurpersupport.Node
-
-import javax.lang.model.element.Modifier 
+import javax.lang.model.element.Modifier
 
 class JavaParser {
     private String basePackage
@@ -216,7 +210,31 @@ class JavaParser {
             builder.addAnnotation(ClassName.get('lombok', 'AllArgsConstructor'))
             builder.addAnnotation(ClassName.get('lombok', 'Data'))
         }
+
+        builder.addMethod(getReadMethod(className, xml))
         return builder
+    }
+
+    MethodSpec getReadMethod(String className, Node node) {
+        MethodSpec.Builder method = methodBuilder("read$className")
+            //.returns(ClassName.get('', className))
+        CodeBlock.Builder code = CodeBlock.builder()
+        node.childNodes().each { Node child ->
+            switch(child.name()) {
+                case 'pad':
+                    String bytes = child.attributes().get('bytes')
+                    if(bytes) {
+                        //code.add('in.readBytes($L)', bytes)
+                    } else {
+                        String align = child.attributes().get('align')
+                    }
+            }
+        }
+
+        //code.addStatement('return null')
+        method.addStatement(code.build())
+
+        return method.build()
     }
 
     List<FieldSpec> getFields(Node node) {
