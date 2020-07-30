@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
-class X11ListField extends X11Field {
+class XListField extends XField {
     String lengthField
-
+    Expression lengthExpression
 }
