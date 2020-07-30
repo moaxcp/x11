@@ -8,7 +8,7 @@ class JavaParserSpec extends Specification {
 
     def 'parse field type name glx'() {
         given:
-        X11Result result = X11Parser.parse(new File('../src/main/xcbXmls/glx.xml'))
+        X11Result result = X11Parser.parseX11(new File('../src/main/xcbXmls/glx.xml'))
         JavaParser parser = new JavaParser(basePackage: 'com.github.moaxcp.x11protocol', x11Result: result)
 
         expect:
@@ -34,7 +34,7 @@ class JavaParserSpec extends Specification {
 
     def 'parse field type name xkb'() {
         given:
-        X11Result result = X11Parser.parse(new File('../src/main/xcbXmls/xkb.xml'))
+        X11Result result = X11Parser.parseX11(new File('../src/main/xcbXmls/xkb.xml'))
         JavaParser parser = new JavaParser(basePackage: 'com.github.moaxcp.x11protocol', x11Result: result)
 
         expect:
@@ -47,7 +47,7 @@ class JavaParserSpec extends Specification {
 
     def 'parse field type name xinput'() {
         given:
-        X11Result result = X11Parser.parse(new File('../src/main/xcbXmls/xinput.xml'))
+        X11Result result = X11Parser.parseX11(new File('../src/main/xcbXmls/xinput.xml'))
         JavaParser parser = new JavaParser(basePackage: 'com.github.moaxcp.x11protocol', x11Result: result)
 
         expect:

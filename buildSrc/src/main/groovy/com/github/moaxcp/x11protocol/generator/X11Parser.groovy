@@ -9,8 +9,12 @@ class X11Parser {
     private GPathResult xml
 
 
-    static X11Result parse(File file) {
+    static X11Result parseX11(File file) {
         return new X11Parser().parseFile(file)
+    }
+
+    static X11Result parseX11(String text) {
+        return new X11Parser().parseText(text)
     }
 
     private X11Parser() {
@@ -20,6 +24,16 @@ class X11Parser {
     private X11Result parseFile(File file) {
         result = new X11Result(file:file)
         xml = new XmlSlurper().parse(file)
+        return parseXml()
+    }
+
+    private X11Result parseText(String text) {
+        result = new X11Result()
+        xml = new XmlSlurper().parseText(text)
+        return parseXml()
+    }
+
+    private X11Result parseXml() {
         parseHeader()
         xml.childNodes().each { node ->
             if(node instanceof Node) {
@@ -30,6 +44,7 @@ class X11Parser {
             }
         }
         return result
+
     }
 
     private void parseHeader() {
@@ -50,7 +65,7 @@ class X11Parser {
     private X11Result cachedParseImport(Node node) {
         String name = node.text()
         File importFile = new File(result.file.parent + File.separator + name + '.xml')
-        return parse(importFile)
+        return parseX11(importFile)
     }
 
     private void parseXidtype(Node node) {

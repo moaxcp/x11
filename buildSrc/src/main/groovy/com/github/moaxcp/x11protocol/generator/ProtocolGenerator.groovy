@@ -9,7 +9,7 @@ class ProtocolGenerator {
     String basePackage
 
     void generate() {
-        JavaResult javaResult = JavaParser.parse(basePackage, X11Parser.parse(inputXml))
+        JavaResult javaResult = JavaParser.parse(basePackage, X11Parser.parseX11(inputXml))
         createClasses(javaResult)
     }
 
