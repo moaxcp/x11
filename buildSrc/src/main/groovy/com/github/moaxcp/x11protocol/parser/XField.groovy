@@ -1,5 +1,10 @@
 package com.github.moaxcp.x11protocol.parser
 
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+
+@ToString(excludes = 'xResult')
+@EqualsAndHashCode
 class XField implements XUnit {
     XResult xResult
     String type

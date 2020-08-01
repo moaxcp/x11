@@ -1,13 +1,8 @@
 package com.github.moaxcp.x11protocol.parser
 
 class XPadAlign implements XUnit {
-    private int align
-    private XListField list
-
-    XPadAlign(int align, XListField list) {
-        this.align = align
-        this.list = list
-    }
+    int align
+    XListField list
 
     @Override
     String getReadCode() {

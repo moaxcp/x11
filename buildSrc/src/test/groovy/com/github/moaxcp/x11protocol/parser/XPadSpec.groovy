@@ -5,7 +5,7 @@ import spock.lang.Specification
 class XPadSpec extends Specification {
     def 'XPad read expression'() {
         given:
-        XPad xpad = new XPad(4)
+        XPad xpad = new XPad(bytes:4)
 
         expect:
         xpad.getReadCode() == 'in.readPad(4);'
@@ -13,7 +13,7 @@ class XPadSpec extends Specification {
 
     def 'XPad write expression'() {
         given:
-        XPad xpad = new XPad(4)
+        XPad xpad = new XPad(bytes:4)
 
         expect:
         xpad.getWriteCode() == 'out.writePad(4);'

@@ -4,6 +4,8 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.util.slurpersupport.Node
 
+import static com.github.moaxcp.x11protocol.parser.XType.xidType
+
 @EqualsAndHashCode
 @ToString
 class XResult {
@@ -18,13 +20,13 @@ class XResult {
     Map<String, XStruct> structs = [:]
 
     void addXidtype(Node node) {
-        String name = node.attributes().get('name')
-        xidTypes.put(name, new XType(result:this, type:'primative', name:'CARD32'))
+        XType type = xidType(this, node)
+        xidTypes.put(type.name, type)
     }
 
     void addXidunion(Node node) {
-        String name = node.attributes().get('name')
-        xidUnion.put(name, new XType(result:this, type:'primative', name:'CARD32'))
+        XType type = xidType(this, node)
+        xidTypes.put(type.name, type)
     }
 
     void addImport(String name, XResult result) {

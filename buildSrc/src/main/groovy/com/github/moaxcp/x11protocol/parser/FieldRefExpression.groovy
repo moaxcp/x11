@@ -1,11 +1,12 @@
 package com.github.moaxcp.x11protocol.parser
 
-class FieldRefExpression implements Expression {
-    private String name
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
 
-    FieldRefExpression(String name) {
-        this.name = name
-    }
+@ToString
+@EqualsAndHashCode
+class FieldRefExpression implements Expression {
+    String name
 
     String getExpression() {
         name

@@ -22,7 +22,7 @@ class XResultSpec extends Specification {
         result.addXidtype((Node) getGPathResult().childNodes().next())
 
         then:
-        result.xidTypes == ['XID':new XType(result:result, type:'primative', name:'CARD32')]
+        result.xidTypes == ['XID':new XType(result, 'primative', 'CARD32')]
     }
 
     def 'Add an xidunion'() {
@@ -33,6 +33,6 @@ class XResultSpec extends Specification {
         result.addXidunion((Node) getGPathResult().childNodes().next())
 
         then:
-        result.xidUnion == ['XID':new XType(result:result, type:'primative', name:'CARD32')]
+        result.xidUnion == ['XID':new XType(result, 'primative', 'CARD32')]
     }
 }

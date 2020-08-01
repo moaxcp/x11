@@ -6,11 +6,7 @@ import groovy.transform.ToString
 @ToString
 @EqualsAndHashCode
 class XPad implements XUnit {
-    private int bytes
-
-    XPad(int bytes) {
-        this.bytes = bytes
-    }
+    int bytes
 
     @Override
     String getReadCode() {

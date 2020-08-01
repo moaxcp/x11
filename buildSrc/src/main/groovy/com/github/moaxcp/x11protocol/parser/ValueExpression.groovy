@@ -1,13 +1,13 @@
 package com.github.moaxcp.x11protocol.parser
 
-import groovy.transform.PackageScope
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
 
+@ToString
+@EqualsAndHashCode
 class ValueExpression implements Expression {
-    private String value
+    String value
 
-    @PackageScope void setValue(String value) {
-        this.value = value
-    }
     String getExpression() {
         return value
     }
