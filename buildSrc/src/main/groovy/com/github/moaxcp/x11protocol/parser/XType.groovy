@@ -5,7 +5,7 @@ import groovy.transform.ToString
 import groovy.util.slurpersupport.Node
 
 @ToString(excludes = 'result')
-@EqualsAndHashCode
+@EqualsAndHashCode(excludes = 'result')
 class XType {
     XResult result
     String type //(primative, struct, union, request)
@@ -13,7 +13,12 @@ class XType {
 
     static XType xidType(XResult result, Node node) {
         String name = node.attributes().get('name')
-        return new XType(result:result, type:'primative', name:name)
+        return new XType(result:result, type:'xid', name:name)
+    }
+
+    static XType xidUnionType(XResult result, Node node) {
+        String name = node.attributes().get('name')
+        return new XType(result:result, type:'xidunion', name:name)
     }
 
     String getGroup() {

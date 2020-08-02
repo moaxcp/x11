@@ -1,9 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
-class XListField implements XUnit {
-    XResult xResult
-    String type
-    String name
+class XListField extends ResolvableXUnit {
     Expression lengthExpression
 
     @Override

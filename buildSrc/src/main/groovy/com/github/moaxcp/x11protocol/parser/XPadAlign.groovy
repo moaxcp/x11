@@ -7,13 +7,16 @@ class XPadAlign implements XUnit {
     @Override
     String getReadCode() {
         if(align == 4) {
-            return "in.readPad(${list.lengthExpression});"
+            return "in.readPadAlign(${list.lengthExpression.expression});"
         }
-        return "in.readPad($align, ${list.lengthExpression});"
+        return "in.readPadAlign($align, ${list.lengthExpression.expression});"
     }
 
     @Override
     String getWriteCode() {
-        return null
+        if(align == 4) {
+            return "out.writePadAlign(${list.lengthExpression.expression});"
+        }
+        return "out.writePadAlign($align, ${list.lengthExpression.expression});"
     }
 }
