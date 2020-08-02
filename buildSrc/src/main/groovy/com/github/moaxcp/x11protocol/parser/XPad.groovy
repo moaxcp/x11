@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.squareup.javapoet.CodeBlock
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
@@ -9,12 +10,12 @@ class XPad implements XUnit {
     int bytes
 
     @Override
-    String getReadCode() {
-        return "in.readPad($bytes);"
+    CodeBlock getReadCode() {
+        return CodeBlock.of("in.readPad($bytes)")
     }
 
     @Override
-    String getWriteCode() {
-        return "out.writePad($bytes);"
+    CodeBlock getWriteCode() {
+        return CodeBlock.of("out.writePad($bytes)")
     }
 }

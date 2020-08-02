@@ -8,7 +8,7 @@ class XPadSpec extends Specification {
         XPad xpad = new XPad(bytes:4)
 
         expect:
-        xpad.getReadCode() == 'in.readPad(4);'
+        xpad.getReadCode().toString() == 'in.readPad(4)'
     }
 
     def 'XPad write expression'() {
@@ -16,6 +16,6 @@ class XPadSpec extends Specification {
         XPad xpad = new XPad(bytes:4)
 
         expect:
-        xpad.getWriteCode() == 'out.writePad(4);'
+        xpad.getWriteCode().toString() == 'out.writePad(4)'
     }
 }

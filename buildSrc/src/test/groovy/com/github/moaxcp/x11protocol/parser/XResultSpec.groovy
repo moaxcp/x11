@@ -46,7 +46,7 @@ class XResultSpec extends Specification {
 
     def 'resolve an xid'() {
         given:
-        xmlBuilder.xcb() {xidunion(name:'XID')}
+        xmlBuilder.xcb(header:'xproto') {xidunion(name:'XID')}
         result.addXidtype((Node) getGPathResult().childNodes().next())
 
         when:
@@ -55,14 +55,15 @@ class XResultSpec extends Specification {
         then:
         type.name == 'XID'
         type.type == 'xid'
+        type.group == 'xproto'
     }
 
     def 'resolve an xid from import'() {
         given:
         xmlBuilder.xcb() {xidunion(name:'XID')}
-        XResult imported = new XResult(header:'import')
+        XResult imported = new XResult(header:'imported')
         imported.addXidtype((Node) getGPathResult().childNodes().next())
-        result.addImport('import', imported)
+        result.addImport(imported)
 
         when:
         XType type = result.resolveXType('XID')
@@ -70,21 +71,23 @@ class XResultSpec extends Specification {
         then:
         type.name == 'XID'
         type.type == 'xid'
+        type.group == 'imported'
     }
 
     def 'resolve an xid from specific import'() {
         given:
         xmlBuilder.xcb() {xidunion(name:'XID')}
-        XResult imported = new XResult(header:'import')
+        XResult imported = new XResult(header:'imported')
         imported.addXidtype((Node) getGPathResult().childNodes().next())
-        result.addImport('import', imported)
+        result.addImport(imported)
 
         when:
-        XType type = result.resolveXType('import:XID')
+        XType type = result.resolveXType('imported:XID')
 
         then:
         type.name == 'XID'
         type.type == 'xid'
+        type.group == 'imported'
     }
 
     def 'resolve an xidunion'() {
@@ -98,5 +101,38 @@ class XResultSpec extends Specification {
         then:
         type.name == 'XID'
         type.type == 'xidunion'
+        type.group == 'xproto'
+    }
+
+    def 'resolve BOOL from typedef'() {
+        given:
+        xmlBuilder.xcb(header:'xproto') {
+            typedef(oldname:'BOOL', newname:'TRUTH')
+        }
+        result.addTypeDef((Node) getGPathResult().childNodes().next())
+
+        when:
+        XType type = result.resolveXType('TRUTH')
+
+        then:
+        type.name == 'BOOL'
+        type.type == 'primative'
+        type.group == 'xproto'
+    }
+
+    def 'resolve CARD32 from typedef'() {
+        given:
+        xmlBuilder.xcb() {
+            typedef(oldname:'CARD32', newname:'VISUALID')
+        }
+        result.addTypeDef((Node) getGPathResult().childNodes().next())
+
+        when:
+        XType type = result.resolveXType('VISUALID')
+
+        then:
+        type.name == 'CARD32'
+        type.type == 'primative'
+        type.group == 'xproto'
     }
 }

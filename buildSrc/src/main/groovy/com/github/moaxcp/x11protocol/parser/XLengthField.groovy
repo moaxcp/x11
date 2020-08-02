@@ -2,8 +2,7 @@ package com.github.moaxcp.x11protocol.parser
 
 import com.squareup.javapoet.CodeBlock
 
-class XListField extends ResolvableXUnit {
-    Expression lengthExpression
+class XLengthField extends ResolvableXUnit implements LocalVariableXUnit {
 
     @Override
     CodeBlock getReadCode() {

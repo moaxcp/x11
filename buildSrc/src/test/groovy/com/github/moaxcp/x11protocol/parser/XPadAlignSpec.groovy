@@ -9,7 +9,7 @@ class XPadAlignSpec extends Specification {
             list: new XListField(lengthExpression: new ValueExpression(value:5)))
 
         expect:
-        align.readCode == "in.readPadAlign(5, 5);"
+        align.readCode.toString() == 'in.readPadAlign(5, 5)'
     }
 
     def 'XPadAlign write expression'() {
@@ -18,6 +18,6 @@ class XPadAlignSpec extends Specification {
             list: new XListField(lengthExpression: new ValueExpression(value:5)))
 
         expect:
-        align.writeCode == "out.writePadAlign(5, 5);"
+        align.writeCode.toString() == 'out.writePadAlign(5, 5)'
     }
 }
