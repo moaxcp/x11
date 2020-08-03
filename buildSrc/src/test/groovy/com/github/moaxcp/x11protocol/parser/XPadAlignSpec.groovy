@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.github.moaxcp.x11protocol.parser.expression.ValueExpression
 import spock.lang.Specification
 
 class XPadAlignSpec extends Specification {

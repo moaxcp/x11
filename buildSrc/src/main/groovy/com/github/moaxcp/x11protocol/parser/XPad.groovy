@@ -4,7 +4,7 @@ import com.squareup.javapoet.CodeBlock
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
-@ToString
+@ToString(includePackage = false)
 @EqualsAndHashCode
 class XPad implements XUnit {
     int bytes

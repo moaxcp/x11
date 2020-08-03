@@ -1,5 +1,6 @@
-package com.github.moaxcp.x11protocol.parser
+package com.github.moaxcp.x11protocol.parser.expression
 
+import com.github.moaxcp.x11protocol.parser.expression.ValueExpression
 import spock.lang.Specification
 
 class ValueExpressionSpec extends Specification {

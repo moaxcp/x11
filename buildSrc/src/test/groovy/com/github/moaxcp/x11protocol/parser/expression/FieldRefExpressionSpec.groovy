@@ -1,5 +1,6 @@
-package com.github.moaxcp.x11protocol.parser
+package com.github.moaxcp.x11protocol.parser.expression
 
+import com.github.moaxcp.x11protocol.parser.expression.FieldRefExpression
 import spock.lang.Specification
 
 class FieldRefExpressionSpec extends Specification {

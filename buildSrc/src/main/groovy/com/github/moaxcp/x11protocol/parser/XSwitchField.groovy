@@ -3,7 +3,7 @@ package com.github.moaxcp.x11protocol.parser
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 
-class XSwitchField extends ResolvableXUnit implements PropertyXUnit {
+class XSwitchField extends XField {
     /**
      * Indicates this field is from a switch and should set the mask on maskField using the enumType
      */

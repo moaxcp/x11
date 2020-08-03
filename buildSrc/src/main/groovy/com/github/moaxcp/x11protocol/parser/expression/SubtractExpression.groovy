@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11protocol.parser
+package com.github.moaxcp.x11protocol.parser.expression
 
 class SubtractExpression extends OpExpression {
     SubtractExpression() {

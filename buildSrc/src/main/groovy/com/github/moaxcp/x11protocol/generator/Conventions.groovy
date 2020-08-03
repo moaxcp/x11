@@ -2,6 +2,7 @@ package com.github.moaxcp.x11protocol.generator
 
 import com.google.common.base.CaseFormat
 import com.squareup.javapoet.ArrayTypeName
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeName
 import pl.allegro.finance.tradukisto.ValueConverters
 
@@ -84,6 +85,10 @@ class Conventions {
 
     static String getStructJavaName(String x11Name) {
         return getJavaName(x11Name) + 'Struct'
+    }
+
+    static TypeName getStructTypeName(String javaPackage, String x11Name) {
+        return ClassName.get(javaPackage, getStructJavaName(x11Name))
     }
 
     static String getUnionJavaName(String x11Name) {

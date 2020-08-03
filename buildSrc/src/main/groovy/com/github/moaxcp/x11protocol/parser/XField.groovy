@@ -3,19 +3,18 @@ package com.github.moaxcp.x11protocol.parser
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
-import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import javax.lang.model.element.Modifier
 import lombok.Setter
 
-@ToString
-@EqualsAndHashCode
-class XField extends ResolvableXUnit implements PropertyXUnit {
+@ToString(includeSuperProperties = true, includePackage = false, includes = ['name', 'type'])
+class XField extends ResolvableVariable implements PropertyXUnit {
     boolean readOnly = false
+    boolean lengthField = false
 
     @Override
     FieldSpec getMember() {
-        FieldSpec.Builder builder = FieldSpec.builder(javaType, javaName)
+        FieldSpec.Builder builder = FieldSpec.builder(resolvedType.javaType, javaName)
             .addModifiers(Modifier.PRIVATE)
         if(readOnly) {
             builder.addAnnotation(

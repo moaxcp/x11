@@ -1,5 +1,9 @@
-package com.github.moaxcp.x11protocol.parser
+package com.github.moaxcp.x11protocol.parser.expression
 
+import com.github.moaxcp.x11protocol.parser.expression.AddExpression
+import com.github.moaxcp.x11protocol.parser.expression.DivideExpression
+import com.github.moaxcp.x11protocol.parser.expression.FieldRefExpression
+import com.github.moaxcp.x11protocol.parser.expression.ValueExpression
 import spock.lang.Specification
 
 class DivideExpressionSpec extends Specification {

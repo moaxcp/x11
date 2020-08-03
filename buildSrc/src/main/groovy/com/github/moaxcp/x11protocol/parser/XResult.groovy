@@ -6,9 +6,10 @@ import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.parser.XType.*
 
+@ToString(includePackage = false, includes='header')
 @EqualsAndHashCode
-@ToString
 class XResult {
+    String basePackage
     String header
     String extensionXName
     String extensionName
@@ -36,6 +37,10 @@ class XResult {
         primatives['double'] = new XType(result:this, type:'primative', name:'double')
         primatives['char'] = new XType(result:this, type:'primative', name:'char')
         primatives['void'] = new XType(result:this, type:'primative', name:'void')
+    }
+
+    String getJavaPackage() {
+        return "$basePackage.$header"
     }
 
     void addXidtype(Node node) {

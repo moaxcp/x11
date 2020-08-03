@@ -2,7 +2,9 @@ package com.github.moaxcp.x11protocol.parser
 
 import com.squareup.javapoet.FieldSpec
 
-interface PropertyXUnit extends LocalVariableXUnit {
+/**
+ *
+ */
+interface PropertyXUnit extends JavaVariableXUnit {
     FieldSpec getMember()
-    boolean isReadOnly()
 }
