@@ -1,10 +1,12 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.github.moaxcp.x11protocol.generator.Conventions
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.util.slurpersupport.Node
 
-import static com.github.moaxcp.x11protocol.parser.XType.*
+import static com.github.moaxcp.x11protocol.parser.XType.xidType
+import static com.github.moaxcp.x11protocol.parser.XType.xidUnionType
 
 @ToString(includePackage = false, includes='header')
 @EqualsAndHashCode
@@ -21,22 +23,12 @@ class XResult {
     Map<String, XType> xidUnions = [:]
     Map<String, String> typedefs = [:]
     Map<String, XStruct> structs = [:]
+    Map<String, XEnum> enums = [:]
 
     XResult() {
-        primatives['BOOL'] = new XType(result:this, type:'primative', name:'BOOL')
-        primatives['BYTE'] = new XType(result:this, type:'primative', name:'BYTE')
-        primatives['INT8'] = new XType(result:this, type:'primative', name:'INT8')
-        primatives['INT16'] = new XType(result:this, type:'primative', name:'INT16')
-        primatives['INT32'] = new XType(result:this, type:'primative', name:'INT32')
-        primatives['CARD8'] = new XType(result:this, type:'primative', name:'CARD8')
-        primatives['CARD16'] = new XType(result:this, type:'primative', name:'CARD16')
-        primatives['CARD32'] = new XType(result:this, type:'primative', name:'CARD32')
-        primatives['CARD64'] = new XType(result:this, type:'primative', name:'CARD64')
-        primatives['fd'] = new XType(result:this, type:'primative', name:'fd')
-        primatives['float'] = new XType(result:this, type:'primative', name:'float')
-        primatives['double'] = new XType(result:this, type:'primative', name:'double')
-        primatives['char'] = new XType(result:this, type:'primative', name:'char')
-        primatives['void'] = new XType(result:this, type:'primative', name:'void')
+        primatives = Conventions.x11Primatives.collectEntries {
+            [(it):new XType(result:this, type:'primative', name:it)]
+        }
     }
 
     String getJavaPackage() {
@@ -64,6 +56,11 @@ class XResult {
     void addStruct(Node node) {
         String name = node.attributes().get('name')
         structs.put(name, XStruct.getXStruct(this, node))
+    }
+
+    void addEnum(Node node) {
+        String name = node.attributes().get('name')
+        enums.put(name, XEnum.getXEnum(this, node))
     }
 
     XType resolveXType(String type) {
@@ -109,7 +106,7 @@ class XResult {
         if(typeDef) {
             type = typeDef
         }
-        XType xType = primatives[type] ?: xidTypes[type] ?: xidUnions[type] ?: structs[type]
+        XType xType = primatives[type] ?: xidTypes[type] ?: xidUnions[type] ?: structs[type] ?: enums[type]
 
         if(xType) {
             return xType

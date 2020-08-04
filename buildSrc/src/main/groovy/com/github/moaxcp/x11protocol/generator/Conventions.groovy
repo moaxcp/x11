@@ -21,6 +21,7 @@ class Conventions {
         'char',
         'float',
         'double',
+        'void',
         'fd'
     ]
 
@@ -113,6 +114,10 @@ class Conventions {
 
     static String getEnumJavaName(String x11Name) {
         return getJavaName(x11Name) + 'Enum'
+    }
+
+    static TypeName getEnumTypeName(String javaPackage, String x11Name) {
+        return ClassName.get(javaPackage, x11Name)
     }
 
     static String getErrorJavaName(String x11Name) {

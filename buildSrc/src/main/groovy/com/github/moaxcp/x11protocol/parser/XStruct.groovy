@@ -14,6 +14,11 @@ class XStruct extends XType {
         Conventions."get${type.capitalize()}JavaName"(name)
     }
 
+    @Override
+    ClassName getJavaType() {
+        (ClassName) super.javaType
+    }
+
     static XStruct getXStruct(XResult result, Node node) {
         XStruct struct = new XStruct()
         struct.result = result
