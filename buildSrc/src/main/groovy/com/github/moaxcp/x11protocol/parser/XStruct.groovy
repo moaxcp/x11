@@ -42,7 +42,7 @@ class XStruct extends XType {
 
     TypeSpec getTypeSpec() {
         List<FieldSpec> fields = protocol.findAll {
-            it instanceof PropertyXUnit
+            it instanceof PropertyXUnit && !it.localOnly
         }.collect { PropertyXUnit it ->
             FieldSpec.builder(it.javaTypeName, it.javaName, Modifier.PRIVATE).build()
         }

@@ -8,6 +8,22 @@ import pl.allegro.finance.tradukisto.ValueConverters
 
 class Conventions {
 
+    static final List<String> x11Primatives = [
+        'BOOL',
+        'BYTE',
+        'INT8',
+        'INT16',
+        'INT32',
+        'CARD8',
+        'CARD16',
+        'CARD32',
+        'CARD64',
+        'char',
+        'float',
+        'double',
+        'fd'
+    ]
+
     static TypeName x11PrimativeToJavaTypeName(String x11Type) {
         if(x11Type == 'void') {
             return ArrayTypeName.of(TypeName.BYTE)
@@ -137,5 +153,9 @@ class Conventions {
 
     static String getEnumValueName(String x11Name) {
         CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, getJavaName(x11Name))
+    }
+
+    static String fromUpperToUpperCamel(String from) {
+        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, from)
     }
 }

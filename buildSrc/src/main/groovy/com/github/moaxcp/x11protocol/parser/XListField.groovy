@@ -5,7 +5,7 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 
-class XListField implements PropertyXUnit {
+class XListField extends ResolvableProperty {
     Expression lengthExpression
 
     String getLengthField() {
@@ -35,6 +35,16 @@ class XListField implements PropertyXUnit {
     @Override
     String getGetterName() {
         return null
+    }
+
+    @Override
+    boolean isReadOnly() {
+        return false
+    }
+
+    @Override
+    boolean isLocalOnly() {
+        return false
     }
 
     @Override
