@@ -11,22 +11,10 @@ class XFieldSpec extends Specification {
 
         expect:
         field.resolvedType == new XType(result:result, type:'primative', name:'CARD32')
-        field.readCode.toString() == 'redMask = in.readCard32();\n'
-        field.writeCode.toString() == 'out.writeCard32(redMask);\n'
+        field.readCode.toString() == 'int redMask = in.readCard32()'
+        field.writeCode.toString() == 'out.writeCard32(redMask)'
         field.member.toString() == 'private int redMask;\n'
         field.readOnly == false
-    }
-    def 'read only CARD32 field'() {
-        given:
-        XResult result = new XResult()
-        XField field = new XField(result:result, type:'CARD32', name:'red_mask', readOnly: true)
-
-        expect:
-        field.resolvedType == new XType(result:result, type:'primative', name:'CARD32')
-        field.readCode.toString() == 'redMask = in.readCard32();\n'
-        field.writeCode.toString() == 'out.writeCard32(redMask);\n'
-        field.member.toString() == '@lombok.Setter(AccessLevel.NONE)\nprivate int redMask;\n'
-        field.readOnly == true
     }
 
     def 'xid field read code'() {
@@ -36,7 +24,7 @@ class XFieldSpec extends Specification {
         XField field = new XField(result:result, type:'VISUALID', name:'visual_id')
 
         expect:
-        field.readCode.toString() == 'visualId = in.readCard32();\n'
+        field.readCode.toString() == 'int visualId = in.readCard32()'
     }
 
     def 'xid field write code'() {
@@ -46,6 +34,6 @@ class XFieldSpec extends Specification {
         XField field = new XField(result:result, type:'VISUALID', name:'visual_id')
 
         expect:
-        field.writeCode.toString() == 'out.writeCard32(visualId);\n'
+        field.writeCode.toString() == 'out.writeCard32(visualId)'
     }
 }

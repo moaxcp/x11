@@ -33,7 +33,7 @@ class XType {
             case 'xidunion':
                 return x11PrimativeToJavaTypeName('CARD32')
             case 'struct':
-                return getStructTypeName(result.javaPackage, type)
+                return getStructTypeName(result.javaPackage, name)
         }
         return null
     }

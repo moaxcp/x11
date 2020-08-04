@@ -26,38 +26,63 @@ class XField extends ResolvableVariable implements PropertyXUnit {
     }
 
     @Override
+    String getSetterName() {
+        return "set${javaName.capitalize()}"
+    }
+
+    @Override
+    String getGetterName() {
+        return "get${javaName.capitalize()}"
+    }
+
+    @Override
     CodeBlock getReadCode() {
-        CodeBlock.Builder block = CodeBlock.builder()
         XType type = resolvedType
         switch(type.type) {
             case 'primative':
                 switch(type.name) {
+                    case 'CARD8':
+                        return declareAndInitializeTo('in.readCard8()')
+                        break
                     case 'CARD32':
-                        block.addStatement("$javaName = in.readCard32()")
+                        return declareAndInitializeTo("in.readCard32()")
+                        break
+                    default:
+                        throw new IllegalArgumentException("primative ${type.name} from $type not supported")
                 }
                 break
             case 'xid':
             case 'xidunion':
-                block.addStatement("$javaName = in.readCard32()")
+                return declareAndInitializeTo("in.readCard32()")
+                break
+            default:
+                throw new IllegalArgumentException("type not supported $type")
         }
-        return block.build()
+    }
+
+    CodeBlock declareAndInitializeTo(String readCall) {
+        return CodeBlock.of('$T $L = $L', javaTypeName, javaName, readCall)
     }
 
     @Override
     CodeBlock getWriteCode() {
-        CodeBlock.Builder block = CodeBlock.builder()
         XType type = resolvedType
         switch(type.type) {
             case 'primative':
                 switch(type.name) {
+                    case 'CARD8':
+                        return CodeBlock.of("out.writeCard8($javaName)")
                     case 'CARD32':
-                        block.addStatement("out.writeCard32($javaName)")
+                        return CodeBlock.of("out.writeCard32($javaName)")
+                    default:
+                        throw new IllegalArgumentException("primative ${type.name} from $type not supported")
                 }
                 break
             case 'xid':
             case 'xidunion':
-                block.addStatement("out.writeCard32($javaName)")
+                return CodeBlock.of("out.writeCard32($javaName)")
+            default:
+                throw new IllegalArgumentException("type not supported $type")
         }
-        return block.build()
     }
 }
