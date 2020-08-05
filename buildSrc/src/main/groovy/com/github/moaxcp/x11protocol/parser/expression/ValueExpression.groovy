@@ -8,6 +8,11 @@ import groovy.transform.ToString
 class ValueExpression implements Expression {
     String value
 
+    @Override
+    List<String> getFieldRefs() {
+        return []
+    }
+
     String getExpression() {
         return value
     }

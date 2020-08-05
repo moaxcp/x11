@@ -6,6 +6,10 @@ import groovy.transform.ToString
 import groovy.util.slurpersupport.Node
 import javax.lang.model.element.Modifier
 
+import static com.github.moaxcp.x11protocol.parser.XField.getXField
+import static com.github.moaxcp.x11protocol.parser.XListField.getXListField
+import static com.github.moaxcp.x11protocol.parser.XPad.getXPad
+
 @ToString(includeSuperProperties = true, includePackage = false, includes = ['name', 'type', 'protocol'])
 class XStruct extends XType {
     List<XUnit> protocol = []
@@ -27,20 +31,15 @@ class XStruct extends XType {
         node.childNodes().each { Node it ->
             switch(it.name()) {
                 case 'field':
-                    String fieldName = it.attributes().get('name')
-                    String fieldType = it.attributes().get('type')
-                    String fieldEnum = it.attributes().get('enum')
-                    String fieldMask = it.attributes().get('mask')
-                    XField field = new XField(result:result, type:fieldType, enumType:fieldEnum, maskType: fieldMask, name:fieldName)
-                    struct.protocol.add(field)
+                    struct.protocol.add(getXField(result, it))
                     break
+                case 'list':
+                    struct.protocol.add(getXListField(result, it))
                 case 'pad':
-                    int padBytes = Integer.valueOf((String) it.attributes().get('bytes'))
-                    XPad pad = new XPad(bytes:padBytes)
-                    struct.protocol.add(pad)
+                    struct.protocol.add(getXPad(it))
                     break
                 default:
-                    throw new IllegalArgumentException("cannot parse $it")
+                    throw new IllegalArgumentException("cannot parse ${it.name()}")
             }
         }
 

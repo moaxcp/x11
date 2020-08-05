@@ -1,12 +1,12 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
-import com.github.moaxcp.x11protocol.parser.expression.FieldRefExpression
+
 import spock.lang.Specification
 
 class FieldRefExpressionSpec extends Specification {
     def 'name'() {
         given:
-        FieldRefExpression expression = new FieldRefExpression(name:'name')
+        FieldRefExpression expression = new FieldRefExpression(fieldName:'name')
 
         expect:
         expression.getExpression() == 'name'

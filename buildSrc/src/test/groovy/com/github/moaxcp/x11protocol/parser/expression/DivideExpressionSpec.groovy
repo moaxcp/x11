@@ -1,9 +1,6 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
-import com.github.moaxcp.x11protocol.parser.expression.AddExpression
-import com.github.moaxcp.x11protocol.parser.expression.DivideExpression
-import com.github.moaxcp.x11protocol.parser.expression.FieldRefExpression
-import com.github.moaxcp.x11protocol.parser.expression.ValueExpression
+
 import spock.lang.Specification
 
 class DivideExpressionSpec extends Specification {
@@ -18,11 +15,11 @@ class DivideExpressionSpec extends Specification {
     def 'nested addition'() {
         given:
         DivideExpression expression = new DivideExpression(expressions:[
-            new FieldRefExpression(name:'a'),
+            new FieldRefExpression(fieldName:'a'),
             new AddExpression(expressions:[
-                new FieldRefExpression(name:'b'),
-                new FieldRefExpression(name:'c')]),
-            new FieldRefExpression(name:'d')])
+                new FieldRefExpression(fieldName:'b'),
+                new FieldRefExpression(fieldName:'c')]),
+            new FieldRefExpression(fieldName:'d')])
 
         expect:
         expression.expression == 'a / (b + c) / d'
@@ -31,11 +28,11 @@ class DivideExpressionSpec extends Specification {
     def 'nested divide'() {
         given:
         DivideExpression expression = new DivideExpression(expressions:[
-            new FieldRefExpression(name:'a'),
+            new FieldRefExpression(fieldName:'a'),
             new DivideExpression(expressions:[
-                new FieldRefExpression(name:'b'),
-                new FieldRefExpression(name:'c')]),
-            new FieldRefExpression(name:'d')])
+                new FieldRefExpression(fieldName:'b'),
+                new FieldRefExpression(fieldName:'c')]),
+            new FieldRefExpression(fieldName:'d')])
 
         expect:
         expression.expression == 'a / (b / c) / d'

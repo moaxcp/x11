@@ -1,10 +1,6 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
-import com.github.moaxcp.x11protocol.parser.expression.AddExpression
-import com.github.moaxcp.x11protocol.parser.expression.FieldRefExpression
-import com.github.moaxcp.x11protocol.parser.expression.MultiplyExpression
-import com.github.moaxcp.x11protocol.parser.expression.SubtractExpression
-import com.github.moaxcp.x11protocol.parser.expression.ValueExpression
+
 import spock.lang.Specification
 
 class AddExpressionSpec extends Specification {
@@ -33,7 +29,7 @@ class AddExpressionSpec extends Specification {
             new ValueExpression(value:7),
             new MultiplyExpression(expressions:[
                 new ValueExpression(value:8),
-                new FieldRefExpression(name:'a')]),
+                new FieldRefExpression(fieldName:'a')]),
             new SubtractExpression(expressions: [
                 new ValueExpression(value:5),
                 new ValueExpression(value:4)])])

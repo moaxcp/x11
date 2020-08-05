@@ -32,11 +32,11 @@ abstract class ResolvableProperty implements PropertyXUnit {
     }
 
     XType getResolvedType() {
-        return result.resolveXType(type)
+        return enumType ? result.resolveXType(enumType) : result.resolveXType(type)
     }
 
-    TypeName getJavaEnumTypeName() {
-        return resolvedTypeEnum.javaType
+    XType getOriginalResolvedType() {
+        return result.resolveXType(type)
     }
 
     XType getResolvedTypeMask() {
@@ -48,15 +48,9 @@ abstract class ResolvableProperty implements PropertyXUnit {
         return resolvedTypeMask.javaType
     }
 
-    XType getResolvedTypeEnum() {
-        requireNonNull(enumType, "enumType must not be null")
-        return result.resolveXType(enumType)
-    }
-
     @Override
     FieldSpec getMember() {
-        TypeName typeName = enumType ? javaEnumTypeName : javaTypeName
-        FieldSpec.Builder builder = FieldSpec.builder(typeName, javaName)
+        FieldSpec.Builder builder = FieldSpec.builder(javaTypeName, javaName)
             .addModifiers(Modifier.PRIVATE)
         if(readOnly) {
             builder.addAnnotation(
@@ -79,7 +73,7 @@ abstract class ResolvableProperty implements PropertyXUnit {
 
     @Override
     CodeBlock getReadCode() {
-        XType type = enumType ? resolvedTypeEnum : resolvedType
+        XType type = resolvedType
         switch(type.type) {
             case 'primative':
                 if(x11Primatives.contains(type.name)) {
@@ -88,8 +82,8 @@ abstract class ResolvableProperty implements PropertyXUnit {
                 throw new IllegalArgumentException("primative ${type.name} from $type not supported")
                 break
             case 'enum':
-                return CodeBlock.of("\$1T \$2L = \$1T.getByCode(in.read${fromUpperToUpperCamel(resolvedType.name)}())",
-                    javaEnumTypeName, javaName)
+                return CodeBlock.of("\$1T \$2L = \$1T.getByCode(in.read${fromUpperToUpperCamel(originalResolvedType.name)}())",
+                    javaTypeName, javaName)
                 break
             case 'xid':
             case 'xidunion':
@@ -100,13 +94,13 @@ abstract class ResolvableProperty implements PropertyXUnit {
         }
     }
 
-    private CodeBlock declareAndInitializeTo(String readCall) {
+    CodeBlock declareAndInitializeTo(String readCall) {
         return CodeBlock.of('$T $L = $L', javaTypeName, javaName, readCall)
     }
 
     @Override
     CodeBlock getWriteCode() {
-        XType type = enumType ? resolvedTypeEnum : resolvedType
+        XType type = resolvedType
         switch(type.type) {
             case 'primative':
                 if(x11Primatives.contains(type.name)) {
@@ -115,10 +109,10 @@ abstract class ResolvableProperty implements PropertyXUnit {
                 throw new IllegalArgumentException("primative ${type.name} from $type not supported")
             case 'enum':
                 if(javaTypeName != TypeName.INT) {
-                    return CodeBlock.of("out.write${fromUpperToUpperCamel(resolvedType.name)}((\$T) \$L.getValue()))",
-                        javaTypeName, javaName)
+                    return CodeBlock.of("out.write${fromUpperToUpperCamel(originalResolvedType.name)}((\$T) \$L.getValue()))",
+                        originalResolvedType.javaType, javaName)
                 } else {
-                    return CodeBlock.of("out.write${fromUpperToUpperCamel(resolvedType.name)}(\$L.getValue()))",
+                    return CodeBlock.of("out.write${fromUpperToUpperCamel(originalResolvedType.name)}(\$L.getValue()))",
                         javaName)
                 }
                 
