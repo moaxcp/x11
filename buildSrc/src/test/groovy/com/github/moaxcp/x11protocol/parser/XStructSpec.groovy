@@ -18,6 +18,12 @@ class XStructSpec extends Specification {
         (Node) getGPathResult().childNodes().next()
     }
 
+    void addNodes() {
+        getGPathResult().childNodes().each {
+            result.addNode(it)
+        }
+    }
+
     def 'struct from node with normal fields'() {
         given:
         xmlBuilder.xcb(header:'xproto') {
@@ -165,6 +171,86 @@ class XStructSpec extends Specification {
                 out.writeCard8(bitsPerPixel);
                 out.writeCard8(scanlinePad);
                 out.writePad(5);
+              }
+            }
+        '''.stripIndent()
+    }
+
+    def 'typeSpec struct from node with enum'() {
+        given:
+        xmlBuilder.xcb() {
+            xidtype(name:'WINDOW')
+            xidtype(name:'COLORMAP')
+            'enum'(name:'BackingStore') {
+                item(name:'NotUseful') {
+                    value('0')
+                }
+                item(name:'WhenMapped') {
+                    value('1')
+                }
+                item(name:'Always') {
+                    value('2')
+                }
+            }
+            'enum'(name:'EventMask') {
+                item(name:'NoEvent') {
+                    bit('0')
+                }
+                item(name:'KeyPress') {
+                    bit('1')
+                }
+                item(name:'KeyRelease') {
+                    bit('2')
+                }
+            }
+            struct(name:'SCREEN') {
+                field(type:'WINDOW', name:'root')
+                field(type:'COLORMAP', name:'default_colormap')
+                field(type:'CARD32', name:'current_input_masks', mask:'EventMask')
+                field(type:'BYTE', name:'backing_stores', 'enum':'BackingStore')
+            }
+        }
+
+        when:
+        addNodes()
+
+        then:
+        result.structs.SCREEN.typeSpec.toString() == '''\
+            class ScreenStruct {
+              private int root;
+            
+              private int defaultColormap;
+            
+              private int currentInputMasks;
+            
+              private com.github.moaxcp.x11client.protocol.xproto.BackingStore backingStores;
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.ScreenStruct readScreenStruct() {
+                int root = in.readCard32();
+                int defaultColormap = in.readCard32();
+                int currentInputMasks = in.readCard32();
+                com.github.moaxcp.x11client.protocol.xproto.BackingStore backingStores = com.github.moaxcp.x11client.protocol.xproto.BackingStore.getByCode(in.readByte());
+                com.github.moaxcp.x11client.protocol.xproto.ScreenStruct struct = new com.github.moaxcp.x11client.protocol.xproto.ScreenStruct();
+                struct.setRoot(root);
+                struct.setDefaultColormap(defaultColormap);
+                struct.setCurrentInputMasks(currentInputMasks);
+                struct.setBackingStores(backingStores);
+                return struct;
+              }
+            
+              public void writeScreenStruct() {
+                out.writeCard32(root);
+                out.writeCard32(defaultColormap);
+                out.writeCard32(currentInputMasks);
+                out.writeByte((byte) backingStores.getValue()));
+              }
+            
+              public void currentInputMasksEnable(com.github.moaxcp.x11client.protocol.xproto.EventMask mask) {
+                currentInputMasks = mask.enableFor(currentInputMasks);
+              }
+            
+              public void currentInputMasksDisable(com.github.moaxcp.x11client.protocol.xproto.EventMask mask) {
+                currentInputMasks = mask.disableFor(currentInputMasks);
               }
             }
         '''.stripIndent()

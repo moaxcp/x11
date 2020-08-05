@@ -29,7 +29,9 @@ class XStruct extends XType {
                 case 'field':
                     String fieldName = it.attributes().get('name')
                     String fieldType = it.attributes().get('type')
-                    XField field = new XField(result:result, type:fieldType, name:fieldName)
+                    String fieldEnum = it.attributes().get('enum')
+                    String fieldMask = it.attributes().get('mask')
+                    XField field = new XField(result:result, type:fieldType, enumType:fieldEnum, maskType: fieldMask, name:fieldName)
                     struct.protocol.add(field)
                     break
                 case 'pad':
@@ -49,12 +51,13 @@ class XStruct extends XType {
         List<FieldSpec> fields = protocol.findAll {
             it instanceof PropertyXUnit && !it.localOnly
         }.collect { PropertyXUnit it ->
-            FieldSpec.builder(it.javaTypeName, it.javaName, Modifier.PRIVATE).build()
+            it.member
         }
         return TypeSpec.classBuilder(javaType)
             .addFields(fields)
             .addMethod(readMethod)
             .addMethod(writeMethod)
+            .addMethods(getMaskMethods())
             .build()
     }
 
@@ -90,5 +93,26 @@ class XStruct extends XType {
             .addModifiers(Modifier.PUBLIC)
             .addCode(writeProtocol.build())
             .build()
+    }
+
+    List<MethodSpec> getMaskMethods() {
+        List<MethodSpec> methods = protocol.collect {
+            if(it instanceof XField && it.maskType) {
+                [
+                    MethodSpec.methodBuilder("${it.javaName}Enable")
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(it.javaMaskTypeName, 'mask')
+                        .addStatement('$1L = mask.enableFor($1L)', it.javaName)
+                        .build(),
+                    MethodSpec.methodBuilder("${it.javaName}Disable")
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(it.javaMaskTypeName, 'mask')
+                        .addStatement('$1L = mask.disableFor($1L)', it.javaName)
+                        .build()
+                ]
+            }
+        }.flatten().findAll { it }
+
+        return methods
     }
 }

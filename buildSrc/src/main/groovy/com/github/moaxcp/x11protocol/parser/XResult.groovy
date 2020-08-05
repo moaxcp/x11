@@ -11,10 +11,12 @@ import static com.github.moaxcp.x11protocol.parser.XType.xidUnionType
 @ToString(includePackage = false, includes='header')
 @EqualsAndHashCode
 class XResult {
+    File file
     String basePackage
     String header
     String extensionXName
     String extensionName
+    Boolean extensionMultiword
     int majorVersion
     int minorVersion
     Map<String, XResult> imports = [:]
@@ -33,6 +35,28 @@ class XResult {
 
     String getJavaPackage() {
         return "$basePackage.$header"
+    }
+
+    void addNode(Node node) {
+        switch(node.name()) {
+            case 'xidtype':
+                addXidtype(node)
+                break
+            case 'xidunion':
+                addXidunion(node)
+                break
+            case 'typedef':
+                addTypeDef(node)
+                break
+            case 'enum':
+                addEnum(node)
+                break
+            case 'struct':
+                addStruct(node)
+                break
+            default:
+                throw new IllegalArgumentException("could not parse $node")
+        }
     }
 
     void addXidtype(Node node) {

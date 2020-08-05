@@ -105,6 +105,14 @@ class XEnumSpec extends Specification {
             
               KeyRelease(0b10);
             
+              static final java.util.Map<java.lang.Integer, com.github.moaxcp.x11client.protocol.xproto.EventMask> byCode;
+            
+              static {
+                for(com.github.moaxcp.x11client.protocol.xproto.EventMask e : values()) {
+                    byCode.put(e.value, e);
+                }
+              }
+            
               private int value;
             
               EventMask(int value) {
@@ -114,6 +122,10 @@ class XEnumSpec extends Specification {
               @java.lang.Override
               public int getValue() {
                 return value;
+              }
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.EventMask getByCode(int code) {
+                return byCode.get(code);
               }
             }
         '''.stripIndent()
