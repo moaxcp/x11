@@ -2,9 +2,9 @@ package com.github.moaxcp.x11protocol.parser
 
 import com.squareup.javapoet.CodeBlock
 
-class XPadAlign implements XUnit {
+class JavaPadAlign implements JavaUnit {
     int align
-    XListField list
+    JavaListProperty list
 
     @Override
     CodeBlock getReadCode() {

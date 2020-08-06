@@ -8,17 +8,32 @@ import groovy.util.slurpersupport.Node
 import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperToUpperCamel
 import static com.github.moaxcp.x11protocol.generator.Conventions.getX11Primatives
 
-class XListField extends ResolvableProperty {
+class XUnitListField extends XUnitField {
     Expression lengthExpression
 
-    static XListField getXListField(XResult result, Node node) {
-        String fieldType = node.attributes().get('type')
+    static XUnitListField getXListField(XResult result, Node node) {
         String fieldName = node.attributes().get('name')
+        String fieldType = node.attributes().get('type')
+        String fieldEnum = node.attributes().get('enum')
+        String fieldAltEnum = node.attributes().get('altenum')
+        String fieldMask = node.attributes().get('mask')
+        String fieldAltMask = node.attributes().get('altmask')
+
         Expression expression = null
         if(node.childNodes().hasNext()) {
             expression = ExpressionFactory.getExpression((Node) node.childNodes().next())
         }
-        return new XListField(result:result, type:fieldType, name:fieldName, lengthExpression: expression)
+
+        return new XUnitListField(
+            result:result,
+            name:fieldName,
+            type:fieldType,
+            enumType:fieldEnum,
+            altEnumType: fieldAltEnum,
+            maskType:fieldMask,
+            altMaskType: fieldAltMask,
+            lengthExpression: expression
+        )
     }
 
     String getLengthField() {
@@ -30,6 +45,11 @@ class XListField extends ResolvableProperty {
         }
 
         return lengthFields[0]
+    }
+
+    @Override
+    JavaProperty getJavaUnit() {
+        return resolvedType.getJavaListProperty(this)
     }
 
     @Override
@@ -46,7 +66,7 @@ class XListField extends ResolvableProperty {
 
     @Override
     CodeBlock getReadCode() {
-        XType type = resolvedType
+        XTypeResolved type = resolvedType
         switch(type.type) {
             case 'primative':
                 if(x11Primatives.contains(type.name)) {

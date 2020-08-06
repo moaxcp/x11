@@ -104,7 +104,7 @@ class Conventions {
         return getJavaName(x11Name) + 'Struct'
     }
 
-    static TypeName getStructTypeName(String javaPackage, String x11Name) {
+    static ClassName getStructTypeName(String javaPackage, String x11Name) {
         return ClassName.get(javaPackage, getStructJavaName(x11Name))
     }
 
@@ -116,7 +116,7 @@ class Conventions {
         return getJavaName(x11Name) + 'Enum'
     }
 
-    static TypeName getEnumTypeName(String javaPackage, String x11Name) {
+    static ClassName getEnumTypeName(String javaPackage, String x11Name) {
         return ClassName.get(javaPackage, x11Name)
     }
 

@@ -2,11 +2,9 @@ package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.generator.Conventions
 import groovy.transform.EqualsAndHashCode
+import groovy.transform.Memoized
 import groovy.transform.ToString
 import groovy.util.slurpersupport.Node
-
-import static com.github.moaxcp.x11protocol.parser.XType.xidType
-import static com.github.moaxcp.x11protocol.parser.XType.xidUnionType
 
 @ToString(includePackage = false, includes='header')
 @EqualsAndHashCode
@@ -20,16 +18,17 @@ class XResult {
     int majorVersion
     int minorVersion
     Map<String, XResult> imports = [:]
-    Map<String, XType> primatives = [:]
-    Map<String, XType> xidTypes = [:]
-    Map<String, XType> xidUnions = [:]
+    Set<String> xidTypes = []
+    Set<String> xidUnions = []
     Map<String, String> typedefs = [:]
-    Map<String, XStruct> structs = [:]
-    Map<String, XEnum> enums = [:]
+    Map<String, XTypeStruct> structs = [:]
+    Map<String, XTypeEnum> enums = [:]
 
-    XResult() {
+    static Map<String, XTypePrimative> primatives = [:]
+
+    static {
         primatives = Conventions.x11Primatives.collectEntries {
-            [(it):new XType(result:this, type:'primative', name:it)]
+            [(it):new XTypePrimative(group:'xproto', name:it)]
         }
     }
 
@@ -60,13 +59,11 @@ class XResult {
     }
 
     void addXidtype(Node node) {
-        XType type = xidType(this, node)
-        xidTypes.put(type.name, type)
+        xidTypes.add((String) node.attributes().get('name'))
     }
 
     void addXidunion(Node node) {
-        XType type = xidUnionType(this, node)
-        xidUnions.put(type.name, type)
+        xidUnions.add((String) node.attributes().get('name'))
     }
 
     void addTypeDef(Node node) {
@@ -79,16 +76,17 @@ class XResult {
 
     void addStruct(Node node) {
         String name = node.attributes().get('name')
-        structs.put(name, XStruct.getXStruct(this, node))
+        structs.put(name, XTypeStruct.getXStruct(node))
     }
 
     void addEnum(Node node) {
         String name = node.attributes().get('name')
-        enums.put(name, XEnum.getXEnum(this, node))
+        enums.put(name, XTypeEnum.getXEnum(node))
     }
 
-    XType resolveXType(String type) {
-        XType resolved
+    @Memoized
+    XTypeResolved resolveXType(String type) {
+        XTypeResolved resolved
         if(type.contains(':')) {
             String specificImport = type.substring(0, type.indexOf(':'))
             String actualType = type.substring(type.indexOf(':') + 1)
@@ -111,8 +109,8 @@ class XResult {
         return resolved
     }
 
-    XType resolveTypeRecursive(String type) {
-        XType fromImport = imports.values().collect {
+    XTypeResolved resolveTypeRecursive(String type) {
+        XTypeResolved fromImport = imports.values().collect {
             it.resolveTypeRecursive(type)
         }.find {
             it
@@ -125,12 +123,15 @@ class XResult {
         return resolveLocal(type)
     }
 
-    XType resolveLocal(String type) {
+    XTypeResolved resolveLocal(String type) {
         String typeDef = resolveTypeDef(type)
         if(typeDef) {
             type = typeDef
         }
-        XType xType = primatives[type] ?: xidTypes[type] ?: xidUnions[type] ?: structs[type] ?: enums[type]
+        if(xidTypes.contains(type) || xidUnions.contains(type)) {
+            type = 'CARD32'
+        }
+        XTypeResolved xType = primatives[type] ?: structs[type] ?: enums[type]
 
         if(xType) {
             return xType

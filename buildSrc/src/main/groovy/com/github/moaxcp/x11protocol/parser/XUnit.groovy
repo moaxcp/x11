@@ -1,11 +1,8 @@
 package com.github.moaxcp.x11protocol.parser
-
-import com.squareup.javapoet.CodeBlock
-
 /**
- * A single unit within the x protocol. XUnit can be read from an input stream and written to an output stream.
+ * A single unit within the x protocol. XUnit is converted to a JavaUnit which defines how to read/write in java and
+ * add the unit to a class in the case of JavaPropertyUnit.
  */
 interface XUnit {
-    CodeBlock getReadCode()
-    CodeBlock getWriteCode()
+    JavaUnit getJavaUnit()
 }

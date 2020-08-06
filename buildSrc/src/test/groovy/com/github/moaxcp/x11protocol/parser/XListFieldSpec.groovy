@@ -28,7 +28,7 @@ class XListFieldSpec extends Specification {
         }
 
         when:
-        XListField field = XListField.getXListField(result, getFirst())
+        XUnitListField field = XUnitListField.getXListField(result, getFirst())
 
         then:
         field.type == 'CARD32'
@@ -47,7 +47,7 @@ class XListFieldSpec extends Specification {
         xmlBuilder.list(type:'char', name:'list')
 
         when:
-        XListField field = XListField.getXListField(result, getFirst())
+        XUnitListField field = XUnitListField.getXListField(result, getFirst())
 
         then:
         field.type == 'char'
