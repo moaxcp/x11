@@ -10,13 +10,13 @@ class ProtocolGenerator {
     String basePackage
 
     void generate() {
-        XResult result = XParser.parse(inputXml)
+        XResult result = XParser.parse(basePackage, inputXml)
         result.enums.values().each {
-            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.typeSpec).build()
+            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
             javaFile.writeTo(outputSrc)
         }
         result.structs.values().each {
-            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.typeSpec).build()
+            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
             javaFile.writeTo(outputSrc)
         }
     }

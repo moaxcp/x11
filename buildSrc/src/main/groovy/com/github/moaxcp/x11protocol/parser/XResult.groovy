@@ -53,8 +53,8 @@ class XResult {
             case 'struct':
                 addStruct(node)
                 break
-            default:
-                throw new IllegalArgumentException("could not parse $node")
+            //default:
+            //    throw new IllegalArgumentException("could not parse ${node.name()}")
         }
     }
 
@@ -74,14 +74,14 @@ class XResult {
         imports.put(result.header, result)
     }
 
-    void addStruct(Node node) {
-        String name = node.attributes().get('name')
-        structs.put(name, XTypeStruct.xStruct(this, node))
-    }
-
     void addEnum(Node node) {
         String name = node.attributes().get('name')
         enums.put(name, XTypeEnum.xTypeEnum(this, node))
+    }
+
+    void addStruct(Node node) {
+        String name = node.attributes().get('name')
+        structs.put(name, XTypeStruct.xStruct(this, node))
     }
 
     @Memoized

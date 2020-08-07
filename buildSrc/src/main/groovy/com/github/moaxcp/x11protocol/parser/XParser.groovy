@@ -9,22 +9,23 @@ class XParser {
     XResult result
     GPathResult xml
 
-    static XResult parse(File file) {
-        return new XParser().parseFile(file)
+    static XResult parse(String basePackage, File file) {
+        return new XParser().parseFile(basePackage, file)
     }
 
-    static XResult parse(String text) {
-        new XParser().parseText(text)
+    static XResult parse(String basePackage, String text) {
+        new XParser().parseText(basePackage, text)
     }
 
-    XResult parseFile(File file) {
-        result = new XResult(file:file)
+    XResult parseFile(String basePackage, File file) {
+        result = new XResult(file:file, basePackage: basePackage)
         xml = new XmlSlurper().parse(file)
-        return parseXml()
+        parseXml()
+        return result
     }
 
-    XResult parseText(String text) {
-        result = new XResult()
+    XResult parseText(String basePackage, String text) {
+        result = new XResult(basePackage: basePackage)
         xml = new XmlSlurper().parseText(text)
         parseXml()
         return result
