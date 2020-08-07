@@ -22,7 +22,7 @@ class XResultSpec extends Specification {
         result.addXidtype((Node) getGPathResult().childNodes().next())
 
         then:
-        result.xidTypes == ['XID':new XType(result:result, type:'xid', name:'XID')]
+        result.xidTypes == ['XID'] as Set
     }
 
     def 'Add an xidunion'() {
@@ -33,7 +33,7 @@ class XResultSpec extends Specification {
         result.addXidunion((Node) getGPathResult().childNodes().next())
 
         then:
-        result.xidUnions == ['XID':new XType(result:result, type:'xidunion', name:'XID')]
+        result.xidUnions == ['XID'] as Set
     }
 
     def 'resolve failed'() {
@@ -50,12 +50,10 @@ class XResultSpec extends Specification {
         result.addXidtype((Node) getGPathResult().childNodes().next())
 
         when:
-        XType type = result.resolveXType('XID')
+        XTypeResolved type = result.resolveXType('XID')
 
         then:
-        type.name == 'XID'
-        type.type == 'xid'
-        type.group == 'xproto'
+        type.name == 'CARD32'
     }
 
     def 'resolve an xid from import'() {
@@ -66,12 +64,10 @@ class XResultSpec extends Specification {
         result.addImport(imported)
 
         when:
-        XType type = result.resolveXType('XID')
+        XTypePrimative type = result.resolveXType('XID')
 
         then:
-        type.name == 'XID'
-        type.type == 'xid'
-        type.group == 'imported'
+        type.name == 'CARD32'
     }
 
     def 'resolve an xid from specific import'() {
@@ -82,12 +78,10 @@ class XResultSpec extends Specification {
         result.addImport(imported)
 
         when:
-        XType type = result.resolveXType('imported:XID')
+        XTypePrimative type = result.resolveXType('imported:XID')
 
         then:
-        type.name == 'XID'
-        type.type == 'xid'
-        type.group == 'imported'
+        type.name == 'CARD32'
     }
 
     def 'resolve an xidunion'() {
@@ -96,12 +90,10 @@ class XResultSpec extends Specification {
         result.addXidunion((Node) getGPathResult().childNodes().next())
 
         when:
-        XType type = result.resolveXType('XID')
+        XTypePrimative type = result.resolveXType('XID')
 
         then:
-        type.name == 'XID'
-        type.type == 'xidunion'
-        type.group == 'xproto'
+        type.name == 'CARD32'
     }
 
     def 'resolve BOOL from typedef'() {
@@ -112,12 +104,10 @@ class XResultSpec extends Specification {
         result.addTypeDef((Node) getGPathResult().childNodes().next())
 
         when:
-        XType type = result.resolveXType('TRUTH')
+        XTypePrimative type = result.resolveXType('TRUTH')
 
         then:
         type.name == 'BOOL'
-        type.type == 'primative'
-        type.group == 'xproto'
     }
 
     def 'resolve CARD32 from typedef'() {
@@ -128,11 +118,9 @@ class XResultSpec extends Specification {
         result.addTypeDef((Node) getGPathResult().childNodes().next())
 
         when:
-        XType type = result.resolveXType('VISUALID')
+        XTypePrimative type = result.resolveXType('VISUALID')
 
         then:
         type.name == 'CARD32'
-        type.type == 'primative'
-        type.group == 'xproto'
     }
 }

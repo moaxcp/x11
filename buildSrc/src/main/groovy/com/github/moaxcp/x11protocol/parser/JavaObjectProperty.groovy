@@ -3,7 +3,7 @@ package com.github.moaxcp.x11protocol.parser
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
-class JavaObjectProperty implements JavaProperty {
+class JavaObjectProperty extends JavaProperty {
     String name
     TypeName typeName
     boolean readOnly

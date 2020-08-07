@@ -11,8 +11,8 @@ import static com.github.moaxcp.x11protocol.parser.JavaListProperty.javaListProp
 class XTypeEnum extends XTypeResolved implements XTypeUnit {
     List<XTypeEnumItem> items = []
     
-    static XTypeEnum getXEnum(Node node) {
-        XTypeEnum xEnum = new XTypeEnum(name:node.attributes().get('name'), type:node.name())
+    static XTypeEnum xTypeEnum(XResult result, Node node) {
+        XTypeEnum xEnum = new XTypeEnum(name:node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
         node.childNodes().each { Node it ->
             if(it.name() != 'item') {
                 throw new IllegalArgumentException("could not parse $it")

@@ -1,35 +1,32 @@
 package com.github.moaxcp.x11protocol.parser
 
-
 import groovy.transform.ToString
 import groovy.util.slurpersupport.Node
 
+import static XUnitField.xUnitField
+import static XUnitListField.xUnitListField
 import static com.github.moaxcp.x11protocol.parser.JavaListProperty.javaListProperty
 import static com.github.moaxcp.x11protocol.parser.JavaObjectProperty.javaObjectProperty
 import static com.github.moaxcp.x11protocol.parser.JavaStruct.javaStruct
-import static XUnitField.getXField
-import static XUnitListField.getXListField
-import static XUnitPad.getXPad
+import static com.github.moaxcp.x11protocol.parser.XUnitPadFactory.xUnitPad
 
-@ToString(includeSuperProperties = true, includePackage = false, includes = ['name', 'type', 'protocol'])
+@ToString(includeSuperProperties = true, includePackage = false, includes = ['name'])
 class XTypeStruct extends XTypeResolved implements XTypeUnit {
     List<XUnit> protocol = []
 
-    static XTypeStruct getXStruct(XResult result, Node node) {
+    static XTypeStruct xStruct(XResult result, Node node) {
         XTypeStruct struct = new XTypeStruct()
-        struct.result = result
         struct.name = node.attributes().get('name')
-        struct.type = node.name()
         node.childNodes().each { Node it ->
             switch(it.name()) {
                 case 'field':
-                    struct.protocol.add(getXField(result, it))
+                    struct.protocol.add(xUnitField(result, it))
                     break
                 case 'list':
-                    struct.protocol.add(getXListField(result, it))
+                    struct.protocol.add(xUnitListField(result, it))
                     break
                 case 'pad':
-                    struct.protocol.add(getXPad(it))
+                    struct.protocol.add(xUnitPad(it))
                     break
                 default:
                     throw new IllegalArgumentException("cannot parse ${it.name()}")

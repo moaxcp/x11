@@ -8,10 +8,10 @@ import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 import lombok.Setter
 
-interface JavaProperty extends JavaUnit {
-    String getName()
-    TypeName getTypeName()
-    default FieldSpec getMember() {
+abstract class JavaProperty implements JavaUnit {
+    abstract String getName()
+    abstract TypeName getTypeName()
+    FieldSpec getMember() {
         FieldSpec.Builder builder = FieldSpec.builder(typeName, name)
             .addModifiers(Modifier.PRIVATE)
         if(readOnly) {
@@ -23,24 +23,24 @@ interface JavaProperty extends JavaUnit {
         return builder.build()
     }
 
-    default String getSetterName() {
+    String getSetterName() {
         return "set${name.capitalize()}"
     }
 
-    default String getGetterName() {
+    String getGetterName() {
         return "get${name.capitalize()}"
     }
 
-    default List<MethodSpec> getMethods() {
+    List<MethodSpec> getMethods() {
         return []
     }
 
-    boolean isReadOnly()
-    void setReadOnly(boolean readOnly)
-    boolean isLocalOnly()
-    void setLocalOnly(boolean localOnly)
+    abstract boolean isReadOnly()
+    abstract void setReadOnly(boolean readOnly)
+    abstract boolean isLocalOnly()
+    abstract void setLocalOnly(boolean localOnly)
 
-    default CodeBlock declareAndInitializeTo(String readCall) {
+    CodeBlock declareAndInitializeTo(String readCall) {
         return CodeBlock.of('$T $L = $L', typeName, name, readCall)
     }
 }

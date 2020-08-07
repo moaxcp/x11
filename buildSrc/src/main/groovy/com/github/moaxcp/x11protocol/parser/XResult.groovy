@@ -28,7 +28,7 @@ class XResult {
 
     static {
         primatives = Conventions.x11Primatives.collectEntries {
-            [(it):new XTypePrimative(group:'xproto', name:it)]
+            [(it):new XTypePrimative(name:it)]
         }
     }
 
@@ -76,16 +76,16 @@ class XResult {
 
     void addStruct(Node node) {
         String name = node.attributes().get('name')
-        structs.put(name, XTypeStruct.getXStruct(node))
+        structs.put(name, XTypeStruct.xStruct(this, node))
     }
 
     void addEnum(Node node) {
         String name = node.attributes().get('name')
-        enums.put(name, XTypeEnum.getXEnum(node))
+        enums.put(name, XTypeEnum.xTypeEnum(this, node))
     }
 
     @Memoized
-    XTypeResolved resolveXType(String type) {
+    <T extends XTypeResolved> T resolveXType(String type) {
         XTypeResolved resolved
         if(type.contains(':')) {
             String specificImport = type.substring(0, type.indexOf(':'))
@@ -97,7 +97,7 @@ class XResult {
             }
         }
         if(resolved) {
-            return resolved
+            return (T) resolved
         }
 
         resolved = resolveTypeRecursive(type)

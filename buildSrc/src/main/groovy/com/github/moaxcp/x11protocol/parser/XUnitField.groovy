@@ -16,7 +16,7 @@ class XUnitField implements XUnit {
     String altMaskType
     boolean readOnly
 
-    static XUnitField getXField(XResult result, Node node) {
+    static XUnitField xUnitField(XResult result, Node node) {
         String fieldName = node.attributes().get('name')
         String fieldType = node.attributes().get('type')
         String fieldEnum = node.attributes().get('enum')

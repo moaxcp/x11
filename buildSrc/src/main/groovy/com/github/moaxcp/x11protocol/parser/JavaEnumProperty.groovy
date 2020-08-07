@@ -12,11 +12,13 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeTo
 /**
  * for converting fields that have an enum set
  */
-class JavaEnumProperty implements JavaProperty {
+class JavaEnumProperty extends JavaProperty {
     String name
     String x11Primative
     TypeName memberTypeName
     TypeName ioTypeName
+    boolean readOnly
+    boolean localOnly
 
     @Override
     TypeName getTypeName() {
@@ -47,8 +49,8 @@ class JavaEnumProperty implements JavaProperty {
         }
         return new JavaEnumProperty(
             name:convertX11VariableNameToJava(field.name),
-            x11Primative:resolvedType.name,
-            memberTypeName:getEnumTypeName(field.result.javaPackage, field.name),
+            x11Primative:field.resolvedEnumType.name,
+            memberTypeName:getEnumTypeName(field.result.javaPackage, field.resolvedEnumType.name),
             ioTypeName:x11PrimativeToJavaTypeName(resolvedType.name)
         )
     }

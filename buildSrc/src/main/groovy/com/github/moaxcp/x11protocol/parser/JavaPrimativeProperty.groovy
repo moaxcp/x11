@@ -10,7 +10,7 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.*
 /**
  * for x11 primative properties
  */
-class JavaPrimativeProperty implements JavaProperty {
+class JavaPrimativeProperty extends JavaProperty {
     String name
     String x11Primative
     TypeName memberTypeName
@@ -63,10 +63,6 @@ class JavaPrimativeProperty implements JavaProperty {
         }
 
         String x11Primative = resolvedType.name
-
-        if(resolvedType.type == 'xidtype' || resolvedType.type == 'xidunion') {
-            x11Primative = 'CARD32'
-        }
 
         return new JavaPrimativeProperty(
             name:convertX11VariableNameToJava(field.name),

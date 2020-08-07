@@ -1,39 +1,98 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.github.moaxcp.x11protocol.XmlSpec
+import com.squareup.javapoet.ClassName
 
-import spock.lang.Specification
+import static com.github.moaxcp.x11protocol.parser.XUnitField.xUnitField
 
-class XUnitFieldSpec extends Specification {
+class XUnitFieldSpec extends XmlSpec {
     def 'CARD32 field'() {
         given:
-        XResult result = new XResult()
-        XUnitField field = new XUnitField(result:result, type:'CARD32', name:'red_mask')
+        xmlBuilder.field(name:'red_mask', type:'CARD32')
 
-        expect:
-        field.resolvedType == new XType(result:result, type:'primative', name:'CARD32')
-        field.readCode.toString() == 'int redMask = in.readCard32()'
-        field.writeCode.toString() == 'out.writeCard32(redMask)'
-        field.member.toString() == 'private int redMask;\n'
-        field.readOnly == false
+        when:
+        XUnitField field = xUnitField(result, getFirstNode())
+
+        then:
+        field.name == 'red_mask'
+        field.type == 'CARD32'
+        field.resolvedType.name == 'CARD32'
+        field.javaUnit.name == 'redMask'
     }
 
-    def 'xid field read code'() {
+    def 'enum field'() {
         given:
-        XResult result = new XResult()
-        result.xidTypes['VISUALID'] = new XType(result:result, type:'xid', name:'VISUALID')
-        XUnitField field = new XUnitField(result:result, type:'VISUALID', name:'visual_id')
+        xmlBuilder.field(name:'class', type:'CARD8', 'enum':'VisualClass')
 
-        expect:
-        field.readCode.toString() == 'int visualId = in.readCard32()'
+        when:
+        XUnitField field = xUnitField(result, getFirstNode())
+
+        then:
+        field.name == 'class'
+        field.type == 'CARD8'
+        field.resolvedType.name == 'CARD8'
     }
 
-    def 'xid field write code'() {
+    def 'enum field resolve enum'() {
         given:
-        XResult result = new XResult()
-        result.xidTypes['VISUALID'] = new XType(result:result, type:'xid', name:'VISUALID')
-        XUnitField field = new XUnitField(result:result, type:'VISUALID', name:'visual_id')
+        xmlBuilder.xcb(header:'xproto') {
+            "enum"(name:'EventMask') {
+                item(name:'NoEvent') {
+                    value("0")
+                }
+                item(name:'KeyPress') {
+                    bit('0')
+                }
+                item(name:'KeyRelease') {
+                    bit('1')
+                }
+            }
+        }
 
-        expect:
-        field.writeCode.toString() == 'out.writeCard32(visualId)'
+        when:
+        addChildNodes()
+        XUnitField field = new XUnitField(
+            result:result,
+            name:'mask',
+            type:'CARD8',
+            enumType: 'EventMask'
+        )
+
+        then:
+        field.name == 'mask'
+        field.type == 'CARD8'
+        field.resolvedEnumType.name == 'EventMask'
+        field.javaUnit.typeName == ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'EventMask')
+    }
+
+    def 'mask field resolve mask'() {
+        given:
+        xmlBuilder.xcb(header:'xproto') {
+            "enum"(name:'EventMask') {
+                item(name:'NoEvent') {
+                    value("0")
+                }
+                item(name:'KeyPress') {
+                    bit('0')
+                }
+                item(name:'KeyRelease') {
+                    bit('1')
+                }
+            }
+        }
+
+        when:
+        addChildNodes()
+        XUnitField field = new XUnitField(
+            result:result,
+            name:'mask',
+            type:'CARD8',
+            maskType: 'EventMask'
+        )
+
+        then:
+        field.name == 'mask'
+        field.type == 'CARD8'
+        field.resolvedMaskType.name == 'EventMask'
     }
 }

@@ -28,18 +28,14 @@ class XListFieldSpec extends Specification {
         }
 
         when:
-        XUnitListField field = XUnitListField.getXListField(result, getFirst())
+        XUnitListField field = XUnitListField.xUnitListField(result, getFirst())
 
         then:
         field.type == 'CARD32'
         field.name == 'visuals'
         field.lengthExpression.expression == 'visualsLen * 4'
         field.lengthField == 'visuals_len'
-
-        field.javaName == 'visuals'
-        field.resolvedType == new XType(type:'primative', name:'CARD32')
-        field.javaTypeName.toString() == 'int[]'
-        field.readCode.toString() == 'int[] visuals = in.readCard32(visualsLen * 4)'
+        field.resolvedType.name == 'CARD32'
     }
 
     def 'String list'() {
@@ -47,16 +43,13 @@ class XListFieldSpec extends Specification {
         xmlBuilder.list(type:'char', name:'list')
 
         when:
-        XUnitListField field = XUnitListField.getXListField(result, getFirst())
+        XUnitListField field = XUnitListField.xUnitListField(result, getFirst())
 
         then:
         field.type == 'char'
         field.name == 'list'
         field.lengthExpression == null
         field.lengthField == null
-
-        field.javaName == 'list'
-        field.resolvedType == new XType(type:'primative', name:'char')
-        field.javaTypeName.toString() == 'java.lang.String'
+        field.resolvedType.name == 'char'
     }
 }
