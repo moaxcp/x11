@@ -37,7 +37,7 @@ class JavaEnumProperty extends JavaProperty {
             return CodeBlock.of("out.write${fromUpperToUpperCamel(x11Primative)}((\$T) \$L.getValue()))",
                 ioTypeName, name)
         } else {
-            return CodeBlock.of("out.write${fromUpperToUpperCamel(x11Primative)}(\$L.getValue()))",
+            return CodeBlock.of("out.write${fromUpperToUpperCamel(x11Primative)}(\$L.getValue())",
                 name)
         }
     }
@@ -49,7 +49,7 @@ class JavaEnumProperty extends JavaProperty {
         }
         return new JavaEnumProperty(
             name:convertX11VariableNameToJava(field.name),
-            x11Primative:field.resolvedEnumType.name,
+            x11Primative:resolvedType.name,
             memberTypeName:getEnumTypeName(field.result.javaPackage, field.resolvedEnumType.name),
             ioTypeName:x11PrimativeToJavaTypeName(resolvedType.name)
         )

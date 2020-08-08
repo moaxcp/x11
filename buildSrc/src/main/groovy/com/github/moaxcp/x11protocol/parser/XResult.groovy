@@ -53,8 +53,8 @@ class XResult {
             case 'struct':
                 addStruct(node)
                 break
-            //default:
-            //    throw new IllegalArgumentException("could not parse ${node.name()}")
+            default:
+                throw new IllegalArgumentException("could not parse ${node.name()}")
         }
     }
 

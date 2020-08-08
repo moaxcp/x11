@@ -11,6 +11,7 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getStructJavaN
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
 
 class JavaStruct implements JavaType {
+    String basePackage
     String simpleName
     ClassName className
     List<JavaUnit> protocol
@@ -22,6 +23,7 @@ class JavaStruct implements JavaType {
 
         String simpleName = getStructJavaName(struct.name)
         return new JavaStruct(
+            basePackage: struct.basePackage,
             simpleName:simpleName,
             className:getStructTypeName(struct.javaPackage, struct.name),
             protocol:protocol
@@ -64,6 +66,7 @@ class JavaStruct implements JavaType {
         return MethodSpec.methodBuilder("read${simpleName}")
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
             .returns(className)
+            .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
             .addCode(readProtocol.build())
             .addStatement('$1T $2L = new $1T()', className, 'struct')
             .addCode(setters.build())
@@ -78,6 +81,7 @@ class JavaStruct implements JavaType {
         }
         return MethodSpec.methodBuilder("write${simpleName}")
             .addModifiers(Modifier.PUBLIC)
+            .addParameter(ClassName.get(basePackage, 'X11Output'), 'out')
             .addCode(writeProtocol.build())
             .build()
     }

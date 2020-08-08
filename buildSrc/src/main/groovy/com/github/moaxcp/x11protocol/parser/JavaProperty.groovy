@@ -43,4 +43,8 @@ abstract class JavaProperty implements JavaUnit {
     CodeBlock declareAndInitializeTo(String readCall) {
         return CodeBlock.of('$T $L = $L', typeName, name, readCall)
     }
+
+    CodeBlock declareAndInitializeTo(CodeBlock readCall) {
+        return CodeBlock.of('$T $L = $L', typeName, name, readCall)
+    }
 }
