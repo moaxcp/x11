@@ -32,7 +32,7 @@ class JavaPrimativeListProperty extends JavaListProperty {
         return new JavaPrimativeListProperty(
             name:convertX11VariableNameToJava(field.name),
             x11Primative:x11Primative,
-            baseType: baseType,
+            baseTypeName: baseType,
             typeName: typeName,
             lengthExpression: field.lengthExpression,
             readOnly: field.readOnly
@@ -46,6 +46,6 @@ class JavaPrimativeListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getWriteCode() {
-        return null
+        return CodeBlock.of("out.write${fromUpperToUpperCamel(x11Primative)}($name)")
     }
 }

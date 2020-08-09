@@ -15,7 +15,9 @@ class JavaTypeListProperty extends JavaListProperty {
         TypeName baseTypeName
         if(resolvedType instanceof XTypeStruct) {
             baseTypeName = getStructTypeName(field.result.javaPackage, resolvedType.name)
-        } //else Request/Reply/Event
+        } else { //else Request/Reply/Event
+            throw new UnsupportedOperationException("not supported $resolvedType")
+        }
         TypeName typeName = ParameterizedTypeName.get(ClassName.get(List), baseTypeName)
         return new JavaTypeListProperty(
             name:convertX11VariableNameToJava(field.name),
