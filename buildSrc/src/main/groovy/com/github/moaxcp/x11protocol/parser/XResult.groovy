@@ -53,6 +53,27 @@ class XResult {
             case 'struct':
                 addStruct(node)
                 break
+            case 'event':
+                addEvent(node)
+                break
+            case 'eventcopy':
+                addEventCopy(node)
+                break
+            case 'eventstruct':
+                addEventStruct(node)
+                break
+            case 'union':
+                addUnion(node)
+                break
+            case 'error':
+                addError(node)
+                break
+            case 'errorcopy':
+                addErrorCopy(node)
+                break
+            case 'request':
+                addRequest(node)
+                break
             default:
                 throw new IllegalArgumentException("could not parse ${node.name()}")
         }
@@ -82,6 +103,34 @@ class XResult {
     void addStruct(Node node) {
         String name = node.attributes().get('name')
         structs.put(name, XTypeStruct.xStruct(this, node))
+    }
+
+    void addEvent(Node node) {
+
+    }
+
+    void addEventCopy(Node node) {
+
+    }
+
+    void addEventStruct(Node node) {
+
+    }
+
+    void addUnion(Node node) {
+
+    }
+
+    void addError(Node node) {
+
+    }
+
+    void addErrorCopy(Node node) {
+
+    }
+
+    void addRequest(Node node) {
+
     }
 
     @Memoized

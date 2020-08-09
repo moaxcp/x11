@@ -10,8 +10,13 @@ class FieldRefExpression implements Expression {
     String fieldName
 
     @Override
-    List<String> getFieldRefs() {
-        return [fieldName]
+    List<FieldRefExpression> getFieldRefs() {
+        return [this]
+    }
+
+    @Override
+    List<ParamRefExpression> getParamRefs() {
+        return []
     }
 
     String getExpression() {

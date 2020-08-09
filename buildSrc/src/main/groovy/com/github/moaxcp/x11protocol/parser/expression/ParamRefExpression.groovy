@@ -1,24 +1,26 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
+import com.github.moaxcp.x11protocol.generator.Conventions
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
 @ToString(includePackage = false)
 @EqualsAndHashCode
-class ValueExpression implements Expression {
-    String value
+class ParamRefExpression implements Expression {
+    String paramName
+    String x11Primative
 
     @Override
-    List<FieldRefExpression> getFieldRefs() {
+    List<String> getFieldRefs() {
         return []
     }
 
     @Override
     List<ParamRefExpression> getParamRefs() {
-        return []
+        return [this]
     }
 
     String getExpression() {
-        return value
+        return Conventions.convertX11VariableNameToJava(paramName)
     }
 }

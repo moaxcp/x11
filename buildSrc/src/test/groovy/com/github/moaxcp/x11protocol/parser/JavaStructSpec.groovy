@@ -5,6 +5,8 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 
+import static com.github.moaxcp.x11protocol.parser.JavaStruct.javaStruct
+
 class JavaStructSpec extends XmlSpec {
     def 'FormatStruct TypeSpec'() {
         given:
@@ -37,6 +39,7 @@ class JavaStructSpec extends XmlSpec {
 
         then:
         spec.toString() == '''\
+            @lombok.Data
             class FormatStruct {
               private byte depth;
             
@@ -45,7 +48,7 @@ class JavaStructSpec extends XmlSpec {
               private byte scanlinePad;
             
               public static com.github.moaxcp.x11client.protocol.xproto.FormatStruct readFormatStruct(
-                  com.github.moaxcp.x11client.protocol.X11Input in) {
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 byte depth = in.readCard8();
                 byte bitsPerPixel = in.readCard8();
                 byte scanlinePad = in.readCard8();
@@ -57,7 +60,8 @@ class JavaStructSpec extends XmlSpec {
                 return struct;
               }
             
-              public void writeFormatStruct(com.github.moaxcp.x11client.protocol.X11Output out) {
+              public void writeFormatStruct(com.github.moaxcp.x11client.protocol.X11Output out) throws
+|                 java.io.IOException {
                 out.writeCard8(depth);
                 out.writeCard8(bitsPerPixel);
                 out.writeCard8(scanlinePad);
@@ -104,6 +108,7 @@ class JavaStructSpec extends XmlSpec {
 
         then:
         spec.toString() == '''\
+            @lombok.Data
             class ScreenStruct {
               private int root;
             
@@ -114,7 +119,7 @@ class JavaStructSpec extends XmlSpec {
               private com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores;
             
               public static com.github.moaxcp.x11client.protocol.xproto.ScreenStruct readScreenStruct(
-                  com.github.moaxcp.x11client.protocol.X11Input in) {
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int root = in.readCard32();
                 int defaultColormap = in.readCard32();
                 int currentInputMasks = in.readCard32();
@@ -145,5 +150,49 @@ class JavaStructSpec extends XmlSpec {
               }
             }
         '''.stripIndent()
+    }
+
+    def 'paramref with DeviceTimeCoord'() {
+        given:
+        xmlBuilder.xcb(header:'xinput') {
+            typedef(oldname:'CARD32', newname:'TIMESTAMP')
+            struct(name:'DeviceTimeCoord') {
+                field(type:'TIMESTAMP', name:'time')
+                list(type:'INT32', name:'axisvalues') {
+                    paramref(type:'CARD8', 'num_axes')
+                }
+            }
+        }
+        addChildNodes()
+
+        when:
+        XTypeStruct struct = result.resolveXType('DeviceTimeCoord')
+        JavaStruct javaStruct = javaStruct(struct)
+
+        then:
+        javaStruct.typeSpec.toString() == '''\
+            @lombok.Data
+            class DeviceTimeCoordStruct {
+              private int time;
+            
+              private int[] axisvalues;
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct readDeviceTimeCoordStruct(
+                  com.github.moaxcp.x11client.protocol.X11Input in, byte numAxes) throws java.io.IOException {
+                int time = in.readCard32();
+                int[] axisvalues = in.readInt32(numAxes);
+                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct struct = new com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct();
+                struct.setTime(time);
+                struct.setAxisvalues(axisvalues);
+                return struct;
+              }
+            
+              public void writeDeviceTimeCoordStruct(com.github.moaxcp.x11client.protocol.X11Output out) {
+                out.writeCard32(time);
+                out.writeInt32(axisvalues);
+              }
+            }
+        '''.stripIndent()
+
     }
 }

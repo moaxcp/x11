@@ -5,7 +5,14 @@ abstract class OpExpression implements Expression {
     List<Expression> expressions = []
 
     @Override
-    List<String> getFieldRefs() {
+    List<ParamRefExpression> getParamRefs() {
+        return expressions.collect {
+            it.paramRefs
+        }.flatten()
+    }
+
+    @Override
+    List<FieldRefExpression> getFieldRefs() {
         return expressions.collect {
             it.fieldRefs
         }.flatten()

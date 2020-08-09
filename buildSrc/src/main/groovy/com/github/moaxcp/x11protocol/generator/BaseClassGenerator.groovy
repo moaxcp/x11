@@ -44,6 +44,7 @@ class BaseClassGenerator {
 
     void generateX11Input() {
         TypeSpec x11Input = interfaceBuilder('X11Input')
+            .addModifiers(PUBLIC)
             .addMethod(methodBuilder('readByte')
                 .addModifiers(PUBLIC, ABSTRACT)
                 .returns(BYTE)
@@ -126,6 +127,7 @@ class BaseClassGenerator {
 
     void generateX11Output() {
         TypeSpec x11Input = interfaceBuilder('X11Output')
+            .addModifiers(PUBLIC)
             .addMethod(methodBuilder('writeByte')
                 .addModifiers(PUBLIC, ABSTRACT)
                 .addParameter(BYTE, 'b')

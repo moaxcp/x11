@@ -63,6 +63,6 @@ class XParser {
     private XResult cachedParseImport(Node node) {
         String name = node.text()
         File importFile = new File(result.file.parent + File.separator + name + '.xml')
-        return parse(importFile)
+        return parse(result.basePackage, importFile)
     }
 }

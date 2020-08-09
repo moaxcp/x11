@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
-
+import static com.github.moaxcp.x11protocol.parser.JavaPrimativeListProperty.javaPrimativeListProperty
 import static com.github.moaxcp.x11protocol.parser.JavaPrimativeProperty.javaPrimativeProperty
 
 class XTypePrimative extends XTypeResolved {

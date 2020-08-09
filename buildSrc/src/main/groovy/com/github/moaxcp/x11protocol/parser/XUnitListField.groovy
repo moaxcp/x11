@@ -2,6 +2,7 @@ package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.parser.expression.Expression
 import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
+import com.github.moaxcp.x11protocol.parser.expression.FieldRefExpression
 import groovy.util.slurpersupport.Node
 
 class XUnitListField extends XUnitField {
@@ -32,9 +33,9 @@ class XUnitListField extends XUnitField {
         )
     }
 
-    String getLengthField() {
-        List<String> lengthFields = lengthExpression?.fieldRefs?.findAll {
-            it.endsWith('_len')
+    FieldRefExpression getLengthField() {
+        List<FieldRefExpression> lengthFields = lengthExpression?.fieldRefs?.findAll {
+            it.fieldName.endsWith('_len')
         } ?: []
         if(lengthFields.size() > 1) {
             throw new IllegalStateException("multiple lengthFields for $name in $lengthFields")

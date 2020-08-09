@@ -1,14 +1,10 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeSpec
+import com.github.moaxcp.x11protocol.parser.expression.ParamRefExpression
+import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.getStructJavaName
-import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
 class JavaStruct implements JavaType {
     String basePackage
@@ -19,6 +15,12 @@ class JavaStruct implements JavaType {
     static JavaStruct javaStruct(XTypeStruct struct) {
         List<JavaUnit> protocol = struct.protocol.collect {
             it.getJavaUnit()
+        }
+
+        protocol.eachWithIndex { JavaUnit entry, int i ->
+            if(entry instanceof JavaPadAlign) {
+                entry.list = protocol[i - 1]
+            }
         }
 
         String simpleName = getStructJavaName(struct.name)
@@ -43,6 +45,7 @@ class JavaStruct implements JavaType {
             it.methods
         }.flatten()
         return TypeSpec.classBuilder(className)
+            .addAnnotation(ClassName.get('lombok', 'Data'))
             .addFields(fields)
             .addMethod(readMethod)
             .addMethod(writeMethod)
@@ -51,6 +54,14 @@ class JavaStruct implements JavaType {
     }
 
     MethodSpec getReadMethod() {
+        List<ParameterSpec> params = protocol.findAll {
+            it instanceof JavaListProperty
+        }.collect { JavaListProperty it ->
+            it.lengthExpression.paramRefs
+        }.flatten().collect { ParamRefExpression it ->
+            ParameterSpec.builder(x11PrimativeToJavaTypeName(it.x11Primative), convertX11VariableNameToJava(it.paramName)).build()
+        }
+
         CodeBlock.Builder readProtocol = CodeBlock.builder()
         protocol.each {
             readProtocol.addStatement(it.readCode)
@@ -67,6 +78,8 @@ class JavaStruct implements JavaType {
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
             .returns(className)
             .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
+            .addParameters(params)
+            .addException(IOException)
             .addCode(readProtocol.build())
             .addStatement('$1T $2L = new $1T()', className, 'struct')
             .addCode(setters.build())
@@ -82,6 +95,7 @@ class JavaStruct implements JavaType {
         return MethodSpec.methodBuilder("write${simpleName}")
             .addModifiers(Modifier.PUBLIC)
             .addParameter(ClassName.get(basePackage, 'X11Output'), 'out')
+            .addException(IOException)
             .addCode(writeProtocol.build())
             .build()
     }

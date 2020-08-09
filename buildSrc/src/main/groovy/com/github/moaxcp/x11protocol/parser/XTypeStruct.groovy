@@ -28,6 +28,9 @@ class XTypeStruct extends XTypeResolved implements XTypeUnit {
                 case 'pad':
                     struct.protocol.add(xUnitPad(it))
                     break
+                case 'switch':
+                    System.out.println("switch on ${struct.name}")
+                    break
                 default:
                     throw new IllegalArgumentException("cannot parse ${it.name()}")
             }

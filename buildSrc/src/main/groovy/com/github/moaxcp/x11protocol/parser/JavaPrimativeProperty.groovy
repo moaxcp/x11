@@ -59,7 +59,8 @@ class JavaPrimativeProperty extends JavaProperty {
         }
         TypeName maskTypeName = null
         if(field.maskType) {
-            maskTypeName = x11PrimativeToJavaTypeName(field.resolvedMaskType.name)
+            XTypeEnum resolvedMaskType = field.resolvedMaskType
+            maskTypeName = getEnumTypeName(resolvedMaskType.javaPackage, resolvedMaskType.name)
         }
 
         String x11Primative = resolvedType.name
