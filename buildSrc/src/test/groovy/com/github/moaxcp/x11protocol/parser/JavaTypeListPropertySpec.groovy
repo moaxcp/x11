@@ -39,11 +39,11 @@ class JavaTypeListPropertySpec extends XmlSpec {
             for(int i = 0; i < 20; i++) {
               formats.add(FormatStruct.readFormatStruct(in));
             }
-        '''
+        '''.stripIndent()
         property.writeCode.toString() == '''\
             for(com.github.moaxcp.x11client.protocol.xproto.FormatStruct t : formats) {
               t.writeFormatStruct(out);
             }
-        '''
+        '''.stripIndent()
     }
 }

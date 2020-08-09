@@ -117,7 +117,7 @@ class Conventions {
     }
 
     static ClassName getEnumTypeName(String javaPackage, String x11Name) {
-        return ClassName.get(javaPackage, x11Name)
+        return ClassName.get(javaPackage, getEnumJavaName(x11Name))
     }
 
     static String getErrorJavaName(String x11Name) {

@@ -61,7 +61,7 @@ class JavaStructSpec extends XmlSpec {
               }
             
               public void writeFormatStruct(com.github.moaxcp.x11client.protocol.X11Output out) throws
-|                 java.io.IOException {
+                  java.io.IOException {
                 out.writeCard8(depth);
                 out.writeCard8(bitsPerPixel);
                 out.writeCard8(scanlinePad);
@@ -132,7 +132,8 @@ class JavaStructSpec extends XmlSpec {
                 return struct;
               }
             
-              public void writeScreenStruct(com.github.moaxcp.x11client.protocol.X11Output out) {
+              public void writeScreenStruct(com.github.moaxcp.x11client.protocol.X11Output out) throws
+                  java.io.IOException {
                 out.writeCard32(root);
                 out.writeCard32(defaultColormap);
                 out.writeCard32(currentInputMasks);
@@ -141,12 +142,12 @@ class JavaStructSpec extends XmlSpec {
             
               public void currentInputMasksEnable(
                   com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask) {
-                currentInputMasks = mask.enableFor(currentInputMasks);
+                currentInputMasks = (int) mask.enableFor(currentInputMasks);
               }
             
               public void currentInputMasksDisable(
                   com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask) {
-                currentInputMasks = mask.disableFor(currentInputMasks);
+                currentInputMasks = (int) mask.disableFor(currentInputMasks);
               }
             }
         '''.stripIndent()
@@ -187,7 +188,8 @@ class JavaStructSpec extends XmlSpec {
                 return struct;
               }
             
-              public void writeDeviceTimeCoordStruct(com.github.moaxcp.x11client.protocol.X11Output out) {
+              public void writeDeviceTimeCoordStruct(com.github.moaxcp.x11client.protocol.X11Output out) throws
+                  java.io.IOException {
                 out.writeCard32(time);
                 out.writeInt32(axisvalues);
               }

@@ -30,12 +30,12 @@ class JavaPrimativeProperty extends JavaProperty {
                 MethodSpec.methodBuilder("${name}Enable")
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(maskTypeName, 'mask')
-                    .addStatement('$1L = mask.enableFor($1L)', name)
+                    .addStatement('$1L = ($2T) mask.enableFor($1L)', name, memberTypeName)
                     .build(),
                 MethodSpec.methodBuilder("${name}Disable")
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(maskTypeName, 'mask')
-                    .addStatement('$1L = mask.disableFor($1L)', name)
+                    .addStatement('$1L = ($2T) mask.disableFor($1L)', name, memberTypeName)
                     .build()
             ]
         }

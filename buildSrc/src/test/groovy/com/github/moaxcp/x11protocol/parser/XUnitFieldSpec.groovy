@@ -62,7 +62,7 @@ class XUnitFieldSpec extends XmlSpec {
         field.name == 'mask'
         field.type == 'CARD8'
         field.resolvedEnumType.name == 'EventMask'
-        field.javaUnit.typeName == ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'EventMask')
+        field.javaUnit.typeName == ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'EventMaskEnum')
     }
 
     def 'mask field resolve mask'() {

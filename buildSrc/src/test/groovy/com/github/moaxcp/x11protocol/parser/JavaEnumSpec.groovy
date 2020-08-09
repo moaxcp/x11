@@ -30,7 +30,7 @@ class JavaEnumSpec extends Specification {
             
               KeyRelease(0b10);
             
-              static final java.util.Map<java.lang.Integer, com.github.moaxcp.x11client.protocol.xproto.EventMask> byCode;
+              static final java.util.Map<java.lang.Integer, com.github.moaxcp.x11client.protocol.xproto.EventMask> byCode = new java.util.HashMap<>();
             
               static {
                 for(com.github.moaxcp.x11client.protocol.xproto.EventMask e : values()) {

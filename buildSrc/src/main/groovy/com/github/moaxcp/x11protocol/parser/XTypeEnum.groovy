@@ -1,12 +1,11 @@
 package com.github.moaxcp.x11protocol.parser
 
-
 import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
 import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.parser.JavaEnum.javaEnum
+import static com.github.moaxcp.x11protocol.parser.JavaEnumListProperty.javaEnumListProperty
 import static com.github.moaxcp.x11protocol.parser.JavaEnumProperty.javaEnumProperty
-import static com.github.moaxcp.x11protocol.parser.JavaListProperty.javaListProperty
 
 class XTypeEnum extends XTypeResolved implements XTypeUnit {
     List<XTypeEnumItem> items = []
@@ -40,6 +39,6 @@ class XTypeEnum extends XTypeResolved implements XTypeUnit {
 
     @Override
     JavaListProperty getJavaListProperty(XUnitListField field) {
-        return javaListProperty(field)
+        return javaEnumListProperty(field)
     }
 }

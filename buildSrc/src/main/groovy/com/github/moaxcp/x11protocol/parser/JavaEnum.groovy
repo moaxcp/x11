@@ -11,6 +11,7 @@ import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumValueName
 
 class JavaEnum implements JavaType {
     String simpleName
@@ -43,6 +44,7 @@ class JavaEnum implements JavaType {
             }
             .addField(FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(Map.class), ClassName.get(Integer), className), 'byCode')
                 .addModifiers(Modifier.STATIC, Modifier.FINAL)
+                .initializer('new $T<>()', ClassName.get(HashMap))
                 .build())
             .addStaticBlock(CodeBlock.of('''\
                 for($T e : values()) {
@@ -61,7 +63,7 @@ class JavaEnum implements JavaType {
     static JavaEnum javaEnum(XTypeEnum xEnum) {
         String simpleName = getEnumJavaName(xEnum.name)
         Map<String, String> values = xEnum.items.collectEntries {
-            [(it.name):it.value]
+            [(getEnumValueName(it.name)):it.value.expression]
         }
         return new JavaEnum(
             simpleName: simpleName,

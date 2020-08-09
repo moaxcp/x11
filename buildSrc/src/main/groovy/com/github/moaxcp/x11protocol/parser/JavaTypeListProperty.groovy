@@ -34,7 +34,7 @@ class JavaTypeListProperty extends JavaListProperty {
             for(int i = 0; i < $3L; i++) {
               $2L.add($4L.read$4L(in));
             }
-        ''', typeName, name, lengthExpression.expression, baseTypeName.simpleName())
+        '''.stripIndent(), typeName, name, lengthExpression.expression, baseTypeName.simpleName())
     }
 
     @Override
@@ -43,6 +43,6 @@ class JavaTypeListProperty extends JavaListProperty {
             for($1T t : $2L) {
               t.write$3L(out);
             }
-        ''', baseTypeName, name, baseTypeName.simpleName())
+        '''.stripIndent(), baseTypeName, name, baseTypeName.simpleName())
     }
 }

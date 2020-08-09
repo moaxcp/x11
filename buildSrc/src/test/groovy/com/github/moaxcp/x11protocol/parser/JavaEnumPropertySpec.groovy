@@ -31,11 +31,11 @@ class JavaEnumPropertySpec extends XmlSpec {
         then:
         property.name == 'mask'
         property.x11Primative == 'CARD32'
-        property.memberTypeName == ClassName.get(result.javaPackage, 'EventMask')
-        property.typeName == ClassName.get(result.javaPackage, 'EventMask')
+        property.memberTypeName == ClassName.get(result.javaPackage, 'EventMaskEnum')
+        property.typeName == ClassName.get(result.javaPackage, 'EventMaskEnum')
         property.ioTypeName == TypeName.INT
-        property.member.toString() == 'private com.github.moaxcp.x11client.protocol.xproto.EventMask mask;\n'
-        property.readCode.toString() == 'com.github.moaxcp.x11client.protocol.xproto.EventMask mask = com.github.moaxcp.x11client.protocol.xproto.EventMask.getByCode(in.readCard32())'
+        property.member.toString() == 'private com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask;\n'
+        property.readCode.toString() == 'com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask = com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum.getByCode(in.readCard32())'
         property.writeCode.toString() == 'out.writeCard32(mask.getValue())'
     }
 }
