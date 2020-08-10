@@ -42,7 +42,7 @@ class JavaEnumListPropertySpec extends XmlSpec {
         property.baseTypeName == ClassName.get(field.result.javaPackage, 'EventMaskEnum')
         property.typeName == ParameterizedTypeName.get(ClassName.get(List), property.baseTypeName)
         property.ioTypeName == TypeName.INT
-        property.lengthExpression.expression == '20'
+        property.lengthExpression.expression.toString() == '20'
         property.readCode.toString() == '''\
             java.util.List<com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum> masks = new ArrayList<>(20);
             for(int i = 0; i < 20; i++) {

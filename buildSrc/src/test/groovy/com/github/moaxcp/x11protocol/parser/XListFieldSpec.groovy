@@ -33,7 +33,7 @@ class XListFieldSpec extends Specification {
         then:
         field.type == 'CARD32'
         field.name == 'visuals'
-        field.lengthExpression.expression == 'visualsLen * 4'
+        field.lengthExpression.expression.toString() == 'visualsLen * 4'
         field.lengthField.fieldName == 'visuals_len'
         field.resolvedType.name == 'CARD32'
     }

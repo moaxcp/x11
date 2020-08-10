@@ -23,9 +23,9 @@ class XEnumSpec extends XmlSpec {
         then:
         result.enums.VisualClass.name == 'VisualClass'
         result.enums.VisualClass.items[0].name == 'StaticGray'
-        result.enums.VisualClass.items[0].value.expression == '0'
+        result.enums.VisualClass.items[0].value.expression.toString() == '0'
         result.enums.VisualClass.items[1].name == 'GrayScale'
-        result.enums.VisualClass.items[1].value.expression == '1'
+        result.enums.VisualClass.items[1].value.expression.toString() == '1'
         result.enums.VisualClass.javaType.simpleName == 'VisualClassEnum'
     }
 
@@ -51,11 +51,11 @@ class XEnumSpec extends XmlSpec {
         then:
         result.resolveXType('EventMask').name == 'EventMask'
         result.resolveXType('EventMask').items[0].name == 'NoEvent'
-        result.resolveXType('EventMask').items[0].value.expression == '0'
+        result.resolveXType('EventMask').items[0].value.expression.toString() == '0'
         result.resolveXType('EventMask').items[1].name == 'KeyPress'
-        result.resolveXType('EventMask').items[1].value.expression == '0b1'
+        result.resolveXType('EventMask').items[1].value.expression.toString() == '0b1'
         result.resolveXType('EventMask').items[2].name == 'KeyRelease'
-        result.resolveXType('EventMask').items[2].value.expression == '0b10'
+        result.resolveXType('EventMask').items[2].value.expression.toString() == '0b10'
         result.resolveXType('EventMask').javaType.simpleName == 'EventMaskEnum'
     }
 }

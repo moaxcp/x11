@@ -9,7 +9,7 @@ class MultiplyExpressionSpec extends Specification {
         MultiplyExpression expression = new MultiplyExpression(expressions:[new ValueExpression(value:5), new ValueExpression(value:4)])
 
         expect:
-        expression.expression == '5 * 4'
+        expression.expression.toString() == '5 * 4'
     }
 
     def 'nested addition'() {
@@ -22,7 +22,7 @@ class MultiplyExpressionSpec extends Specification {
             new FieldRefExpression(fieldName:'d')])
 
         expect:
-        expression.expression == 'a * (b + c) * d'
+        expression.expression.toString() == 'a * (b + c) * d'
     }
 
     def 'nested divide'() {
@@ -35,6 +35,6 @@ class MultiplyExpressionSpec extends Specification {
             new FieldRefExpression(fieldName:'d')])
 
         expect:
-        expression.expression == 'a * (b / c) * d'
+        expression.expression.toString() == 'a * (b / c) * d'
     }
 }

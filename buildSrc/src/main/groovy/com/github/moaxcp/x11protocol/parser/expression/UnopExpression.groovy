@@ -1,5 +1,7 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
+import com.squareup.javapoet.CodeBlock
+
 class UnopExpression implements Expression {
     String op
     Expression unExpression
@@ -15,7 +17,7 @@ class UnopExpression implements Expression {
     }
 
     @Override
-    String getExpression() {
-        return "op (${unExpression.expression})"
+    CodeBlock getExpression() {
+        return CodeBlock.of('op ($L)', unExpression.expression)
     }
 }

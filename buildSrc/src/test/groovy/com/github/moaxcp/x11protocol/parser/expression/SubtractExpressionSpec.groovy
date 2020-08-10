@@ -11,7 +11,7 @@ class SubtractExpressionSpec extends Specification {
         SubtractExpression expression = new SubtractExpression(expressions:[new ValueExpression(value:5), new ValueExpression(value:4)])
 
         expect:
-        expression.expression == '5 - 4'
+        expression.expression.toString() == '5 - 4'
     }
 
     def 'nested add expression'() {
@@ -22,6 +22,6 @@ class SubtractExpressionSpec extends Specification {
                  [new ValueExpression(value:5), new ValueExpression(value:4)])])
 
         expect:
-        expression.expression == '7 - 5 + 4'
+        expression.expression.toString() == '7 - 5 + 4'
     }
 }

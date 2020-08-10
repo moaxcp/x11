@@ -25,7 +25,7 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
         property.x11Primative == 'CARD64'
         property.baseTypeName == TypeName.LONG
         property.typeName == ArrayTypeName.of(TypeName.LONG)
-        property.lengthExpression.expression == 'numWindowModifiers'
+        property.lengthExpression.expression.toString() == 'numWindowModifiers'
         property.readCode.toString() == 'long[] windowModifiers = in.readCard64(numWindowModifiers)'
         property.writeCode.toString() == 'out.writeCard64(windowModifiers)'
     }

@@ -9,7 +9,7 @@ class AddExpressionSpec extends Specification {
         AddExpression expression = new AddExpression(expressions:[new ValueExpression(value:5), new ValueExpression(value:4)])
 
         expect:
-        expression.expression == '5 + 4'
+        expression.expression.toString() == '5 + 4'
     }
 
     def 'nested subtract expression'() {
@@ -20,7 +20,7 @@ class AddExpressionSpec extends Specification {
                 [new ValueExpression(value:5), new ValueExpression(value:4)])])
 
         expect:
-        expression.expression == '7 + 5 - 4'
+        expression.expression.toString() == '7 + 5 - 4'
     }
 
     def 'nested subtract and multiply expression'() {
@@ -35,6 +35,6 @@ class AddExpressionSpec extends Specification {
                 new ValueExpression(value:4)])])
 
         expect:
-        expression.expression == '7 + 8 * a + 5 - 4'
+        expression.expression.toString() == '7 + 8 * a + 5 - 4'
     }
 }

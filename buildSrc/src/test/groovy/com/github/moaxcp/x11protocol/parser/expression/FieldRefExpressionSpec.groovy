@@ -9,6 +9,6 @@ class FieldRefExpressionSpec extends Specification {
         FieldRefExpression expression = new FieldRefExpression(fieldName:'name')
 
         expect:
-        expression.getExpression() == 'name'
+        expression.getExpression().toString() == 'name'
     }
 }

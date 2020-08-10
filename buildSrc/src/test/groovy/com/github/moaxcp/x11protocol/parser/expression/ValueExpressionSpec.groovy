@@ -9,6 +9,6 @@ class ValueExpressionSpec extends Specification {
         ValueExpression expression = new ValueExpression(value:'value')
 
         expect:
-        expression.expression == 'value'
+        expression.expression.toString() == 'value'
     }
 }

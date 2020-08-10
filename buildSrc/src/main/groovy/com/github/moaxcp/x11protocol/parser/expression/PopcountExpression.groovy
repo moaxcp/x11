@@ -1,17 +1,14 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
-import groovy.transform.EqualsAndHashCode
-import groovy.transform.ToString
 
-@ToString(includePackage = false)
-@EqualsAndHashCode
-class ValueExpression implements Expression {
-    String value
-
+class PopcountExpression implements Expression {
+    String basePackage
+    FieldRefExpression field
     @Override
     List<FieldRefExpression> getFieldRefs() {
-        return []
+        return [field]
     }
 
     @Override
@@ -19,7 +16,8 @@ class ValueExpression implements Expression {
         return []
     }
 
+    @Override
     CodeBlock getExpression() {
-        return CodeBlock.of(value)
+        return CodeBlock.of('$T.popcount($L)', ClassName.get(basePackage, 'UtilityClass'), field.expression)
     }
 }

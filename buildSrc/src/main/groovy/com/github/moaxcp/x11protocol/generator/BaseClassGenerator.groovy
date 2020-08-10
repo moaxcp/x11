@@ -1,11 +1,13 @@
 package com.github.moaxcp.x11protocol.generator
 
 import com.squareup.javapoet.ArrayTypeName
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 
 import static com.squareup.javapoet.MethodSpec.methodBuilder
 import static com.squareup.javapoet.TypeName.*
+import static com.squareup.javapoet.TypeSpec.classBuilder
 import static com.squareup.javapoet.TypeSpec.interfaceBuilder
 import static javax.lang.model.element.Modifier.*
 
@@ -14,9 +16,24 @@ class BaseClassGenerator {
     String basePackage
 
     void generate() {
+        generatePopcount()
         generateIntValue()
         generateX11Input()
         generateX11Output()
+    }
+
+    void generatePopcount() {
+        TypeSpec popcount = classBuilder('Popcount')
+            .addModifiers(PUBLIC)
+            .addAnnotation(ClassName.get('lombok.experimental', 'UtilityClass'))
+            .addMethod(methodBuilder('popcount')
+                .addModifiers(PUBLIC)
+                .returns(INT)
+                .addParameter(INT, 'value')
+                .addStatement('return $T.bitCount(value)', Integer)
+                .build())
+            .build()
+        JavaFile.builder(basePackage, popcount).build().writeTo(outputSrc)
     }
 
     void generateIntValue() {

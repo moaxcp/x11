@@ -21,7 +21,7 @@ class XTypeEnum extends XTypeResolved implements XTypeUnit {
             }
             XTypeEnumItem item = new XTypeEnumItem()
             item.name = (String) it.attributes().get('name')
-            item.value = ExpressionFactory.getExpression((Node) it.childNodes().next())
+            item.value = ExpressionFactory.getExpression(result.basePackage, (Node) it.childNodes().next())
             xEnum.items.add(item)
         }
         return xEnum

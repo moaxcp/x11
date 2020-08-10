@@ -33,7 +33,7 @@ class JavaTypeListPropertySpec extends XmlSpec {
         property.name == 'formats'
         property.baseTypeName == ClassName.get(field.result.javaPackage, 'FormatStruct')
         property.typeName == ParameterizedTypeName.get(ClassName.get(List), property.baseTypeName)
-        property.lengthExpression.expression == '20'
+        property.lengthExpression.expression.toString() == '20'
         property.readCode.toString() == '''\
             java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> formats = new ArrayList<>();
             for(int i = 0; i < 20; i++) {

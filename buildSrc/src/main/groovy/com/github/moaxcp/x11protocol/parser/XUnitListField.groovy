@@ -18,7 +18,7 @@ class XUnitListField extends XUnitField {
 
         Expression expression = null
         if(node.childNodes().hasNext()) {
-            expression = ExpressionFactory.getExpression((Node) node.childNodes().next())
+            expression = ExpressionFactory.getExpression(result.basePackage, (Node) node.childNodes().next())
         }
 
         return new XUnitListField(
