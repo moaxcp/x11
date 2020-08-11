@@ -112,6 +112,10 @@ class Conventions {
         return getJavaName(x11Name) + 'Union'
     }
 
+    static ClassName getUnionTypeName(String javaPackage, String x11Name) {
+        return ClassName.get(javaPackage, getUnionJavaName(x11Name))
+    }
+
     static String getEnumJavaName(String x11Name) {
         return getJavaName(x11Name) + 'Enum'
     }

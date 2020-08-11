@@ -22,6 +22,7 @@ class XResult {
     Set<String> xidUnions = []
     Map<String, String> typedefs = [:]
     Map<String, XTypeStruct> structs = [:]
+    Map<String, XTypeUnion> unions = [:]
     Map<String, XTypeEnum> enums = [:]
 
     static Map<String, XTypePrimative> primatives = [:]
@@ -118,7 +119,8 @@ class XResult {
     }
 
     void addUnion(Node node) {
-
+        String name = node.attributes().get('name')
+        unions.put(name, XTypeUnion.xTypeUnion(this, node))
     }
 
     void addError(Node node) {
@@ -180,7 +182,7 @@ class XResult {
         if(xidTypes.contains(type) || xidUnions.contains(type)) {
             type = 'CARD32'
         }
-        XTypeResolved xType = primatives[type] ?: structs[type] ?: enums[type]
+        XTypeResolved xType = primatives[type] ?: structs[type] ?: unions[type] ?: enums[type]
 
         if(xType) {
             return xType

@@ -6,25 +6,14 @@ import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
-class JavaStruct implements JavaType {
-    String basePackage
-    String simpleName
-    ClassName className
-    List<JavaUnit> protocol
+class JavaStruct extends JavaBaseObject {
 
     static JavaStruct javaStruct(XTypeStruct struct) {
-        List<JavaUnit> protocol = struct.protocol.collect {
-            it.getJavaUnit()
-        }
-
-        protocol.eachWithIndex { JavaUnit entry, int i ->
-            if(entry instanceof JavaPadAlign) {
-                entry.list = protocol[i - 1]
-            }
-        }
+        List<JavaUnit> protocol = struct.toJavaProtocol()
 
         String simpleName = getStructJavaName(struct.name)
         return new JavaStruct(
+            superType: struct.superType,
             basePackage: struct.basePackage,
             simpleName:simpleName,
             className:getStructTypeName(struct.javaPackage, struct.name),
@@ -33,26 +22,6 @@ class JavaStruct implements JavaType {
     }
 
     @Override
-    TypeSpec getTypeSpec() {
-        List<FieldSpec> fields = protocol.findAll {
-            it instanceof JavaProperty
-        }.collect { JavaProperty it ->
-            it.member
-        }
-        List<MethodSpec> methods = protocol.findAll {
-            it instanceof JavaProperty
-        }.collect { JavaProperty it ->
-            it.methods
-        }.flatten()
-        return TypeSpec.classBuilder(className)
-            .addAnnotation(ClassName.get('lombok', 'Data'))
-            .addFields(fields)
-            .addMethod(readMethod)
-            .addMethod(writeMethod)
-            .addMethods(methods)
-            .build()
-    }
-
     MethodSpec getReadMethod() {
         List<ParameterSpec> params = protocol.findAll {
             it instanceof JavaListProperty
@@ -87,6 +56,7 @@ class JavaStruct implements JavaType {
             .build()
     }
 
+    @Override
     MethodSpec getWriteMethod() {
         CodeBlock.Builder writeProtocol = CodeBlock.builder()
         protocol.each {

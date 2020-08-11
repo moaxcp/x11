@@ -5,14 +5,11 @@ import groovy.util.slurpersupport.Node
 
 import static XUnitField.xUnitField
 import static XUnitListField.xUnitListField
-import static JavaTypeListProperty.javaTypeListProperty
-import static JavaTypeProperty.javaTypeProperty
 import static com.github.moaxcp.x11protocol.parser.JavaStruct.javaStruct
 import static com.github.moaxcp.x11protocol.parser.XUnitPadFactory.xUnitPad
 
 @ToString(includeSuperProperties = true, includePackage = false, includes = ['name'])
-class XTypeStruct extends XTypeResolved implements XTypeUnit {
-    List<XUnit> protocol = []
+class XTypeStruct extends XTypeObject {
 
     static XTypeStruct xStruct(XResult result, Node node) {
         XTypeStruct struct = new XTypeStruct(basePackage: result.basePackage, javaPackage: result.javaPackage)
@@ -42,15 +39,5 @@ class XTypeStruct extends XTypeResolved implements XTypeUnit {
     @Override
     JavaType getJavaType() {
         return javaStruct(this)
-    }
-
-    @Override
-    JavaTypeProperty getJavaProperty(XUnitField field) {
-        return javaTypeProperty(field)
-    }
-
-    @Override
-    JavaListProperty getJavaListProperty(XUnitListField field) {
-        return javaTypeListProperty(field)
     }
 }
