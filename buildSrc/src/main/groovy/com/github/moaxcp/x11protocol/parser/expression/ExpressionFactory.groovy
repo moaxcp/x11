@@ -10,9 +10,9 @@ class ExpressionFactory {
             case 'bit':
                 return new BitValueExpression(Integer.valueOf(node.text()))
             case 'fieldref':
-                return new FieldRefExpression(fieldName: node.text())
+                return new FieldRefExpression(fieldName: node.text(), x11Type: node.attributes().get('type'))
             case 'paramref':
-                return new ParamRefExpression(paramName: node.text(), x11Primative: node.attributes().get('type'))
+                return new ParamRefExpression(paramName: node.text(), x11Type: node.attributes().get('type'))
             case 'op':
                 return getOpExpression(basePackage, node)
             case 'unop':

@@ -195,6 +195,58 @@ class JavaStructSpec extends XmlSpec {
               }
             }
         '''.stripIndent()
+    }
+
+    def 'fieldref with boolean type'() {
+        given:
+        xmlBuilder.xcb(header:'xkb') {
+            struct(name:'SetKeyType') {
+                field(type:'BOOL', name:'preserve')
+                field(type:'CARD8', name:'nMapEntries')
+                list(type:'INT32', name:'preserve_entries') {
+                    op(op:'*') {
+                        fieldref("preserve")
+                        fieldref("nMapEntries")
+                    }
+                }
+            }
+        }
+        addChildNodes()
+
+        when:
+        XTypeStruct struct = result.resolveXType('SetKeyType')
+        JavaStruct javaStruct = javaStruct(struct)
+
+        then:
+        javaStruct.typeSpec.toString() == '''\
+            @lombok.Data
+            public class SetKeyTypeStruct {
+              private boolean preserve;
+            
+              private byte nmapentries;
+            
+              private int[] preserveEntries;
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct readSetKeyTypeStruct(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                boolean preserve = in.readBool();
+                byte nmapentries = in.readCard8();
+                int[] preserveEntries = in.readInt32((preserve ? 1 : 0) * nmapentries);
+                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct struct = new com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct();
+                struct.setPreserve(preserve);
+                struct.setNmapentries(nmapentries);
+                struct.setPreserveEntries(preserveEntries);
+                return struct;
+              }
+            
+              public void writeSetKeyTypeStruct(com.github.moaxcp.x11client.protocol.X11Output out) throws
+                  java.io.IOException {
+                out.writeBool(preserve);
+                out.writeCard8(nmapentries);
+                out.writeInt32(preserveEntries);
+              }
+            }
+        '''.stripIndent()
 
     }
 }

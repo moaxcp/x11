@@ -28,7 +28,7 @@ class JavaStruct extends JavaBaseObject {
         }.collect { JavaListProperty it ->
             it.lengthExpression.paramRefs
         }.flatten().collect { ParamRefExpression it ->
-            ParameterSpec.builder(x11PrimativeToJavaTypeName(it.x11Primative), convertX11VariableNameToJava(it.paramName)).build()
+            ParameterSpec.builder(x11PrimativeToJavaTypeName(it.x11Type), convertX11VariableNameToJava(it.paramName)).build()
         }
 
         CodeBlock.Builder readProtocol = CodeBlock.builder()

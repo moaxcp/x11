@@ -9,7 +9,7 @@ import groovy.transform.ToString
 @EqualsAndHashCode
 class ParamRefExpression implements Expression {
     String paramName
-    String x11Primative
+    String x11Type
 
     @Override
     List<String> getFieldRefs() {
