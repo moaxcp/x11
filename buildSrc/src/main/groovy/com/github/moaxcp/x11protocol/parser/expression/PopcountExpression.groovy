@@ -18,6 +18,6 @@ class PopcountExpression implements Expression {
 
     @Override
     CodeBlock getExpression() {
-        return CodeBlock.of('$T.popcount($L)', ClassName.get(basePackage, 'UtilityClass'), field.expression)
+        return CodeBlock.of('$T.popcount($L)', ClassName.get(basePackage, 'Popcount'), field.expression)
     }
 }

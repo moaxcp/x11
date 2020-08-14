@@ -18,6 +18,6 @@ class UnopExpression implements Expression {
 
     @Override
     CodeBlock getExpression() {
-        return CodeBlock.of('op ($L)', unExpression.expression)
+        return CodeBlock.of("$op (\$L)", unExpression.expression)
     }
 }

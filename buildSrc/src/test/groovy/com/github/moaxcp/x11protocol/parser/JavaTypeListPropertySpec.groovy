@@ -35,7 +35,7 @@ class JavaTypeListPropertySpec extends XmlSpec {
         property.typeName == ParameterizedTypeName.get(ClassName.get(List), property.baseTypeName)
         property.lengthExpression.expression.toString() == '20'
         property.readCode.toString() == '''\
-            java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> formats = new ArrayList<>();
+            java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> formats = new java.util.ArrayList<>();
             for(int i = 0; i < 20; i++) {
               formats.add(FormatStruct.readFormatStruct(in));
             }

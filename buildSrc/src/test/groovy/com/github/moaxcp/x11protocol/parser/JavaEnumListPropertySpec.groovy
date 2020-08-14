@@ -44,7 +44,7 @@ class JavaEnumListPropertySpec extends XmlSpec {
         property.ioTypeName == TypeName.INT
         property.lengthExpression.expression.toString() == '20'
         property.readCode.toString() == '''\
-            java.util.List<com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum> masks = new ArrayList<>(20);
+            java.util.List<com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum> masks = new java.util.ArrayList<>(20);
             for(int i = 0; i < 20; i++) {
               masks.add(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum.getByCode(in.readCard32()));
             }

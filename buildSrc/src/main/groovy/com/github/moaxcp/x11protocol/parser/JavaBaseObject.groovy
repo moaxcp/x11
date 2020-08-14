@@ -4,6 +4,7 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
+import javax.lang.model.element.Modifier
 
 abstract class JavaBaseObject implements JavaType {
     String basePackage
@@ -25,6 +26,7 @@ abstract class JavaBaseObject implements JavaType {
             it.methods
         }.flatten()
         TypeSpec.Builder typeSpec = TypeSpec.classBuilder(className)
+            .addModifiers(Modifier.PUBLIC)
             .addAnnotation(ClassName.get('lombok', 'Data'))
             .addFields(fields)
             .addMethod(readMethod)

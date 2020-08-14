@@ -34,9 +34,6 @@ class JavaUnionSpec extends XmlSpec {
         union.className == ClassName.get(result.javaPackage, 'BehaviorUnion')
         union.typeSpec.toString() == '''\
             public interface BehaviorUnion {
-              void getType();
-              
-              void setType(byte type);
             }
         '''.stripIndent()
 

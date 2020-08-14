@@ -40,7 +40,7 @@ class JavaStructSpec extends XmlSpec {
         then:
         spec.toString() == '''\
             @lombok.Data
-            class FormatStruct {
+            public class FormatStruct {
               private byte depth;
             
               private byte bitsPerPixel;
@@ -109,7 +109,7 @@ class JavaStructSpec extends XmlSpec {
         then:
         spec.toString() == '''\
             @lombok.Data
-            class ScreenStruct {
+            public class ScreenStruct {
               private int root;
             
               private int defaultColormap;
@@ -137,17 +137,17 @@ class JavaStructSpec extends XmlSpec {
                 out.writeCard32(root);
                 out.writeCard32(defaultColormap);
                 out.writeCard32(currentInputMasks);
-                out.writeByte((byte) backingStores.getValue()));
+                out.writeByte((byte) backingStores.getValue());
               }
             
               public void currentInputMasksEnable(
-                  com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask) {
-                currentInputMasks = (int) mask.enableFor(currentInputMasks);
+                  com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
+                currentInputMasks = (int) maskEnum.enableFor(currentInputMasks);
               }
             
               public void currentInputMasksDisable(
-                  com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask) {
-                currentInputMasks = (int) mask.disableFor(currentInputMasks);
+                  com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
+                currentInputMasks = (int) maskEnum.disableFor(currentInputMasks);
               }
             }
         '''.stripIndent()
@@ -173,7 +173,7 @@ class JavaStructSpec extends XmlSpec {
         then:
         javaStruct.typeSpec.toString() == '''\
             @lombok.Data
-            class DeviceTimeCoordStruct {
+            public class DeviceTimeCoordStruct {
               private int time;
             
               private int[] axisvalues;

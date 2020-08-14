@@ -14,7 +14,7 @@ class JavaTypeListProperty extends JavaListProperty {
         XTypeResolved resolvedType = field.resolvedType
         TypeName baseTypeName
         if(resolvedType instanceof XTypeStruct) {
-            baseTypeName = getStructTypeName(field.result.javaPackage, resolvedType.name)
+            baseTypeName = getStructTypeName(resolvedType.javaPackage, resolvedType.name)
         } else { //else Request/Reply/Event
             throw new UnsupportedOperationException("not supported $resolvedType")
         }
@@ -30,11 +30,11 @@ class JavaTypeListProperty extends JavaListProperty {
     @Override
     CodeBlock getReadCode() {
         return CodeBlock.of('''\
-            $1T $2L = new ArrayList<>();
-            for(int i = 0; i < $3L; i++) {
-              $2L.add($4L.read$4L(in));
+            $1T $2L = new $3T<>();
+            for(int i = 0; i < $4L; i++) {
+              $2L.add($5L.read$5L(in));
             }
-        '''.stripIndent(), typeName, name, lengthExpression.expression, baseTypeName.simpleName())
+        '''.stripIndent(), typeName, name, ClassName.get('java.util', 'ArrayList'), lengthExpression.expression, baseTypeName.simpleName())
     }
 
     @Override

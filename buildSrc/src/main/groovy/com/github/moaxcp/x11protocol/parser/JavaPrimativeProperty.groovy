@@ -29,13 +29,13 @@ class JavaPrimativeProperty extends JavaProperty {
             return [
                 MethodSpec.methodBuilder("${name}Enable")
                     .addModifiers(Modifier.PUBLIC)
-                    .addParameter(maskTypeName, 'mask')
-                    .addStatement('$1L = ($2T) mask.enableFor($1L)', name, memberTypeName)
+                    .addParameter(maskTypeName, 'maskEnum')
+                    .addStatement('$1L = ($2T) maskEnum.enableFor($1L)', name, memberTypeName)
                     .build(),
                 MethodSpec.methodBuilder("${name}Disable")
                     .addModifiers(Modifier.PUBLIC)
-                    .addParameter(maskTypeName, 'mask')
-                    .addStatement('$1L = ($2T) mask.disableFor($1L)', name, memberTypeName)
+                    .addParameter(maskTypeName, 'maskEnum')
+                    .addStatement('$1L = ($2T) maskEnum.disableFor($1L)', name, memberTypeName)
                     .build()
             ]
         }
