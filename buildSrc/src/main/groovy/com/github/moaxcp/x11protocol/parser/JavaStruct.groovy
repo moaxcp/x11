@@ -62,7 +62,7 @@ class JavaStruct extends JavaBaseObject {
         protocol.each {
             writeProtocol.addStatement(it.writeCode)
         }
-        return MethodSpec.methodBuilder("write${simpleName}")
+        return MethodSpec.methodBuilder("write")
             .addModifiers(Modifier.PUBLIC)
             .addParameter(ClassName.get(basePackage, 'X11Output'), 'out')
             .addException(IOException)

@@ -4,7 +4,7 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
-import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperToUpperCamel
+import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumTypeName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getX11Primatives
 import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToJavaTypeName
@@ -27,17 +27,17 @@ class JavaEnumProperty extends JavaProperty {
 
     @Override
     CodeBlock getReadCode() {
-        return CodeBlock.of("\$1T \$2L = \$1T.getByCode(in.read${fromUpperToUpperCamel(x11Primative)}())",
+        return CodeBlock.of("\$1T \$2L = \$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Primative)}())",
             memberTypeName, name)
     }
 
     @Override
     CodeBlock getWriteCode() {
         if(ioTypeName != TypeName.INT) {
-            return CodeBlock.of("out.write${fromUpperToUpperCamel(x11Primative)}((\$T) \$L.getValue())",
+            return CodeBlock.of("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}((\$T) \$L.getValue())",
                 ioTypeName, name)
         } else {
-            return CodeBlock.of("out.write${fromUpperToUpperCamel(x11Primative)}(\$L.getValue())",
+            return CodeBlock.of("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}(\$L.getValue())",
                 name)
         }
     }

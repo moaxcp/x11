@@ -32,7 +32,7 @@ class JavaEnumListProperty extends JavaListProperty {
             for(int i = 0; i < $4L; i++) {
               $2L.add($5T.getByCode(in.read$6L()));
             }
-        ''', typeName, name, ClassName.get('java.util', 'ArrayList'), lengthExpression.expression, baseTypeName, fromUpperToUpperCamel(x11Primative))
+        ''', typeName, name, ClassName.get('java.util', 'ArrayList'), lengthExpression.expression, baseTypeName, fromUpperUnderscoreToUpperCamel(x11Primative))
     }
 
     @Override
@@ -41,6 +41,6 @@ class JavaEnumListProperty extends JavaListProperty {
             for($1T e : $2L) {
               out.write$3L(e.getValue());
             }
-        ''', baseTypeName, name, fromUpperToUpperCamel(x11Primative))
+        ''', baseTypeName, name, fromUpperUnderscoreToUpperCamel(x11Primative))
     }
 }

@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.generator
 
 import com.google.common.base.CaseFormat
-import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeName
 import pl.allegro.finance.tradukisto.ValueConverters
@@ -27,7 +26,7 @@ class Conventions {
 
     static TypeName x11PrimativeToJavaTypeName(String x11Type) {
         if(x11Type == 'void') {
-            return ArrayTypeName.of(TypeName.BYTE)
+            return TypeName.BYTE
         }
         String primative = x11PrimativeToJavaPrimative(x11Type)
         switch(primative) {
@@ -164,7 +163,11 @@ class Conventions {
         CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, getJavaName(x11Name))
     }
 
-    static String fromUpperToUpperCamel(String from) {
+    static String fromUpperCamelToLowerCamel(String from) {
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, from)
+    }
+
+    static String fromUpperUnderscoreToUpperCamel(String from) {
         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, from)
     }
 }

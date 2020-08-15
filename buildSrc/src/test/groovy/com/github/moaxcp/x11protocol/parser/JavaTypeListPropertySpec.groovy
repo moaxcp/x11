@@ -42,7 +42,7 @@ class JavaTypeListPropertySpec extends XmlSpec {
         '''.stripIndent()
         property.writeCode.toString() == '''\
             for(com.github.moaxcp.x11client.protocol.xproto.FormatStruct t : formats) {
-              t.writeFormatStruct(out);
+              t.write(out);
             }
         '''.stripIndent()
     }

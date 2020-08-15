@@ -41,8 +41,8 @@ class JavaTypeListProperty extends JavaListProperty {
     CodeBlock getWriteCode() {
         return CodeBlock.of('''\
             for($1T t : $2L) {
-              t.write$3L(out);
+              t.write(out);
             }
-        '''.stripIndent(), baseTypeName, name, baseTypeName.simpleName())
+        '''.stripIndent(), baseTypeName, name)
     }
 }

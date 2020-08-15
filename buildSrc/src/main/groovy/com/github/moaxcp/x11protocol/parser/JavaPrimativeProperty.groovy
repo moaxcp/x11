@@ -44,12 +44,12 @@ class JavaPrimativeProperty extends JavaProperty {
 
     @Override
     CodeBlock getReadCode() {
-        return declareAndInitializeTo("in.read${fromUpperToUpperCamel(x11Primative)}()")
+        return declareAndInitializeTo("in.read${fromUpperUnderscoreToUpperCamel(x11Primative)}()")
     }
 
     @Override
     CodeBlock getWriteCode() {
-        return CodeBlock.of("out.write${fromUpperToUpperCamel(x11Primative)}($name)")
+        return CodeBlock.of("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)")
     }
 
     static JavaPrimativeProperty javaPrimativeProperty(XUnitField field) {

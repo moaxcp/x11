@@ -60,8 +60,7 @@ class JavaStructSpec extends XmlSpec {
                 return struct;
               }
             
-              public void writeFormatStruct(com.github.moaxcp.x11client.protocol.X11Output out) throws
-                  java.io.IOException {
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(depth);
                 out.writeCard8(bitsPerPixel);
                 out.writeCard8(scanlinePad);
@@ -132,8 +131,7 @@ class JavaStructSpec extends XmlSpec {
                 return struct;
               }
             
-              public void writeScreenStruct(com.github.moaxcp.x11client.protocol.X11Output out) throws
-                  java.io.IOException {
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard32(root);
                 out.writeCard32(defaultColormap);
                 out.writeCard32(currentInputMasks);
@@ -188,8 +186,7 @@ class JavaStructSpec extends XmlSpec {
                 return struct;
               }
             
-              public void writeDeviceTimeCoordStruct(com.github.moaxcp.x11client.protocol.X11Output out) throws
-                  java.io.IOException {
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard32(time);
                 out.writeInt32(axisvalues);
               }
@@ -239,8 +236,7 @@ class JavaStructSpec extends XmlSpec {
                 return struct;
               }
             
-              public void writeSetKeyTypeStruct(com.github.moaxcp.x11client.protocol.X11Output out) throws
-                  java.io.IOException {
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeBool(preserve);
                 out.writeCard8(nmapentries);
                 out.writeInt32(preserveEntries);

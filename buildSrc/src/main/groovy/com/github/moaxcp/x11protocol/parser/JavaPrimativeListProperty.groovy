@@ -6,7 +6,7 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
-import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperToUpperCamel
+import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
 import static com.github.moaxcp.x11protocol.generator.Conventions.getX11Primatives
 import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToJavaTypeName
 
@@ -41,11 +41,11 @@ class JavaPrimativeListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getReadCode() {
-        return declareAndInitializeTo("in.read${fromUpperToUpperCamel(x11Primative)}(${lengthExpression.expression})")
+        return declareAndInitializeTo("in.read${fromUpperUnderscoreToUpperCamel(x11Primative)}(${lengthExpression.expression})")
     }
 
     @Override
     CodeBlock getWriteCode() {
-        return CodeBlock.of("out.write${fromUpperToUpperCamel(x11Primative)}($name)")
+        return CodeBlock.of("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)")
     }
 }
