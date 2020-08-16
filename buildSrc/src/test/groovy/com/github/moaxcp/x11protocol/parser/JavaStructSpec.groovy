@@ -40,6 +40,8 @@ class JavaStructSpec extends XmlSpec {
         then:
         spec.toString() == '''\
             @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
             public class FormatStruct {
               private byte depth;
             
@@ -108,6 +110,8 @@ class JavaStructSpec extends XmlSpec {
         then:
         spec.toString() == '''\
             @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
             public class ScreenStruct {
               private int root;
             
@@ -171,6 +175,8 @@ class JavaStructSpec extends XmlSpec {
         then:
         javaStruct.typeSpec.toString() == '''\
             @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
             public class DeviceTimeCoordStruct {
               private int time;
             
@@ -217,6 +223,8 @@ class JavaStructSpec extends XmlSpec {
         then:
         javaStruct.typeSpec.toString() == '''\
             @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
             public class SetKeyTypeStruct {
               private boolean preserve;
             

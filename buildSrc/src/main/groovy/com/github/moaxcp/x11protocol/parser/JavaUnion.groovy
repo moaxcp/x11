@@ -16,6 +16,7 @@ class JavaUnion extends JavaBaseObject {
         String simpleName = getUnionJavaName(union.name)
         return "${fromUpperCamelToLowerCamel(simpleName)}JavaUnion"(
             basePackage: union.basePackage,
+            javaPackage: union.javaPackage,
             simpleName: simpleName,
             className: getUnionTypeName(union.javaPackage, union.name),
             protocol: protocol

@@ -4,9 +4,10 @@ import com.github.moaxcp.x11protocol.XmlSpec
 import com.squareup.javapoet.ClassName
 
 class JavaUnionSpec extends XmlSpec {
-    def create() {
+    def 'create behavior union'() {
         given:
         xmlBuilder.xcb() {
+            typedef(oldname:'CARD8', newname:'KEYCODE')
             struct(name:'CommonBehavior') {
                 field(name:'type', type:'CARD8')
                 field(name:'data', type:'CARD8')
@@ -15,10 +16,59 @@ class JavaUnionSpec extends XmlSpec {
                 field(name:'type', type:'CARD8')
                 pad(bytes:'1')
             }
+            typedef(oldname:'DefaultBehavior', newname:'LockBehavior')
+            struct(name:'RadioGroupBehavior') {
+                field(name:'type', type:'CARD8')
+                field(name:'group', type:'CARD8')
+            }
+            struct(name:'OverlayBehavior') {
+                field(name:'type', type:'CARD8')
+                field(name:'key', type:'KEYCODE')
+            }
+            typedef(oldname:'LockBehavior', newname:'PermamentLockBehavior')
+            typedef(oldname:'RadioGroupBehavior', newname:'PermamentRadioGroupBehavior')
+            typedef(oldname:'OverlayBehavior', newname:'PermamentOverlayBehavior')
             union(name:'Behavior') {
                 field(name:'common', type:'CommonBehavior')
                 field(name:'default', type:'DefaultBehavior')
+                field(name:'lock', type:'LockBehavior')
+                field(name:'radioGroup', type:'RadioGroupBehavior')
+                field(name:'overlay1', type:'OverlayBehavior')
+                field(name:'overlay2', type:'OverlayBehavior')
+                field(name:'permamentLock', type:'PermamentLockBehavior')
+                field(name:'permamentRadioGroup', type:'PermamentRadioGroupBehavior')
+                field(name:'permamentOverlay1', type:'PermamentOverlayBehavior')
+                field(name:'permamentOverlay2', type:'PermamentOverlayBehavior')
                 field(name:'type', type:'CARD8')
+            }
+            'enum'(name:'BehaviorType') {
+                item(name:'Default') {
+                    value('0')
+                }
+                item(name:'Lock') {
+                    value('1')
+                }
+                item(name:'RadioGroup') {
+                    value('2')
+                }
+                item(name:'Overlay1') {
+                    value('3')
+                }
+                item(name:'Overlay2') {
+                    value('4')
+                }
+                item(name:'PermamentLock') {
+                    value('129')
+                }
+                item(name:'PermamentRadioGroup') {
+                    value('130')
+                }
+                item(name:'PermamentOverlay1') {
+                    value('131')
+                }
+                item(name:'PermamentOverlay2') {
+                    value('132')
+                }
             }
         }
         addChildNodes()
@@ -36,8 +86,23 @@ class JavaUnionSpec extends XmlSpec {
             public interface BehaviorUnion {
               static com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion readBehaviorUnion(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                byte type = in.readCard8();
+                byte data = in.readCard8();
+                com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum typeEnum = com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.getByCode(type);
+                if(typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.DEFAULT || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.LOCK || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.PERMAMENT_LOCK) {
+                  return new com.github.moaxcp.x11client.protocol.xproto.DefaultBehaviorStruct(type);
+                }
+                if(typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.RADIO_GROUP || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.PERMAMENT_RADIO_GROUP) {
+                  return new com.github.moaxcp.x11client.protocol.xproto.RadioGroupBehaviorStruct(type, data);
+                }
+                if(typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.OVERLAY1 || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.OVERLAY2 || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.PERMAMENT_OVERLAY1 || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.PERMAMENT_OVERLAY2) {
+                  return new com.github.moaxcp.x11client.protocol.xproto.OverlayBehaviorStruct(type, data);
+                }
+                else {
+                  return new com.github.moaxcp.x11client.protocol.xproto.CommonBehaviorStruct(type, data);
+                }
               }
-              
+            
               void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException;
             }
         '''.stripIndent()

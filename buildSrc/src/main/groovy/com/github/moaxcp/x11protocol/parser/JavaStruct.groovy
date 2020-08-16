@@ -15,6 +15,7 @@ class JavaStruct extends JavaBaseObject {
         return new JavaStruct(
             superType: struct.superType,
             basePackage: struct.basePackage,
+            javaPackage: struct.javaPackage,
             simpleName:simpleName,
             className:getStructTypeName(struct.javaPackage, struct.name),
             protocol:protocol

@@ -8,10 +8,23 @@ import javax.lang.model.element.Modifier
 
 abstract class JavaBaseObject implements JavaType {
     String basePackage
+    String javaPackage
     String simpleName
     ClassName superType
     ClassName className
     List<JavaUnit> protocol
+
+    JavaProperty getField(String name) {
+        protocol.find {
+            it.name == name
+        }
+    }
+
+    boolean hasFields() {
+        protocol.find {
+            it instanceof JavaProperty
+        }
+    }
 
     @Override
     TypeSpec getTypeSpec() {
@@ -27,13 +40,17 @@ abstract class JavaBaseObject implements JavaType {
         }.flatten()
         TypeSpec.Builder typeSpec = TypeSpec.classBuilder(className)
             .addModifiers(Modifier.PUBLIC)
-            .addAnnotation(ClassName.get('lombok', 'Data'))
             .addFields(fields)
             .addMethod(readMethod)
             .addMethod(writeMethod)
             .addMethods(methods)
         if(superType) {
             typeSpec.addSuperinterface(superType)
+        }
+        if(hasFields()) {
+            typeSpec.addAnnotation(ClassName.get('lombok', 'Data'))
+                .addAnnotation(ClassName.get('lombok', 'AllArgsConstructor'))
+                .addAnnotation(ClassName.get('lombok', 'NoArgsConstructor'))
         }
 
         typeSpec.build()
