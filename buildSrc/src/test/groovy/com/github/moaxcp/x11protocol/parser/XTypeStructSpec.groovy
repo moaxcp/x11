@@ -5,7 +5,7 @@ import groovy.xml.MarkupBuilder
 import spock.lang.Specification
 import groovy.util.slurpersupport.Node
 
-class XStructSpec extends Specification {
+class XTypeStructSpec extends Specification {
     StringWriter writer = new StringWriter()
     MarkupBuilder xmlBuilder = new MarkupBuilder(writer)
     XResult result = new XResult(basePackage: 'com.github.moaxcp.x11client.protocol', header:'xproto')

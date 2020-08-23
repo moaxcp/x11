@@ -43,7 +43,7 @@ class JavaEnumProperty extends JavaProperty {
     }
 
     static JavaEnumProperty javaEnumProperty(XUnitField field) {
-        XTypeResolved resolvedType = field.resolvedType
+        XType resolvedType = field.resolvedType
         if(!x11Primatives.contains(resolvedType.name)) {
             throw new IllegalArgumentException("Could not find ${resolvedType.name} in primative types $x11Primatives")
         }

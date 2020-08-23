@@ -1,14 +1,12 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.parser.expression.Expression
+import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
 import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
-import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
-import static com.github.moaxcp.x11protocol.generator.Conventions.getX11Primatives
-import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToJavaTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
 class JavaPrimativeListProperty extends JavaListProperty {
     String name
@@ -19,8 +17,8 @@ class JavaPrimativeListProperty extends JavaListProperty {
     boolean readOnly
     boolean localOnly
 
-    static JavaListProperty javaPrimativeListProperty(XUnitListField field) {
-        XTypeResolved resolvedType = field.resolvedType
+    static JavaPrimativeListProperty javaPrimativeListProperty(JavaType javaType, XUnitListField field) {
+        XType resolvedType = field.resolvedType
         if(!x11Primatives.contains(resolvedType.name)) {
             throw new IllegalArgumentException("Could not find ${resolvedType.name} in primative types $x11Primatives")
         }
@@ -29,14 +27,16 @@ class JavaPrimativeListProperty extends JavaListProperty {
         TypeName baseType = x11PrimativeToJavaTypeName(resolvedType.name)
         TypeName typeName = ArrayTypeName.of(baseType)
 
-        return new JavaPrimativeListProperty(
+        JavaPrimativeListProperty property = new JavaPrimativeListProperty(
             name:convertX11VariableNameToJava(field.name),
             x11Primative:x11Primative,
             baseTypeName: baseType,
             typeName: typeName,
-            lengthExpression: field.lengthExpression,
             readOnly: field.readOnly
         )
+
+        property.lengthExpression = ExpressionFactory.getExpression(javaType, field.lengthExpression)
+        return property
     }
 
     @Override

@@ -7,7 +7,7 @@ import static com.github.moaxcp.x11protocol.parser.JavaEnum.javaEnum
 import static com.github.moaxcp.x11protocol.parser.JavaEnumListProperty.javaEnumListProperty
 import static com.github.moaxcp.x11protocol.parser.JavaEnumProperty.javaEnumProperty
 
-class XTypeEnum extends XTypeResolved implements XTypeUnit {
+class XTypeEnum extends XType implements XTypeUnit {
     List<XTypeEnumItem> items = []
     
     static XTypeEnum xTypeEnum(XResult result, Node node) {
@@ -21,7 +21,7 @@ class XTypeEnum extends XTypeResolved implements XTypeUnit {
             }
             XTypeEnumItem item = new XTypeEnumItem()
             item.name = (String) it.attributes().get('name')
-            item.value = ExpressionFactory.getExpression(result.basePackage, (Node) it.childNodes().next())
+            item.value = ExpressionFactory.getExpression(null, (Node) it.childNodes().next())
             xEnum.items.add(item)
         }
         return xEnum
@@ -38,7 +38,7 @@ class XTypeEnum extends XTypeResolved implements XTypeUnit {
     }
 
     @Override
-    JavaListProperty getJavaListProperty(XUnitListField field) {
-        return javaEnumListProperty(field)
+    JavaListProperty getJavaListProperty(JavaType javaType, XUnitListField field) {
+        return javaEnumListProperty(javaType, field)
     }
 }

@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.github.moaxcp.x11protocol.parser.expression.FieldRefExpression
 import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.TypeName
 
@@ -14,11 +13,20 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
             result:result,
             name:'window_modifiers',
             type:'CARD64',
-            lengthExpression: new FieldRefExpression(fieldName: 'num_window_modifiers')
+            lengthExpression: new XmlSlurper().parseText('<fieldref>num_window_modifiers</fieldref>').nodeIterator().next()
         )
+        JavaType javaType = Mock(JavaType)
+        javaType.simpleName >> 'SimpleName'
+        javaType.getField(_) >> {
+            new JavaPrimativeProperty(
+                name: it[0],
+                x11Primative: 'CARD64',
+                memberTypeName: TypeName.LONG
+            )
+        }
 
         when:
-        JavaPrimativeListProperty property = javaPrimativeListProperty(field)
+        JavaPrimativeListProperty property = javaPrimativeListProperty(javaType, field)
 
         then:
         property.name == 'windowModifiers'

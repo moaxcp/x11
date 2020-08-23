@@ -22,8 +22,9 @@ class XResult {
     Set<String> xidUnions = []
     Map<String, String> typedefs = [:]
     Map<String, XTypeStruct> structs = [:]
-    Map<String, XTypeUnion> unions = [:]
     Map<String, XTypeEnum> enums = [:]
+    Map<String, XTypeUnion> unions = [:]
+    Map<String, XTypeEvent> events = [:]
 
     static Map<String, XTypePrimative> primatives = [:]
 
@@ -103,11 +104,12 @@ class XResult {
 
     void addStruct(Node node) {
         String name = node.attributes().get('name')
-        structs.put(name, XTypeStruct.xStruct(this, node))
+        structs.put(name, XTypeStruct.xTypeStruct(this, node))
     }
 
     void addEvent(Node node) {
-
+        String name = node.attributes().get('name')
+        events.put(name, XTypeEvent.xTypeEvent(this, node))
     }
 
     void addEventCopy(Node node) {
@@ -136,8 +138,8 @@ class XResult {
     }
 
     @Memoized
-    <T extends XTypeResolved> T resolveXType(String type) {
-        XTypeResolved resolved
+    <T extends XType> T resolveXType(String type) {
+        XType resolved
         if(type.contains(':')) {
             String specificImport = type.substring(0, type.indexOf(':'))
             String actualType = type.substring(type.indexOf(':') + 1)
@@ -160,8 +162,8 @@ class XResult {
         return resolved
     }
 
-    XTypeResolved resolveTypeRecursive(String type) {
-        XTypeResolved fromImport = imports.values().collect {
+    XType resolveTypeRecursive(String type) {
+        XType fromImport = imports.values().collect {
             it.resolveTypeRecursive(type)
         }.find {
             it
@@ -174,7 +176,7 @@ class XResult {
         return resolveLocal(type)
     }
 
-    XTypeResolved resolveLocal(String type) {
+    XType resolveLocal(String type) {
         String typeDef = resolveTypeDef(type)
         if(typeDef) {
             type = typeDef
@@ -182,7 +184,7 @@ class XResult {
         if(xidTypes.contains(type) || xidUnions.contains(type)) {
             type = 'CARD32'
         }
-        XTypeResolved xType = primatives[type] ?: structs[type] ?: unions[type] ?: enums[type]
+        XType xType = primatives[type] ?: structs[type] ?: unions[type] ?: enums[type] ?: events[type]
 
         if(xType) {
             return xType

@@ -4,5 +4,5 @@ package com.github.moaxcp.x11protocol.parser
  * add the unit to a class in the case of JavaPropertyUnit.
  */
 interface XUnit {
-    JavaUnit getJavaUnit()
+    JavaUnit getJavaUnit(JavaType javaType)
 }

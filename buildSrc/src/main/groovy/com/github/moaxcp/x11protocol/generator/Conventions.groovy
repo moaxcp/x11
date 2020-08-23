@@ -131,6 +131,10 @@ class Conventions {
         return getJavaName(x11Name) + 'Event'
     }
 
+    static ClassName getEventTypeName(String javaPackage, String x11Name) {
+        return ClassName.get(javaPackage, getEventJavaName(x11Name))
+    }
+
     static String getEventStructJavaName(String x11Name) {
         return getJavaName(x11Name) + 'EventStruct'
     }

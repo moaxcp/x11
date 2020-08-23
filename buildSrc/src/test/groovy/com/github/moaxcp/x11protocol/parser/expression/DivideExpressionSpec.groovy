@@ -1,6 +1,8 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
-
+import com.github.moaxcp.x11protocol.parser.JavaPrimativeProperty
+import com.github.moaxcp.x11protocol.parser.JavaType
+import com.squareup.javapoet.TypeName
 import spock.lang.Specification
 
 class DivideExpressionSpec extends Specification {
@@ -14,25 +16,46 @@ class DivideExpressionSpec extends Specification {
 
     def 'nested addition'() {
         given:
+        JavaType javaType = Mock(JavaType)
+        javaType.simpleName >> 'SimpleName'
+        javaType.getField(_) >> {
+            new JavaPrimativeProperty(
+                name: it[0],
+                x11Primative: 'CARD32',
+                memberTypeName: TypeName.INT
+            )
+        }
         DivideExpression expression = new DivideExpression(expressions:[
-            new FieldRefExpression(fieldName:'a'),
+            new FieldRefExpression(javaType:javaType, fieldName:'a'),
             new AddExpression(expressions:[
-                new FieldRefExpression(fieldName:'b'),
-                new FieldRefExpression(fieldName:'c')]),
-            new FieldRefExpression(fieldName:'d')])
+                new FieldRefExpression(javaType:javaType, fieldName:'b'),
+                new FieldRefExpression(javaType:javaType, fieldName:'c')]),
+            new FieldRefExpression(javaType:javaType, fieldName:'d')])
 
-        expect:
-        expression.expression.toString() == 'a / (b + c) / d'
+        when:
+        String result = expression.expression.toString()
+
+        then:
+        result == 'a / (b + c) / d'
     }
 
     def 'nested divide'() {
         given:
+        JavaType javaType = Mock(JavaType)
+        javaType.simpleName >> 'SimpleName'
+        javaType.getField(_) >> {
+            new JavaPrimativeProperty(
+                name: it[0],
+                x11Primative: 'CARD32',
+                memberTypeName: TypeName.INT
+            )
+        }
         DivideExpression expression = new DivideExpression(expressions:[
-            new FieldRefExpression(fieldName:'a'),
+            new FieldRefExpression(javaType:javaType, fieldName:'a'),
             new DivideExpression(expressions:[
-                new FieldRefExpression(fieldName:'b'),
-                new FieldRefExpression(fieldName:'c')]),
-            new FieldRefExpression(fieldName:'d')])
+                new FieldRefExpression(javaType:javaType, fieldName:'b'),
+                new FieldRefExpression(javaType:javaType, fieldName:'c')]),
+            new FieldRefExpression(javaType:javaType, fieldName:'d')])
 
         expect:
         expression.expression.toString() == 'a / (b / c) / d'

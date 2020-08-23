@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.github.moaxcp.x11protocol.parser.expression.ValueExpression
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.ParameterizedTypeName
 
@@ -23,11 +22,12 @@ class JavaTypeListPropertySpec extends XmlSpec {
             result:result,
             name: 'formats',
             type: 'FORMAT',
-            lengthExpression: new ValueExpression(value: '20')
+            lengthExpression: new XmlSlurper().parseText('<value>20</value>').nodeIterator().next()
         )
+        JavaType javaType = Mock(JavaType)
 
         when:
-        JavaTypeListProperty property = javaTypeListProperty(field)
+        JavaTypeListProperty property = javaTypeListProperty(javaType, field)
 
         then:
         property.name == 'formats'

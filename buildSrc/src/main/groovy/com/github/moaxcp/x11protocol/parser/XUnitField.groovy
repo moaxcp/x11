@@ -35,7 +35,7 @@ class XUnitField implements XUnit {
         )
     }
 
-    XTypeResolved getResolvedType() {
+    XType getResolvedType() {
         return result.resolveXType(type)
     }
 
@@ -44,13 +44,13 @@ class XUnitField implements XUnit {
         return (XTypeEnum) result.resolveXType(enumType)
     }
 
-    XTypeResolved getResolvedMaskType() {
+    XType getResolvedMaskType() {
         requireNonNull(maskType, "maskType must not be null")
         return result.resolveXType(maskType)
     }
 
     @Override
-    JavaProperty getJavaUnit() {
+    JavaProperty getJavaUnit(JavaType javaType) {
         JavaProperty unit
         if(enumType) {
             unit = resolvedEnumType.getJavaProperty(this)

@@ -55,11 +55,11 @@ class JavaStructSpec extends XmlSpec {
                 byte bitsPerPixel = in.readCard8();
                 byte scanlinePad = in.readCard8();
                 in.readPad(5);
-                com.github.moaxcp.x11client.protocol.xproto.FormatStruct struct = new com.github.moaxcp.x11client.protocol.xproto.FormatStruct();
-                struct.setDepth(depth);
-                struct.setBitsPerPixel(bitsPerPixel);
-                struct.setScanlinePad(scanlinePad);
-                return struct;
+                com.github.moaxcp.x11client.protocol.xproto.FormatStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.FormatStruct();
+                javaObject.setDepth(depth);
+                javaObject.setBitsPerPixel(bitsPerPixel);
+                javaObject.setScanlinePad(scanlinePad);
+                return javaObject;
               }
             
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
@@ -127,12 +127,12 @@ class JavaStructSpec extends XmlSpec {
                 int defaultColormap = in.readCard32();
                 int currentInputMasks = in.readCard32();
                 com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores = com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum.getByCode(in.readByte());
-                com.github.moaxcp.x11client.protocol.xproto.ScreenStruct struct = new com.github.moaxcp.x11client.protocol.xproto.ScreenStruct();
-                struct.setRoot(root);
-                struct.setDefaultColormap(defaultColormap);
-                struct.setCurrentInputMasks(currentInputMasks);
-                struct.setBackingStores(backingStores);
-                return struct;
+                com.github.moaxcp.x11client.protocol.xproto.ScreenStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.ScreenStruct();
+                javaObject.setRoot(root);
+                javaObject.setDefaultColormap(defaultColormap);
+                javaObject.setCurrentInputMasks(currentInputMasks);
+                javaObject.setBackingStores(backingStores);
+                return javaObject;
               }
             
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
@@ -186,10 +186,10 @@ class JavaStructSpec extends XmlSpec {
                   com.github.moaxcp.x11client.protocol.X11Input in, byte numAxes) throws java.io.IOException {
                 int time = in.readCard32();
                 int[] axisvalues = in.readInt32(numAxes);
-                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct struct = new com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct();
-                struct.setTime(time);
-                struct.setAxisvalues(axisvalues);
-                return struct;
+                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct();
+                javaObject.setTime(time);
+                javaObject.setAxisvalues(axisvalues);
+                return javaObject;
               }
             
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
@@ -237,11 +237,11 @@ class JavaStructSpec extends XmlSpec {
                 boolean preserve = in.readBool();
                 byte nmapentries = in.readCard8();
                 int[] preserveEntries = in.readInt32((preserve ? 1 : 0) * nmapentries);
-                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct struct = new com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct();
-                struct.setPreserve(preserve);
-                struct.setNmapentries(nmapentries);
-                struct.setPreserveEntries(preserveEntries);
-                return struct;
+                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct();
+                javaObject.setPreserve(preserve);
+                javaObject.setNmapentries(nmapentries);
+                javaObject.setPreserveEntries(preserveEntries);
+                return javaObject;
               }
             
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {

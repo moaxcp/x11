@@ -9,6 +9,7 @@ class XUnitFieldSpec extends XmlSpec {
     def 'CARD32 field'() {
         given:
         xmlBuilder.field(name:'red_mask', type:'CARD32')
+        JavaType javaType = Mock(JavaType)
 
         when:
         XUnitField field = xUnitField(result, getFirstNode())
@@ -17,7 +18,7 @@ class XUnitFieldSpec extends XmlSpec {
         field.name == 'red_mask'
         field.type == 'CARD32'
         field.resolvedType.name == 'CARD32'
-        field.javaUnit.name == 'redMask'
+        field.getJavaUnit(javaType).name == 'redMask'
     }
 
     def 'enum field'() {
@@ -57,12 +58,13 @@ class XUnitFieldSpec extends XmlSpec {
             type:'CARD8',
             enumType: 'EventMask'
         )
+        JavaType javaType = Mock(JavaType)
 
         then:
         field.name == 'mask'
         field.type == 'CARD8'
         field.resolvedEnumType.name == 'EventMask'
-        field.javaUnit.typeName == ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'EventMaskEnum')
+        field.getJavaUnit(javaType).typeName == ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'EventMaskEnum')
     }
 
     def 'mask field resolve mask'() {

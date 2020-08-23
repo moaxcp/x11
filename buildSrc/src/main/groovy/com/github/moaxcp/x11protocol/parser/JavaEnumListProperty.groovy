@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterizedTypeName
@@ -11,8 +12,8 @@ class JavaEnumListProperty extends JavaListProperty {
     String x11Primative
     TypeName ioTypeName
 
-    static JavaEnumListProperty javaEnumListProperty(XUnitListField field) {
-        XTypeResolved resolvedType = field.resolvedType
+    static JavaEnumListProperty javaEnumListProperty(JavaType javaType, XUnitListField field) {
+        XType resolvedType = field.resolvedType
         TypeName baseTypeName = getEnumTypeName(field.result.javaPackage, field.resolvedEnumType.name)
         TypeName typeName = ParameterizedTypeName.get(ClassName.get(List), baseTypeName)
         return new JavaEnumListProperty(
@@ -21,7 +22,7 @@ class JavaEnumListProperty extends JavaListProperty {
             baseTypeName: baseTypeName,
             typeName: typeName,
             ioTypeName:x11PrimativeToJavaTypeName(resolvedType.name),
-            lengthExpression: field.lengthExpression
+            lengthExpression: ExpressionFactory.getExpression(javaType, field.lengthExpression)
         )
     }
 

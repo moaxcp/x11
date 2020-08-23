@@ -20,6 +20,18 @@ class JavaEnum implements JavaType {
     Map<String, String> values
 
     @Override
+    JavaProperty getField(String name) {
+        if(name == 'value') {
+            return new JavaPrimativeProperty(
+                name: 'value',
+                x11Primative: 'CARD32',
+                memberTypeName: TypeName.INT
+            )
+        }
+        return null
+    }
+
+    @Override
     TypeSpec getTypeSpec() {
         return TypeSpec.enumBuilder(className)
             .addModifiers(Modifier.PUBLIC)

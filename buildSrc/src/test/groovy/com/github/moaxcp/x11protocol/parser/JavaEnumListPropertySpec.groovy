@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.github.moaxcp.x11protocol.parser.expression.ValueExpression
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
@@ -30,11 +29,12 @@ class JavaEnumListPropertySpec extends XmlSpec {
             name: 'masks',
             type: 'CARD32',
             enumType: 'EventMask',
-            lengthExpression: new ValueExpression(value: '20')
+            lengthExpression: new XmlSlurper().parseText('<value>20</value>').nodeIterator().next()
         )
+        JavaType javaType = Mock(JavaType)
 
         when:
-        JavaEnumListProperty property = javaEnumListProperty(field)
+        JavaEnumListProperty property = javaEnumListProperty(javaType, field)
 
         then:
         property.name == 'masks'

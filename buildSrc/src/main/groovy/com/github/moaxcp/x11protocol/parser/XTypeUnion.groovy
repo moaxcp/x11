@@ -17,7 +17,7 @@ class XTypeUnion extends XTypeObject {
             switch(it.name()) {
                 case 'field':
                     XUnitField field = xUnitField(result, it)
-                    XTypeResolved resolved = field.resolvedType
+                    XType resolved = field.resolvedType
                     if(resolved instanceof XTypeStruct) {
                         resolved.superType = ClassName.get(union.javaPackage, getUnionJavaName(union.name))
                     }

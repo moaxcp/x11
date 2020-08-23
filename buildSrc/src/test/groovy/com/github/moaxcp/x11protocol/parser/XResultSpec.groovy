@@ -50,7 +50,7 @@ class XResultSpec extends Specification {
         result.addXidtype((Node) getGPathResult().childNodes().next())
 
         when:
-        XTypeResolved type = result.resolveXType('XID')
+        XType type = result.resolveXType('XID')
 
         then:
         type.name == 'CARD32'

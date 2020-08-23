@@ -1,12 +1,10 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.github.moaxcp.x11protocol.parser.expression.Expression
-import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
-import com.github.moaxcp.x11protocol.parser.expression.FieldRefExpression
+
 import groovy.util.slurpersupport.Node
 
 class XUnitListField extends XUnitField {
-    Expression lengthExpression
+    Node lengthExpression
 
     static XUnitListField xUnitListField(XResult result, Node node) {
         String fieldName = node.attributes().get('name')
@@ -15,13 +13,7 @@ class XUnitListField extends XUnitField {
         String fieldAltEnum = node.attributes().get('altenum')
         String fieldMask = node.attributes().get('mask')
         String fieldAltMask = node.attributes().get('altmask')
-
-        Expression expression = null
-        if(node.childNodes().hasNext()) {
-            expression = ExpressionFactory.getExpression(result.basePackage, (Node) node.childNodes().next())
-        }
-
-        return new XUnitListField(
+        XUnitListField field = new XUnitListField(
             result:result,
             name:fieldName,
             type:fieldType,
@@ -29,26 +21,16 @@ class XUnitListField extends XUnitField {
             altEnumType: fieldAltEnum,
             maskType:fieldMask,
             altMaskType: fieldAltMask,
-            lengthExpression: expression
+            lengthExpression: (Node) node.childNodes().next()
         )
-    }
-
-    FieldRefExpression getLengthField() {
-        List<FieldRefExpression> lengthFields = lengthExpression?.fieldRefs?.findAll {
-            it.fieldName.endsWith('_len')
-        } ?: []
-        if(lengthFields.size() > 1) {
-            throw new IllegalStateException("multiple lengthFields for $name in $lengthFields")
-        }
-
-        return lengthFields[0]
+        return field
     }
 
     @Override
-    JavaListProperty getJavaUnit() {
+    JavaListProperty getJavaUnit(JavaType javaType) {
         if(enumType) {
-            return resolvedEnumType.getJavaListProperty(this)
+            return resolvedEnumType.getJavaListProperty(javaType, this)
         }
-        return resolvedType.getJavaListProperty(this)
+        return resolvedType.getJavaListProperty(javaType, this)
     }
 }

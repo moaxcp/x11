@@ -7,4 +7,5 @@ interface JavaType {
     String getSimpleName()
     ClassName getClassName()
     TypeSpec getTypeSpec()
+    JavaProperty getField(String name)
 }

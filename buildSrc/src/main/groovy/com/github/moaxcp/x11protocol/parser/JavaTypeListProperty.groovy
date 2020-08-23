@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterizedTypeName
@@ -10,8 +11,8 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeN
 
 class JavaTypeListProperty extends JavaListProperty {
 
-    static JavaTypeListProperty javaTypeListProperty(XUnitListField field) {
-        XTypeResolved resolvedType = field.resolvedType
+    static JavaTypeListProperty javaTypeListProperty(JavaType javaType, XUnitListField field) {
+        XType resolvedType = field.resolvedType
         TypeName baseTypeName
         if(resolvedType instanceof XTypeStruct) {
             baseTypeName = getStructTypeName(resolvedType.javaPackage, resolvedType.name)
@@ -23,7 +24,7 @@ class JavaTypeListProperty extends JavaListProperty {
             name:convertX11VariableNameToJava(field.name),
             baseTypeName: baseTypeName,
             typeName: typeName,
-            lengthExpression: field.lengthExpression
+            lengthExpression: ExpressionFactory.getExpression(javaType, field.lengthExpression)
         )
     }
 

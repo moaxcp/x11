@@ -4,7 +4,7 @@ class XUnitPadAlign implements XUnit {
     int align
 
     @Override
-    JavaPadAlign getJavaUnit() {
+    JavaPadAlign getJavaUnit(JavaType javaType) {
         return new JavaPadAlign(align: align)
     }
 }

@@ -32,10 +32,11 @@ class XUnitPadFactorySpec extends XmlSpec {
     def 'convert pad'() {
         given:
         xmlBuilder.pad(bytes:4)
-        XUnitPad pad = xUnitPad(getFirstNode())
+        XUnitPad pad = (XUnitPad) xUnitPad(getFirstNode())
+        JavaType javaType = Mock(JavaType)
 
         when:
-        JavaPad javaPad = pad.javaUnit
+        JavaPad javaPad = pad.getJavaUnit(javaType)
 
         then:
         javaPad.bytes == 4
@@ -45,9 +46,10 @@ class XUnitPadFactorySpec extends XmlSpec {
         given:
         xmlBuilder.pad(align:4)
         XUnitPadAlign pad = xUnitPad(getFirstNode())
+        JavaType javaType = Mock(JavaType)
 
         when:
-        JavaPadAlign javaPad = pad.javaUnit
+        JavaPadAlign javaPad = pad.getJavaUnit(javaType)
 
         then:
         javaPad.align == 4

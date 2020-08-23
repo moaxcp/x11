@@ -1,10 +1,10 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeSpec
+import com.github.moaxcp.x11protocol.parser.expression.ParamRefExpression
+import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
+
+import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToJavaTypeName
 
 abstract class JavaBaseObject implements JavaType {
     String basePackage
@@ -15,7 +15,8 @@ abstract class JavaBaseObject implements JavaType {
     List<JavaUnit> protocol
 
     JavaProperty getField(String name) {
-        protocol.find {
+        (JavaProperty) protocol.find {
+            it instanceof JavaProperty &&
             it.name == name
         }
     }
@@ -56,6 +57,50 @@ abstract class JavaBaseObject implements JavaType {
         typeSpec.build()
     }
 
-    abstract MethodSpec getReadMethod()
-    abstract MethodSpec getWriteMethod()
+    MethodSpec getReadMethod() {
+        List<ParameterSpec> params = protocol.findAll {
+            it instanceof JavaListProperty
+        }.collect { JavaListProperty it ->
+            it.lengthExpression.paramRefs
+        }.flatten().collect { ParamRefExpression it ->
+            ParameterSpec.builder(x11PrimativeToJavaTypeName(it.x11Type), it.paramName).build()
+        }
+
+        CodeBlock.Builder readProtocol = CodeBlock.builder()
+        protocol.each {
+            readProtocol.addStatement(it.readCode)
+        }
+
+        CodeBlock.Builder setters = CodeBlock.builder()
+        protocol.findAll {
+            it instanceof JavaProperty
+        }.each { JavaProperty it ->
+            setters.addStatement('$L.$L($L)', 'javaObject', it.setterName, it.name)
+        }
+
+        return MethodSpec.methodBuilder("read${simpleName}")
+            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+            .returns(className)
+            .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
+            .addParameters(params)
+            .addException(IOException)
+            .addCode(readProtocol.build())
+            .addStatement('$1T $2L = new $1T()', className, 'javaObject')
+            .addCode(setters.build())
+            .addStatement('return $L', 'javaObject')
+            .build()
+    }
+
+    MethodSpec getWriteMethod() {
+        CodeBlock.Builder writeProtocol = CodeBlock.builder()
+        protocol.each {
+            writeProtocol.addStatement(it.writeCode)
+        }
+        return MethodSpec.methodBuilder("write")
+            .addModifiers(Modifier.PUBLIC)
+            .addParameter(ClassName.get(basePackage, 'X11Output'), 'out')
+            .addException(IOException)
+            .addCode(writeProtocol.build())
+            .build()
+    }
 }

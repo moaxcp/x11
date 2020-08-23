@@ -1,17 +1,18 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
-
+import com.github.moaxcp.x11protocol.parser.*
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.TypeName
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
+import static java.util.Objects.requireNonNull
 
 @ToString(includePackage = false)
 @EqualsAndHashCode
 class FieldRefExpression implements Expression {
     String fieldName
-    String x11Type
+    JavaType javaType
 
     @Override
     List<FieldRefExpression> getFieldRefs() {
@@ -24,9 +25,21 @@ class FieldRefExpression implements Expression {
     }
 
     CodeBlock getExpression() {
-        if(x11Type == 'BOOL') {
-            return CodeBlock.of("(${convertX11VariableNameToJava(fieldName)} ? 1 : 0)")
+        JavaProperty field = javaType.getField(fieldName)
+        requireNonNull(field, "$fieldName in ${javaType.simpleName} was null")
+        if(field instanceof JavaListProperty) {
+
+        } else if(field instanceof JavaProperty) {
+            if(!(field instanceof JavaPrimativeProperty)) {
+                throw new UnsupportedOperationException("field ${field.name} is not primative")
+            }
+            String propertyName = field.name
+            if(field.typeName == TypeName.BOOLEAN) {
+                return CodeBlock.of("($propertyName ? 1 : 0)")
+            }
+            return CodeBlock.of(propertyName)
+        } else {
+            throw new UnsupportedOperationException("field not supported ${field.name}")
         }
-        return CodeBlock.of(convertX11VariableNameToJava(fieldName))
     }
 }
