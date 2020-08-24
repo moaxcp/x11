@@ -14,6 +14,7 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumTypeNam
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumValueName
 
 class JavaEnum implements JavaType {
+    String basePackage
     String simpleName
     ClassName className
     ClassName superInterface
@@ -78,6 +79,7 @@ class JavaEnum implements JavaType {
             [(getEnumValueName(it.name)):it.value.expression]
         }
         return new JavaEnum(
+            basePackage: xEnum.basePackage,
             simpleName: simpleName,
             className: getEnumTypeName(xEnum.javaPackage, xEnum.name),
             superInterface: ClassName.get(xEnum.basePackage, 'IntValue'),

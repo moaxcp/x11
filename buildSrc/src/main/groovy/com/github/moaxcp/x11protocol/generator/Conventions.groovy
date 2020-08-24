@@ -83,7 +83,10 @@ class Conventions {
     }
 
     static String convertX11VariableNameToJava(String x11Name) {
-        String converted =  CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, x11Name)
+        String converted = x11Name
+        if(x11Name.contains('_')) {
+            converted = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, x11Name)
+        }
         if(converted == 'class') {
             return 'clazz'
         }

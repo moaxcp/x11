@@ -7,17 +7,16 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getEventTypeNa
 class JavaEvent extends JavaBaseObject {
 
     static JavaEvent javaEvent(XTypeEvent event) {
-        List<JavaUnit> protocol = event.toJavaProtocol()
-
         String simpleName = getEventJavaName(event.name)
 
-        return new JavaEvent(
+        JavaEvent javaEvent = new JavaEvent(
             superType: event.superType,
             basePackage: event.basePackage,
             javaPackage: event.javaPackage,
             simpleName:simpleName,
-            className:getEventTypeName(event.javaPackage, event.name),
-            protocol:protocol
+            className:getEventTypeName(event.javaPackage, event.name)
         )
+        javaEvent.protocol = event.toJavaProtocol(javaEvent)
+        return javaEvent
     }
 }

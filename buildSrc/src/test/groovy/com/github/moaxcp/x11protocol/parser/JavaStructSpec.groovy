@@ -228,25 +228,25 @@ class JavaStructSpec extends XmlSpec {
             public class SetKeyTypeStruct {
               private boolean preserve;
             
-              private byte nmapentries;
+              private byte nMapEntries;
             
               private int[] preserveEntries;
             
               public static com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct readSetKeyTypeStruct(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 boolean preserve = in.readBool();
-                byte nmapentries = in.readCard8();
-                int[] preserveEntries = in.readInt32((preserve ? 1 : 0) * nmapentries);
+                byte nMapEntries = in.readCard8();
+                int[] preserveEntries = in.readInt32((preserve ? 1 : 0) * nMapEntries);
                 com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct();
                 javaObject.setPreserve(preserve);
-                javaObject.setNmapentries(nmapentries);
+                javaObject.setNMapEntries(nMapEntries);
                 javaObject.setPreserveEntries(preserveEntries);
                 return javaObject;
               }
             
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeBool(preserve);
-                out.writeCard8(nmapentries);
+                out.writeCard8(nMapEntries);
                 out.writeInt32(preserveEntries);
               }
             }

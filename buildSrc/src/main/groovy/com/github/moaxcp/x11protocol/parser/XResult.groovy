@@ -163,6 +163,12 @@ class XResult {
     }
 
     XType resolveTypeRecursive(String type) {
+        XType fromLocal = resolveLocal(type)
+
+        if(fromLocal) {
+            return fromLocal
+        }
+
         XType fromImport = imports.values().collect {
             it.resolveTypeRecursive(type)
         }.find {
@@ -173,7 +179,7 @@ class XResult {
             return fromImport
         }
 
-        return resolveLocal(type)
+        return null
     }
 
     XType resolveLocal(String type) {

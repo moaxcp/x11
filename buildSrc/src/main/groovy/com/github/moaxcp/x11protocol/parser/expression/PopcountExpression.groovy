@@ -4,7 +4,6 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 
 class PopcountExpression implements Expression {
-    String basePackage
     FieldRefExpression field
     @Override
     List<FieldRefExpression> getFieldRefs() {
@@ -18,6 +17,6 @@ class PopcountExpression implements Expression {
 
     @Override
     CodeBlock getExpression() {
-        return CodeBlock.of('$T.popcount($L)', ClassName.get(basePackage, 'Popcount'), field.expression)
+        return CodeBlock.of('$T.popcount($L)', ClassName.get(field.javaType.basePackage, 'Popcount'), field.expression)
     }
 }

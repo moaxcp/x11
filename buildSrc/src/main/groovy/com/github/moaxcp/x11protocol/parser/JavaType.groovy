@@ -4,6 +4,7 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeSpec
 
 interface JavaType {
+    String getBasePackage()
     String getSimpleName()
     ClassName getClassName()
     TypeSpec getTypeSpec()
