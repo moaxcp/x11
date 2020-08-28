@@ -61,15 +61,6 @@ class JavaEvent extends JavaBaseObject {
     }
 
     @Override
-    void addSizeMethod(TypeSpec.Builder typeBuilder) {
-        typeBuilder.addMethod(MethodSpec.methodBuilder('getSize')
-            .addModifiers(Modifier.PUBLIC)
-            .returns(TypeName.INT)
-            .addStatement('return 2')
-            .build())
-    }
-
-    @Override
     void addSettersCode(CodeBlock.Builder codeBuilder) {
         codeBuilder.addStatement('$L.$L($L)', 'javaObject', 'setSentEvent', 'sentEvent')
         super.addSettersCode(codeBuilder)

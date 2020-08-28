@@ -47,6 +47,21 @@ class JavaEnumListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getSize() {
-        return CodeBlock.of('0')
+        if(ioTypeName == TypeName.BYTE) {
+            return CodeBlock.of('1 * $L.size()', name)
+        }
+        if(ioTypeName == TypeName.SHORT) {
+            return CodeBlock.of('2 * $L.size()', name)
+        }
+        if(ioTypeName == TypeName.CHAR) {
+            return CodeBlock.of('2 * $L.size()', name)
+        }
+        if(ioTypeName == TypeName.INT) {
+            return CodeBlock.of('4 * $L.size()', name)
+        }
+        if(ioTypeName == TypeName.LONG) {
+            return CodeBlock.of('8 * $L.size()', name)
+        }
+        throw new UnsupportedOperationException("type not supported $ioTypeName")
     }
 }
