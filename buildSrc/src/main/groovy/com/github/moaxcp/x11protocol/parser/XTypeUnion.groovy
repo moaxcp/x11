@@ -4,6 +4,8 @@ import com.squareup.javapoet.ClassName
 import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getUnionJavaName
+import static com.github.moaxcp.x11protocol.parser.JavaClientMessageDataUnionProperty.javaClientMessageDataUnionProperty
+import static com.github.moaxcp.x11protocol.parser.JavaTypeProperty.javaTypeProperty
 import static com.github.moaxcp.x11protocol.parser.JavaUnion.javaUnion
 import static com.github.moaxcp.x11protocol.parser.XUnitField.xUnitField
 import static com.github.moaxcp.x11protocol.parser.XUnitListField.xUnitListField
@@ -43,5 +45,13 @@ class XTypeUnion extends XTypeObject {
     @Override
     JavaType getJavaType() {
         return javaUnion(this)
+    }
+    
+    @Override
+    JavaTypeProperty getJavaProperty(XUnitField field) {
+        if(name == 'ClientMessageData') {
+            return javaClientMessageDataUnionProperty(field)
+        }
+        return javaTypeProperty(field)
     }
 }

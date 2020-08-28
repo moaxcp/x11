@@ -53,6 +53,10 @@ class JavaEventSpec extends XmlSpec {
                 out.writeCard8((byte) kind.getValue());
                 out.writeCard32(serial);
               }
+              
+              public int getSize() {
+                return 0;
+              }
             }
         '''.stripIndent()
     }

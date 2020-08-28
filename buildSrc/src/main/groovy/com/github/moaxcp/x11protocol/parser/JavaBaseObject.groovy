@@ -44,6 +44,7 @@ abstract class JavaBaseObject implements JavaType {
             .addFields(fields)
             .addMethod(readMethod)
             .addMethod(writeMethod)
+            .addMethod(sizeMethod)
             .addMethods(methods)
         if(superTypes) {
             typeSpec.addSuperinterfaces(superTypes)
@@ -101,6 +102,14 @@ abstract class JavaBaseObject implements JavaType {
             .addParameter(ClassName.get(basePackage, 'X11Output'), 'out')
             .addException(IOException)
             .addCode(writeProtocol.build())
+            .build()
+    }
+
+    MethodSpec getSizeMethod() {
+        return MethodSpec.methodBuilder('getSize')
+            .addModifiers(Modifier.PUBLIC)
+            .returns(TypeName.INT)
+            .addStatement('return 0')
             .build()
     }
 }

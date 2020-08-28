@@ -69,6 +69,10 @@ class JavaStructSpec extends XmlSpec {
                 out.writeCard8(scanlinePad);
                 out.writePad(5);
               }
+              
+              public int getSize() {
+                return 0;
+              }
             }
         '''.stripIndent()
     }
@@ -143,6 +147,10 @@ class JavaStructSpec extends XmlSpec {
                 out.writeCard32(currentInputMasks);
                 out.writeByte((byte) backingStores.getValue());
               }
+              
+              public int getSize() {
+                return 0;
+              }
             
               public void currentInputMasksEnable(
                   com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
@@ -198,6 +206,10 @@ class JavaStructSpec extends XmlSpec {
                 out.writeCard32(time);
                 out.writeInt32(axisvalues);
               }
+              
+              public int getSize() {
+                return 0;
+              }
             }
         '''.stripIndent()
     }
@@ -250,6 +262,10 @@ class JavaStructSpec extends XmlSpec {
                 out.writeBool(preserve);
                 out.writeCard8(nMapEntries);
                 out.writeInt32(preserveEntries);
+              }
+              
+              public int getSize() {
+                return 0;
               }
             }
         '''.stripIndent()
