@@ -44,4 +44,9 @@ class JavaEnumListProperty extends JavaListProperty {
             }
         ''', baseTypeName, name, fromUpperUnderscoreToUpperCamel(x11Primative))
     }
+
+    @Override
+    int getSize() {
+        return 0
+    }
 }

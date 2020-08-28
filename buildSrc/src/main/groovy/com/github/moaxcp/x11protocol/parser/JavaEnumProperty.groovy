@@ -42,6 +42,11 @@ class JavaEnumProperty extends JavaProperty {
         }
     }
 
+    @Override
+    int getSize() {
+        return 0
+    }
+
     static JavaEnumProperty javaEnumProperty(XUnitField field) {
         XType resolvedType = field.resolvedType
         if(!x11Primatives.contains(resolvedType.name)) {

@@ -46,4 +46,9 @@ class JavaTypeListProperty extends JavaListProperty {
             }
         '''.stripIndent(), baseTypeName, name)
     }
+
+    @Override
+    int getSize() {
+        return 0
+    }
 }

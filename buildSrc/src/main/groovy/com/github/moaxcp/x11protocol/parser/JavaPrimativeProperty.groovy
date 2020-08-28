@@ -52,6 +52,11 @@ class JavaPrimativeProperty extends JavaProperty {
         return CodeBlock.of("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)")
     }
 
+    @Override
+    int getSize() {
+        return 0
+    }
+
     static JavaPrimativeProperty javaPrimativeProperty(XUnitField field) {
         XType resolvedType = field.resolvedType
         if(!x11Primatives.contains(resolvedType.name)) {

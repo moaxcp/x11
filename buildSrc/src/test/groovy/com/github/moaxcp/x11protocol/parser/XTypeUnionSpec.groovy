@@ -33,7 +33,7 @@ class XTypeUnionSpec extends XmlSpec {
 
         then:
         union.name == 'Behavior'
-        common.superType == unionClass
-        defaultStruct.superType == unionClass
+        common.superTypes == [unionClass] as Set
+        defaultStruct.superTypes == [unionClass] as Set
     }
 }

@@ -14,4 +14,9 @@ class JavaRequiredStartAlign implements JavaUnit {
     CodeBlock getWriteCode() {
         return CodeBlock.of('//todo align')
     }
+
+    @Override
+    int getSize() {
+        return 0
+    }
 }

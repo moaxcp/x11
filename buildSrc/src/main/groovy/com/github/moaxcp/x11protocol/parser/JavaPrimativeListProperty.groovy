@@ -48,4 +48,9 @@ class JavaPrimativeListProperty extends JavaListProperty {
     CodeBlock getWriteCode() {
         return CodeBlock.of("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)")
     }
+
+    @Override
+    int getSize() {
+        return 0
+    }
 }

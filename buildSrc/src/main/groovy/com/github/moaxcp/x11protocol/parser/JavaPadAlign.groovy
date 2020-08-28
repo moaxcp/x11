@@ -21,4 +21,9 @@ class JavaPadAlign implements JavaUnit {
         }
         return CodeBlock.of("out.writePadAlign($align, ${list.lengthExpression.expression})")
     }
+
+    @Override
+    int getSize() {
+        return 0
+    }
 }

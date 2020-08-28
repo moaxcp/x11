@@ -12,7 +12,7 @@ import static com.github.moaxcp.x11protocol.parser.XUnitPadFactory.xUnitPad
 import static com.github.moaxcp.x11protocol.parser.XUnitRequiredStartAlign.xUnitRequiredStartAlign
 
 abstract class XTypeObject extends XType implements XTypeUnit {
-    ClassName superType
+    Set<ClassName> superTypes = []
     List<XUnit> protocol = []
 
     XUnitField getField(String name) {

@@ -32,7 +32,7 @@ class JavaEventSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
-            public class CompleteNotifyEvent {
+            public class CompleteNotifyEvent implements com.github.moaxcp.x11client.protocol.XEvent {
               private com.github.moaxcp.x11client.protocol.xproto.CompleteKindEnum kind;
             
               private int serial;

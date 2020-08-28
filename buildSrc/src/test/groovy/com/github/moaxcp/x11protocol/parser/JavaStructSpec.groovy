@@ -13,6 +13,7 @@ class JavaStructSpec extends XmlSpec {
         JavaStruct struct = new JavaStruct(
             basePackage: result.basePackage,
             simpleName:'FormatStruct',
+            superTypes: [ClassName.get(result.basePackage, 'XObject')],
             className: ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'FormatStruct'),
             protocol:[
                 new JavaPrimativeProperty(
@@ -42,7 +43,7 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
-            public class FormatStruct {
+            public class FormatStruct implements com.github.moaxcp.x11client.protocol.XObject {
               private byte depth;
             
               private byte bitsPerPixel;
@@ -77,6 +78,7 @@ class JavaStructSpec extends XmlSpec {
         JavaStruct struct = new JavaStruct(
             basePackage: result.basePackage,
             simpleName: 'ScreenStruct',
+            superTypes: [ClassName.get(result.basePackage, 'XObject')],
             className: ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'ScreenStruct'),
             protocol: [
                 new JavaPrimativeProperty(
@@ -112,7 +114,7 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
-            public class ScreenStruct {
+            public class ScreenStruct implements com.github.moaxcp.x11client.protocol.XObject {
               private int root;
             
               private int defaultColormap;
@@ -177,7 +179,7 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
-            public class DeviceTimeCoordStruct {
+            public class DeviceTimeCoordStruct implements com.github.moaxcp.x11client.protocol.XObject {
               private int time;
             
               private int[] axisvalues;
@@ -225,7 +227,7 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
-            public class SetKeyTypeStruct {
+            public class SetKeyTypeStruct implements com.github.moaxcp.x11client.protocol.XObject {
               private boolean preserve;
             
               private byte nMapEntries;

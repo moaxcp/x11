@@ -29,4 +29,9 @@ class JavaTypeProperty extends JavaProperty {
     CodeBlock getWriteCode() {
         return CodeBlock.of('$L.write(out)', name)
     }
+
+    @Override
+    int getSize() {
+        return 0
+    }
 }

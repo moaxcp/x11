@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11protocol
 
-import com.github.moaxcp.x11protocol.generator.BaseClassGenerator
+
 import com.github.moaxcp.x11protocol.generator.ProtocolGenerator
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
@@ -17,9 +17,7 @@ class GenerateX11ProtocolTask extends DefaultTask {
 
     @TaskAction
     def writeSource() {
-        BaseClassGenerator base = new BaseClassGenerator(outputSrc: outputSrc.get().asFile, basePackage: 'com.github.moaxcp.x11client.protocol')
-        base.generate()
-        xcbXmls.get().asFileTree.findAll { it.name.endsWith('.xml') }.each {
+        xcbXmls.get().asFileTree.findAll { it.name.endsWith('xproto.xml') }.each {
             ProtocolGenerator gen = new ProtocolGenerator(inputXml: it, outputSrc: outputSrc.get().asFile, basePackage: 'com.github.moaxcp.x11client.protocol')
             gen.generate()
         }

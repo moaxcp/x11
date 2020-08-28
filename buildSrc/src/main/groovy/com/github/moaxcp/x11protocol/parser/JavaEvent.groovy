@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.squareup.javapoet.ClassName
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventTypeName
@@ -10,7 +11,7 @@ class JavaEvent extends JavaBaseObject {
         String simpleName = getEventJavaName(event.name)
 
         JavaEvent javaEvent = new JavaEvent(
-            superType: event.superType,
+            superTypes: event.superTypes + ClassName.get(event.basePackage, 'XEvent'),
             basePackage: event.basePackage,
             javaPackage: event.javaPackage,
             simpleName:simpleName,

@@ -19,7 +19,7 @@ class XTypeUnion extends XTypeObject {
                     XUnitField field = xUnitField(result, it)
                     XType resolved = field.resolvedType
                     if(resolved instanceof XTypeStruct) {
-                        resolved.superType = ClassName.get(union.javaPackage, getUnionJavaName(union.name))
+                        resolved.superTypes += ClassName.get(union.javaPackage, getUnionJavaName(union.name))
                     }
                     union.protocol.add(field)
                     break

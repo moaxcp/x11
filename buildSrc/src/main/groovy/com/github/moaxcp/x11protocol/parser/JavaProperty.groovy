@@ -1,10 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.squareup.javapoet.AnnotationSpec
-import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeName
+import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
 import lombok.Setter
 
@@ -17,7 +13,7 @@ abstract class JavaProperty implements JavaUnit {
         if(readOnly) {
             builder.addAnnotation(
                 AnnotationSpec.builder(Setter)
-                    .addMember('value', CodeBlock.of('AccessLevel.NONE'))
+                    .addMember('value', CodeBlock.of('$T.PRIVATE', ClassName.get('lombok', 'AccessLevel')))
                     .build())
         }
         return builder.build()

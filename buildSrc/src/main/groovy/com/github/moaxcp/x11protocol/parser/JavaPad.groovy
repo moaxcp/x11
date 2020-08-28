@@ -18,4 +18,9 @@ class JavaPad implements JavaUnit {
     CodeBlock getWriteCode() {
         return CodeBlock.of("out.writePad($bytes)")
     }
+
+    @Override
+    int getSize() {
+        return bytes
+    }
 }

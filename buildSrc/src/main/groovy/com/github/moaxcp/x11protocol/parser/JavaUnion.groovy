@@ -1,26 +1,24 @@
 package com.github.moaxcp.x11protocol.parser
 
-
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
 import javax.lang.model.element.Modifier
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperCamelToLowerCamel
-import static com.github.moaxcp.x11protocol.generator.Conventions.getUnionJavaName
-import static com.github.moaxcp.x11protocol.generator.Conventions.getUnionTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
 class JavaUnion extends JavaBaseObject {
 
     static JavaUnion javaUnion(XTypeUnion union) {
-        List<JavaUnit> protocol = union.toJavaProtocol()
         String simpleName = getUnionJavaName(union.name)
-        return "${fromUpperCamelToLowerCamel(simpleName)}JavaUnion"(
+        JavaUnion javaUnion = "${fromUpperCamelToLowerCamel(simpleName)}JavaUnion"(
             basePackage: union.basePackage,
             javaPackage: union.javaPackage,
             simpleName: simpleName,
-            className: getUnionTypeName(union.javaPackage, union.name),
-            protocol: protocol
+            className: getUnionTypeName(union.javaPackage, union.name)
         )
+        javaUnion.protocol = union.toJavaProtocol(javaUnion)
+        return javaUnion
     }
 
     static JavaUnion behaviorUnionJavaUnion(Map args) {
@@ -28,7 +26,7 @@ class JavaUnion extends JavaBaseObject {
     }
 
     static JavaUnion clientMessageDataUnionJavaUnion(Map args) {
-        return new JavaUnion(args)
+        return new ClientMessageDataUnion(args)
     }
 
     static JavaUnion actionUnionJavaUnion(Map args) {
@@ -43,6 +41,7 @@ class JavaUnion extends JavaBaseObject {
     TypeSpec getTypeSpec() {
         return TypeSpec.interfaceBuilder(className)
             .addModifiers(Modifier.PUBLIC)
+            .addSuperinterface(ClassName.get(basePackage, 'XObject'))
             .build()
     }
 

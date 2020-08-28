@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.squareup.javapoet.ClassName
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
@@ -9,7 +10,7 @@ class JavaStruct extends JavaBaseObject {
     static JavaStruct javaStruct(XTypeStruct struct) {
         String simpleName = getStructJavaName(struct.name)
         JavaStruct javaType = new JavaStruct(
-            superType: struct.superType,
+            superTypes: struct.superTypes + ClassName.get(struct.basePackage, 'XObject'),
             basePackage: struct.basePackage,
             javaPackage: struct.javaPackage,
             simpleName:simpleName,

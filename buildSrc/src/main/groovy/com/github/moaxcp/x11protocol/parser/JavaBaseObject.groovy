@@ -10,7 +10,7 @@ abstract class JavaBaseObject implements JavaType {
     String basePackage
     String javaPackage
     String simpleName
-    ClassName superType
+    Set<ClassName> superTypes = []
     ClassName className
     List<JavaUnit> protocol
 
@@ -45,8 +45,8 @@ abstract class JavaBaseObject implements JavaType {
             .addMethod(readMethod)
             .addMethod(writeMethod)
             .addMethods(methods)
-        if(superType) {
-            typeSpec.addSuperinterface(superType)
+        if(superTypes) {
+            typeSpec.addSuperinterfaces(superTypes)
         }
         if(hasFields()) {
             typeSpec.addAnnotation(ClassName.get('lombok', 'Data'))
