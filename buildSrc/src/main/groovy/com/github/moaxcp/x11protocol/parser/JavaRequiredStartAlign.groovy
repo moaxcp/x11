@@ -16,7 +16,7 @@ class JavaRequiredStartAlign implements JavaUnit {
     }
 
     @Override
-    int getSize() {
-        return 0
+    CodeBlock getSize() {
+        return CodeBlock.of('$L', 0)
     }
 }

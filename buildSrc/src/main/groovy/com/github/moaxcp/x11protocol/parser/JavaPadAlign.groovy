@@ -23,7 +23,7 @@ class JavaPadAlign implements JavaUnit {
     }
 
     @Override
-    int getSize() {
-        return 0
+    CodeBlock getSize() {
+        return CodeBlock.of('$L', 0)
     }
 }

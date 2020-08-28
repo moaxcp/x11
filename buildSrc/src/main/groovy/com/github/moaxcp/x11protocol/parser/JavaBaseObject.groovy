@@ -106,15 +106,19 @@ abstract class JavaBaseObject implements JavaType {
         }
 
         CodeBlock.Builder setters = CodeBlock.builder()
-        protocol.findAll {
-            it instanceof JavaProperty
-        }.each { JavaProperty it ->
-            setters.addStatement('$L.$L($L)', 'javaObject', it.setterName, it.name)
-        }
+        addSettersCode(setters)
         methodBuilder
             .addCode(readProtocol.build())
             .addStatement('$1T $2L = new $1T()', className, 'javaObject')
             .addCode(setters.build())
+    }
+    
+    void addSettersCode(CodeBlock.Builder codeBlock) {
+        protocol.findAll {
+            it instanceof JavaProperty
+        }.each { JavaProperty it ->
+            codeBlock.addStatement('$L.$L($L)', 'javaObject', it.setterName, it.name)
+        }
     }
 
     MethodSpec getWriteMethod() {
@@ -131,10 +135,13 @@ abstract class JavaBaseObject implements JavaType {
     }
     
     void addSizeMethod(TypeSpec.Builder typeBuilder) {
+        List<CodeBlock> sizes = protocol.collect {
+            it.getSize()
+        }
         typeBuilder.addMethod(MethodSpec.methodBuilder('getSize')
             .addModifiers(Modifier.PUBLIC)
             .returns(TypeName.INT)
-            .addStatement('return 0')
+            .addStatement('return $L', sizes.join(' + '))
             .build())
     }
 }

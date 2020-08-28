@@ -20,7 +20,7 @@ class JavaPad implements JavaUnit {
     }
 
     @Override
-    int getSize() {
-        return bytes
+    CodeBlock getSize() {
+        return CodeBlock.of('$L', bytes)
     }
 }

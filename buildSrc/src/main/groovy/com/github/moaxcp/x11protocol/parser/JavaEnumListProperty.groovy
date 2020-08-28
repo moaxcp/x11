@@ -46,7 +46,7 @@ class JavaEnumListProperty extends JavaListProperty {
     }
 
     @Override
-    int getSize() {
-        return 0
+    CodeBlock getSize() {
+        return CodeBlock.of('0')
     }
 }

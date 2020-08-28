@@ -43,21 +43,21 @@ class JavaEnumProperty extends JavaProperty {
     }
 
     @Override
-    int getSize() {
-        if(memberTypeName == TypeName.BYTE) {
-            return 1
+    CodeBlock getSize() {
+        if(ioTypeName == TypeName.BYTE) {
+            return CodeBlock.of('1')
         }
-        if(memberTypeName == TypeName.SHORT) {
-            return 2
+        if(ioTypeName == TypeName.SHORT) {
+            return CodeBlock.of('2')
         }
-        if(memberTypeName == TypeName.CHAR) {
-            return 2
+        if(ioTypeName == TypeName.CHAR) {
+            return CodeBlock.of('2')
         }
-        if(memberTypeName == TypeName.INT) {
-            return 4
+        if(ioTypeName == TypeName.INT) {
+            return CodeBlock.of('4')
         }
-        if(memberTypeName == TypeName.LONG) {
-            return 8
+        if(ioTypeName == TypeName.LONG) {
+            return CodeBlock.of('8')
         }
         throw new UnsupportedOperationException("type not supported $memberTypeName")
     }

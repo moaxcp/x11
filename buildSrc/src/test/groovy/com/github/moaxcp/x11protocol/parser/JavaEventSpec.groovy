@@ -3,7 +3,7 @@ package com.github.moaxcp.x11protocol.parser
 import com.github.moaxcp.x11protocol.XmlSpec
 
 class JavaEventSpec extends XmlSpec {
-    def create() {
+    def keyPres() {
         given:
         xmlBuilder.xcb() {
             xidtype(name:'WINDOW')
@@ -83,7 +83,6 @@ class JavaEventSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent readKeyPressEvent(
                   com.github.moaxcp.x11client.protocol.X11Input in, boolean sentEvent) throws
                   java.io.IOException {
-                this.sentEvent = sentEvent;
                 byte eventDetail = in.readCard8();
                 short sequenceNumber = in.readCard16();
                 byte detail = in.readCard8();
@@ -99,6 +98,7 @@ class JavaEventSpec extends XmlSpec {
                 boolean sameScreen = in.readBool();
                 in.readPad(1);
                 com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent javaObject = new com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent();
+                javaObject.setSentEvent(sentEvent);
                 javaObject.setEventDetail(eventDetail);
                 javaObject.setSequenceNumber(sequenceNumber);
                 javaObject.setDetail(detail);
@@ -145,5 +145,76 @@ class JavaEventSpec extends XmlSpec {
               }
             }
         '''.stripIndent()
+    }
+
+    def mapRequest() {
+        given:
+        xmlBuilder.xcb() {
+            xidtype(name: 'WINDOW')
+            event(name:'MapRequest', number:'20') {
+                pad(bytes:'1')
+                field(type:'WINDOW', name:'parent')
+                field(type:'WINDOW', name:'window')
+            }
+        }
+
+        when:
+        addChildNodes()
+        XTypeEvent event = result.resolveXType('MapRequest')
+        JavaEvent javaEvent = event.javaType
+
+        then:
+        javaEvent.typeSpec.toString() == '''\
+            @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
+            public class MapRequestEvent implements com.github.moaxcp.x11client.protocol.XEvent {
+              public static final byte NUMBER = 20;
+            
+              private boolean sentEvent;
+            
+              private byte eventDetail;
+            
+              private short sequenceNumber;
+            
+              private int parent;
+            
+              private int window;
+            
+              public byte getNumber() {
+                return NUMBER;
+              }
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent readMapRequestEvent(
+                  com.github.moaxcp.x11client.protocol.X11Input in, boolean sentEvent) throws
+                  java.io.IOException {
+                byte eventDetail = in.readCard8();
+                short sequenceNumber = in.readCard16();
+                in.readPad(1);
+                int parent = in.readCard32();
+                int window = in.readCard32();
+                com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent javaObject = new com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent();
+                javaObject.setSentEvent(sentEvent);
+                javaObject.setEventDetail(eventDetail);
+                javaObject.setSequenceNumber(sequenceNumber);
+                javaObject.setParent(parent);
+                javaObject.setWindow(window);
+                return javaObject;
+              }
+            
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8(eventDetail);
+                out.writeCard16(sequenceNumber);
+                out.writePad(1);
+                out.writeCard32(parent);
+                out.writeCard32(window);
+              }
+            
+              public int getSize() {
+                return 2;
+              }
+            }
+        '''.stripIndent()
+
     }
 }

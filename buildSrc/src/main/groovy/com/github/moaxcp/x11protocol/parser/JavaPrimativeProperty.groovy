@@ -53,21 +53,24 @@ class JavaPrimativeProperty extends JavaProperty {
     }
 
     @Override
-    int getSize() {
+    CodeBlock getSize() {
+        if(memberTypeName == TypeName.BOOLEAN) {
+            return CodeBlock.of('1')
+        }
         if(memberTypeName == TypeName.BYTE) {
-            return 1
+            return CodeBlock.of('1')
         }
         if(memberTypeName == TypeName.SHORT) {
-            return 2
+            return CodeBlock.of('2')
         }
         if(memberTypeName == TypeName.CHAR) {
-            return 2
+            return CodeBlock.of('2')
         }
         if(memberTypeName == TypeName.INT) {
-            return 4
+            return CodeBlock.of('4')
         }
         if(memberTypeName == TypeName.LONG) {
-            return 8
+            return CodeBlock.of('8')
         }
         throw new UnsupportedOperationException("type not supported $memberTypeName")
     }

@@ -31,7 +31,7 @@ class JavaTypeProperty extends JavaProperty {
     }
 
     @Override
-    int getSize() {
-        return 0
+    CodeBlock getSize() {
+        return CodeBlock.of('$L.getSize()', name)
     }
 }

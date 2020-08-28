@@ -70,8 +70,8 @@ class JavaEvent extends JavaBaseObject {
     }
 
     @Override
-    void addReadStatements(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addStatement('this.sentEvent = sentEvent')
-        super.addReadStatements(methodBuilder)
+    void addSettersCode(CodeBlock.Builder codeBuilder) {
+        codeBuilder.addStatement('$L.$L($L)', 'javaObject', 'setSentEvent', 'sentEvent')
+        super.addSettersCode(codeBuilder)
     }
 }

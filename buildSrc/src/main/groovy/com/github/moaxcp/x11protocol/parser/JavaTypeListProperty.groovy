@@ -10,6 +10,7 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11Vari
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
 
 class JavaTypeListProperty extends JavaListProperty {
+    String basePackage
 
     static JavaTypeListProperty javaTypeListProperty(JavaType javaType, XUnitListField field) {
         XType resolvedType = field.resolvedType
@@ -21,6 +22,7 @@ class JavaTypeListProperty extends JavaListProperty {
         }
         TypeName typeName = ParameterizedTypeName.get(ClassName.get(List), baseTypeName)
         return new JavaTypeListProperty(
+            basePackage: javaType.basePackage,
             name:convertX11VariableNameToJava(field.name),
             baseTypeName: baseTypeName,
             typeName: typeName,
@@ -48,7 +50,7 @@ class JavaTypeListProperty extends JavaListProperty {
     }
 
     @Override
-    int getSize() {
-        return 0
+    CodeBlock getSize() {
+        return CodeBlock.of('$T.sizeOf($L)', ClassName.get(basePackage, 'XObject'), name)
     }
 }

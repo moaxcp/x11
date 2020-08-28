@@ -6,8 +6,8 @@ interface JavaUnit {
     CodeBlock getReadCode()
     CodeBlock getWriteCode()
     /**
-     * size in bytes
+     * expression of size in bytes
      * @return
      */
-    int getSize()
+    CodeBlock getSize()
 }

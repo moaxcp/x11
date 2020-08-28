@@ -18,7 +18,7 @@ public class ClientMessageData32 implements ClientMessageDataUnion {
 
   @Override
   public int getSize() {
-    return 5;
+    return 20;
   }
 
   @Override
