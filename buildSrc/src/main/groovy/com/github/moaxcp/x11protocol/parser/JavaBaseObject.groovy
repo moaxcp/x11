@@ -29,23 +29,10 @@ abstract class JavaBaseObject implements JavaType {
 
     @Override
     TypeSpec getTypeSpec() {
-        List<FieldSpec> fields = protocol.findAll {
-            it instanceof JavaProperty
-        }.collect { JavaProperty it ->
-            it.member
-        }
-        List<MethodSpec> methods = protocol.findAll {
-            it instanceof JavaProperty
-        }.collect { JavaProperty it ->
-            it.methods
-        }.flatten()
         TypeSpec.Builder typeSpec = TypeSpec.classBuilder(className)
-            .addModifiers(Modifier.PUBLIC)
-            .addFields(fields)
-            .addMethod(readMethod)
-            .addMethod(writeMethod)
-            .addMethod(sizeMethod)
-            .addMethods(methods)
+        typeSpec.addModifiers(Modifier.PUBLIC)
+        addFields(typeSpec)
+        addMethods(typeSpec)
         if(superTypes) {
             typeSpec.addSuperinterfaces(superTypes)
         }
@@ -58,7 +45,44 @@ abstract class JavaBaseObject implements JavaType {
         typeSpec.build()
     }
 
+    void addFields(TypeSpec.Builder typeBuilder) {
+        List<FieldSpec> fields = protocol.findAll {
+            it instanceof JavaProperty
+        }.collect { JavaProperty it ->
+            it.member
+        }
+        typeBuilder.addFields(fields)
+    }
+
+    void addMethods(TypeSpec.Builder typeBuilder) {
+        List<MethodSpec> methods = protocol.findAll {
+            it instanceof JavaProperty
+        }.collect { JavaProperty it ->
+            it.methods
+        }.flatten()
+
+        typeBuilder.addMethod(readMethod)
+        .addMethod(writeMethod)
+        .addMethod(sizeMethod)
+        .addMethods(methods)
+    }
+
     MethodSpec getReadMethod() {
+        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("read${simpleName}")
+            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+            .returns(className)
+            .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
+            .addException(IOException)
+        addParameters(methodBuilder)
+        addHeaderStatements(methodBuilder)
+        addReadStatements(methodBuilder)
+
+        methodBuilder.addStatement('return $L', 'javaObject')
+
+        return methodBuilder.build()
+    }
+    
+    void addParameters(MethodSpec.Builder methodBuilder) {
         List<ParameterSpec> params = protocol.findAll {
             it instanceof JavaListProperty
         }.collect { JavaListProperty it ->
@@ -66,6 +90,14 @@ abstract class JavaBaseObject implements JavaType {
         }.flatten().collect { ParamRefExpression it ->
             ParameterSpec.builder(x11PrimativeToJavaTypeName(it.x11Type), it.paramName).build()
         }
+        methodBuilder.addParameters(params)
+    }
+
+    void addHeaderStatements(MethodSpec.Builder builder) {
+
+    }
+
+    void addReadStatements(MethodSpec.Builder methodBuilder) {
 
         CodeBlock.Builder readProtocol = CodeBlock.builder()
         protocol.each {
@@ -78,18 +110,10 @@ abstract class JavaBaseObject implements JavaType {
         }.each { JavaProperty it ->
             setters.addStatement('$L.$L($L)', 'javaObject', it.setterName, it.name)
         }
-
-        return MethodSpec.methodBuilder("read${simpleName}")
-            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-            .returns(className)
-            .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
-            .addParameters(params)
-            .addException(IOException)
+        methodBuilder
             .addCode(readProtocol.build())
             .addStatement('$1T $2L = new $1T()', className, 'javaObject')
             .addCode(setters.build())
-            .addStatement('return $L', 'javaObject')
-            .build()
     }
 
     MethodSpec getWriteMethod() {

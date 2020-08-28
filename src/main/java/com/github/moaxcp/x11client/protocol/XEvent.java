@@ -4,4 +4,5 @@ public interface XEvent extends XObject {
   default int getSize() {
     return 32;
   }
+  byte getNumber();
 }
