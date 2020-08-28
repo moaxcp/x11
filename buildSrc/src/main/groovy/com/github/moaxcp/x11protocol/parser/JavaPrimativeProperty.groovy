@@ -54,7 +54,22 @@ class JavaPrimativeProperty extends JavaProperty {
 
     @Override
     int getSize() {
-        return 0
+        if(memberTypeName == TypeName.BYTE) {
+            return 1
+        }
+        if(memberTypeName == TypeName.SHORT) {
+            return 2
+        }
+        if(memberTypeName == TypeName.CHAR) {
+            return 2
+        }
+        if(memberTypeName == TypeName.INT) {
+            return 4
+        }
+        if(memberTypeName == TypeName.LONG) {
+            return 8
+        }
+        throw new UnsupportedOperationException("type not supported $memberTypeName")
     }
 
     static JavaPrimativeProperty javaPrimativeProperty(XUnitField field) {
