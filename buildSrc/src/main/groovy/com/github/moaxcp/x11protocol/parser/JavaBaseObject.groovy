@@ -63,8 +63,9 @@ abstract class JavaBaseObject implements JavaType {
 
         typeBuilder.addMethod(readMethod)
         .addMethod(writeMethod)
-        .addMethod(sizeMethod)
         .addMethods(methods)
+        
+        addSizeMethod(typeBuilder)
     }
 
     MethodSpec getReadMethod() {
@@ -73,7 +74,7 @@ abstract class JavaBaseObject implements JavaType {
             .returns(className)
             .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
             .addException(IOException)
-        addParameters(methodBuilder)
+        addReadParameters(methodBuilder)
         addHeaderStatements(methodBuilder)
         addReadStatements(methodBuilder)
 
@@ -82,7 +83,7 @@ abstract class JavaBaseObject implements JavaType {
         return methodBuilder.build()
     }
     
-    void addParameters(MethodSpec.Builder methodBuilder) {
+    void addReadParameters(MethodSpec.Builder methodBuilder) {
         List<ParameterSpec> params = protocol.findAll {
             it instanceof JavaListProperty
         }.collect { JavaListProperty it ->
@@ -128,12 +129,12 @@ abstract class JavaBaseObject implements JavaType {
             .addCode(writeProtocol.build())
             .build()
     }
-
-    MethodSpec getSizeMethod() {
-        return MethodSpec.methodBuilder('getSize')
+    
+    void addSizeMethod(TypeSpec.Builder typeBuilder) {
+        typeBuilder.addMethod(MethodSpec.methodBuilder('getSize')
             .addModifiers(Modifier.PUBLIC)
             .returns(TypeName.INT)
             .addStatement('return 0')
-            .build()
+            .build())
     }
 }

@@ -1,10 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeSpec
+import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventJavaName
@@ -42,6 +38,8 @@ class JavaEvent extends JavaBaseObject {
         typeBuilder.addField(FieldSpec.builder(TypeName.BYTE, 'NUMBER', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
             .initializer('$L', number)
             .build())
+        typeBuilder.addField(FieldSpec.builder(TypeName.BOOLEAN, 'sentEvent', Modifier.PRIVATE)
+            .build())
         super.addFields(typeBuilder)
     }
 
@@ -54,5 +52,26 @@ class JavaEvent extends JavaBaseObject {
             .build())
 
         super.addMethods(typeBuilder)
+    }
+
+    @Override
+    void addReadParameters(MethodSpec.Builder methodBuilder) {
+        super.addReadParameters(methodBuilder)
+        methodBuilder.addParameter(ParameterSpec.builder(TypeName.BOOLEAN, 'sentEvent').build())
+    }
+
+    @Override
+    void addSizeMethod(TypeSpec.Builder typeBuilder) {
+        typeBuilder.addMethod(MethodSpec.methodBuilder('getSize')
+            .addModifiers(Modifier.PUBLIC)
+            .returns(TypeName.INT)
+            .addStatement('return 2')
+            .build())
+    }
+
+    @Override
+    void addReadStatements(MethodSpec.Builder methodBuilder) {
+        methodBuilder.addStatement('this.sentEvent = sentEvent')
+        super.addReadStatements(methodBuilder)
     }
 }
