@@ -77,6 +77,8 @@ abstract class JavaBaseObject implements JavaType {
         addReadParameters(methodBuilder)
         addHeaderStatements(methodBuilder)
         addReadStatements(methodBuilder)
+        methodBuilder.addStatement('$1T $2L = new $1T()', className, 'javaObject')
+        addSetterStatements(methodBuilder)
 
         methodBuilder.addStatement('return $L', 'javaObject')
 
@@ -99,49 +101,59 @@ abstract class JavaBaseObject implements JavaType {
     }
 
     void addReadStatements(MethodSpec.Builder methodBuilder) {
-
         CodeBlock.Builder readProtocol = CodeBlock.builder()
         protocol.each {
             readProtocol.addStatement(it.readCode)
         }
 
-        CodeBlock.Builder setters = CodeBlock.builder()
-        addSettersCode(setters)
-        methodBuilder
-            .addCode(readProtocol.build())
-            .addStatement('$1T $2L = new $1T()', className, 'javaObject')
-            .addCode(setters.build())
+        methodBuilder.addCode(readProtocol.build())
     }
     
-    void addSettersCode(CodeBlock.Builder codeBlock) {
+    void addSetterStatements(MethodSpec.Builder methodBuilder) {
+        CodeBlock.Builder setters = CodeBlock.builder()
         protocol.findAll {
             it instanceof JavaProperty
         }.each { JavaProperty it ->
-            codeBlock.addStatement('$L.$L($L)', 'javaObject', it.setterName, it.name)
+            setters.addStatement('$L.$L($L)', 'javaObject', it.setterName, it.name)
         }
+        methodBuilder.addCode(setters.build())
     }
 
     MethodSpec getWriteMethod() {
+        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("write")
+            .addModifiers(Modifier.PUBLIC)
+            .addParameter(ClassName.get(basePackage, 'X11Output'), 'out')
+            .addException(IOException)
+        addWriteParameters(methodBuilder)
+        addWriteStatements(methodBuilder)
+        
+        return methodBuilder.build()
+    }
+    
+    void addWriteParameters(MethodSpec.Builder methodBuilder) {
+        
+    }
+    
+    void addWriteStatements(MethodSpec.Builder methodBuilder) {
         CodeBlock.Builder writeProtocol = CodeBlock.builder()
         protocol.each {
             writeProtocol.addStatement(it.writeCode)
         }
-        return MethodSpec.methodBuilder("write")
-            .addModifiers(Modifier.PUBLIC)
-            .addParameter(ClassName.get(basePackage, 'X11Output'), 'out')
-            .addException(IOException)
-            .addCode(writeProtocol.build())
-            .build()
+        methodBuilder.addCode(writeProtocol.build())
     }
     
     void addSizeMethod(TypeSpec.Builder typeBuilder) {
-        List<CodeBlock> sizes = protocol.collect {
-            it.getSize()
-        }
+        CodeBlock sizes = getSizeExpression()
         typeBuilder.addMethod(MethodSpec.methodBuilder('getSize')
             .addModifiers(Modifier.PUBLIC)
             .returns(TypeName.INT)
-            .addStatement('return $L', sizes.join(' + '))
+            .addStatement('return $L', sizes)
             .build())
+    }
+    
+    CodeBlock getSizeExpression() {
+        protocol.stream()
+            .map({it.getSize()})
+            .collect(CodeBlock.joining(' + '))
     }
 }

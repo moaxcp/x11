@@ -61,8 +61,21 @@ class JavaEvent extends JavaBaseObject {
     }
 
     @Override
-    void addSettersCode(CodeBlock.Builder codeBuilder) {
-        codeBuilder.addStatement('$L.$L($L)', 'javaObject', 'setSentEvent', 'sentEvent')
-        super.addSettersCode(codeBuilder)
+    void addWriteStatements(MethodSpec.Builder methodBuilder) {
+        super.addWriteStatements(methodBuilder)
+        //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
+        methodBuilder.beginControlFlow('if(getSize() < 32)')
+            .addStatement('out.writePad(32 - getSize())')
+            .endControlFlow()
+    }
+
+    @Override
+    void addSetterStatements(MethodSpec.Builder methodBuilder) {
+        methodBuilder.addStatement('$L.$L($L)', 'javaObject', 'setSentEvent', 'sentEvent')
+        super.addSetterStatements(methodBuilder)
+        //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
+        methodBuilder.beginControlFlow('if(javaObject.getSize() < 32)')
+            .addStatement('in.readPad(32 - javaObject.getSize())')
+            .endControlFlow()
     }
 }

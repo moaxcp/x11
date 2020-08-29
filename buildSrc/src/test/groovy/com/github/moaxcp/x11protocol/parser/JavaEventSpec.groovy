@@ -112,6 +112,9 @@ class JavaEventSpec extends XmlSpec {
                 javaObject.setEventY(eventY);
                 javaObject.setState(state);
                 javaObject.setSameScreen(sameScreen);
+                if(javaObject.getSize() < 32) {
+                  in.readPad(32 - javaObject.getSize());
+                }
                 return javaObject;
               }
             
@@ -130,6 +133,9 @@ class JavaEventSpec extends XmlSpec {
                 out.writeCard16(state);
                 out.writeBool(sameScreen);
                 out.writePad(1);
+                if(getSize() < 32) {
+                  out.writePad(32 - getSize());
+                }
               }
             
               public void stateEnable(com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
@@ -199,6 +205,9 @@ class JavaEventSpec extends XmlSpec {
                 javaObject.setSequenceNumber(sequenceNumber);
                 javaObject.setParent(parent);
                 javaObject.setWindow(window);
+                if(javaObject.getSize() < 32) {
+                  in.readPad(32 - javaObject.getSize());
+                }
                 return javaObject;
               }
             
@@ -208,6 +217,9 @@ class JavaEventSpec extends XmlSpec {
                 out.writePad(1);
                 out.writeCard32(parent);
                 out.writeCard32(window);
+                if(getSize() < 32) {
+                  out.writePad(32 - getSize());
+                }
               }
             
               public int getSize() {
