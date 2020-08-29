@@ -113,7 +113,8 @@ class XResult {
     }
 
     void addEventCopy(Node node) {
-
+        String name = node.attributes().get('name')
+        events.put(name, XTypeEvent.xTypeEventCopy(this, node))
     }
 
     void addEventStruct(Node node) {
