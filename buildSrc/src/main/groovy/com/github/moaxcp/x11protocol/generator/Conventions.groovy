@@ -130,6 +130,10 @@ class Conventions {
         return getJavaName(x11Name) + 'Error'
     }
 
+    static ClassName getErrorTypeName(String javaPackage, String x11Name) {
+        return ClassName.get(javaPackage, getErrorJavaName(x11Name))
+    }
+
     static String getEventJavaName(String x11Name) {
         return getJavaName(x11Name) + 'Event'
     }

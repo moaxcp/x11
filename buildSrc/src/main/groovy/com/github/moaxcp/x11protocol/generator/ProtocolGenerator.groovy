@@ -27,5 +27,9 @@ class ProtocolGenerator {
             JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
             javaFile.writeTo(outputSrc)
         }
+        result.errors.values().each {
+            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
+            javaFile.writeTo(outputSrc)
+        }
     }
 }
