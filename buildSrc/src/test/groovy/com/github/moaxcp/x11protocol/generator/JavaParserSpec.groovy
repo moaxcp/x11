@@ -24,7 +24,7 @@ class JavaParserSpec extends Specification {
         'CARD8'         || TypeName.BYTE
         'CARD16'        || TypeName.SHORT
         'CARD32'        || TypeName.INT
-        'char'          || TypeName.CHAR
+        'char'          || TypeName.BYTE
         'POINT'         || ClassName.get('com.github.moaxcp.x11protocol.xproto', 'PointStruct')
         'CreateContext' || ClassName.get('com.github.moaxcp.x11protocol.glx', 'CreateContextRequest')
         'WINDOW'        || TypeName.INT

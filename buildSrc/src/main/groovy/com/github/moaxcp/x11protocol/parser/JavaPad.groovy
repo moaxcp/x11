@@ -11,12 +11,12 @@ class JavaPad implements JavaUnit {
 
     @Override
     CodeBlock getReadCode() {
-        return CodeBlock.of("in.readPad($bytes)")
+        return CodeBlock.builder().addStatement("in.readPad($bytes)").build()
     }
 
     @Override
     CodeBlock getWriteCode() {
-        return CodeBlock.of("out.writePad($bytes)")
+        return CodeBlock.builder().addStatement("out.writePad($bytes)").build()
     }
 
     @Override

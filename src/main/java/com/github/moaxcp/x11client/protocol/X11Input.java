@@ -32,7 +32,7 @@ public interface X11Input {
 
   long readCard64() throws IOException;
 
-  char[] readChar(int length) throws IOException;
+  byte[] readChar(int length) throws IOException;
 
   String readString8(int length) throws IOException;
 

@@ -8,7 +8,7 @@ class JavaPadUnitSpec extends Specification {
         JavaPad xpad = new JavaPad(bytes:4)
 
         expect:
-        xpad.getReadCode().toString() == 'in.readPad(4)'
+        xpad.getReadCode().toString() == 'in.readPad(4);\n'
     }
 
     def 'XPad write expression'() {
@@ -16,6 +16,6 @@ class JavaPadUnitSpec extends Specification {
         JavaPad xpad = new JavaPad(bytes:4)
 
         expect:
-        xpad.getWriteCode().toString() == 'out.writePad(4)'
+        xpad.getWriteCode().toString() == 'out.writePad(4);\n'
     }
 }

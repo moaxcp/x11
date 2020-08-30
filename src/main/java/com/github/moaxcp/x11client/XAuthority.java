@@ -20,7 +20,7 @@ public class XAuthority {
   @NonNull byte[] address;
   int displayNumber;
   @NonNull String protocolName;
-  @NonNull byte[] protocolData;
+  @NonNull String protocolData;
 
   /**
    * Represents a Family or connection type used in authentication.
@@ -73,7 +73,7 @@ public class XAuthority {
    * @throws NullPointerException if any parameter is null.
    * @throws IllegalArgumentException if displayNumber is < 0 or protocolName is empty.
    */
-  XAuthority(@NonNull Family family, @NonNull byte[] address, int displayNumber, @NonNull String protocolName, @NonNull byte[] protocolData) {
+  XAuthority(@NonNull Family family, @NonNull byte[] address, int displayNumber, @NonNull String protocolName, @NonNull String protocolData) {
     this.family = family;
     this.address = requireNonEmpty("address", address);
     if(displayNumber < 0) {
@@ -81,7 +81,7 @@ public class XAuthority {
     }
     this.displayNumber = displayNumber;
     this.protocolName = requireNonBlank("protocolName", protocolName);
-    this.protocolData = requireNonEmpty("protocolData", protocolData);
+    this.protocolData = requireNonBlank("protocolData", protocolData);
   }
 
   public static Optional<XAuthority> read(DataInput in) {
@@ -92,7 +92,7 @@ public class XAuthority {
       int number = Integer.parseInt(in.readUTF());
       String name = in.readUTF();
       dataLength = in.readUnsignedShort();
-      byte[] data = readBytes(in, dataLength);
+      String data = new String(readBytes(in, dataLength));
       return Optional.of(new XAuthority(family, address, number, name, data));
     } catch (IOException ex) {
       return Optional.empty();

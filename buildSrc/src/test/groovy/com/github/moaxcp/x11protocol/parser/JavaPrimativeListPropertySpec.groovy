@@ -34,7 +34,7 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
         property.baseTypeName == TypeName.LONG
         property.typeName == ArrayTypeName.of(TypeName.LONG)
         property.lengthExpression.expression.toString() == 'numWindowModifiers'
-        property.readCode.toString() == 'long[] windowModifiers = in.readCard64(numWindowModifiers)'
-        property.writeCode.toString() == 'out.writeCard64(windowModifiers)'
+        property.readCode.toString() == 'long[] windowModifiers = in.readCard64(numWindowModifiers);\n'
+        property.writeCode.toString() == 'out.writeCard64(windowModifiers);\n'
     }
 }

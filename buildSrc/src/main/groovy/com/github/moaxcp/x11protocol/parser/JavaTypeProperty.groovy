@@ -27,7 +27,9 @@ class JavaTypeProperty extends JavaProperty {
 
     @Override
     CodeBlock getWriteCode() {
-        return CodeBlock.of('$L.write(out)', name)
+        return CodeBlock.builder()
+            .addStatement('$L.write(out)', name)
+            .build()
     }
 
     @Override

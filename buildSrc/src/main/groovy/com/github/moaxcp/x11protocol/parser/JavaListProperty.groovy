@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.parser.expression.Expression
-import com.github.moaxcp.x11protocol.parser.expression.FieldRefExpression
 import com.squareup.javapoet.TypeName
 
 abstract class JavaListProperty extends JavaProperty {
@@ -9,7 +8,7 @@ abstract class JavaListProperty extends JavaProperty {
     TypeName baseTypeName
     TypeName typeName
     Expression lengthExpression
-    FieldRefExpression lengthField
+    String lengthField
     boolean readOnly
     boolean localOnly
 }

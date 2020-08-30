@@ -9,17 +9,26 @@ class JavaPadAlign implements JavaUnit {
     @Override
     CodeBlock getReadCode() {
         if(align == 4) {
-            return CodeBlock.of("in.readPadAlign(${list.lengthExpression.expression})")
+            return CodeBlock.builder()
+                .addStatement("in.readPadAlign(${list.lengthExpression.expression})")
+                .build()
         }
-        return CodeBlock.of("in.readPadAlign($align, ${list.lengthExpression.expression})")
+        return CodeBlock.builder()
+            .addStatement("in.readPadAlign($align, ${list.lengthExpression.expression})")
+            .build()
     }
 
     @Override
     CodeBlock getWriteCode() {
         if(align == 4) {
-            return CodeBlock.of("out.writePadAlign(${list.lengthExpression.expression})")
+            return CodeBlock.builder()
+                .addStatement("out.writePadAlign(${list.lengthExpression.expression})")
+                .build()
         }
-        return CodeBlock.of("out.writePadAlign($align, ${list.lengthExpression.expression})")
+        return CodeBlock.builder()
+            .addStatement("out.writePadAlign($align, ${list.lengthExpression.expression})")
+            .build()
+
     }
 
     @Override

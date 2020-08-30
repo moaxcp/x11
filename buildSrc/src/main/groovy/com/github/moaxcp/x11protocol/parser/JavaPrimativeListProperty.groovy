@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.github.moaxcp.x11protocol.parser.expression.Expression
+
 import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
 import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.CodeBlock
@@ -9,12 +9,7 @@ import com.squareup.javapoet.TypeName
 import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
 class JavaPrimativeListProperty extends JavaListProperty {
-    String name
     String x11Primative
-    TypeName typeName
-    Expression lengthExpression
-    boolean readOnly
-    boolean localOnly
 
     static JavaPrimativeListProperty javaPrimativeListProperty(JavaType javaType, XUnitListField field) {
         XType resolvedType = field.resolvedType
@@ -45,7 +40,9 @@ class JavaPrimativeListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getWriteCode() {
-        return CodeBlock.of("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)")
+        return CodeBlock.builder()
+            .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)")
+            .build()
     }
 
     @Override
@@ -60,7 +57,7 @@ class JavaPrimativeListProperty extends JavaListProperty {
             return CodeBlock.of('2 * $L.length', name)
         }
         if(baseTypeName == TypeName.CHAR) {
-            return CodeBlock.of('2 * $L.length', name)
+            return CodeBlock.of('1 * $L.length', name)
         }
         if(baseTypeName == TypeName.INT) {
             return CodeBlock.of('4 * $L.length', name)

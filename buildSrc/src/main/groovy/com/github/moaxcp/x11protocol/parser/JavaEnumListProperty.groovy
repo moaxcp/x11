@@ -28,21 +28,21 @@ class JavaEnumListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getReadCode() {
-        return CodeBlock.of('''\
-            $1T $2L = new $3T<>($4L);
-            for(int i = 0; i < $4L; i++) {
-              $2L.add($5T.getByCode(in.read$6L()));
-            }
-        ''', typeName, name, ClassName.get('java.util', 'ArrayList'), lengthExpression.expression, baseTypeName, fromUpperUnderscoreToUpperCamel(x11Primative))
+        return CodeBlock.builder()
+            .addStatement('$1T $2L = new $3T<>($4L)', typeName, name, ArrayList.class, lengthExpression.expression)
+            .beginControlFlow('for(int i = 0; i < $L; i++)', lengthExpression.expression)
+            .addStatement('$L.add($T.getByCode(in.read$L()))', name, baseTypeName, fromUpperUnderscoreToUpperCamel(x11Primative))
+            .endControlFlow()
+            .build()
     }
 
     @Override
     CodeBlock getWriteCode() {
-        return CodeBlock.of('''\
-            for($1T e : $2L) {
-              out.write$3L(e.getValue());
-            }
-        ''', baseTypeName, name, fromUpperUnderscoreToUpperCamel(x11Primative))
+        return CodeBlock.builder()
+            .beginControlFlow('for($T e : $L)', baseTypeName, name)
+            .addStatement('out.write$L(e.getValue())', fromUpperUnderscoreToUpperCamel(x11Primative))
+            .endControlFlow()
+            .build()
     }
 
     @Override

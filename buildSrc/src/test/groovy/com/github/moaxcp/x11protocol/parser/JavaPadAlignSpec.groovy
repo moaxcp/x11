@@ -10,7 +10,7 @@ class JavaPadAlignSpec extends Specification {
             list: new JavaPrimativeListProperty(lengthExpression: new ValueExpression(value:5)))
 
         expect:
-        align.readCode.toString() == 'in.readPadAlign(5)'
+        align.readCode.toString() == 'in.readPadAlign(5);\n'
     }
 
     def 'XPadAlign read expression'() {
@@ -19,7 +19,7 @@ class JavaPadAlignSpec extends Specification {
             list: new JavaPrimativeListProperty(lengthExpression: new ValueExpression(value:5)))
 
         expect:
-        align.readCode.toString() == 'in.readPadAlign(5, 5)'
+        align.readCode.toString() == 'in.readPadAlign(5, 5);\n'
     }
 
     def 'XPadAlign write expression 4'() {
@@ -28,7 +28,7 @@ class JavaPadAlignSpec extends Specification {
             list: new JavaPrimativeListProperty(lengthExpression: new ValueExpression(value:5)))
 
         expect:
-        align.writeCode.toString() == 'out.writePadAlign(5)'
+        align.writeCode.toString() == 'out.writePadAlign(5);\n'
     }
 
     def 'XPadAlign write expression'() {
@@ -37,6 +37,6 @@ class JavaPadAlignSpec extends Specification {
             list: new JavaPrimativeListProperty(lengthExpression: new ValueExpression(value:5)))
 
         expect:
-        align.writeCode.toString() == 'out.writePadAlign(5, 5)'
+        align.writeCode.toString() == 'out.writePadAlign(5, 5);\n'
     }
 }

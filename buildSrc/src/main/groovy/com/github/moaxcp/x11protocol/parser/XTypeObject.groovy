@@ -1,9 +1,10 @@
 package com.github.moaxcp.x11protocol.parser
 
-
+import com.github.moaxcp.x11protocol.parser.expression.FieldRefExpression
 import com.squareup.javapoet.ClassName
 import groovy.util.slurpersupport.Node
 
+import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
 import static com.github.moaxcp.x11protocol.parser.JavaTypeListProperty.javaTypeListProperty
 import static com.github.moaxcp.x11protocol.parser.JavaTypeProperty.javaTypeProperty
 import static com.github.moaxcp.x11protocol.parser.XUnitField.xUnitField
@@ -64,6 +65,26 @@ abstract class XTypeObject extends XType implements XTypeUnit {
         java.eachWithIndex { JavaUnit entry, int i ->
             if(entry instanceof JavaPadAlign) {
                 entry.list = java[i - 1]
+            }
+        }
+
+        java.each { JavaUnit property ->
+            if(property instanceof JavaPrimativeStringListProperty) {
+                List<FieldRefExpression> fieldRefs = property.lengthExpression.fieldRefs
+                String lengthField = null
+                if(fieldRefs.size() > 1) {
+                    lengthField = fieldRefs.find {
+                        it.fieldName.endsWith('Len')
+                    }?.fieldName
+                } else if(fieldRefs.size() == 1) {
+                    lengthField = fieldRefs.get(0).fieldName
+                }
+                if(lengthField) {
+                    property.lengthField = convertX11VariableNameToJava(lengthField)
+                    JavaPrimativeProperty lengthProperty = java.find { it instanceof JavaPrimativeProperty && it.name == lengthField }
+                    lengthProperty.localOnly = true
+                    lengthProperty.lengthOfField = property.name
+                }
             }
         }
 

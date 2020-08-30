@@ -17,6 +17,7 @@ class JavaPrimativeProperty extends JavaProperty {
     TypeName maskTypeName
     boolean readOnly
     boolean localOnly
+    String lengthOfField
 
     @Override
     TypeName getTypeName() {
@@ -49,7 +50,18 @@ class JavaPrimativeProperty extends JavaProperty {
 
     @Override
     CodeBlock getWriteCode() {
-        return CodeBlock.of("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)")
+        if(lengthOfField) {
+            CodeBlock.Builder builder = CodeBlock.builder()
+            if(memberTypeName != TypeName.INT) {
+                builder.addStatement('$1T $2L = ($1T) $3L.length()', memberTypeName, name, lengthOfField)
+            } else {
+                builder.addStatement('$1T $2L = $3L.length()', memberTypeName, name, lengthOfField)
+            }
+            return builder
+                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)")
+                .build()
+        }
+        return CodeBlock.builder().addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)").build()
     }
 
     @Override
@@ -64,7 +76,7 @@ class JavaPrimativeProperty extends JavaProperty {
             return CodeBlock.of('2')
         }
         if(memberTypeName == TypeName.CHAR) {
-            return CodeBlock.of('2')
+            return CodeBlock.of('1')
         }
         if(memberTypeName == TypeName.INT) {
             return CodeBlock.of('4')

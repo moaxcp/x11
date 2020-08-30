@@ -27,18 +27,21 @@ class JavaEnumProperty extends JavaProperty {
 
     @Override
     CodeBlock getReadCode() {
-        return CodeBlock.of("\$1T \$2L = \$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Primative)}())",
-            memberTypeName, name)
+        return CodeBlock.builder()
+            .addStatement("\$1T \$2L = \$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Primative)}())", memberTypeName, name)
+            .build()
     }
 
     @Override
     CodeBlock getWriteCode() {
         if(ioTypeName != TypeName.INT) {
-            return CodeBlock.of("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}((\$T) \$L.getValue())",
-                ioTypeName, name)
+            return CodeBlock.builder()
+                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}((\$T) \$L.getValue())", ioTypeName, name)
+                .build()
         } else {
-            return CodeBlock.of("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}(\$L.getValue())",
-                name)
+            return CodeBlock.builder()
+                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}(\$L.getValue())", name)
+                .build()
         }
     }
 

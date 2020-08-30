@@ -37,7 +37,7 @@ class Conventions {
             case 'short':
                 return TypeName.SHORT
             case 'char':
-                return TypeName.CHAR
+                return TypeName.BYTE
             case 'int':
                 return TypeName.INT
             case 'long':
@@ -71,7 +71,7 @@ class Conventions {
             case 'CARD64':
                 return 'long'
             case 'char':
-                return 'char'
+                return 'byte'
             case 'float':
                 return 'float'
             case 'double':

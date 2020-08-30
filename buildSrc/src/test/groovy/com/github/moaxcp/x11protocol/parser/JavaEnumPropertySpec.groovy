@@ -35,7 +35,7 @@ class JavaEnumPropertySpec extends XmlSpec {
         property.typeName == ClassName.get(result.javaPackage, 'EventMaskEnum')
         property.ioTypeName == TypeName.INT
         property.member.toString() == 'private com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask;\n'
-        property.readCode.toString() == 'com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask = com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum.getByCode(in.readCard32())'
-        property.writeCode.toString() == 'out.writeCard32(mask.getValue())'
+        property.readCode.toString() == 'com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask = com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum.getByCode(in.readCard32());\n'
+        property.writeCode.toString() == 'out.writeCard32(mask.getValue());\n'
     }
 }

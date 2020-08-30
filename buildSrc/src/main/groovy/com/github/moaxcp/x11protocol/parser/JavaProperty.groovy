@@ -37,10 +37,10 @@ abstract class JavaProperty implements JavaUnit {
     abstract void setLocalOnly(boolean localOnly)
 
     CodeBlock declareAndInitializeTo(String readCall) {
-        return CodeBlock.of('$T $L = $L', typeName, name, readCall)
+        return CodeBlock.builder().addStatement('$T $L = $L', typeName, name, readCall).build()
     }
 
     CodeBlock declareAndInitializeTo(CodeBlock readCall) {
-        return CodeBlock.of('$T $L = $L', typeName, name, readCall)
+        return CodeBlock.builder().addStatement('$T $L = $L', typeName, name, readCall).build()
     }
 }

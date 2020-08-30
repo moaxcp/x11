@@ -47,7 +47,7 @@ abstract class JavaBaseObject implements JavaType {
 
     void addFields(TypeSpec.Builder typeBuilder) {
         List<FieldSpec> fields = protocol.findAll {
-            it instanceof JavaProperty
+            it instanceof JavaProperty && !it.localOnly
         }.collect { JavaProperty it ->
             it.member
         }
@@ -103,7 +103,7 @@ abstract class JavaBaseObject implements JavaType {
     void addReadStatements(MethodSpec.Builder methodBuilder) {
         CodeBlock.Builder readProtocol = CodeBlock.builder()
         protocol.each {
-            readProtocol.addStatement(it.readCode)
+            readProtocol.add(it.readCode)
         }
 
         methodBuilder.addCode(readProtocol.build())
@@ -112,7 +112,7 @@ abstract class JavaBaseObject implements JavaType {
     void addSetterStatements(MethodSpec.Builder methodBuilder) {
         CodeBlock.Builder setters = CodeBlock.builder()
         protocol.findAll {
-            it instanceof JavaProperty
+            it instanceof JavaProperty && !it.localOnly
         }.each { JavaProperty it ->
             setters.addStatement('$L.$L($L)', 'javaObject', it.setterName, it.name)
         }
@@ -137,7 +137,7 @@ abstract class JavaBaseObject implements JavaType {
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
         CodeBlock.Builder writeProtocol = CodeBlock.builder()
         protocol.each {
-            writeProtocol.addStatement(it.writeCode)
+            writeProtocol.add(it.writeCode)
         }
         methodBuilder.addCode(writeProtocol.build())
     }

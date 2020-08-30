@@ -1,5 +1,7 @@
 package com.github.moaxcp.x11client;
 
+import com.github.moaxcp.x11client.protocol.X11Output;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 

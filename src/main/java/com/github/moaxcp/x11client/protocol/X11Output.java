@@ -32,7 +32,7 @@ public interface X11Output {
 
   void writeCard64(long card64) throws IOException;
 
-  void writeChar(char[] string) throws IOException;
+  void writeChar(byte[] string) throws IOException;
 
   void writeString8(String string) throws IOException;
 
