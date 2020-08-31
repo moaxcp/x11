@@ -23,7 +23,7 @@ public class X11InputStreamTest {
   void readByte() throws IOException {
     X11InputStream in = makeInputStream(255);
     int value = in.readByte();
-    assertThat(value).isEqualTo(255);
+    assertThat(value).isEqualTo(-1);
   }
 
   @Test
@@ -51,14 +51,14 @@ public class X11InputStreamTest {
   void readCard8() throws IOException {
     X11InputStream in = makeInputStream(255);
     int value = in.readCard8();
-    assertThat(value).isEqualTo(255);
+    assertThat(value).isEqualTo(-1);
   }
 
   @Test
   void readCard16() throws IOException {
     X11InputStream in = makeInputStream(255, 255);
     int value = in.readCard16();
-    assertThat(value).isEqualTo(65535);
+    assertThat(value).isEqualTo(-1);
   }
 
   @Test
@@ -78,7 +78,7 @@ public class X11InputStreamTest {
   @Test
   void readBytes() throws IOException {
     X11InputStream in = makeInputStream(1, 2, 3, 4);
-    byte[] bytes = in.readBytes(4);
+    byte[] bytes = in.readByte(4);
     assertThat(bytes).containsExactly(1, 2, 3, 4);
   }
 
@@ -87,7 +87,7 @@ public class X11InputStreamTest {
     InputStream origin = mock(InputStream.class);
     X11InputStream in = new X11InputStream(origin);
     when(origin.read(any(), eq(0), eq(4))).thenReturn(2);
-    IllegalStateException exception = assertThrows(IllegalStateException.class, () -> in.readBytes(4));
+    IllegalStateException exception = assertThrows(IllegalStateException.class, () -> in.readByte(4));
     assertThat(exception).hasMessage("could not read all bytes for length: \"4\"");
   }
 

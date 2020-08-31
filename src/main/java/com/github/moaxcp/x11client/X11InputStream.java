@@ -13,6 +13,11 @@ class X11InputStream implements X11Input {
   }
 
   @Override
+  public boolean readBool() throws IOException {
+    return in.readByte() > 0;
+  }
+
+  @Override
   public byte readByte() throws IOException {
     return (byte) in.readUnsignedByte();
   }
@@ -33,8 +38,31 @@ class X11InputStream implements X11Input {
   }
 
   @Override
+  public int[] readInt32(int length) throws IOException {
+    int[] result = new int[length];
+    for(int i = 0; i < length; i++) {
+      result[i] = readInt32();
+    }
+    return result;
+  }
+
+  @Override
+  public long readInt64() throws IOException {
+    return in.readLong();
+  }
+
+  @Override
   public byte readCard8() throws IOException {
     return (byte) in.readUnsignedByte();
+  }
+
+  @Override
+  public byte[] readCard8(int length) throws IOException {
+    byte[] result = new byte[length];
+    for(int i = 0; i < length; i++) {
+      result[i] = readCard8();
+    }
+    return result;
   }
 
   @Override
@@ -43,8 +71,40 @@ class X11InputStream implements X11Input {
   }
 
   @Override
+  public short[] readCard16(int length) throws IOException {
+    short[] result = new short[length];
+    for(int i = 0; i < length; i++) {
+      result[i] = readCard16();
+    }
+    return result;
+  }
+
+  @Override
   public int readCard32() throws IOException {
     return in.readInt();
+  }
+
+  @Override
+  public int[] readCard32(int length) throws IOException {
+    int[] result = new int[length];
+    for(int i = 0; i < length; i++) {
+      result[i] = readCard32();
+    }
+    return result;
+  }
+
+  @Override
+  public long readCard64() throws IOException {
+    return 0;
+  }
+
+  @Override
+  public byte[] readChar(int length) throws IOException {
+    byte[] result = new byte[length];
+    for(int i = 0; i < length; i++) {
+      result[i] = readByte();
+    }
+    return result;
   }
 
   @Override
@@ -64,11 +124,24 @@ class X11InputStream implements X11Input {
   }
 
   @Override
+  public byte[] readVoid(int length) throws IOException {
+    return readByte(length);
+  }
+
+  @Override
   public void readPad(int forLength) throws IOException {
     readByte((4 - forLength % 4) % 4);
   }
 
   public void close() throws IOException {
     in.close();
+  }
+
+  public void mark(int readLimit) {
+    in.mark(readLimit);
+  }
+
+  public void reset() throws IOException {
+    in.reset();
   }
 }

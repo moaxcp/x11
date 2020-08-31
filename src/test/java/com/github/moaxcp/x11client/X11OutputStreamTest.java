@@ -44,7 +44,7 @@ public class X11OutputStreamTest {
 
   @Test
   void writeCard8() throws IOException {
-    out.writeCard8(255);
+    out.writeCard8((byte) 255);
     assertThat(byteOut.toByteArray())
         .hasSize(1)
         .containsExactly(255);

@@ -40,13 +40,18 @@ public interface X11Output {
 
   void writeVoid(byte[] bytes) throws IOException;
 
-  void writePad(int length) throws IOException;
+  default void writePad(int length) throws IOException {
+    writeByte(new byte[length]);
+  }
 
   default void writePadAlign(int forLength) throws IOException {
-    writeByte(new byte[(4 - forLength % 4) % 4]);
+    writePadAlign(4, forLength);
   }
 
   default void writePadAlign(int pad, int forLength) throws IOException {
-    writeByte(new byte[(pad - forLength % pad) % pad]);
+    int n = forLength % pad;
+    if (n > 0)
+      n = pad - n;
+    writeByte(new byte[n]);
   }
 }

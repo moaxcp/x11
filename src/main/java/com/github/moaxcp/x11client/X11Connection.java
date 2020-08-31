@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11client;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -9,7 +10,10 @@ import java.util.Optional;
 
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
+import com.github.moaxcp.x11client.protocol.xproto.SetupAuthenticateStruct;
+import com.github.moaxcp.x11client.protocol.xproto.SetupFailedStruct;
 import com.github.moaxcp.x11client.protocol.xproto.SetupRequestStruct;
+import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
 import lombok.Getter;
 import lombok.NonNull;
 import org.newsclub.net.unix.AFUNIXSocket;
@@ -23,7 +27,7 @@ public class X11Connection implements AutoCloseable {
   @Getter
   private final XAuthority xAuthority;
   @Getter
-  private final ConnectionSuccess connectionSuccess;
+  private final SetupStruct setupStruct;
 
   private final Socket socket;
   private final X11InputStream in;
@@ -40,20 +44,25 @@ public class X11Connection implements AutoCloseable {
     this.displayName = displayName;
     this.xAuthority = xAuthority;
     this.socket = socket;
-    in = new X11InputStream(socket.getInputStream());
+    //using BufferedInputStream to support mark/reset
+    in = new X11InputStream(new BufferedInputStream(socket.getInputStream(), 128));
     out = new X11OutputStream(socket.getOutputStream());
     sendConnectionSetup();
+    in.mark(1);
     int result = in.readInt8();
+    in.reset();
     switch(result) {
       case 0: //failure
-        ConnectionFailure failure = ConnectionFailure.readFailure(getX11Input());
+        SetupFailedStruct failure = SetupFailedStruct.readSetupFailedStruct(getX11Input());
         throw new ConnectionFailureException(failure);
       case 1: //success
-        connectionSuccess = ConnectionSuccess.readSuccess(getX11Input());
+        setupStruct = SetupStruct.readSetupStruct(getX11Input());
         break;
       case 2: //authenticate
+        SetupAuthenticateStruct authenticate = SetupAuthenticateStruct.readSetupAuthenticateStruct(getX11Input());
+        throw new UnsupportedOperationException("authenticate not supported " + authenticate);
       default:
-        throw new UnsupportedOperationException("authenticate not supported");
+        throw new UnsupportedOperationException(result + " not supported");
     }
   }
 
@@ -98,6 +107,15 @@ public class X11Connection implements AutoCloseable {
 
   public static X11Connection connect() throws IOException {
     DisplayName name = DisplayName.standard();
+    List<XAuthority> authorities = getAuthorities(getXAuthorityFile());
+    Optional<XAuthority> authority = getAuthority(authorities, name);
+    if(!authority.isPresent()) {
+      throw new IllegalStateException("could not find authority for environment");
+    }
+    return connect(name, authority.get());
+  }
+
+  public static X11Connection connect(DisplayName name) throws IOException {
     List<XAuthority> authorities = getAuthorities(getXAuthorityFile());
     Optional<XAuthority> authority = getAuthority(authorities, name);
     if(!authority.isPresent()) {

@@ -112,15 +112,19 @@ public class XAuthority {
         case WILD:
           return Optional.of(auth);
         default:
-          InetAddress authAddress = InetAddress.getByName(new String(auth.getAddress(), StandardCharsets.UTF_8));
           InetAddress hostNameAddress;
           if(displayName.getHostName() == null || displayName.getHostName().equals("localhost")) {
             hostNameAddress = InetAddress.getLocalHost();
           } else {
             hostNameAddress = InetAddress.getByName(displayName.getHostName());
           }
-          if(authAddress.equals(hostNameAddress)) {
-            return Optional.of(auth);
+          try {
+            InetAddress authAddress = InetAddress.getByName(new String(auth.getAddress(), StandardCharsets.UTF_8));
+            if(authAddress.equals(hostNameAddress)) {
+              return Optional.of(auth);
+            }
+          } catch (UnknownHostException e) {
+            //go to next authority
           }
           break;
       }

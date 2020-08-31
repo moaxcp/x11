@@ -13,17 +13,22 @@ class X11OutputStream implements X11Output {
   }
 
   @Override
-  public void writeByte(int b) throws IOException {
+  public void writeBool(boolean bool) throws IOException {
+    out.writeByte(bool ? 1 : 0);
+  }
+
+  @Override
+  public void writeByte(byte b) throws IOException {
     out.write(b);
   }
 
   @Override
-  public void writeInt8(int int8) throws IOException {
-    writeByte(int8);
+  public void writeInt8(byte int8) throws IOException {
+    out.writeByte(int8);
   }
 
   @Override
-  public void writeInt16(int int16) throws IOException {
+  public void writeInt16(short int16) throws IOException {
     out.writeShort(int16);
   }
 
@@ -33,13 +38,39 @@ class X11OutputStream implements X11Output {
   }
 
   @Override
-  public void writeCard8(int card8) throws IOException {
+  public void writeInt32(int[] int32) throws IOException {
+    for(int i : int32) {
+      writeInt32(i);
+    }
+  }
+
+  @Override
+  public void writeInt64(long int64) throws IOException {
+    out.writeLong(int64);
+  }
+
+  @Override
+  public void writeCard8(byte card8) throws IOException {
     out.writeByte(card8);
   }
 
   @Override
-  public void writeCard16(int card16) throws IOException {
+  public void writeCard8(byte[] card8) throws IOException {
+    for(byte i : card8) {
+      writeCard8(i);
+    }
+  }
+
+  @Override
+  public void writeCard16(short card16) throws IOException {
     out.writeShort(card16);
+  }
+
+  @Override
+  public void writeCard16(short[] card16) throws IOException {
+    for(short i : card16) {
+      writeCard16(i);
+    }
   }
 
   @Override
@@ -48,18 +79,41 @@ class X11OutputStream implements X11Output {
   }
 
   @Override
+  public void writeCard32(int[] card32) throws IOException {
+    for(int i : card32) {
+      writeCard32(i);
+    }
+  }
+
+  @Override
+  public void writeCard64(long card64) throws IOException {
+    out.writeLong(card64);
+  }
+
+  @Override
+  public void writeChar(byte[] string) throws IOException {
+    writeByte(string);
+  }
+
+  @Override
   public void writeString8(String string8) throws IOException {
     writeString8(string8.getBytes(StandardCharsets.US_ASCII));
   }
 
   @Override
-  public void writeString8(byte[] string8) throws IOException {
-    out.write(string8);
+  public void writeByte(byte[] bytes) throws IOException {
+    for(byte i : bytes) {
+      writeByte(i);
+    }
   }
 
   @Override
-  public void writePad(int forLength) throws IOException {
-    out.write(new byte[(4 - forLength % 4) % 4]);
+  public void writeVoid(byte[] bytes) throws IOException {
+    writeByte(bytes);
+  }
+
+  public void writeString8(byte[] string8) throws IOException {
+    out.write(string8);
   }
 
   public void flush() throws IOException {

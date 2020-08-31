@@ -3,6 +3,7 @@ plugins {
     id 'io.freefair.lombok' version '5.0.1'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
     id 'com.github.moaxcp.x11protocol'
+    id 'java-test-fixtures'
 }
 
 java {
