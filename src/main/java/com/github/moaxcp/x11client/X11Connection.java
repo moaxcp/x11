@@ -49,7 +49,7 @@ public class X11Connection implements AutoCloseable {
     out = new X11OutputStream(socket.getOutputStream());
     sendConnectionSetup();
     in.mark(1);
-    int result = in.readInt8();
+    byte result = in.readInt8();
     in.reset();
     switch(result) {
       case 0: //failure

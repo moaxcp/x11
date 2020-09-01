@@ -128,11 +128,6 @@ class X11InputStream implements X11Input {
     return readByte(length);
   }
 
-  @Override
-  public void readPad(int forLength) throws IOException {
-    readByte((4 - forLength % 4) % 4);
-  }
-
   public void close() throws IOException {
     in.close();
   }
