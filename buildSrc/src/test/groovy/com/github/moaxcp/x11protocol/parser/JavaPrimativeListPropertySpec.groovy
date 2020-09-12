@@ -4,7 +4,7 @@ import com.github.moaxcp.x11protocol.XmlSpec
 import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.TypeName
 
-import static com.github.moaxcp.x11protocol.parser.JavaPrimativeListProperty.javaPrimativeListProperty
+import static com.github.moaxcp.x11protocol.parser.JavaPrimativeListProperty.javaPrimativeListProperty 
 
 class JavaPrimativeListPropertySpec extends XmlSpec {
     def create() {

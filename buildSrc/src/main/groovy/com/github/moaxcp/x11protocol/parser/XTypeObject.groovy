@@ -92,7 +92,7 @@ abstract class XTypeObject extends XType implements XTypeUnit {
     }
 
     @Override
-    JavaTypeProperty getJavaProperty(XUnitField field) {
+    JavaTypeProperty getJavaProperty(JavaType javaType, XUnitField field) {
         return javaTypeProperty(field)
     }
 

@@ -47,21 +47,26 @@ class JavaEnumListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getSize() {
-        if(ioTypeName == TypeName.BYTE) {
-            return CodeBlock.of('1 * $L.size()', name)
+        switch(x11Primative) {
+            case 'BOOL':
+            case 'byte':
+            case 'BYTE':
+            case 'INT8':
+            case 'CARD8':
+            case 'char':
+                return CodeBlock.of('1 * $L.size()', name)
+            case 'INT16':
+            case 'CARD16':
+                return CodeBlock.of('2 * $L.size()', name)
+            case 'INT32':
+            case 'CARD32':
+            case 'float':
+            case 'fd':
+                return CodeBlock.of('4 * $L.size()', name)
+            case 'CARD64':
+            case 'double':
+                return CodeBlock.of('8 * $L.size()', name)
         }
-        if(ioTypeName == TypeName.SHORT) {
-            return CodeBlock.of('2 * $L.size()', name)
-        }
-        if(ioTypeName == TypeName.CHAR) {
-            return CodeBlock.of('2 * $L.size()', name)
-        }
-        if(ioTypeName == TypeName.INT) {
-            return CodeBlock.of('4 * $L.size()', name)
-        }
-        if(ioTypeName == TypeName.LONG) {
-            return CodeBlock.of('8 * $L.size()', name)
-        }
-        throw new UnsupportedOperationException("type not supported $ioTypeName")
+        throw new UnsupportedOperationException("type not supported $x11Primative")
     }
 }

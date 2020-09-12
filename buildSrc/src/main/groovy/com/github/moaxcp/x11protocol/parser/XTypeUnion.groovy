@@ -48,7 +48,7 @@ class XTypeUnion extends XTypeObject {
     }
     
     @Override
-    JavaTypeProperty getJavaProperty(XUnitField field) {
+    JavaTypeProperty getJavaProperty(JavaType javaType, XUnitField field) {
         if(name == 'ClientMessageData') {
             return javaClientMessageDataUnionProperty(field)
         }

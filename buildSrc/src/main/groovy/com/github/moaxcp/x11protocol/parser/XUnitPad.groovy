@@ -5,6 +5,6 @@ class XUnitPad implements XUnit {
 
     @Override
     JavaPad getJavaUnit(JavaType javaType) {
-        return new JavaPad(bytes:bytes)
+        return new JavaPad(javaType: javaType, xUnit:this, bytes:bytes)
     }
 }

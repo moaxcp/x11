@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
 import static com.github.moaxcp.x11protocol.parser.JavaPrimativeListProperty.javaPrimativeListProperty
-import static com.github.moaxcp.x11protocol.parser.JavaPrimativeProperty.javaPrimativeProperty
 import static com.github.moaxcp.x11protocol.parser.JavaPrimativeStringListProperty.javaPrimativeStringListProperty
 
 class XTypePrimative extends XType {
@@ -11,8 +10,8 @@ class XTypePrimative extends XType {
     }
 
     @Override
-    JavaPrimativeProperty getJavaProperty(XUnitField field) {
-        return javaPrimativeProperty(field)
+    JavaPrimativeProperty getJavaProperty(JavaType javaType, XUnitField field) {
+        return new JavaPrimativeProperty(javaType: javaType, x11Field: field)
     }
 
     @Override

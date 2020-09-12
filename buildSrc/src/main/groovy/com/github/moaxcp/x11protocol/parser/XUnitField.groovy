@@ -14,7 +14,6 @@ class XUnitField implements XUnit {
     String altEnumType
     String maskType
     String altMaskType
-    boolean readOnly
 
     static XUnitField xUnitField(XResult result, Node node) {
         String fieldName = node.attributes().get('name')
@@ -30,8 +29,7 @@ class XUnitField implements XUnit {
             enumType:fieldEnum,
             altEnumType: fieldAltEnum,
             maskType:fieldMask,
-            altMaskType: fieldAltMask,
-            readOnly: fieldName == 'value_mask'
+            altMaskType: fieldAltMask
         )
     }
 

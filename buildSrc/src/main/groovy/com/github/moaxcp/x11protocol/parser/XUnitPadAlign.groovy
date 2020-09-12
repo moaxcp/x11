@@ -5,6 +5,6 @@ class XUnitPadAlign implements XUnit {
 
     @Override
     JavaPadAlign getJavaUnit(JavaType javaType) {
-        return new JavaPadAlign(align: align)
+        return new JavaPadAlign(javaType: javaType, xUnit: this, align: align)
     }
 }

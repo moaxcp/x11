@@ -5,7 +5,6 @@ import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.parser.JavaEnum.javaEnum
 import static com.github.moaxcp.x11protocol.parser.JavaEnumListProperty.javaEnumListProperty
-import static com.github.moaxcp.x11protocol.parser.JavaEnumProperty.javaEnumProperty
 
 class XTypeEnum extends XType implements XTypeUnit {
     List<XTypeEnumItem> items = []
@@ -33,8 +32,8 @@ class XTypeEnum extends XType implements XTypeUnit {
     }
 
     @Override
-    JavaProperty getJavaProperty(XUnitField field) {
-        return javaEnumProperty(field)
+    JavaProperty getJavaProperty(JavaType javaType, XUnitField field) {
+        return new JavaEnumProperty(javaType: javaType, x11Field: field)
     }
 
     @Override

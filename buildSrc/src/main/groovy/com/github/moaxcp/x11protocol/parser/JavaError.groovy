@@ -13,7 +13,7 @@ class JavaError extends JavaBaseObject {
         String simpleName = getEventJavaName(error.name)
 
         JavaError javaError = new JavaError(
-            superTypes: error.superTypes + ClassName.get(error.basePackage, 'XEvent'),
+            superTypes: error.superTypes + ClassName.get(error.basePackage, 'XError'),
             basePackage: error.basePackage,
             javaPackage: error.javaPackage,
             simpleName:simpleName,
@@ -37,8 +37,6 @@ class JavaError extends JavaBaseObject {
         typeBuilder.addField(FieldSpec.builder(TypeName.BYTE, 'NUMBER', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
             .initializer('$L', number)
             .build())
-        typeBuilder.addField(FieldSpec.builder(TypeName.BOOLEAN, 'sentEvent', Modifier.PRIVATE)
-            .build())
         super.addFields(typeBuilder)
     }
 
@@ -54,12 +52,6 @@ class JavaError extends JavaBaseObject {
     }
 
     @Override
-    void addReadParameters(MethodSpec.Builder methodBuilder) {
-        super.addReadParameters(methodBuilder)
-        methodBuilder.addParameter(ParameterSpec.builder(TypeName.BOOLEAN, 'sentEvent').build())
-    }
-
-    @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
         super.addWriteStatements(methodBuilder)
         //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
@@ -70,7 +62,6 @@ class JavaError extends JavaBaseObject {
 
     @Override
     void addSetterStatements(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addStatement('$L.$L($L)', 'javaObject', 'setSentEvent', 'sentEvent')
         super.addSetterStatements(methodBuilder)
         //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
         methodBuilder.beginControlFlow('if(javaObject.getSize() < 32)')

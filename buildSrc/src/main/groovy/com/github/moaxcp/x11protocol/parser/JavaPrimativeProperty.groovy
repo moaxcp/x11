@@ -11,17 +11,33 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.*
  * for x11 primative properties
  */
 class JavaPrimativeProperty extends JavaProperty {
-    String name
-    String x11Primative
-    TypeName memberTypeName
-    TypeName maskTypeName
-    boolean readOnly
-    boolean localOnly
     String lengthOfField
 
     @Override
     TypeName getTypeName() {
         return memberTypeName
+    }
+
+    TypeName getMemberTypeName() {
+        if(!x11Primatives.contains(x11Field.resolvedType.name)) {
+        throw new IllegalStateException("Could not find ${x11Field.resolvedType.name} in primative types $x11Primatives")
+    }
+        return x11PrimativeToJavaTypeName(x11Field.resolvedType.name)
+    }
+
+    TypeName getMaskTypeName() {
+        if(x11Field.maskType) {
+            XType resolvedMaskType = x11Field.resolvedMaskType
+            if(!x11Primatives.contains(resolvedMaskType.name)) {
+                throw new IllegalStateException("Could not find ${resolvedMaskType.name} in primative types $x11Primatives")
+            }
+            return getEnumTypeName(resolvedMaskType.javaPackage, resolvedMaskType.name)
+        }
+        return null
+    }
+
+    boolean isReadOnly() {
+        return getMaskTypeName()
     }
 
     @Override
@@ -45,7 +61,7 @@ class JavaPrimativeProperty extends JavaProperty {
 
     @Override
     CodeBlock getReadCode() {
-        return declareAndInitializeTo("in.read${fromUpperUnderscoreToUpperCamel(x11Primative)}()")
+        return declareAndInitializeTo("in.read${fromUpperUnderscoreToUpperCamel(x11Type)}()")
     }
 
     @Override
@@ -58,54 +74,34 @@ class JavaPrimativeProperty extends JavaProperty {
                 builder.addStatement('$1T $2L = $3L.length()', memberTypeName, name, lengthOfField)
             }
             return builder
-                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)")
+                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}($name)")
                 .build()
         }
-        return CodeBlock.builder().addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)").build()
+        return CodeBlock.builder().addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}($name)").build()
     }
 
     @Override
     CodeBlock getSize() {
-        if(memberTypeName == TypeName.BOOLEAN) {
-            return CodeBlock.of('1')
+        switch(x11Type) {
+            case 'BOOL':
+            case 'byte':
+            case 'BYTE':
+            case 'INT8':
+            case 'CARD8':
+            case 'char':
+                return CodeBlock.of('1')
+            case 'INT16':
+            case 'CARD16':
+                return CodeBlock.of('2')
+            case 'INT32':
+            case 'CARD32':
+            case 'float':
+            case 'fd':
+                return CodeBlock.of('4')
+            case 'CARD64':
+            case 'double':
+                return CodeBlock.of('8')
         }
-        if(memberTypeName == TypeName.BYTE) {
-            return CodeBlock.of('1')
-        }
-        if(memberTypeName == TypeName.SHORT) {
-            return CodeBlock.of('2')
-        }
-        if(memberTypeName == TypeName.CHAR) {
-            return CodeBlock.of('1')
-        }
-        if(memberTypeName == TypeName.INT) {
-            return CodeBlock.of('4')
-        }
-        if(memberTypeName == TypeName.LONG) {
-            return CodeBlock.of('8')
-        }
-        throw new UnsupportedOperationException("type not supported $memberTypeName")
-    }
-
-    static JavaPrimativeProperty javaPrimativeProperty(XUnitField field) {
-        XType resolvedType = field.resolvedType
-        if(!x11Primatives.contains(resolvedType.name)) {
-            throw new IllegalArgumentException("Could not find ${resolvedType.name} in primative types $x11Primatives")
-        }
-        TypeName maskTypeName = null
-        if(field.maskType) {
-            XTypeEnum resolvedMaskType = field.resolvedMaskType
-            maskTypeName = getEnumTypeName(resolvedMaskType.javaPackage, resolvedMaskType.name)
-        }
-
-        String x11Primative = resolvedType.name
-
-        return new JavaPrimativeProperty(
-            name:convertX11VariableNameToJava(field.name),
-            x11Primative:x11Primative,
-            memberTypeName:x11PrimativeToJavaTypeName(resolvedType.name),
-            maskTypeName:maskTypeName,
-            readOnly: field.readOnly
-        )
+        throw new UnsupportedOperationException("type not supported $x11Primative")
     }
 }

@@ -3,32 +3,31 @@ package com.github.moaxcp.x11protocol.parser
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
-import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
-import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumTypeName
-import static com.github.moaxcp.x11protocol.generator.Conventions.getX11Primatives
-import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToJavaTypeName
-
+import static com.github.moaxcp.x11protocol.generator.Conventions.*
 /**
  * for converting fields that have an enum set
  */
 class JavaEnumProperty extends JavaProperty {
-    String name
-    String x11Primative
     TypeName memberTypeName
     TypeName ioTypeName
-    boolean readOnly
-    boolean localOnly
 
     @Override
     TypeName getTypeName() {
         return memberTypeName
     }
 
+    TypeName getMemberTypeName() {
+        getEnumTypeName(x11Field.resolvedEnumType.javaPackage, x11Field.resolvedEnumType.name)
+    }
+
+    TypeName getIoTypeName() {
+        x11PrimativeToJavaTypeName(x11Field.resolvedType.name)
+    }
+
     @Override
     CodeBlock getReadCode() {
         return CodeBlock.builder()
-            .addStatement("\$1T \$2L = \$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Primative)}())", memberTypeName, name)
+            .addStatement("\$1T \$2L = \$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Type)}())", memberTypeName, name)
             .build()
     }
 
@@ -36,45 +35,37 @@ class JavaEnumProperty extends JavaProperty {
     CodeBlock getWriteCode() {
         if(ioTypeName != TypeName.INT) {
             return CodeBlock.builder()
-                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}((\$T) \$L.getValue())", ioTypeName, name)
+                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}((\$T) \$L.getValue())", ioTypeName, name)
                 .build()
         } else {
             return CodeBlock.builder()
-                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}(\$L.getValue())", name)
+                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}(\$L.getValue())", name)
                 .build()
         }
     }
 
     @Override
     CodeBlock getSize() {
-        if(ioTypeName == TypeName.BYTE) {
-            return CodeBlock.of('1')
+        switch(x11Type) {
+            case 'BOOL':
+            case 'byte':
+            case 'BYTE':
+            case 'INT8':
+            case 'CARD8':
+            case 'char':
+                return CodeBlock.of('1')
+            case 'INT16':
+            case 'CARD16':
+                return CodeBlock.of('2')
+            case 'INT32':
+            case 'CARD32':
+            case 'float':
+            case 'fd':
+                return CodeBlock.of('4')
+            case 'CARD64':
+            case 'double':
+                return CodeBlock.of('8')
         }
-        if(ioTypeName == TypeName.SHORT) {
-            return CodeBlock.of('2')
-        }
-        if(ioTypeName == TypeName.CHAR) {
-            return CodeBlock.of('2')
-        }
-        if(ioTypeName == TypeName.INT) {
-            return CodeBlock.of('4')
-        }
-        if(ioTypeName == TypeName.LONG) {
-            return CodeBlock.of('8')
-        }
-        throw new UnsupportedOperationException("type not supported $memberTypeName")
-    }
-
-    static JavaEnumProperty javaEnumProperty(XUnitField field) {
-        XType resolvedType = field.resolvedType
-        if(!x11Primatives.contains(resolvedType.name)) {
-            throw new IllegalArgumentException("Could not find ${resolvedType.name} in primative types $x11Primatives")
-        }
-        return new JavaEnumProperty(
-            name:convertX11VariableNameToJava(field.name),
-            x11Primative:resolvedType.name,
-            memberTypeName:getEnumTypeName(field.resolvedEnumType.javaPackage, field.resolvedEnumType.name),
-            ioTypeName:x11PrimativeToJavaTypeName(resolvedType.name)
-        )
+        throw new UnsupportedOperationException("type not supported $x11Type")
     }
 }
