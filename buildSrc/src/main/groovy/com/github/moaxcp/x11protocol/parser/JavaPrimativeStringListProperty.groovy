@@ -1,36 +1,25 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.TypeName
+import com.squareup.javapoet.TypeName 
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
-import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToJavaTypeName
-
-class JavaPrimativeStringListProperty extends JavaListProperty {
-    String x11Primative
-
-    static JavaPrimativeStringListProperty javaPrimativeStringListProperty(JavaType javaType, XUnitListField field) {
-        XType resolvedType = field.resolvedType
-        if(resolvedType.name != 'char') {
+class JavaPrimativeStringListProperty extends JavaPrimativeListProperty {
+    
+    JavaPrimativeStringListProperty(JavaType javaType, XUnitListField field) {
+        super(javaType, field)
+    }
+    
+    @Override
+    TypeName getTypeName() {
+        if(x11Field.resolvedType.name != 'char') {
             throw new IllegalArgumentException("Only char is supported. Got ${resolvedType.name}")
         }
+        return ClassName.get(String.class)
+    }
 
-        String x11Primative = resolvedType.name
-        TypeName baseType = x11PrimativeToJavaTypeName(resolvedType.name)
-        TypeName typeName = ClassName.get(String.class)
-
-        JavaPrimativeStringListProperty property = new JavaPrimativeStringListProperty(
-            name:convertX11VariableNameToJava(field.name),
-            x11Primative:x11Primative,
-            baseTypeName: baseType,
-            typeName: typeName,
-            readOnly: field.readOnly
-        )
-
-        property.lengthExpression = ExpressionFactory.getExpression(javaType, field.lengthExpression)
-        return property
+    static JavaPrimativeStringListProperty javaPrimativeStringListProperty(JavaType javaType, XUnitListField field) {
+        return new JavaPrimativeStringListProperty(javaType, field)
     }
 
     @Override

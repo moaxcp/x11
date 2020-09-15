@@ -26,11 +26,12 @@ class JavaEnumPropertySpec extends XmlSpec {
         XUnitField field = new XUnitField(result: result, name: 'mask', type: 'CARD32', enumType: 'EventMask')
 
         when:
-        JavaEnumProperty property = javaEnumProperty(field)
+        JavaType javaType = Mock(JavaType)
+        JavaEnumProperty property = javaEnumProperty(javaType, field)
 
         then:
         property.name == 'mask'
-        property.x11Primative == 'CARD32'
+        property.x11Type == 'CARD32'
         property.memberTypeName == ClassName.get(result.javaPackage, 'EventMaskEnum')
         property.typeName == ClassName.get(result.javaPackage, 'EventMaskEnum')
         property.ioTypeName == TypeName.INT

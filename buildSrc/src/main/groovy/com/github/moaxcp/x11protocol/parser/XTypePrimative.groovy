@@ -11,11 +11,11 @@ class XTypePrimative extends XType {
 
     @Override
     JavaPrimativeProperty getJavaProperty(JavaType javaType, XUnitField field) {
-        return new JavaPrimativeProperty(javaType: javaType, x11Field: field)
+        return new JavaPrimativeProperty(javaType, field)
     }
 
     @Override
-    JavaListProperty getJavaListProperty(JavaType javaType, XUnitListField field) {
+    JavaListProperty getJavaProperty(JavaType javaType, XUnitListField field) {
         if(field.resolvedType.name == 'char') {
             return javaPrimativeStringListProperty(javaType, field)
         }

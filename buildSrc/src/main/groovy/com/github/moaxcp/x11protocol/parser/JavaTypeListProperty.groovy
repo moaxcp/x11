@@ -1,33 +1,40 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
+
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
 
 class JavaTypeListProperty extends JavaListProperty {
-    String basePackage
+
+    JavaTypeListProperty(JavaType javaType, XUnitListField field) {
+        super(javaType, field)
+    }
 
     static JavaTypeListProperty javaTypeListProperty(JavaType javaType, XUnitListField field) {
-        XType resolvedType = field.resolvedType
-        TypeName baseTypeName
-        if(resolvedType instanceof XTypeStruct) {
-            baseTypeName = getStructTypeName(resolvedType.javaPackage, resolvedType.name)
+        return new JavaTypeListProperty(javaType, field)
+    }
+
+    String getBasePackage() {
+        return javaType.basePackage
+    }
+
+    @Override
+    ClassName getBaseTypeName() {
+        XType type = x11Field.resolvedType
+        if(type instanceof XTypeStruct) {
+            return getStructTypeName(type.javaPackage, type.name)
         } else { //else Request/Reply/Event
-            throw new UnsupportedOperationException("not supported $resolvedType")
+            throw new UnsupportedOperationException("not supported ${type.name}")
         }
-        TypeName typeName = ParameterizedTypeName.get(ClassName.get(List), baseTypeName)
-        return new JavaTypeListProperty(
-            basePackage: javaType.basePackage,
-            name:convertX11VariableNameToJava(field.name),
-            baseTypeName: baseTypeName,
-            typeName: typeName,
-            lengthExpression: ExpressionFactory.getExpression(javaType, field.lengthExpression)
-        )
+    }
+
+    @Override
+    TypeName getTypeName() {
+        return ParameterizedTypeName.get(ClassName.get(List), baseTypeName)
     }
 
     @Override

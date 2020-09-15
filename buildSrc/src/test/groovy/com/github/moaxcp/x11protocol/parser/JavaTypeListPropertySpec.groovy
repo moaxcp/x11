@@ -17,32 +17,33 @@ class JavaTypeListPropertySpec extends XmlSpec {
                 field(type:'CARD8', name:'scanline_pad')
                 pad(bytes:5)
             }
+            struct(name:'Setup') {
+                field(type:'CARD8', name:'pixmap_formats_len')
+                list(type:'FORMAT', name:'pixmap_formats') {
+                    fieldref('pixmap_formats_len')
+                }
+            }
         }
         addChildNodes()
-        XUnitListField field = new XUnitListField(
-            result:result,
-            name: 'formats',
-            type: 'FORMAT',
-            lengthExpression: new XmlSlurper().parseText('<value>20</value>').nodeIterator().next()
-        )
-        JavaType javaType = Mock(JavaType)
+        JavaStruct struct = result.resolveXType('Setup').javaType
+
 
         when:
-        JavaTypeListProperty property = javaTypeListProperty(javaType, field)
+        JavaTypeListProperty property = struct.getField('pixmapFormats')
 
         then:
-        property.name == 'formats'
-        property.baseTypeName == ClassName.get(field.result.javaPackage, 'FormatStruct')
+        property.name == 'pixmapFormats'
+        property.baseTypeName == ClassName.get(result.javaPackage, 'FormatStruct')
         property.typeName == ParameterizedTypeName.get(ClassName.get(List), property.baseTypeName)
-        property.lengthExpression.expression.toString() == '20'
+        property.lengthExpression.expression.toString() == 'pixmapFormatsLen'
         property.readCode.toString() == '''\
-            java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> formats = new java.util.ArrayList<>();
-            for(int i = 0; i < 20; i++) {
-              formats.add(FormatStruct.readFormatStruct(in));
+            java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> pixmapFormats = new java.util.ArrayList<>();
+            for(int i = 0; i < pixmapFormatsLen; i++) {
+              pixmapFormats.add(FormatStruct.readFormatStruct(in));
             }
         '''.stripIndent()
         property.writeCode.toString() == '''\
-            for(com.github.moaxcp.x11client.protocol.xproto.FormatStruct t : formats) {
+            for(com.github.moaxcp.x11client.protocol.xproto.FormatStruct t : pixmapFormats) {
               t.write(out);
             }
         '''.stripIndent()

@@ -2,7 +2,8 @@ package com.github.moaxcp.x11protocol.parser.expression
 
 import com.github.moaxcp.x11protocol.parser.JavaPrimativeProperty
 import com.github.moaxcp.x11protocol.parser.JavaType
-import com.squareup.javapoet.TypeName
+import com.github.moaxcp.x11protocol.parser.XResult
+import com.github.moaxcp.x11protocol.parser.XUnitField
 import spock.lang.Specification
 
 class AddExpressionSpec extends Specification {
@@ -27,11 +28,11 @@ class AddExpressionSpec extends Specification {
 
     def 'nested subtract and multiply expression'() {
         given:
+        XResult xResult = new XResult()
         JavaType javaType = Mock(JavaType)
         javaType.getField('a') >> new JavaPrimativeProperty(
-            name: 'a',
-            x11Primative: 'CARD8',
-            memberTypeName: TypeName.BYTE
+            javaType,
+            new XUnitField(result: xResult, name: 'a', type: 'CARD8')
         )
         AddExpression expression = new AddExpression(expressions: [
             new ValueExpression(value:7),

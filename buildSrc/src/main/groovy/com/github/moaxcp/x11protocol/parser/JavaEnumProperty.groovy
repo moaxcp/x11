@@ -8,8 +8,14 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.*
  * for converting fields that have an enum set
  */
 class JavaEnumProperty extends JavaProperty {
-    TypeName memberTypeName
-    TypeName ioTypeName
+
+    JavaEnumProperty(JavaType javaType, XUnitField field) {
+        super(javaType, field)
+    }
+
+    static JavaEnumProperty javaEnumProperty(JavaType javaType, XUnitField field) {
+        return new JavaEnumProperty(javaType, field)
+    }
 
     @Override
     TypeName getTypeName() {

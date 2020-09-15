@@ -1,23 +1,20 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.CodeBlock
-
-import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
+import com.squareup.javapoet.CodeBlock 
 
 class JavaTypeProperty extends JavaProperty {
-    String name
-    ClassName typeName
-    boolean readOnly
-    boolean localOnly
+    
+    JavaTypeProperty(JavaType javaType, XUnitField field) {
+        super(javaType, field)
+    }
 
-    static JavaTypeProperty javaTypeProperty(XUnitField field) {
-        JavaType javaType = field.resolvedType.javaType
-        return new JavaTypeProperty(
-            name: convertX11VariableNameToJava(field.name),
-            typeName: javaType.className,
-            readOnly: field.readOnly
-        )
+    static JavaTypeProperty javaTypeProperty(JavaType javaType, XUnitField field) {
+        return new JavaTypeProperty(javaType, field)
+    }
+
+    ClassName getTypeName() {
+        return x11Field.resolvedType.javaType.className
     }
 
     @Override

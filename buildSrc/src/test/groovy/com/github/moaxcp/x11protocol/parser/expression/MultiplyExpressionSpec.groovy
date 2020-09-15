@@ -2,7 +2,8 @@ package com.github.moaxcp.x11protocol.parser.expression
 
 import com.github.moaxcp.x11protocol.parser.JavaPrimativeProperty
 import com.github.moaxcp.x11protocol.parser.JavaType
-import com.squareup.javapoet.TypeName
+import com.github.moaxcp.x11protocol.parser.XResult
+import com.github.moaxcp.x11protocol.parser.XUnitField
 import spock.lang.Specification
 
 class MultiplyExpressionSpec extends Specification {
@@ -16,13 +17,13 @@ class MultiplyExpressionSpec extends Specification {
 
     def 'nested addition'() {
         given:
+        XResult xResult = new XResult()
         JavaType javaType = Mock(JavaType)
         javaType.simpleName >> 'SimpleName'
         javaType.getField(_) >> {
             new JavaPrimativeProperty(
-                name: it[0],
-                x11Primative: 'CARD32',
-                memberTypeName: TypeName.INT
+                javaType,
+                new XUnitField(result: xResult, name: it[0], type: 'CARD32')
             )
         }
         MultiplyExpression expression = new MultiplyExpression(expressions:[
@@ -38,13 +39,13 @@ class MultiplyExpressionSpec extends Specification {
 
     def 'nested divide'() {
         given:
+        XResult xResult = new XResult()
         JavaType javaType = Mock(JavaType)
         javaType.simpleName >> 'SimpleName'
         javaType.getField(_) >> {
             new JavaPrimativeProperty(
-                name: it[0],
-                x11Primative: 'CARD32',
-                memberTypeName: TypeName.INT
+                javaType,
+                new XUnitField(result: xResult, name: it[0], type: 'CARD32')
             )
         }
         MultiplyExpression expression = new MultiplyExpression(expressions:[

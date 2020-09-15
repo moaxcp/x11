@@ -6,12 +6,20 @@ import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.*
-
 /**
  * for x11 primative properties
  */
 class JavaPrimativeProperty extends JavaProperty {
     String lengthOfField
+
+    JavaPrimativeProperty(Map map) {
+        super(map)
+        lengthOfField = map.lengthOfField
+    }
+    
+    JavaPrimativeProperty(JavaType javaType, XUnitField field) {
+        super(javaType, field)
+    }
 
     @Override
     TypeName getTypeName() {
@@ -28,9 +36,6 @@ class JavaPrimativeProperty extends JavaProperty {
     TypeName getMaskTypeName() {
         if(x11Field.maskType) {
             XType resolvedMaskType = x11Field.resolvedMaskType
-            if(!x11Primatives.contains(resolvedMaskType.name)) {
-                throw new IllegalStateException("Could not find ${resolvedMaskType.name} in primative types $x11Primatives")
-            }
             return getEnumTypeName(resolvedMaskType.javaPackage, resolvedMaskType.name)
         }
         return null

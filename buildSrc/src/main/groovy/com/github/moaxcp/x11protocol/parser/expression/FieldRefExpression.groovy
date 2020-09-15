@@ -1,14 +1,16 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
-import com.github.moaxcp.x11protocol.parser.*
+
+import com.github.moaxcp.x11protocol.parser.JavaListProperty
+import com.github.moaxcp.x11protocol.parser.JavaPrimativeProperty
+import com.github.moaxcp.x11protocol.parser.JavaProperty
+import com.github.moaxcp.x11protocol.parser.JavaType
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 import groovy.transform.EqualsAndHashCode
-import groovy.transform.ToString
 
 import static java.util.Objects.requireNonNull
 
-@ToString(includePackage = false)
 @EqualsAndHashCode
 class FieldRefExpression implements Expression {
     String fieldName

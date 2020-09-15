@@ -38,7 +38,7 @@ class JavaEnumListPropertySpec extends XmlSpec {
 
         then:
         property.name == 'masks'
-        property.x11Primative == 'CARD32'
+        property.x11Type == 'CARD32'
         property.baseTypeName == ClassName.get(field.result.javaPackage, 'EventMaskEnum')
         property.typeName == ParameterizedTypeName.get(ClassName.get(List), property.baseTypeName)
         property.ioTypeName == TypeName.INT

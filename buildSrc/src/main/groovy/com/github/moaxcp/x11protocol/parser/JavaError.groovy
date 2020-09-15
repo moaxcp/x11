@@ -6,7 +6,7 @@ import javax.lang.model.element.Modifier
 import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorTypeName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventJavaName
 
-class JavaError extends JavaBaseObject {
+class JavaError extends JavaObjectType {
     int number
 
     static JavaError javaError(XTypeError error) {

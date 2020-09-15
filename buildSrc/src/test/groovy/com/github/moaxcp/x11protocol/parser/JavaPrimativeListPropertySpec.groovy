@@ -4,33 +4,26 @@ import com.github.moaxcp.x11protocol.XmlSpec
 import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.TypeName
 
-import static com.github.moaxcp.x11protocol.parser.JavaPrimativeListProperty.javaPrimativeListProperty 
-
 class JavaPrimativeListPropertySpec extends XmlSpec {
     def create() {
         given:
-        XUnitListField field = new XUnitListField(
-            result:result,
-            name:'window_modifiers',
-            type:'CARD64',
-            lengthExpression: new XmlSlurper().parseText('<fieldref>num_window_modifiers</fieldref>').nodeIterator().next()
-        )
-        JavaType javaType = Mock(JavaType)
-        javaType.simpleName >> 'SimpleName'
-        javaType.getField(_) >> {
-            new JavaPrimativeProperty(
-                name: it[0],
-                x11Primative: 'CARD64',
-                memberTypeName: TypeName.LONG
-            )
+        xmlBuilder.xcb(header:'xproto') {
+            struct(name:'Window') {
+                field(name: 'num_window_modifiers', type: 'CARD64')
+                list(name: 'window_modifiers', type: 'CARD64') {
+                    fieldref('num_window_modifiers')
+                }
+            }
         }
+        addChildNodes()
+        JavaObjectType javaType = result.resolveXType('Window').javaType
 
         when:
-        JavaPrimativeListProperty property = javaPrimativeListProperty(javaType, field)
+        JavaPrimativeListProperty property = javaType.protocol[1]
 
         then:
         property.name == 'windowModifiers'
-        property.x11Primative == 'CARD64'
+        property.x11Type == 'CARD64'
         property.baseTypeName == TypeName.LONG
         property.typeName == ArrayTypeName.of(TypeName.LONG)
         property.lengthExpression.expression.toString() == 'numWindowModifiers'

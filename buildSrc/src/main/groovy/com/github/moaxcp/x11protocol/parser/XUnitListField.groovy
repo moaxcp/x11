@@ -2,35 +2,31 @@ package com.github.moaxcp.x11protocol.parser
 
 
 import groovy.util.slurpersupport.Node
-
+/**
+ * A list in the x11 protocol.
+ */
 class XUnitListField extends XUnitField {
-    Node lengthExpression
+    final Node lengthExpression
+
+    XUnitListField(Map map) {
+        super(map)
+        lengthExpression = map.lengthExpression
+    }
+
+    XUnitListField(XResult result, Node node) {
+        super(result, node)
+        lengthExpression = (Node) node.childNodes().next()
+    }
 
     static XUnitListField xUnitListField(XResult result, Node node) {
-        String fieldName = node.attributes().get('name')
-        String fieldType = node.attributes().get('type')
-        String fieldEnum = node.attributes().get('enum')
-        String fieldAltEnum = node.attributes().get('altenum')
-        String fieldMask = node.attributes().get('mask')
-        String fieldAltMask = node.attributes().get('altmask')
-        XUnitListField field = new XUnitListField(
-            result:result,
-            name:fieldName,
-            type:fieldType,
-            enumType:fieldEnum,
-            altEnumType: fieldAltEnum,
-            maskType:fieldMask,
-            altMaskType: fieldAltMask,
-            lengthExpression: (Node) node.childNodes().next()
-        )
-        return field
+        return new XUnitListField(result, node)
     }
 
     @Override
     JavaListProperty getJavaUnit(JavaType javaType) {
         if(enumType) {
-            return resolvedEnumType.getJavaListProperty(javaType, this)
+            return resolvedEnumType.getJavaProperty(javaType, this)
         }
-        return resolvedType.getJavaListProperty(javaType, this)
+        return resolvedType.getJavaProperty(javaType, this)
     }
 }

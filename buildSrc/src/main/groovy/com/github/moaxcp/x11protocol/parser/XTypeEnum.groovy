@@ -33,11 +33,11 @@ class XTypeEnum extends XType implements XTypeUnit {
 
     @Override
     JavaProperty getJavaProperty(JavaType javaType, XUnitField field) {
-        return new JavaEnumProperty(javaType: javaType, x11Field: field)
+        return new JavaEnumProperty(javaType, field)
     }
 
     @Override
-    JavaListProperty getJavaListProperty(JavaType javaType, XUnitListField field) {
+    JavaListProperty getJavaProperty(JavaType javaType, XUnitListField field) {
         return javaEnumListProperty(javaType, field)
     }
 }

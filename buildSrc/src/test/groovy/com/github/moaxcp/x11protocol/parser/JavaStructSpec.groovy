@@ -1,45 +1,28 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeSpec
 
 import static com.github.moaxcp.x11protocol.parser.JavaStruct.javaStruct
 
 class JavaStructSpec extends XmlSpec {
     def 'FormatStruct TypeSpec'() {
         given:
-        JavaStruct struct = new JavaStruct(
-            basePackage: result.basePackage,
-            simpleName:'FormatStruct',
-            superTypes: [ClassName.get(result.basePackage, 'XObject')],
-            className: ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'FormatStruct'),
-            protocol:[
-                new JavaPrimativeProperty(
-                    name: 'depth',
-                    x11Primative: 'CARD8',
-                    memberTypeName: TypeName.BYTE
-                ),
-                new JavaPrimativeProperty(
-                    name: 'bitsPerPixel',
-                    x11Primative: 'CARD8',
-                    memberTypeName: TypeName.BYTE
-                ),
-                new JavaPrimativeProperty(
-                    name: 'scanlinePad',
-                    x11Primative: 'CARD8',
-                    memberTypeName: TypeName.BYTE
-                ),
-                new JavaPad(bytes: 5)
-            ]
-        )
+        xmlBuilder.xcb(header:'xproto') {
+            struct(name:'Format') {
+                field(type: 'CARD8', name: 'depth')
+                field(type: 'CARD8', name: 'bitsPerPixel')
+                field(type: 'CARD8', name: 'scanlinePad')
+                pad(bytes:'5')
+            }
+        }
+        addChildNodes()
 
         when:
-        TypeSpec spec = struct.typeSpec
+        XTypeStruct struct = result.resolveXType('Format')
+        JavaStruct javaStruct = javaStruct(struct)
 
         then:
-        spec.toString() == '''\
+        javaStruct.typeSpec.toString() == '''\
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
@@ -79,42 +62,32 @@ class JavaStructSpec extends XmlSpec {
 
     def 'ScreenStruct TypeSpec'() {
         given:
-        JavaStruct struct = new JavaStruct(
-            basePackage: result.basePackage,
-            simpleName: 'ScreenStruct',
-            superTypes: [ClassName.get(result.basePackage, 'XObject')],
-            className: ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'ScreenStruct'),
-            protocol: [
-                new JavaPrimativeProperty(
-                    name: 'root',
-                    x11Primative: 'CARD32',
-                    memberTypeName: TypeName.INT
-                ),
-                new JavaPrimativeProperty(
-                    name: 'defaultColormap',
-                    x11Primative: 'CARD32',
-                    memberTypeName: TypeName.INT
-                ),
-                new JavaPrimativeProperty(
-                    name: 'currentInputMasks',
-                    x11Primative: 'CARD32',
-                    memberTypeName: TypeName.INT,
-                    maskTypeName: ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'EventMaskEnum')
-                ),
-                new JavaEnumProperty(
-                    name: 'backingStores',
-                    x11Primative: 'BYTE',
-                    ioTypeName: TypeName.BYTE,
-                    memberTypeName: ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'BackingStoreEnum')
-                )
-            ]
-        )
+        xmlBuilder.xcb(header:'xproto') {
+            'enum'(name:'EventMask') {
+                item(name:'NoEvent') {
+                    value('0')
+                }
+            }
+            'enum'(name:'BackingStore') {
+                item(name:'NotUseful') {
+                    value('0')
+                }
+            }
+            struct(name:'SCREEN') {
+                field(type:'CARD32', name:'root')
+                field(type:'CARD32', name:'default_colormap')
+                field(type:'CARD32', mask:'EventMask', name:'current_input_masks')
+                field(type:'BYTE', name:'backing_stores', enum:'BackingStore')
+            }
+        }
+        addChildNodes()
 
         when:
-        TypeSpec spec = struct.typeSpec
+        XTypeStruct struct = result.resolveXType('SCREEN')
+        JavaStruct javaStruct = javaStruct(struct)
 
         then:
-        spec.toString() == '''\
+        javaStruct.typeSpec.toString() == '''\
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor

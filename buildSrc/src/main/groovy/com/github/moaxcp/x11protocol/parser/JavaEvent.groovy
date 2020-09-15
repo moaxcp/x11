@@ -6,7 +6,7 @@ import javax.lang.model.element.Modifier
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventTypeName
 
-class JavaEvent extends JavaBaseObject {
+class JavaEvent extends JavaObjectType {
     int number
 
     static JavaEvent javaEvent(XTypeEvent event) {
@@ -21,14 +21,12 @@ class JavaEvent extends JavaBaseObject {
             number: event.number
         )
         javaEvent.protocol = [new JavaPrimativeProperty(
-            name: 'eventDetail',
-            x11Primative: 'CARD8',
-            memberTypeName: TypeName.BYTE
+            javaEvent,
+            new XUnitField(result: event.result, name:'event_detail', type: 'CARD8')
         ),
         new JavaPrimativeProperty(
-            name: 'sequenceNumber',
-            x11Primative: 'CARD16',
-            memberTypeName: TypeName.SHORT
+            javaEvent,
+            new XUnitField(result: event.result, name:'sequence_number', type: 'CARD16')
         )] + event.toJavaProtocol(javaEvent)
         return javaEvent
     }

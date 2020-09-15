@@ -1,53 +1,47 @@
 package com.github.moaxcp.x11protocol.parser
 
-
-import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
 import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.*
+import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
+import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToJavaTypeName
 
 class JavaPrimativeListProperty extends JavaListProperty {
-    String x11Primative
+
+    JavaPrimativeListProperty(JavaType javaType, XUnitListField field) {
+        super(javaType, field)
+    }
+
+    @Override
+    TypeName getBaseTypeName() {
+        return x11PrimativeToJavaTypeName(x11Field.resolvedType.name)
+    }
+
+    @Override
+    TypeName getTypeName() {
+        return ArrayTypeName.of(baseTypeName)
+    }
 
     static JavaPrimativeListProperty javaPrimativeListProperty(JavaType javaType, XUnitListField field) {
-        XType resolvedType = field.resolvedType
-        if(!x11Primatives.contains(resolvedType.name)) {
-            throw new IllegalArgumentException("Could not find ${resolvedType.name} in primative types $x11Primatives")
-        }
-
-        String x11Primative = resolvedType.name
-        TypeName baseType = x11PrimativeToJavaTypeName(resolvedType.name)
-        TypeName typeName = ArrayTypeName.of(baseType)
-
-        JavaPrimativeListProperty property = new JavaPrimativeListProperty(
-            name:convertX11VariableNameToJava(field.name),
-            x11Primative:x11Primative,
-            baseTypeName: baseType,
-            typeName: typeName,
-            readOnly: field.readOnly
-        )
-
-        property.lengthExpression = ExpressionFactory.getExpression(javaType, field.lengthExpression)
-        return property
+        return new JavaPrimativeListProperty(javaType, field)
     }
 
     @Override
     CodeBlock getReadCode() {
-        return declareAndInitializeTo("in.read${fromUpperUnderscoreToUpperCamel(x11Primative)}(${lengthExpression.expression})")
+        return declareAndInitializeTo("in.read${fromUpperUnderscoreToUpperCamel(x11Type)}(${lengthExpression.expression})")
     }
 
     @Override
     CodeBlock getWriteCode() {
         return CodeBlock.builder()
-            .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Primative)}($name)")
+            .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}($name)")
             .build()
     }
 
     @Override
     CodeBlock getSize() {
-        switch(x11Primative) {
+        switch(x11Type) {
             case 'BOOL':
             case 'byte':
             case 'BYTE':
@@ -67,6 +61,6 @@ class JavaPrimativeListProperty extends JavaListProperty {
             case 'double':
                 return CodeBlock.of('8 * $L.length', name)
         }
-        throw new UnsupportedOperationException("type not supported $x11Primative")
+        throw new UnsupportedOperationException("type not supported $x11Type")
     }
 }

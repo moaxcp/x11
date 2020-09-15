@@ -1,11 +1,8 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
-
 import com.squareup.javapoet.CodeBlock
 import groovy.transform.EqualsAndHashCode
-import groovy.transform.ToString
 
-@ToString(includePackage = false)
 @EqualsAndHashCode
 class ParamRefExpression implements Expression {
     String paramName

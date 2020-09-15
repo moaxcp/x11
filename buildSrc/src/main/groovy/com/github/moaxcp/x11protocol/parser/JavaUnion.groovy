@@ -7,7 +7,7 @@ import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
-class JavaUnion extends JavaBaseObject {
+class JavaUnion extends JavaObjectType {
 
     static JavaUnion javaUnion(XTypeUnion union) {
         String simpleName = getUnionJavaName(union.name)

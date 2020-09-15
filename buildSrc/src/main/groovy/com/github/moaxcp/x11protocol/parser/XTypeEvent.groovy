@@ -8,7 +8,7 @@ class XTypeEvent extends XTypeObject {
     int number
 
     static XTypeEvent xTypeEvent(XResult result, Node node) {
-        XTypeEvent event = new XTypeEvent(basePackage: result.basePackage, javaPackage: result.javaPackage)
+        XTypeEvent event = new XTypeEvent(result: result, basePackage: result.basePackage, javaPackage: result.javaPackage)
         event.name = node.attributes().get('name')
         event.number = Integer.valueOf((String) node.attributes().get('number'))
         event.addUnits(result, node)
@@ -17,7 +17,7 @@ class XTypeEvent extends XTypeObject {
     }
     
     static XTypeEvent xTypeEventCopy(XResult result, Node node) {
-        XTypeEvent event = new XTypeEvent(basePackage: result.basePackage, javaPackage: result.javaPackage)
+        XTypeEvent event = new XTypeEvent(result: result, basePackage: result.basePackage, javaPackage: result.javaPackage)
         event.name = node.attributes().get('name')
         event.number = Integer.valueOf((String) node.attributes().get('number'))
         XTypeEvent ref = result.resolveXType((String) node.attributes().get('ref'))

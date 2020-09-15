@@ -6,7 +6,7 @@ import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToJavaTypeName
 
-abstract class JavaBaseObject implements JavaType {
+abstract class JavaObjectType implements JavaType {
     String basePackage
     String javaPackage
     String simpleName

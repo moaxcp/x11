@@ -5,7 +5,7 @@ import com.squareup.javapoet.ClassName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
 
-class JavaStruct extends JavaBaseObject {
+class JavaStruct extends JavaObjectType {
 
     static JavaStruct javaStruct(XTypeStruct struct) {
         String simpleName = getStructJavaName(struct.name)

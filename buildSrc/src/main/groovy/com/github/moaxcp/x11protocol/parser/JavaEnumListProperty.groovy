@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
+
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterizedTypeName
@@ -9,21 +9,30 @@ import com.squareup.javapoet.TypeName
 import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
 class JavaEnumListProperty extends JavaListProperty {
-    String x11Primative
-    TypeName ioTypeName
+    
+    JavaEnumListProperty(JavaType javaType, XUnitListField field) {
+        super(javaType, field)
+    }
+    @Override
+    TypeName getTypeName() {
+        return memberTypeName
+    }
+    
+    @Override
+    TypeName getBaseTypeName() {
+        return getEnumTypeName(x11Field.resolvedEnumType.javaPackage, x11Field.resolvedEnumType.name)
+    }
+
+    TypeName getMemberTypeName() {
+        return ParameterizedTypeName.get(ClassName.get(List), baseTypeName)
+    }
+
+    TypeName getIoTypeName() {
+        return x11PrimativeToJavaTypeName(x11Field.resolvedType.name)
+    }
 
     static JavaEnumListProperty javaEnumListProperty(JavaType javaType, XUnitListField field) {
-        XType resolvedType = field.resolvedType
-        TypeName baseTypeName = getEnumTypeName(field.result.javaPackage, field.resolvedEnumType.name)
-        TypeName typeName = ParameterizedTypeName.get(ClassName.get(List), baseTypeName)
-        return new JavaEnumListProperty(
-            name:convertX11VariableNameToJava(field.name),
-            x11Primative:resolvedType.name,
-            baseTypeName: baseTypeName,
-            typeName: typeName,
-            ioTypeName:x11PrimativeToJavaTypeName(resolvedType.name),
-            lengthExpression: ExpressionFactory.getExpression(javaType, field.lengthExpression)
-        )
+        return new JavaEnumListProperty(javaType, field)
     }
 
     @Override
@@ -31,7 +40,7 @@ class JavaEnumListProperty extends JavaListProperty {
         return CodeBlock.builder()
             .addStatement('$1T $2L = new $3T<>($4L)', typeName, name, ArrayList.class, lengthExpression.expression)
             .beginControlFlow('for(int i = 0; i < $L; i++)', lengthExpression.expression)
-            .addStatement('$L.add($T.getByCode(in.read$L()))', name, baseTypeName, fromUpperUnderscoreToUpperCamel(x11Primative))
+            .addStatement('$L.add($T.getByCode(in.read$L()))', name, baseTypeName, fromUpperUnderscoreToUpperCamel(x11Type))
             .endControlFlow()
             .build()
     }
@@ -40,14 +49,14 @@ class JavaEnumListProperty extends JavaListProperty {
     CodeBlock getWriteCode() {
         return CodeBlock.builder()
             .beginControlFlow('for($T e : $L)', baseTypeName, name)
-            .addStatement('out.write$L(e.getValue())', fromUpperUnderscoreToUpperCamel(x11Primative))
+            .addStatement('out.write$L(e.getValue())', fromUpperUnderscoreToUpperCamel(x11Type))
             .endControlFlow()
             .build()
     }
 
     @Override
     CodeBlock getSize() {
-        switch(x11Primative) {
+        switch(x11Type) {
             case 'BOOL':
             case 'byte':
             case 'BYTE':
@@ -67,6 +76,6 @@ class JavaEnumListProperty extends JavaListProperty {
             case 'double':
                 return CodeBlock.of('8 * $L.size()', name)
         }
-        throw new UnsupportedOperationException("type not supported $x11Primative")
+        throw new UnsupportedOperationException("type not supported $x11Type")
     }
 }
