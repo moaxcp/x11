@@ -22,9 +22,6 @@ class JavaError extends JavaObjectType {
         )
         javaError.protocol = [new JavaPrimativeProperty(
             javaError,
-            new XUnitField(result: error.result, name: 'event_detail', type: 'CARD8')
-        ), new JavaPrimativeProperty(
-            javaError,
             new XUnitField(result: error.result, name: 'sequence_number', type:'CARD16')
         )] + error.toJavaProtocol(javaError)
         return javaError
@@ -32,7 +29,7 @@ class JavaError extends JavaObjectType {
 
     @Override
     void addFields(TypeSpec.Builder typeBuilder) {
-        typeBuilder.addField(FieldSpec.builder(TypeName.BYTE, 'NUMBER', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+        typeBuilder.addField(FieldSpec.builder(TypeName.BYTE, 'CODE', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
             .initializer('$L', number)
             .build())
         super.addFields(typeBuilder)
@@ -40,10 +37,10 @@ class JavaError extends JavaObjectType {
 
     @Override
     void addMethods(TypeSpec.Builder typeBuilder) {
-        typeBuilder.addMethod(MethodSpec.methodBuilder('getNumber')
+        typeBuilder.addMethod(MethodSpec.methodBuilder('getCode')
             .returns(TypeName.BYTE)
             .addModifiers(Modifier.PUBLIC)
-            .addStatement('return NUMBER')
+            .addStatement('return CODE')
             .build())
 
         super.addMethods(typeBuilder)
@@ -51,6 +48,7 @@ class JavaError extends JavaObjectType {
 
     @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
+        methodBuilder.addStatement('out.writeCard8(CODE)')
         super.addWriteStatements(methodBuilder)
         //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
         methodBuilder.beginControlFlow('if(getSize() < 32)')

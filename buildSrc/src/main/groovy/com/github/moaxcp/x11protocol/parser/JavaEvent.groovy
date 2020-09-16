@@ -60,7 +60,7 @@ class JavaEvent extends JavaObjectType {
 
     @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addStatement('out.writeCard8(sentEvent ? 10000000B & NUMBER : NUMBER)')
+        methodBuilder.addStatement('out.writeCard8(sentEvent ? 0b10000000 & NUMBER : NUMBER)')
         super.addWriteStatements(methodBuilder)
         //todo could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
         methodBuilder.beginControlFlow('if(getSize() < 32)')
