@@ -35,10 +35,10 @@ class JavaTypeListPropertySpec extends XmlSpec {
         property.name == 'pixmapFormats'
         property.baseTypeName == ClassName.get(result.javaPackage, 'FormatStruct')
         property.typeName == ParameterizedTypeName.get(ClassName.get(List), property.baseTypeName)
-        property.lengthExpression.expression.toString() == 'pixmapFormatsLen'
+        property.lengthExpression.expression.toString() == 'Byte.toUnsignedInt(pixmapFormatsLen)'
         property.readCode.toString() == '''\
             java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> pixmapFormats = new java.util.ArrayList<>();
-            for(int i = 0; i < pixmapFormatsLen; i++) {
+            for(int i = 0; i < Byte.toUnsignedInt(pixmapFormatsLen); i++) {
               pixmapFormats.add(FormatStruct.readFormatStruct(in));
             }
         '''.stripIndent()

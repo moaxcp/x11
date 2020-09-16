@@ -8,9 +8,14 @@ import static com.github.moaxcp.x11protocol.parser.JavaEnumListProperty.javaEnum
 
 class XTypeEnum extends XType implements XTypeUnit {
     List<XTypeEnumItem> items = []
+
+    XTypeEnum(Map map) {
+        super(map)
+        items = map.items ?: []
+    }
     
     static XTypeEnum xTypeEnum(XResult result, Node node) {
-        XTypeEnum xEnum = new XTypeEnum(name:node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
+        XTypeEnum xEnum = new XTypeEnum(result: result, name:node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
         node.childNodes().each { Node it ->
             if(it.name() == 'doc') {
                 return

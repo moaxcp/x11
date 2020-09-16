@@ -223,7 +223,7 @@ class JavaStructSpec extends XmlSpec {
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 boolean preserve = in.readBool();
                 byte nMapEntries = in.readCard8();
-                int[] preserveEntries = in.readInt32((preserve ? 1 : 0) * nMapEntries);
+                int[] preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
                 com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct();
                 javaObject.setPreserve(preserve);
                 javaObject.setNMapEntries(nMapEntries);

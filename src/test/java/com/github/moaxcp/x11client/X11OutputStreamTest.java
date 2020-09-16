@@ -83,8 +83,8 @@ public class X11OutputStreamTest {
   }
 
   @Test
-  void writePad() throws IOException {
-    out.writePad(9);
+  void writePadAlign() throws IOException {
+    out.writePadAlign(9);
     assertThat(byteOut.toByteArray())
         .hasSize(3)
         .containsExactly(0, 0, 0);

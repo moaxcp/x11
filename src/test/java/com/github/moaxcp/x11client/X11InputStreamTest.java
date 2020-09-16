@@ -92,11 +92,11 @@ public class X11InputStreamTest {
   }
 
   @Test
-  void readPad() throws IOException {
+  void readPadAlign() throws IOException {
     InputStream origin = mock(InputStream.class);
     X11InputStream in = new X11InputStream(origin);
     when(origin.read(any(), eq(0), eq(3))).thenReturn(3);
-    in.readPad(9);
+    in.readPadAlign(9);
     then(origin).should().read(captor.capture(), eq(0), eq(3));
     assertThat(captor.getValue()).hasSize(3);
   }

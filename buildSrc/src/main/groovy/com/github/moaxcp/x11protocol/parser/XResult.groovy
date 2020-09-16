@@ -27,13 +27,9 @@ class XResult {
     Map<String, XTypeEvent> events = [:]
     Map<String, XTypeError> errors = [:]
 
-    static Map<String, XTypePrimative> primatives = [:]
-
-    static {
-        primatives = Conventions.x11Primatives.collectEntries {
-            [(it):new XTypePrimative(name:it)]
+    Map<String, XTypePrimative> primatives = Conventions.x11Primatives.collectEntries {
+            [(it):new XTypePrimative(result:this, name:it)]
         }
-    }
 
     String getJavaPackage() {
         return "$basePackage.$header"

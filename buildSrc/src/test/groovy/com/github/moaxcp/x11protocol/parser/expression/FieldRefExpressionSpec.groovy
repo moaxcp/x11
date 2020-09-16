@@ -24,6 +24,6 @@ class FieldRefExpressionSpec extends Specification {
         FieldRefExpression expression = new FieldRefExpression(javaType: javaType, fieldName:'name')
 
         expect:
-        expression.getExpression().toString() == 'name'
+        expression.getExpression().toString() == 'Integer.toUnsignedLong(name)'
     }
 }

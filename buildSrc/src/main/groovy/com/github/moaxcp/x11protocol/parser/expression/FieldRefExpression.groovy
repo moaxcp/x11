@@ -39,6 +39,16 @@ class FieldRefExpression implements Expression {
             if(field.typeName == TypeName.BOOLEAN) {
                 return CodeBlock.of("($propertyName ? 1 : 0)")
             }
+            String x11Type = field.x11Type
+            if(x11Type == 'CARD8') {
+                return CodeBlock.of('Byte.toUnsignedInt($L)', propertyName)
+            }
+            if(x11Type == 'CARD16') {
+                return CodeBlock.of('Short.toUnsignedInt($L)', propertyName)
+            }
+            if(x11Type == 'CARD32') {
+                return CodeBlock.of('Integer.toUnsignedLong($L)', propertyName)
+            }
             return CodeBlock.of(propertyName)
         } else {
             throw new UnsupportedOperationException("field not supported ${field.name}")

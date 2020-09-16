@@ -12,9 +12,13 @@ import static com.github.moaxcp.x11protocol.parser.XUnitListField.xUnitListField
 import static com.github.moaxcp.x11protocol.parser.XUnitPadFactory.xUnitPad
 
 class XTypeUnion extends XTypeObject {
+
+    XTypeUnion(Map map) {
+        super(map)
+    }
+
     static XTypeUnion xTypeUnion(XResult result, Node node) {
-        XTypeUnion union = new XTypeUnion(basePackage: result.basePackage, javaPackage: result.javaPackage)
-        union.name = node.attributes().get('name')
+        XTypeUnion union = new XTypeUnion(result: result, name: node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
         node.childNodes().each { Node it ->
             switch(it.name()) {
                 case 'field':
@@ -50,8 +54,8 @@ class XTypeUnion extends XTypeObject {
     @Override
     JavaTypeProperty getJavaProperty(JavaType javaType, XUnitField field) {
         if(name == 'ClientMessageData') {
-            return javaClientMessageDataUnionProperty(field)
+            return javaClientMessageDataUnionProperty(javaType, field)
         }
-        return javaTypeProperty(field)
+        return javaTypeProperty(javaType, field)
     }
 }

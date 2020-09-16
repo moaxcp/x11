@@ -37,7 +37,7 @@ class DivideExpressionSpec extends Specification {
         String result = expression.expression.toString()
 
         then:
-        result == 'a / (b + c) / d'
+        result == 'Integer.toUnsignedLong(a) / (Integer.toUnsignedLong(b) + Integer.toUnsignedLong(c)) / Integer.toUnsignedLong(d)'
     }
 
     def 'nested divide'() {
@@ -59,6 +59,6 @@ class DivideExpressionSpec extends Specification {
             new FieldRefExpression(javaType:javaType, fieldName:'d')])
 
         expect:
-        expression.expression.toString() == 'a / (b / c) / d'
+        expression.expression.toString() == 'Integer.toUnsignedLong(a) / (Integer.toUnsignedLong(b) / Integer.toUnsignedLong(c)) / Integer.toUnsignedLong(d)'
     }
 }

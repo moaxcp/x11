@@ -5,13 +5,12 @@ import com.squareup.javapoet.CodeBlock
 import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
 
 class JavaClientMessageDataUnionProperty extends JavaTypeProperty {
-    static javaClientMessageDataUnionProperty(XUnitField field) {
-        JavaType javaType = field.resolvedType.javaType
-        return new JavaClientMessageDataUnionProperty(
-            name: convertX11VariableNameToJava(field.name),
-            typeName: javaType.className,
-            readOnly: field.readOnly
-        )
+    JavaClientMessageDataUnionProperty(JavaType javaType, XUnitField field) {
+        super(javaType, field)
+
+    }
+    static javaClientMessageDataUnionProperty(JavaType javaType, XUnitField field) {
+        return new JavaClientMessageDataUnionProperty(javaType, field)
     }
 
     @Override

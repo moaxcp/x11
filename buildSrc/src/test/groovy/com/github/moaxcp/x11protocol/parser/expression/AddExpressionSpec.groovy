@@ -47,6 +47,6 @@ class AddExpressionSpec extends Specification {
         String result = expression.expression.toString()
 
         then:
-        result == '7 + 8 * a + 5 - 4'
+        result == '7 + 8 * Byte.toUnsignedInt(a) + 5 - 4'
     }
 }

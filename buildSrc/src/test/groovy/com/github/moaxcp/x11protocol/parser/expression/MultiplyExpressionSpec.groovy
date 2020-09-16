@@ -34,7 +34,7 @@ class MultiplyExpressionSpec extends Specification {
             new FieldRefExpression(javaType:javaType, fieldName:'d')])
 
         expect:
-        expression.expression.toString() == 'a * (b + c) * d'
+        expression.expression.toString() == 'Integer.toUnsignedLong(a) * (Integer.toUnsignedLong(b) + Integer.toUnsignedLong(c)) * Integer.toUnsignedLong(d)'
     }
 
     def 'nested divide'() {
@@ -56,6 +56,6 @@ class MultiplyExpressionSpec extends Specification {
             new FieldRefExpression(javaType:javaType, fieldName:'d')])
 
         expect:
-        expression.expression.toString() == 'a * (b / c) * d'
+        expression.expression.toString() == 'Integer.toUnsignedLong(a) * (Integer.toUnsignedLong(b) / Integer.toUnsignedLong(c)) * Integer.toUnsignedLong(d)'
     }
 }

@@ -16,6 +16,12 @@ abstract class XTypeObject extends XType implements XTypeUnit {
     Set<ClassName> superTypes = []
     List<XUnit> protocol = []
 
+    XTypeObject(Map map) {
+        super(map)
+        superTypes = map.superTypes ?: []
+        protocol = map.protocol ?: []
+    }
+
     XUnitField getField(String name) {
         return protocol.find {
             it.name == name

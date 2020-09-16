@@ -21,13 +21,11 @@ class JavaError extends JavaObjectType {
             number: error.number
         )
         javaError.protocol = [new JavaPrimativeProperty(
-            name: 'eventDetail',
-            x11Primative: 'CARD8',
-            memberTypeName: TypeName.BYTE
+            javaError,
+            new XUnitField(result: error.result, name: 'event_detail', type: 'CARD8')
         ), new JavaPrimativeProperty(
-            name: 'sequenceNumber',
-            x11Primative: 'CARD16',
-            memberTypeName: TypeName.SHORT
+            javaError,
+            new XUnitField(result: error.result, name: 'sequence_number', type:'CARD16')
         )] + error.toJavaProtocol(javaError)
         return javaError
     }

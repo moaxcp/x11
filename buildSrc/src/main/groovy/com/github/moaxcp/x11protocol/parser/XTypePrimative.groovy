@@ -4,6 +4,11 @@ import static com.github.moaxcp.x11protocol.parser.JavaPrimativeListProperty.jav
 import static com.github.moaxcp.x11protocol.parser.JavaPrimativeStringListProperty.javaPrimativeStringListProperty
 
 class XTypePrimative extends XType {
+
+    XTypePrimative(Map map) {
+        super(map)
+    }
+
     @Override
     JavaType getJavaType() {
         throw new UnsupportedOperationException("primatives")

@@ -17,8 +17,8 @@ abstract class JavaProperty implements JavaUnit {
     boolean localOnly
 
     JavaProperty(Map map) {
-        javaType = map.javaType
-        x11Field = map.x11Field
+        javaType = requireNonNull(map.javaType, 'javaType must not be null')
+        x11Field = requireNonNull(map.x11Field, 'field must not be null')
         readOnly = map.readOnly
         localOnly = map.localOnly
     }
