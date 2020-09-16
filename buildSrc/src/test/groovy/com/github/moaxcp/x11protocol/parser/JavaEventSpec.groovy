@@ -119,6 +119,7 @@ class JavaEventSpec extends XmlSpec {
               }
             
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8(sentEvent ? 10000000B & NUMBER : NUMBER);
                 out.writeCard8(eventDetail);
                 out.writeCard16(sequenceNumber);
                 out.writeCard8(detail);
@@ -212,6 +213,7 @@ class JavaEventSpec extends XmlSpec {
               }
             
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8(sentEvent ? 10000000B & NUMBER : NUMBER);
                 out.writeCard8(eventDetail);
                 out.writeCard16(sequenceNumber);
                 out.writePad(1);

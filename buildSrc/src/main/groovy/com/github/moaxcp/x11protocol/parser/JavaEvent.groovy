@@ -60,8 +60,9 @@ class JavaEvent extends JavaObjectType {
 
     @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
+        methodBuilder.addStatement('out.writeCard8(sentEvent ? 10000000B & NUMBER : NUMBER)')
         super.addWriteStatements(methodBuilder)
-        //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
+        //todo could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
         methodBuilder.beginControlFlow('if(getSize() < 32)')
             .addStatement('out.writePad(32 - getSize())')
             .endControlFlow()
