@@ -48,6 +48,7 @@ class JavaPrimativeListProperty extends JavaListProperty {
             case 'INT8':
             case 'CARD8':
             case 'char':
+            case 'void':
                 return CodeBlock.of('1 * $L.length', name)
             case 'INT16':
             case 'CARD16':

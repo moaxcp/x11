@@ -152,6 +152,9 @@ abstract class JavaObjectType implements JavaType {
     }
     
     CodeBlock getSizeExpression() {
+        if(protocol.isEmpty()) {
+            return CodeBlock.of('0')
+        }
         protocol.stream()
             .map({it.getSize()})
             .collect(CodeBlock.joining(' + '))

@@ -26,6 +26,7 @@ class XResult {
     Map<String, XTypeUnion> unions = [:]
     Map<String, XTypeEvent> events = [:]
     Map<String, XTypeError> errors = [:]
+    Map<String, XTypeRequest> requests = [:]
 
     Map<String, XTypePrimative> primatives = Conventions.x11Primatives.collectEntries {
             [(it):new XTypePrimative(result:this, name:it)]
@@ -134,7 +135,8 @@ class XResult {
     }
 
     void addRequest(Node node) {
-
+        String name = node.attributes().get('name')
+        requests.put(name, XTypeRequest.xTypeRequest(this, node))
     }
 
     @Memoized
@@ -190,7 +192,7 @@ class XResult {
         if(xidTypes.contains(type) || xidUnions.contains(type)) {
             type = 'CARD32'
         }
-        XType xType = primatives[type] ?: structs[type] ?: unions[type] ?: enums[type] ?: events[type] ?: errors[type]
+        XType xType = primatives[type] ?: structs[type] ?: unions[type] ?: enums[type] ?: events[type] ?: errors[type] ?: requests[type]
 
         if(xType) {
             return xType

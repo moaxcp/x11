@@ -94,6 +94,7 @@ class JavaPrimativeProperty extends JavaProperty {
             case 'INT8':
             case 'CARD8':
             case 'char':
+            case 'void':
                 return CodeBlock.of('1')
             case 'INT16':
             case 'CARD16':

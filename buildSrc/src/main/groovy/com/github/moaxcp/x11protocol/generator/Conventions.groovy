@@ -78,6 +78,8 @@ class Conventions {
                 return 'double'
             case 'fd':
                 return 'int'
+            case 'void':
+                return 'byte'
         }
         throw new IllegalArgumentException("Could not convert $x11Type")
     }
@@ -148,6 +150,10 @@ class Conventions {
 
     static String getRequestJavaName(String x11Name) {
         return getJavaName(x11Name) + 'Request'
+    }
+
+    static ClassName getRequestTypeName(String javaPackage, String x11Name) {
+        return ClassName.get(javaPackage, getRequestJavaName(x11Name))
     }
 
     static String getReplyJavaName(String x11Name) {
