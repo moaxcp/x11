@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.github.moaxcp.x11protocol.parser.expression.EmptyExpression
 import com.github.moaxcp.x11protocol.parser.expression.ParamRefExpression
 import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
@@ -25,6 +26,14 @@ abstract class JavaObjectType implements JavaType {
         protocol.find {
             it instanceof JavaProperty
         }
+    }
+    
+    boolean isLastListNoLength() {
+        if(protocol.isEmpty()) {
+            return false
+        }
+        JavaUnit unit = protocol.last()
+        return unit instanceof JavaListProperty && unit.lengthExpression instanceof EmptyExpression
     }
 
     @Override
@@ -156,7 +165,17 @@ abstract class JavaObjectType implements JavaType {
             return CodeBlock.of('0')
         }
         protocol.stream()
-            .map({it.getSize()})
+            .map({it.getSizeExpression()})
             .collect(CodeBlock.joining(' + '))
+    }
+
+    Optional<Integer> getFixedSize() {
+        boolean empty = protocol.find {
+            it.fixedSize.isEmpty()
+        }
+        if(empty) {
+            return Optional.empty()
+        }
+        Optional.of(protocol.stream().mapToInt({it.fixedSize.get()}).sum())
     }
 }

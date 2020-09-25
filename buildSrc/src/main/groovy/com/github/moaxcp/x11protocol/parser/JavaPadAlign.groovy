@@ -38,7 +38,12 @@ class JavaPadAlign implements JavaUnit {
     }
 
     @Override
-    CodeBlock getSize() {
+    CodeBlock getSizeExpression() {
         return CodeBlock.of('$L', 0)
+    }
+
+    @Override
+    Optional<Integer> getFixedSize() {
+        return null
     }
 }

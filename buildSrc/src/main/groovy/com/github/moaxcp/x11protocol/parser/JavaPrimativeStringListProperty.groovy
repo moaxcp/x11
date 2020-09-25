@@ -35,7 +35,7 @@ class JavaPrimativeStringListProperty extends JavaPrimativeListProperty {
     }
 
     @Override
-    CodeBlock getSize() {
+    CodeBlock getSizeExpression() {
         return CodeBlock.of('$L.length()', name)
     }
 }

@@ -51,7 +51,7 @@ class JavaEnumProperty extends JavaProperty {
     }
 
     @Override
-    CodeBlock getSize() {
+    CodeBlock getSizeExpression() {
         switch(x11Type) {
             case 'BOOL':
             case 'byte':
@@ -72,6 +72,32 @@ class JavaEnumProperty extends JavaProperty {
             case 'CARD64':
             case 'double':
                 return CodeBlock.of('8')
+        }
+        throw new UnsupportedOperationException("type not supported $x11Type")
+    }
+
+    @Override
+    Optional<Integer> getFixedSize() {
+        switch(x11Type) {
+            case 'BOOL':
+            case 'byte':
+            case 'BYTE':
+            case 'INT8':
+            case 'CARD8':
+            case 'char':
+            case 'void':
+                return Optional.of(1)
+            case 'INT16':
+            case 'CARD16':
+                return Optional.of(2)
+            case 'INT32':
+            case 'CARD32':
+            case 'float':
+            case 'fd':
+                return Optional.of(4)
+            case 'CARD64':
+            case 'double':
+                return Optional.of(8)
         }
         throw new UnsupportedOperationException("type not supported $x11Type")
     }

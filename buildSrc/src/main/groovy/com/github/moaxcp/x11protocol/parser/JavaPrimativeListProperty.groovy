@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.github.moaxcp.x11protocol.parser.expression.EmptyExpression
 import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
@@ -29,7 +30,8 @@ class JavaPrimativeListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getReadCode() {
-        return declareAndInitializeTo("in.read${fromUpperUnderscoreToUpperCamel(x11Type)}(${lengthExpression.expression})")
+        CodeBlock listSize = lengthExpression instanceof EmptyExpression ? CodeBlock.of('') : lengthExpression.expression
+        return declareAndInitializeTo(CodeBlock.of('in.read$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), listSize))
     }
 
     @Override
@@ -40,7 +42,7 @@ class JavaPrimativeListProperty extends JavaListProperty {
     }
 
     @Override
-    CodeBlock getSize() {
+    CodeBlock getSizeExpression() {
         switch(x11Type) {
             case 'BOOL':
             case 'byte':
@@ -63,5 +65,10 @@ class JavaPrimativeListProperty extends JavaListProperty {
                 return CodeBlock.of('8 * $L.length', name)
         }
         throw new UnsupportedOperationException("type not supported $x11Type")
+    }
+
+    @Override
+    Optional<Integer> getFixedSize() {
+        return Optional.empty()
     }
 }

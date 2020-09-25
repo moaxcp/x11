@@ -44,8 +44,89 @@ class JavaRequest extends JavaObjectType {
     }
 
     @Override
+    void addReadStatements(MethodSpec.Builder methodBuilder) {
+        if(lastListNoLength) {
+            methodBuilder.addStatement('int javaStart = 1')
+            methodBuilder.addCode(protocol[0].readCode)
+            methodBuilder.addStatement('javaStart++')
+            methodBuilder.addStatement('short length = in.readCard16()')
+            methodBuilder.addStatement('javaStart += 2')
+            CodeBlock.Builder readProtocol = CodeBlock.builder()
+            protocol.eachWithIndex { it, i ->
+                if (i == 0) {
+                    return
+                }
+                readProtocol.add(it.readCode)
+                if (it.fixedSize.isPresent()) {
+                    readProtocol.addStatement('javaStart += $L', it.fixedSize.get())
+                }
+            }
+            methodBuilder.addCode(readProtocol.build())
+        } else {
+            if(protocol) {
+                methodBuilder.addCode(protocol[0].readCode)
+            } else {
+                methodBuilder.addStatement('in.readByte()')
+            }
+            methodBuilder.addStatement('short length = in.readCard16()')
+            CodeBlock.Builder readProtocol = CodeBlock.builder()
+            protocol.eachWithIndex { it, i ->
+                if (i == 0) {
+                    return
+                }
+                readProtocol.add(it.readCode)
+            }
+            methodBuilder.addCode(readProtocol.build())
+        }
+    }
+
+    @Override
+    void addSetterStatements(MethodSpec.Builder methodBuilder) {
+        super.addSetterStatements(methodBuilder)
+        if(fixedSize && fixedSize.get() % 4 == 0) {
+            return
+        }
+        methodBuilder.addStatement('in.readPadAlign(javaObject.getSize())')
+    }
+
+    @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
         methodBuilder.addStatement('out.writeCard8(OPCODE)')
-        super.addWriteStatements(methodBuilder)
+        if(protocol) {
+            methodBuilder.addCode(protocol[0].writeCode)
+        } else {
+            methodBuilder.addStatement('out.writePad(1)')
+        }
+        methodBuilder.addStatement('out.writeCard16((short) getLength())')
+        CodeBlock.Builder writeProtocol = CodeBlock.builder()
+        protocol.eachWithIndex { it, i ->
+            if(i == 0) {
+                return
+            }
+            writeProtocol.add(it.writeCode)
+        }
+        methodBuilder.addCode(writeProtocol.build())
+        if(fixedSize && fixedSize.get() % 4 == 0) {
+            return
+        }
+        methodBuilder.addStatement('out.writePadAlign(getSize())')
+    }
+
+    @Override
+    CodeBlock getSizeExpression() {
+        CodeBlock.of('$L + $L',
+            CodeBlock.of('1 + 2'),
+            super.getSizeExpression())
+    }
+
+    @Override
+    Optional<Integer> getFixedSize() {
+        boolean empty = protocol.find {
+            it.fixedSize.isEmpty()
+        }
+        if(empty) {
+            return Optional.empty()
+        }
+        Optional.of(protocol.stream().mapToInt({it.fixedSize.get()}).sum() + 3)
     }
 }

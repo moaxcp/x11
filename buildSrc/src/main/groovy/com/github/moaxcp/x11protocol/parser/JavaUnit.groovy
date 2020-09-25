@@ -11,5 +11,10 @@ interface JavaUnit {
      * expression of size in bytes
      * @return
      */
-    CodeBlock getSize()
+    CodeBlock getSizeExpression()
+    /**
+     * returns the known fixed size or empty if not known
+     * @return
+     */
+    Optional<Integer> getFixedSize()
 }

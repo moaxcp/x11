@@ -37,9 +37,9 @@ class JavaTypeListPropertySpec extends XmlSpec {
         property.typeName == ParameterizedTypeName.get(ClassName.get(List), property.baseTypeName)
         property.lengthExpression.expression.toString() == 'Byte.toUnsignedInt(pixmapFormatsLen)'
         property.readCode.toString() == '''\
-            java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> pixmapFormats = new java.util.ArrayList<>();
+            java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> pixmapFormats = new java.util.ArrayList<>(Byte.toUnsignedInt(pixmapFormatsLen));
             for(int i = 0; i < Byte.toUnsignedInt(pixmapFormatsLen); i++) {
-              pixmapFormats.add(FormatStruct.readFormatStruct(in));
+              pixmapFormats.add(com.github.moaxcp.x11client.protocol.xproto.FormatStruct.readFormatStruct(in));
             }
         '''.stripIndent()
         property.writeCode.toString() == '''\

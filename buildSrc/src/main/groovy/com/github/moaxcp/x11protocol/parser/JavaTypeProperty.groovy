@@ -30,7 +30,12 @@ class JavaTypeProperty extends JavaProperty {
     }
 
     @Override
-    CodeBlock getSize() {
+    CodeBlock getSizeExpression() {
         return CodeBlock.of('$L.getSize()', name)
+    }
+
+    @Override
+    Optional<Integer> getFixedSize() {
+        return x11Field.resolvedType.javaType.getFixedSize()
     }
 }

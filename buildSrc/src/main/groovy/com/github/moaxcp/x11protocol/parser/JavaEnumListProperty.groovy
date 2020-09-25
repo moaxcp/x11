@@ -55,7 +55,7 @@ class JavaEnumListProperty extends JavaListProperty {
     }
 
     @Override
-    CodeBlock getSize() {
+    CodeBlock getSizeExpression() {
         switch(x11Type) {
             case 'BOOL':
             case 'byte':
@@ -78,5 +78,10 @@ class JavaEnumListProperty extends JavaListProperty {
                 return CodeBlock.of('8 * $L.size()', name)
         }
         throw new UnsupportedOperationException("type not supported $x11Type")
+    }
+
+    @Override
+    Optional<Integer> getFixedSize() {
+        return Optional.empty()
     }
 }

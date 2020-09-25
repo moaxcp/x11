@@ -7,6 +7,9 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11Vari
 
 class ExpressionFactory {
     static Expression getExpression(JavaType javaType, Node node) {
+        if(!node) {
+            return new EmptyExpression()
+        }
         switch(node.name()) {
             case 'value':
                 return new ValueExpression(value:node.text())

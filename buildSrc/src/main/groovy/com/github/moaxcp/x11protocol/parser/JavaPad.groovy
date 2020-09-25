@@ -26,7 +26,12 @@ class JavaPad implements JavaUnit {
     }
 
     @Override
-    CodeBlock getSize() {
+    CodeBlock getSizeExpression() {
         return CodeBlock.of('$L', bytes)
+    }
+
+    @Override
+    Optional<Integer> getFixedSize() {
+        return Optional.of(bytes)
     }
 }
