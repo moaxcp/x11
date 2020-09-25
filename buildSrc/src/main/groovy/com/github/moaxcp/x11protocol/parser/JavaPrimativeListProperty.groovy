@@ -30,7 +30,7 @@ class JavaPrimativeListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getReadCode() {
-        CodeBlock listSize = lengthExpression instanceof EmptyExpression ? CodeBlock.of('') : lengthExpression.expression
+        CodeBlock listSize = lengthExpression instanceof EmptyExpression ? CodeBlock.of('javaStart - length') : lengthExpression.expression
         return declareAndInitializeTo(CodeBlock.of('in.read$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), listSize))
     }
 

@@ -51,17 +51,15 @@ class JavaRequest extends JavaObjectType {
             methodBuilder.addStatement('javaStart++')
             methodBuilder.addStatement('short length = in.readCard16()')
             methodBuilder.addStatement('javaStart += 2')
-            CodeBlock.Builder readProtocol = CodeBlock.builder()
             protocol.eachWithIndex { it, i ->
                 if (i == 0) {
                     return
                 }
-                readProtocol.add(it.readCode)
-                if (it.fixedSize.isPresent()) {
-                    readProtocol.addStatement('javaStart += $L', it.fixedSize.get())
+                methodBuilder.addCode(it.readCode)
+                if(i != protocol.size() - 1) {
+                    methodBuilder.addStatement('javaStart += $L', it.getSizeExpression())
                 }
             }
-            methodBuilder.addCode(readProtocol.build())
         } else {
             if(protocol) {
                 methodBuilder.addCode(protocol[0].readCode)
