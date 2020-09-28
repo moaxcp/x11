@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.TypeName
 
 class SumOfExpression implements Expression {
     String ref
@@ -14,6 +15,11 @@ class SumOfExpression implements Expression {
     @Override
     List<ParamRefExpression> getParamRefs() {
         return []
+    }
+
+    @Override
+    TypeName getTypeName() {
+        return null
     }
 
     @Override

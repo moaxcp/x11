@@ -1,5 +1,9 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
+import com.squareup.javapoet.TypeName
+
+import static com.github.moaxcp.x11protocol.parser.expression.Expressions.selectCastUp
+
 abstract class OpExpression implements Expression {
     String op
     List<Expression> expressions = []
@@ -16,5 +20,12 @@ abstract class OpExpression implements Expression {
         return expressions.collect {
             it.fieldRefs
         }.flatten()
+    }
+
+    TypeName getTypeName() {
+        List<TypeName> types = expressions.collect { it.typeName }
+        types.inject { result, i ->
+            return selectCastUp(result, i)
+        }
     }
 }

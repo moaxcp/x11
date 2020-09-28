@@ -9,6 +9,7 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 import groovy.transform.EqualsAndHashCode
 
+import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToExpressionTypeName
 import static java.util.Objects.requireNonNull
 
 @EqualsAndHashCode
@@ -24,6 +25,11 @@ class FieldRefExpression implements Expression {
     @Override
     List<ParamRefExpression> getParamRefs() {
         return []
+    }
+
+    @Override
+    TypeName getTypeName() {
+        return x11PrimativeToExpressionTypeName(javaType.getField(fieldName).x11Type)
     }
 
     CodeBlock getExpression() {

@@ -28,7 +28,7 @@ class ConventionsSpec extends Specification {
 
     void 'hard-coded convention with CARD32'() {
         expect:
-        'int' == Conventions.x11PrimativeToJavaPrimative('CARD32')
+        'int' == Conventions.x11PrimativeToStoragePrimative('CARD32')
     }
 
     void 'convert x11 variable name to java variable name'() {

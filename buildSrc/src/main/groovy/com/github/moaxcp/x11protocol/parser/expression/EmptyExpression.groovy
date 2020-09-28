@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.TypeName
 
 class EmptyExpression implements Expression {
 
@@ -12,6 +13,11 @@ class EmptyExpression implements Expression {
     @Override
     List<ParamRefExpression> getParamRefs() {
         return []
+    }
+
+    @Override
+    TypeName getTypeName() {
+        throw new UnsupportedOperationException('cannot get type for empty expression')
     }
 
     @Override

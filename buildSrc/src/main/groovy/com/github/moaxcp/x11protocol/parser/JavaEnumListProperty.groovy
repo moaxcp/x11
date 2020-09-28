@@ -28,7 +28,7 @@ class JavaEnumListProperty extends JavaListProperty {
     }
 
     TypeName getIoTypeName() {
-        return x11PrimativeToJavaTypeName(x11Field.resolvedType.name)
+        return x11PrimativeToStorageTypeName(x11Field.resolvedType.name)
     }
 
     static JavaEnumListProperty javaEnumListProperty(JavaType javaType, XUnitListField field) {

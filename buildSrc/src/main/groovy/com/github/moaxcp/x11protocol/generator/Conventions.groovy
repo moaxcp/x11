@@ -24,11 +24,11 @@ class Conventions {
         'fd'
     ]
 
-    static TypeName x11PrimativeToJavaTypeName(String x11Type) {
+    static TypeName x11PrimativeToExpressionTypeName(String x11Type) {
         if(x11Type == 'void') {
             return TypeName.BYTE
         }
-        String primative = x11PrimativeToJavaPrimative(x11Type)
+        String primative = x11PrimativeToExpressionPrimative(x11Type)
         switch(primative) {
             case 'boolean':
                 return TypeName.BOOLEAN
@@ -50,7 +50,65 @@ class Conventions {
         throw new IllegalArgumentException("Could not convert $x11Type")
     }
 
-    static String x11PrimativeToJavaPrimative(String x11Type) {
+    static String x11PrimativeToExpressionPrimative(String x11Type) {
+        switch(x11Type) {
+            case 'BOOL':
+                return 'byte'
+            case 'BYTE':
+                return 'byte'
+            case 'INT8':
+                return 'byte'
+            case 'INT16':
+                return 'short'
+            case 'INT32':
+                return 'int'
+            case 'CARD8':
+                return 'int'
+            case 'CARD16':
+                return 'int'
+            case 'CARD32':
+                return 'long'
+            case 'char':
+                return 'byte'
+            case 'float':
+                return 'float'
+            case 'double':
+                return 'double'
+            case 'fd':
+                return 'int'
+            case 'void':
+                return 'byte'
+        }
+        throw new IllegalArgumentException("Could not convert $x11Type")
+    }
+
+    static TypeName x11PrimativeToStorageTypeName(String x11Type) {
+        if(x11Type == 'void') {
+            return TypeName.BYTE
+        }
+        String primative = x11PrimativeToStoragePrimative(x11Type)
+        switch(primative) {
+            case 'boolean':
+                return TypeName.BOOLEAN
+            case 'byte':
+                return TypeName.BYTE
+            case 'short':
+                return TypeName.SHORT
+            case 'char':
+                return TypeName.BYTE
+            case 'int':
+                return TypeName.INT
+            case 'long':
+                return TypeName.LONG
+            case 'float':
+                return TypeName.FLOAT
+            case 'double':
+                return TypeName.DOUBLE
+        }
+        throw new IllegalArgumentException("Could not convert $x11Type")
+    }
+
+    static String x11PrimativeToStoragePrimative(String x11Type) {
         switch(x11Type) {
             case 'BOOL':
                 return 'boolean'

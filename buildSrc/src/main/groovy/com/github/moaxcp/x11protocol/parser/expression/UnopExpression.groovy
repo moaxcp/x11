@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.TypeName
 
 class UnopExpression implements Expression {
     String op
@@ -14,6 +15,11 @@ class UnopExpression implements Expression {
     @Override
     List<ParamRefExpression> getParamRefs() {
         return unExpression.paramRefs
+    }
+
+    @Override
+    TypeName getTypeName() {
+        return unExpression.typeName
     }
 
     @Override

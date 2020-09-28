@@ -9,7 +9,7 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
         given:
         xmlBuilder.xcb(header:'xproto') {
             struct(name:'Window') {
-                field(name: 'num_window_modifiers', type: 'CARD64')
+                field(name: 'num_window_modifiers', type: 'CARD32')
                 list(name: 'window_modifiers', type: 'CARD64') {
                     fieldref('num_window_modifiers')
                 }
@@ -26,8 +26,8 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
         property.x11Type == 'CARD64'
         property.baseTypeName == TypeName.LONG
         property.typeName == ArrayTypeName.of(TypeName.LONG)
-        property.lengthExpression.expression.toString() == 'numWindowModifiers'
-        property.readCode.toString() == 'long[] windowModifiers = in.readCard64(numWindowModifiers);\n'
+        property.lengthExpression.expression.toString() == 'Integer.toUnsignedLong(numWindowModifiers)'
+        property.readCode.toString() == 'long[] windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));\n'
         property.writeCode.toString() == 'out.writeCard64(windowModifiers);\n'
     }
 }

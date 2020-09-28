@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.github.moaxcp.x11protocol.parser.expression.ExpressionFactory
+import com.github.moaxcp.x11protocol.parser.expression.Expressions
 import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.parser.JavaEnum.javaEnum
@@ -25,7 +25,7 @@ class XTypeEnum extends XType implements XTypeUnit {
             }
             XTypeEnumItem item = new XTypeEnumItem()
             item.name = (String) it.attributes().get('name')
-            item.value = ExpressionFactory.getExpression(null, (Node) it.childNodes().next())
+            item.value = Expressions.getExpression(null, (Node) it.childNodes().next())
             xEnum.items.add(item)
         }
         return xEnum

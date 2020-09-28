@@ -5,7 +5,7 @@ import com.github.moaxcp.x11protocol.parser.expression.ParamRefExpression
 import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToJavaTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToStorageTypeName
 
 abstract class JavaObjectType implements JavaType {
     String basePackage
@@ -100,7 +100,7 @@ abstract class JavaObjectType implements JavaType {
         }.collect { JavaListProperty it ->
             it.lengthExpression.paramRefs
         }.flatten().collect { ParamRefExpression it ->
-            ParameterSpec.builder(x11PrimativeToJavaTypeName(it.x11Type), it.paramName).build()
+            ParameterSpec.builder(x11PrimativeToStorageTypeName(it.x11Type), it.paramName).build()
         }
         methodBuilder.addParameters(params)
     }

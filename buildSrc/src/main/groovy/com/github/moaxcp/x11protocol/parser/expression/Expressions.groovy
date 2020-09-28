@@ -1,11 +1,37 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
 import com.github.moaxcp.x11protocol.parser.JavaType
+import com.squareup.javapoet.TypeName
 import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
 
-class ExpressionFactory {
+class Expressions {
+    static TypeName selectCastUp(TypeName first, TypeName second) {
+        int order1 = castOrder(first)
+        int order2 = castOrder(second)
+        if(order1 > order2) {
+            return first
+        }
+        return second
+    }
+
+    static int castOrder(TypeName name) {
+        switch(name) {
+            case TypeName.BOOLEAN:
+            case TypeName.BYTE:
+                return 1
+            case TypeName.SHORT:
+                return 2
+            case TypeName.INT:
+                return 3
+            case TypeName.LONG:
+                return 4
+            default:
+                throw new IllegalArgumentException('invalid type ' + name)
+        }
+    }
+
     static Expression getExpression(JavaType javaType, Node node) {
         if(!node) {
             return new EmptyExpression()

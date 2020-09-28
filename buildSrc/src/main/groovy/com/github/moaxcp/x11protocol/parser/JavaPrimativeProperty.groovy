@@ -30,7 +30,7 @@ class JavaPrimativeProperty extends JavaProperty {
         if(!x11Primatives.contains(x11Field.resolvedType.name)) {
         throw new IllegalStateException("Could not find ${x11Field.resolvedType.name} in primative types $x11Primatives")
     }
-        return x11PrimativeToJavaTypeName(x11Field.resolvedType.name)
+        return x11PrimativeToStorageTypeName(x11Field.resolvedType.name)
     }
 
     TypeName getMaskTypeName() {

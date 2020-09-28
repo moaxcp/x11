@@ -307,7 +307,7 @@ class JavaParser {
     TypeName getFieldTypeName(String type) {
         Tuple3<String, String, String> tuple = x11Result.resolveType(type)
         if(tuple.getSecond() == 'primative') {
-            return Conventions.x11PrimativeToJavaTypeName(tuple.getThird())
+            return Conventions.x11PrimativeToStorageTypeName(tuple.getThird())
         }
         return ClassName.get(basePackage + '.' + tuple.getFirst(), Conventions."get${tuple.second.capitalize()}JavaName"(tuple.getThird()))
     }

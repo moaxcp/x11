@@ -6,7 +6,8 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
-import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToJavaTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToStorageTypeName
+import static com.github.moaxcp.x11protocol.parser.expression.Expressions.castOrder
 
 class JavaPrimativeListProperty extends JavaListProperty {
 
@@ -16,7 +17,7 @@ class JavaPrimativeListProperty extends JavaListProperty {
 
     @Override
     TypeName getBaseTypeName() {
-        return x11PrimativeToJavaTypeName(x11Field.resolvedType.name)
+        return x11PrimativeToStorageTypeName(x11Field.resolvedType.name)
     }
 
     @Override
@@ -30,7 +31,19 @@ class JavaPrimativeListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getReadCode() {
-        CodeBlock listSize = lengthExpression instanceof EmptyExpression ? CodeBlock.of('javaStart - length') : lengthExpression.expression
+        CodeBlock listSize
+        TypeName expressionType
+        if(lengthExpression instanceof EmptyExpression) {
+            listSize = CodeBlock.of('javaStart - length')
+            expressionType = TypeName.INT
+        } else {
+            listSize = lengthExpression.expression
+            expressionType = lengthExpression.typeName
+        }
+
+        if(castOrder(expressionType) > castOrder(TypeName.INT)) {
+            return declareAndInitializeTo(CodeBlock.of('in.read$L((int) ($L))', fromUpperUnderscoreToUpperCamel(x11Type), listSize))
+        }
         return declareAndInitializeTo(CodeBlock.of('in.read$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), listSize))
     }
 
