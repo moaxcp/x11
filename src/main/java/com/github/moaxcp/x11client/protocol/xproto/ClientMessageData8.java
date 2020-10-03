@@ -21,7 +21,6 @@ public class ClientMessageData8 implements ClientMessageDataUnion {
     return 20;
   }
 
-  @Override
   public void write(X11Output out) throws IOException {
     out.writeCard8(data8);
   }

@@ -21,7 +21,6 @@ public class ClientMessageData32 implements ClientMessageDataUnion {
     return 20;
   }
 
-  @Override
   public void write(X11Output out) throws IOException {
     out.writeCard32(data32);
   }

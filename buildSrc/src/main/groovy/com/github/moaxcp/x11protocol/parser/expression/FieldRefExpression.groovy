@@ -1,6 +1,5 @@
 package com.github.moaxcp.x11protocol.parser.expression
 
-
 import com.github.moaxcp.x11protocol.parser.JavaListProperty
 import com.github.moaxcp.x11protocol.parser.JavaPrimativeProperty
 import com.github.moaxcp.x11protocol.parser.JavaProperty
@@ -10,6 +9,7 @@ import com.squareup.javapoet.TypeName
 import groovy.transform.EqualsAndHashCode
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToExpressionTypeName
+import static com.github.moaxcp.x11protocol.parser.expression.Expressions.castOrder
 import static java.util.Objects.requireNonNull
 
 @EqualsAndHashCode
@@ -59,5 +59,13 @@ class FieldRefExpression implements Expression {
         } else {
             throw new UnsupportedOperationException("field not supported ${field.name}")
         }
+    }
+
+    @Override
+    CodeBlock getExpression(TypeName primative) {
+        if(castOrder(getTypeName()) > castOrder(primative)) {
+            return CodeBlock.of('($T) ($L)', primative, expression)
+        }
+        return expression
     }
 }

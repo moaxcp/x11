@@ -4,6 +4,8 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
+import static com.github.moaxcp.x11protocol.parser.expression.Expressions.castOrder
+
 class PopcountExpression implements Expression {
     FieldRefExpression field
     @Override
@@ -24,5 +26,13 @@ class PopcountExpression implements Expression {
     @Override
     CodeBlock getExpression() {
         return CodeBlock.of('$T.popcount($L)', ClassName.get(field.javaType.basePackage, 'Popcount'), field.expression)
+    }
+
+    @Override
+    CodeBlock getExpression(TypeName primative) {
+        if(castOrder(getTypeName()) > castOrder(primative)) {
+            return CodeBlock.of('($T) ($L)', primative, expression)
+        }
+        return expression
     }
 }

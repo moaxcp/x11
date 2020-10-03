@@ -4,6 +4,8 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 import groovy.transform.EqualsAndHashCode
 
+import static com.github.moaxcp.x11protocol.parser.expression.Expressions.castOrder
+
 @EqualsAndHashCode
 class ValueExpression implements Expression {
     String value
@@ -25,5 +27,13 @@ class ValueExpression implements Expression {
 
     CodeBlock getExpression() {
         return CodeBlock.of(value)
+    }
+
+    @Override
+    CodeBlock getExpression(TypeName primative) {
+        if(castOrder(getTypeName()) > castOrder(primative)) {
+            return CodeBlock.of('($T) ($L)', primative, expression)
+        }
+        return expression
     }
 }

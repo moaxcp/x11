@@ -50,7 +50,7 @@ class JavaTypeListProperty extends JavaListProperty {
                 .build()
         }
         return CodeBlock.builder()
-            .addStatement('$1T $2L = new $3T<>($4L)', typeName, name, ArrayList.class, lengthExpression.expression)
+            .addStatement('$1T $2L = new $3T<>($4L)', typeName, name, ArrayList.class, lengthExpression.getExpression(TypeName.INT))
             .beginControlFlow('for(int i = 0; i < $L; i++)', lengthExpression.expression)
             .addStatement('$L.add($T.read$L(in))', name, baseTypeName, baseTypeName.simpleName())
             .endControlFlow()

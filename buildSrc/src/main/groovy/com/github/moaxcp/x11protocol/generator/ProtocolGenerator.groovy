@@ -2,6 +2,7 @@ package com.github.moaxcp.x11protocol.generator
 
 import com.github.moaxcp.x11protocol.parser.XParser
 import com.github.moaxcp.x11protocol.parser.XResult
+import com.github.moaxcp.x11protocol.parser.XTypeReply
 import com.squareup.javapoet.JavaFile
 
 class ProtocolGenerator {
@@ -34,6 +35,11 @@ class ProtocolGenerator {
         result.requests.values().each {
             JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
             javaFile.writeTo(outputSrc)
+            XTypeReply reply = it.reply
+            if(reply) {
+                JavaFile replyFile = JavaFile.builder(result.javaPackage, reply.javaType.typeSpec).build()
+                replyFile.writeTo(outputSrc)
+            }
         }
     }
 }

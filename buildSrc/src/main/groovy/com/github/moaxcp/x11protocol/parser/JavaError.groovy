@@ -38,6 +38,7 @@ class JavaError extends JavaObjectType {
     @Override
     void addMethods(TypeSpec.Builder typeBuilder) {
         typeBuilder.addMethod(MethodSpec.methodBuilder('getCode')
+            .addAnnotation(Override)
             .returns(TypeName.BYTE)
             .addModifiers(Modifier.PUBLIC)
             .addStatement('return CODE')

@@ -5,8 +5,9 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
 interface Expression {
-    abstract List<FieldRefExpression> getFieldRefs()
-    abstract List<ParamRefExpression> getParamRefs()
+    List<FieldRefExpression> getFieldRefs()
+    List<ParamRefExpression> getParamRefs()
     TypeName getTypeName()
-    abstract CodeBlock getExpression()
+    CodeBlock getExpression()
+    CodeBlock getExpression(TypeName primative)
 }

@@ -5,6 +5,7 @@ import com.squareup.javapoet.TypeName
 import groovy.transform.EqualsAndHashCode
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToStorageTypeName
+import static com.github.moaxcp.x11protocol.parser.expression.Expressions.castOrder
 
 @EqualsAndHashCode
 class ParamRefExpression implements Expression {
@@ -28,5 +29,13 @@ class ParamRefExpression implements Expression {
 
     CodeBlock getExpression() {
         return CodeBlock.of(paramName)
+    }
+
+    @Override
+    CodeBlock getExpression(TypeName primative) {
+        if(castOrder(getTypeName()) > castOrder(primative)) {
+            return CodeBlock.of('($T) ($L)', primative, expression)
+        }
+        return expression
     }
 }

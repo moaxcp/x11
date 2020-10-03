@@ -26,7 +26,7 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
-            public class FormatStruct implements com.github.moaxcp.x11client.protocol.XObject {
+            public class FormatStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private byte depth;
             
               private byte bitsPerPixel;
@@ -45,7 +45,8 @@ class JavaStructSpec extends XmlSpec {
                 javaObject.setScanlinePad(scanlinePad);
                 return javaObject;
               }
-            
+              
+              @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(depth);
                 out.writeCard8(bitsPerPixel);
@@ -53,6 +54,7 @@ class JavaStructSpec extends XmlSpec {
                 out.writePad(5);
               }
               
+              @java.lang.Override
               public int getSize() {
                 return 1 + 1 + 1 + 5;
               }
@@ -91,7 +93,7 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
-            public class ScreenStruct implements com.github.moaxcp.x11client.protocol.XObject {
+            public class ScreenStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private int root;
             
               private int defaultColormap;
@@ -114,6 +116,7 @@ class JavaStructSpec extends XmlSpec {
                 return javaObject;
               }
             
+              @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard32(root);
                 out.writeCard32(defaultColormap);
@@ -131,6 +134,7 @@ class JavaStructSpec extends XmlSpec {
                 currentInputMasks = (int) maskEnum.disableFor(currentInputMasks);
               }
               
+              @java.lang.Override
               public int getSize() {
                 return 4 + 4 + 4 + 1;
               }
@@ -160,7 +164,7 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
-            public class DeviceTimeCoordStruct implements com.github.moaxcp.x11client.protocol.XObject {
+            public class DeviceTimeCoordStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private int time;
             
               private int[] axisvalues;
@@ -175,11 +179,13 @@ class JavaStructSpec extends XmlSpec {
                 return javaObject;
               }
             
+              @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard32(time);
                 out.writeInt32(axisvalues);
               }
               
+              @java.lang.Override
               public int getSize() {
                 return 4 + 4 * axisvalues.length;
               }
@@ -212,7 +218,7 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
-            public class SetKeyTypeStruct implements com.github.moaxcp.x11client.protocol.XObject {
+            public class SetKeyTypeStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private boolean preserve;
             
               private byte nMapEntries;
@@ -231,12 +237,14 @@ class JavaStructSpec extends XmlSpec {
                 return javaObject;
               }
             
+              @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeBool(preserve);
                 out.writeCard8(nMapEntries);
                 out.writeInt32(preserveEntries);
               }
               
+              @java.lang.Override
               public int getSize() {
                 return 1 + 1 + 4 * preserveEntries.length;
               }

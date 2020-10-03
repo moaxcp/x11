@@ -14,5 +14,4 @@ public interface XObject {
    * @return
    */
   int getSize();
-  void write(X11Output out) throws IOException;
 }

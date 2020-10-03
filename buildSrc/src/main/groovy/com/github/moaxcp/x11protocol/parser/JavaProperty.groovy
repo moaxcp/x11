@@ -26,6 +26,7 @@ abstract class JavaProperty implements JavaUnit {
     JavaProperty(JavaType javaType, XUnitField field) {
         this.javaType = requireNonNull(javaType, 'javaType must not be null')
         this.x11Field = requireNonNull(field, 'field must not be null')
+        this.localOnly = field.localOnly
     }
     
     XUnitField getXUnit() {

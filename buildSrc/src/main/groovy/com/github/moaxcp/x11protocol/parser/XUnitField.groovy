@@ -15,6 +15,7 @@ class XUnitField implements XUnit {
     final String altEnumType
     final String maskType
     final String altMaskType
+    final boolean localOnly
 
     XUnitField(Map map) {
         result = requireNonNull(map.result, 'result must not be null')
@@ -24,6 +25,7 @@ class XUnitField implements XUnit {
         altEnumType = map.altEnumType
         maskType = map.maskType
         altMaskType = map.altMaskType
+        localOnly = map.localOnly ?: false
     }
 
     XUnitField(XResult result, Node node) {

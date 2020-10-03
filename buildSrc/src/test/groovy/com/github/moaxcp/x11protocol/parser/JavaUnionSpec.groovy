@@ -107,7 +107,7 @@ class JavaUnionSpec extends XmlSpec {
             }
         '''.stripIndent()
 
-        common.superTypes == [union.className, ClassName.get(union.basePackage, 'XObject')] as Set
-        defaultStruct.superTypes == [union.className, ClassName.get(union.basePackage, 'XObject')] as Set
+        common.superTypes == [union.className, ClassName.get(union.basePackage, 'XStruct')] as Set
+        defaultStruct.superTypes == [union.className, ClassName.get(union.basePackage, 'XStruct')] as Set
     }
 }

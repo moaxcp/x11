@@ -218,6 +218,10 @@ class Conventions {
         return getJavaName(x11Name) + 'Reply'
     }
 
+    static ClassName getReplyTypeName(String javaPackage, String x11Name) {
+        return ClassName.get(javaPackage, getReplyJavaName(x11Name))
+    }
+
     static String getJavaName(String x11Name) {
         String startNumbers = x11Name.find('^\\d+')
         if(startNumbers) {

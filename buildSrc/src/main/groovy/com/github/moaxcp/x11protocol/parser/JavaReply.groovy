@@ -1,46 +1,27 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.squareup.javapoet.*
-import javax.lang.model.element.Modifier
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.getRequestJavaName
-import static com.github.moaxcp.x11protocol.generator.Conventions.getRequestTypeName
+import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.ParameterSpec
 
-class JavaRequest extends JavaObjectType {
-    int opCode
+import static com.github.moaxcp.x11protocol.generator.Conventions.getReplyJavaName
+import static com.github.moaxcp.x11protocol.generator.Conventions.getReplyTypeName
 
-    static JavaRequest javaRequest(XTypeRequest request) {
-        String simpleName = getRequestJavaName(request.name)
+class JavaReply extends JavaObjectType {
+    static JavaReply javaReply(XTypeReply reply) {
+        String simpleName= getReplyJavaName(reply.name)
 
-        JavaRequest javaRequest = new JavaRequest(
-            superTypes: request.superTypes + ClassName.get(request.basePackage, 'XRequest'),
-            basePackage: request.basePackage,
-            javaPackage: request.javaPackage,
+        JavaReply javaReply = new JavaReply(
+            superTypes: reply.superTypes + ClassName.get(reply.basePackage, 'XReply'),
+            basePackage: reply.basePackage,
+            javaPackage: reply.javaPackage,
             simpleName:simpleName,
-            className: getRequestTypeName(request.javaPackage, request.name),
-            opCode: request.opCode
+            className: getReplyTypeName(reply.javaPackage, reply.name)
         )
-        javaRequest.protocol = request.toJavaProtocol(javaRequest)
-        return javaRequest
-    }
-
-    @Override
-    void addFields(TypeSpec.Builder typeBuilder) {
-        typeBuilder.addField(FieldSpec.builder(TypeName.BYTE, 'OPCODE', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-            .initializer('$L', opCode)
-            .build())
-        super.addFields(typeBuilder)
-    }
-
-    @Override
-    void addMethods(TypeSpec.Builder typeBuilder) {
-        typeBuilder.addMethod(MethodSpec.methodBuilder('getOpCode')
-            .returns(TypeName.BYTE)
-            .addModifiers(Modifier.PUBLIC)
-            .addStatement('return OPCODE')
-            .build())
-
-        super.addMethods(typeBuilder)
+        javaReply.protocol = reply.toJavaProtocol(javaReply)
+        return javaReply
     }
 
     @Override
@@ -58,7 +39,7 @@ class JavaRequest extends JavaObjectType {
                 super.addReadStatements(methodBuilder)
             } else {
                 methodBuilder.addStatement('in.readByte()')
-                methodBuilder.addStatement('short length = in.readCard16()')
+                methodBuilder.addStatement('int length = in.readCard32()')
             }
         }
     }
@@ -72,14 +53,19 @@ class JavaRequest extends JavaObjectType {
         methodBuilder.addStatement('in.readPadAlign(javaObject.getSize())')
     }
 
+    void addWriteParameters(MethodSpec.Builder methodBuilder) {
+        methodBuilder.addParameter(ParameterSpec.builder(short.class, 'sequenceNumber').build())
+        super.addReadParameters(methodBuilder)
+    }
+
     @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addStatement('out.writeCard8(OPCODE)')
+        methodBuilder.addStatement('out.writeCard8((byte) 1)')
         if(protocol.size() > 1) {
             CodeBlock.Builder writeProtocol = CodeBlock.builder()
             protocol.each { it ->
                 if(it instanceof JavaProperty && it.name == 'length') {
-                    methodBuilder.addStatement('out.writeCard16((short) getLength())')
+                    methodBuilder.addStatement('out.writeCard32(getLength())')
                 } else {
                     methodBuilder.addCode(it.writeCode)
                 }
@@ -87,7 +73,7 @@ class JavaRequest extends JavaObjectType {
             methodBuilder.addCode(writeProtocol.build())
         } else {
             methodBuilder.addStatement('out.writePad(1)')
-            methodBuilder.addStatement('out.writeCard16((short) 0)')
+            methodBuilder.addStatement('out.writeCard32(0)')
         }
         if(fixedSize && fixedSize.get() % 4 == 0) {
             return

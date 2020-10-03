@@ -76,6 +76,7 @@ class JavaEventSpec extends XmlSpec {
             
               private boolean sameScreen;
             
+              @java.lang.Override
               public byte getNumber() {
                 return NUMBER;
               }
@@ -118,6 +119,7 @@ class JavaEventSpec extends XmlSpec {
                 return javaObject;
               }
             
+              @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(sentEvent ? 0b10000000 & NUMBER : NUMBER);
                 out.writeCard8(eventDetail);
@@ -147,6 +149,7 @@ class JavaEventSpec extends XmlSpec {
                 state = (short) maskEnum.disableFor(state);
               }
             
+              @java.lang.Override
               public int getSize() {
                 return 1 + 2 + 1 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 1 + 1;
               }
@@ -188,6 +191,7 @@ class JavaEventSpec extends XmlSpec {
             
               private int window;
             
+              @java.lang.Override
               public byte getNumber() {
                 return NUMBER;
               }
@@ -212,6 +216,7 @@ class JavaEventSpec extends XmlSpec {
                 return javaObject;
               }
             
+              @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(sentEvent ? 0b10000000 & NUMBER : NUMBER);
                 out.writeCard8(eventDetail);
@@ -224,6 +229,7 @@ class JavaEventSpec extends XmlSpec {
                 }
               }
             
+              @java.lang.Override
               public int getSize() {
                 return 1 + 2 + 1 + 4 + 4;
               }

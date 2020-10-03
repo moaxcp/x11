@@ -24,4 +24,9 @@ class EmptyExpression implements Expression {
     CodeBlock getExpression() {
         throw new UnsupportedOperationException('cannot generate code for EmptyExpression')
     }
+
+    @Override
+    CodeBlock getExpression(TypeName primative) {
+        throw new UnsupportedOperationException('cannot generate code for EmptyExpression')
+    }
 }

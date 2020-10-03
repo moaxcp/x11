@@ -10,6 +10,11 @@ class ClientMessageDataUnion extends JavaUnion {
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(ClassName.get(basePackage, 'XObject'))
             .addMethod(readMethod)
+            .addMethod(MethodSpec.methodBuilder('write')
+                .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                .addParameter(ParameterSpec.builder(ClassName.get(basePackage, 'X11Output'), 'in').build())
+                .addException(IOException)
+                .build())
             .build()
     }
 

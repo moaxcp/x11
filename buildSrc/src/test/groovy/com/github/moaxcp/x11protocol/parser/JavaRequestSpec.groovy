@@ -42,6 +42,7 @@ class JavaRequestSpec extends XmlSpec {
                 return javaObject;
               }
             
+              @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(OPCODE);
                 out.writePad(1);
@@ -49,8 +50,9 @@ class JavaRequestSpec extends XmlSpec {
                 out.writeCard32(window);
               }
             
+              @java.lang.Override
               public int getSize() {
-                return 1 + 2 + 1 + 4;
+                return 1 + 1 + 2 + 4;
               }
             }
         '''.stripIndent()
@@ -110,7 +112,7 @@ class JavaRequestSpec extends XmlSpec {
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int javaStart = 1;
                 com.github.moaxcp.x11client.protocol.xproto.CoordModeEnum coordinateMode = com.github.moaxcp.x11client.protocol.xproto.CoordModeEnum.getByCode(in.readByte());
-                javaStart++;
+                javaStart += 1;
                 short length = in.readCard16();
                 javaStart += 2;
                 int drawable = in.readCard32();
@@ -132,6 +134,7 @@ class JavaRequestSpec extends XmlSpec {
                 return javaObject;
               }
             
+              @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(OPCODE);
                 out.writeByte((byte) coordinateMode.getValue());
@@ -144,8 +147,9 @@ class JavaRequestSpec extends XmlSpec {
                 out.writePadAlign(getSize());
               }
             
+              @java.lang.Override
               public int getSize() {
-                return 1 + 2 + 1 + 4 + 4 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(points);
+                return 1 + 1 + 2 + 4 + 4 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(points);
               }
             }
         '''.stripIndent()

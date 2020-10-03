@@ -130,6 +130,7 @@ abstract class JavaObjectType implements JavaType {
 
     MethodSpec getWriteMethod() {
         MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("write")
+            .addAnnotation(Override)
             .addModifiers(Modifier.PUBLIC)
             .addParameter(ClassName.get(basePackage, 'X11Output'), 'out')
             .addException(IOException)
@@ -154,6 +155,7 @@ abstract class JavaObjectType implements JavaType {
     void addSizeMethod(TypeSpec.Builder typeBuilder) {
         CodeBlock sizes = getSizeExpression()
         typeBuilder.addMethod(MethodSpec.methodBuilder('getSize')
+            .addAnnotation(Override)
             .addModifiers(Modifier.PUBLIC)
             .returns(TypeName.INT)
             .addStatement('return $L', sizes)
