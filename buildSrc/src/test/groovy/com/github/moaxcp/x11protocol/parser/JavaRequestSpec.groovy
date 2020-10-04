@@ -58,7 +58,7 @@ class JavaRequestSpec extends XmlSpec {
         '''.stripIndent()
     }
 
-    def queryTextExtends() {
+    def polyPoint() {
         given:
         xmlBuilder.xcb() {
             xidtype(name:'GCONTEXT')
@@ -150,6 +150,98 @@ class JavaRequestSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 1 + 1 + 2 + 4 + 4 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(points);
+              }
+            }
+        '''.stripIndent()
+    }
+
+    def queryTextExtends() {
+        given:
+        xmlBuilder.xcb() {
+            struct(name:'CHAR2B') {
+                field(type:'CARD8', name:'byte1')
+                field(type:'CARD8', name:'byte2')
+            }
+            xidtype(name:'FONT')
+            xidtype(name:'GCONTEXT')
+            xidunion(name:'FONTABLE') {
+                type('FONT')
+                type('GCONTEXT')
+            }
+            request(name:'QueryTextExtends', opcode:'48') {
+                exprfield(type:'BOOL', name:'odd_length') {
+                    op(op:'&') {
+                        fieldref('string_len')
+                        value('1')
+                    }
+                }
+                field(type:'FONTABLE', name:'font')
+                list(type:'CHAR2B', name:'string')
+            }
+        }
+
+        when:
+        addChildNodes()
+        XTypeRequest request = result.resolveXType('QueryTextExtends')
+        JavaRequest javaRequest = request.javaType
+
+        then:
+        javaRequest.typeSpec.toString() == '''\
+            @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
+            public class QueryTextExtendsRequest implements com.github.moaxcp.x11client.protocol.XRequest {
+              public static final byte OPCODE = 48;
+            
+              private int font;
+            
+              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2bStruct> string;
+            
+              public byte getOpCode() {
+                return OPCODE;
+              }
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest readQueryTextExtendsRequest(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                int javaStart = 1;
+                boolean oddLength = in.readBool();
+                javaStart += 1;
+                short length = in.readCard16();
+                javaStart += 2;
+                int font = in.readCard32();
+                javaStart += 4;
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2bStruct> string = new java.util.ArrayList<>(length - javaStart);
+                while(javaStart < Short.toUnsignedInt(length) * 4) {
+                  com.github.moaxcp.x11client.protocol.xproto.Char2bStruct baseObject = com.github.moaxcp.x11client.protocol.xproto.Char2bStruct.readChar2bStruct(in);
+                  string.add(baseObject);
+                  javaStart += baseObject.getSize();
+                }
+                com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest javaObject = new com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest();
+                javaObject.setFont(font);
+                javaObject.setString(string);
+                in.readPadAlign(javaObject.getSize());
+                return javaObject;
+              }
+            
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8(OPCODE);
+                out.writeBool(getOddLength());
+                out.writeCard16((short) getLength());
+                out.writeCard32(font);
+                for(com.github.moaxcp.x11client.protocol.xproto.Char2bStruct t : string) {
+                  t.write(out);
+                }
+                out.writePadAlign(getSize());
+              }
+              
+              public boolean getOddLength() {
+                return ((string.size()) & (1)) > 0;
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 1 + 1 + 2 + 4 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(string);
               }
             }
         '''.stripIndent()

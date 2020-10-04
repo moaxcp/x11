@@ -7,6 +7,7 @@ import groovy.util.slurpersupport.Node
 import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
 import static com.github.moaxcp.x11protocol.parser.JavaTypeListProperty.javaTypeListProperty
 import static com.github.moaxcp.x11protocol.parser.JavaTypeProperty.javaTypeProperty
+import static com.github.moaxcp.x11protocol.parser.XUnitExprField.xUnitExprField
 import static com.github.moaxcp.x11protocol.parser.XUnitField.xUnitField
 import static com.github.moaxcp.x11protocol.parser.XUnitListField.xUnitListField
 import static com.github.moaxcp.x11protocol.parser.XUnitPadFactory.xUnitPad
@@ -57,7 +58,7 @@ abstract class XTypeObject extends XType implements XTypeUnit {
                 System.out.println("switch")
                 return null
             case 'exprfield':
-                return null
+                return xUnitExprField(result, node)
             case 'doc':
                 return null
             case 'reply':

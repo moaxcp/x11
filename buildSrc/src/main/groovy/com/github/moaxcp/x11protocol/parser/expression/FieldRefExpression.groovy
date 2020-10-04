@@ -34,6 +34,13 @@ class FieldRefExpression implements Expression {
 
     CodeBlock getExpression() {
         JavaProperty field = javaType.getField(fieldName)
+        if(field == null && fieldName.endsWith('Len')) {
+            String lengthField = fieldName.replace('Len', '')
+            field = javaType.getField(lengthField)
+            if(field instanceof JavaListProperty && field.x11Type == 'CHAR2B') {
+                return CodeBlock.of('$L.size()', lengthField)
+            }
+        }
         requireNonNull(field, "$fieldName in ${javaType.simpleName} was null")
         if(field instanceof JavaListProperty) {
 
