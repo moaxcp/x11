@@ -22,6 +22,16 @@ class JavaPrimativeProperty extends JavaProperty {
     }
 
     @Override
+    String getName() {
+        if(typeName == TypeName.BOOLEAN) {
+            if(x11Field.name.startsWith('is_')) {
+                return convertX11VariableNameToJava(x11Field.name.replace('is_', ''))
+            }
+        }
+        return convertX11VariableNameToJava(x11Field.name)
+    }
+
+    @Override
     TypeName getTypeName() {
         return memberTypeName
     }

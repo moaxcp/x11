@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.TypeName
 
 class JavaPadAlign implements JavaUnit {
     JavaType javaType
@@ -16,11 +17,11 @@ class JavaPadAlign implements JavaUnit {
     CodeBlock getReadCode() {
         if(align == 4) {
             return CodeBlock.builder()
-                .addStatement("in.readPadAlign(${list.lengthExpression.expression})")
+                .addStatement("in.readPadAlign(${list.lengthExpression.getExpression(TypeName.INT)})")
                 .build()
         }
         return CodeBlock.builder()
-            .addStatement("in.readPadAlign($align, ${list.lengthExpression.expression})")
+            .addStatement("in.readPadAlign($align, ${list.lengthExpression.getExpression(TypeName.INT)})")
             .build()
     }
 
@@ -28,11 +29,11 @@ class JavaPadAlign implements JavaUnit {
     CodeBlock getWriteCode() {
         if(align == 4) {
             return CodeBlock.builder()
-                .addStatement("out.writePadAlign(${list.lengthExpression.expression})")
+                .addStatement("out.writePadAlign(${list.lengthExpression.getExpression(TypeName.INT)})")
                 .build()
         }
         return CodeBlock.builder()
-            .addStatement("out.writePadAlign($align, ${list.lengthExpression.expression})")
+            .addStatement("out.writePadAlign($align, ${list.lengthExpression.getExpression(TypeName.INT)})")
             .build()
 
     }

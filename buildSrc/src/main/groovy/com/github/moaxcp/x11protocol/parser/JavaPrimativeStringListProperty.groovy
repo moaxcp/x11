@@ -24,7 +24,7 @@ class JavaPrimativeStringListProperty extends JavaPrimativeListProperty {
 
     @Override
     CodeBlock getReadCode() {
-        return declareAndInitializeTo("in.readString8(${lengthExpression.expression})")
+        return declareAndInitializeTo("in.readString8(${lengthExpression.getExpression(TypeName.INT)})")
     }
 
     @Override

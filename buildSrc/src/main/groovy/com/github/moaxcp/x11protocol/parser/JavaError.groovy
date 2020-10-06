@@ -66,4 +66,22 @@ class JavaError extends JavaObjectType {
             .addStatement('in.readPad(32 - javaObject.getSize())')
             .endControlFlow()
     }
+
+    @Override
+    CodeBlock getSizeExpression() {
+        CodeBlock.of('$L + $L',
+            CodeBlock.of('1 + 1'),
+            super.getSizeExpression())
+    }
+
+    @Override
+    Optional<Integer> getFixedSize() {
+        boolean empty = protocol.find {
+            it.fixedSize.isEmpty()
+        }
+        if(empty) {
+            return Optional.empty()
+        }
+        Optional.of(protocol.stream().mapToInt({it.fixedSize.get()}).sum() + 2)
+    }
 }

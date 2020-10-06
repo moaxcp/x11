@@ -16,6 +16,14 @@ class XTypeError extends XTypeObject {
         XTypeError error = new XTypeError(result: result, name: node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
         error.number = Integer.valueOf((String) node.attributes().get('number'))
         error.addUnits(result, node)
+        XUnitField minor = error.getField('minor_opcode')
+        if(!minor) {
+            error.protocol.add(0, new XUnitField(result: result, name: 'minor_opcode', type: 'CARD16'))
+        }
+        XUnitField major = error.getField('major_opcode')
+        if(!major) {
+            error.protocol.add(1, new XUnitField(result: result, name: 'major_opcode', type: 'CARD8'))
+        }
 
         return error
     }
