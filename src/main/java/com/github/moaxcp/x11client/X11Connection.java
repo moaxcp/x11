@@ -115,7 +115,7 @@ public class X11Connection implements AutoCloseable {
     return connect(name, authority.get());
   }
 
-  public static X11Connection connect(DisplayName name) throws IOException {
+  public static X11Connection connect(@NonNull DisplayName name) throws IOException {
     List<XAuthority> authorities = getAuthorities(getXAuthorityFile());
     Optional<XAuthority> authority = getAuthority(authorities, name);
     if(!authority.isPresent()) {

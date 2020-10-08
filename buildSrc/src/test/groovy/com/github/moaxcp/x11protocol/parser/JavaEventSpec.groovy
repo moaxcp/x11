@@ -77,7 +77,7 @@ class JavaEventSpec extends XmlSpec {
               private boolean sameScreen;
             
               @java.lang.Override
-              public byte getNumber() {
+              public byte getResponseCode() {
                 return NUMBER;
               }
             
@@ -192,7 +192,7 @@ class JavaEventSpec extends XmlSpec {
               private int window;
             
               @java.lang.Override
-              public byte getNumber() {
+              public byte getResponseCode() {
                 return NUMBER;
               }
             

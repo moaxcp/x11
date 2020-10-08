@@ -43,7 +43,7 @@ class JavaEvent extends JavaObjectType {
 
     @Override
     void addMethods(TypeSpec.Builder typeBuilder) {
-        typeBuilder.addMethod(MethodSpec.methodBuilder('getNumber')
+        typeBuilder.addMethod(MethodSpec.methodBuilder('getResponseCode')
             .addAnnotation(Override)
             .returns(TypeName.BYTE)
             .addModifiers(Modifier.PUBLIC)
