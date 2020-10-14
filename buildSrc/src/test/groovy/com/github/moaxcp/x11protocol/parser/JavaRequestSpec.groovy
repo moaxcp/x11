@@ -27,6 +27,11 @@ class JavaRequestSpec extends XmlSpec {
               public static final byte OPCODE = 4;
             
               private int window;
+              
+              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplySupplier> getReplySupplier(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                return Optional.empty();
+              }
             
               public byte getOpCode() {
                 return OPCODE;
@@ -103,6 +108,11 @@ class JavaRequestSpec extends XmlSpec {
               private int gc;
             
               private java.util.List<com.github.moaxcp.x11client.protocol.xproto.PointStruct> points;
+              
+              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplySupplier> getReplySupplier(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                return Optional.empty();
+              }
             
               public byte getOpCode() {
                 return OPCODE;
@@ -196,6 +206,11 @@ class JavaRequestSpec extends XmlSpec {
               private int font;
             
               private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2bStruct> string;
+            
+              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplySupplier> getReplySupplier(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                return Optional.empty();
+              }
             
               public byte getOpCode() {
                 return OPCODE;

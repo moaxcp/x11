@@ -8,6 +8,7 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getRequestType
 
 class JavaRequest extends JavaObjectType {
     int opCode
+    XTypeReply reply
 
     static JavaRequest javaRequest(XTypeRequest request) {
         String simpleName = getRequestJavaName(request.name)
@@ -18,7 +19,8 @@ class JavaRequest extends JavaObjectType {
             javaPackage: request.javaPackage,
             simpleName:simpleName,
             className: getRequestTypeName(request.javaPackage, request.name),
-            opCode: request.opCode
+            opCode: request.opCode,
+            reply: request.reply
         )
         javaRequest.protocol = request.toJavaProtocol(javaRequest)
         return javaRequest
@@ -34,6 +36,19 @@ class JavaRequest extends JavaObjectType {
 
     @Override
     void addMethods(TypeSpec.Builder typeBuilder) {
+        CodeBlock replyReturn
+        if(reply) {
+            replyReturn = CodeBlock.builder().addStatement('return Optional.of(() -> $T.read$L(in))', reply.javaType.className, reply.javaType.simpleName).build()
+        } else {
+            replyReturn = CodeBlock.builder().addStatement('return Optional.empty()').build()
+        }
+        typeBuilder.addMethod(MethodSpec.methodBuilder('getReplySupplier')
+            .addParameter(ClassName.get('com.github.moaxcp.x11client.protocol', 'X11Input'), 'in')
+            .returns(ParameterizedTypeName.get(ClassName.get('java.util', 'Optional'), ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplySupplier')))
+            .addModifiers(Modifier.PUBLIC)
+            .addException(IOException.class)
+            .addCode(replyReturn)
+            .build())
         typeBuilder.addMethod(MethodSpec.methodBuilder('getOpCode')
             .returns(TypeName.BYTE)
             .addModifiers(Modifier.PUBLIC)
