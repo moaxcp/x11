@@ -28,8 +28,8 @@ class JavaRequestSpec extends XmlSpec {
             
               private int window;
               
-              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplySupplier> getReplySupplier(
-                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplyFunction> getReplyFunction(
+                  ) {
                 return Optional.empty();
               }
             
@@ -109,8 +109,8 @@ class JavaRequestSpec extends XmlSpec {
             
               private java.util.List<com.github.moaxcp.x11client.protocol.xproto.PointStruct> points;
               
-              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplySupplier> getReplySupplier(
-                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplyFunction> getReplyFunction(
+                  ) {
                 return Optional.empty();
               }
             
@@ -207,8 +207,8 @@ class JavaRequestSpec extends XmlSpec {
             
               private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2bStruct> string;
             
-              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplySupplier> getReplySupplier(
-                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplyFunction> getReplyFunction(
+                  ) {
                 return Optional.empty();
               }
             

@@ -38,15 +38,13 @@ class JavaRequest extends JavaObjectType {
     void addMethods(TypeSpec.Builder typeBuilder) {
         CodeBlock replyReturn
         if(reply) {
-            replyReturn = CodeBlock.builder().addStatement('return Optional.of(() -> $T.read$L(in))', reply.javaType.className, reply.javaType.simpleName).build()
+            replyReturn = CodeBlock.builder().addStatement('return Optional.of($T::read$L)', reply.javaType.className, reply.javaType.simpleName).build()
         } else {
             replyReturn = CodeBlock.builder().addStatement('return Optional.empty()').build()
         }
-        typeBuilder.addMethod(MethodSpec.methodBuilder('getReplySupplier')
-            .addParameter(ClassName.get('com.github.moaxcp.x11client.protocol', 'X11Input'), 'in')
-            .returns(ParameterizedTypeName.get(ClassName.get('java.util', 'Optional'), ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplySupplier')))
+        typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
+            .returns(ParameterizedTypeName.get(ClassName.get('java.util', 'Optional'), ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction')))
             .addModifiers(Modifier.PUBLIC)
-            .addException(IOException.class)
             .addCode(replyReturn)
             .build())
         typeBuilder.addMethod(MethodSpec.methodBuilder('getOpCode')

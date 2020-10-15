@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 public interface XRequest extends XObject {
-  Optional<XReplySupplier> getReplySupplier(X11Input in) throws IOException;
+  Optional<XReplyFunction> getReplyFunction();
   byte getOpCode();
   default int getLength() {
     return (short) ((getSize() + 4 - getSize() % 4) / 4);

@@ -14,9 +14,8 @@ import java.util.ServiceLoader;
 
 public class X11Client implements AutoCloseable {
   private final X11Connection connection;
-  private short nextSequenceNumber = 1;
   private int nextResourceNumber = 1;
-  private final XProtocolService service = new XProtocolService();
+  private final XProtocolService service;
 
   public static X11Client connect(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority) throws IOException {
     return new X11Client(X11Connection.connect(displayName, xAuthority));
@@ -32,24 +31,15 @@ public class X11Client implements AutoCloseable {
 
   X11Client(X11Connection connection) {
     this.connection = connection;
+    service = new XProtocolService(connection.getX11Input(), connection.getX11Output());
   }
 
   public int send(XRequest request) throws IOException {
-    request.write(connection.getX11Output());
-    return nextSequenceNumber++;
+    return service.send(request);
   }
 
-  public Optional<XResponse> read() throws IOException {
-    X11Input in = connection.getX11Input();
-    byte responseCode = in.readByte();
-    if(responseCode == 0) {
-
-    } else if(responseCode == 1) {
-
-    } else if(responseCode > 1) {
-
-    }
-    return Optional.empty();
+  public XResponse read() throws IOException {
+    return service.read();
   }
 
   public int nextResource() {
