@@ -34,7 +34,7 @@ public class XprotoXProtocolReader implements XProtocolReader {
   public XEvent readEvent(byte number, boolean sentEvent, X11Input in) throws IOException {
     switch(number) {
       case 26:
-        return CirculateNotifyEvent.readCirculateNotifyEvent(in, sentEvent);
+        return CirculateNotifyEvent.readCirculateNotifyEvent(sentEvent, in);
       default:
         throw new IllegalArgumentException("number " + number + " is not supported");
     }

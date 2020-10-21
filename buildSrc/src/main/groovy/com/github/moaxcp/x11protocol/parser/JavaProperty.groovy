@@ -15,6 +15,7 @@ abstract class JavaProperty implements JavaUnit {
     
     boolean readOnly
     boolean localOnly
+    boolean readParam
 
     JavaProperty(Map map) {
         javaType = requireNonNull(map.javaType, 'javaType must not be null')

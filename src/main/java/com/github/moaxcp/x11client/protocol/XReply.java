@@ -11,5 +11,5 @@ public interface XReply extends XObject, XResponse {
   default int getLength() {
     return (short) ((getSize() + 4 - getSize() % 4) / 4);
   }
-  void write(X11Output out, short sequenceNumber) throws IOException;
+  void write(X11Output out) throws IOException;
 }

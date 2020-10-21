@@ -38,7 +38,7 @@ class JavaRequest extends JavaObjectType {
     void addMethods(TypeSpec.Builder typeBuilder) {
         CodeBlock replyReturn
         if(reply) {
-            replyReturn = CodeBlock.builder().addStatement('return Optional.of($T::read$L)', reply.javaType.className, reply.javaType.simpleName).build()
+            replyReturn = CodeBlock.builder().addStatement('return Optional.of((field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in))', reply.javaType.className, reply.javaType.simpleName).build()
         } else {
             replyReturn = CodeBlock.builder().addStatement('return Optional.empty()').build()
         }

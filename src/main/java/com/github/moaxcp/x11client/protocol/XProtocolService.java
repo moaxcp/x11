@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
-import java.util.function.Supplier;
 
 public class XProtocolService {
   private final ServiceLoader<XProtocolReader> loader = ServiceLoader.load(XProtocolReader.class);

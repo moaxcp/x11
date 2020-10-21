@@ -1,10 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
-
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.ParameterSpec
+import com.squareup.javapoet.*
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getReplyJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getReplyTypeName
@@ -21,7 +17,23 @@ class JavaReply extends JavaObjectType {
             className: getReplyTypeName(reply.javaPackage, reply.name)
         )
         javaReply.protocol = reply.toJavaProtocol(javaReply)
+        if(javaReply.protocol.size() > 0) {
+            javaReply.protocol[0].readParam = true
+            javaReply.protocol[1].readParam = true
+        }
         return javaReply
+    }
+
+    @Override
+    void addReadParameters(MethodSpec.Builder methodBuilder) {
+        if(protocol.size() > 0) {
+            if(protocol[0] instanceof JavaPad) {
+                methodBuilder.addParameter(ParameterSpec.builder(TypeName.BYTE, 'pad').build())
+            } else {
+                methodBuilder.addParameter(ParameterSpec.builder(TypeName.BYTE, ((JavaProperty) protocol[0]).name).build())
+            }
+            methodBuilder.addParameter(ParameterSpec.builder(TypeName.SHORT, 'sequenceNumber').build())
+        }
     }
 
     @Override
@@ -38,7 +50,6 @@ class JavaReply extends JavaObjectType {
             if(protocol.size() > 1) {
                 super.addReadStatements(methodBuilder)
             } else {
-                methodBuilder.addStatement('in.readByte()')
                 methodBuilder.addStatement('int length = in.readCard32()')
             }
         }
@@ -46,16 +57,23 @@ class JavaReply extends JavaObjectType {
 
     @Override
     void addSetterStatements(MethodSpec.Builder methodBuilder) {
-        super.addSetterStatements(methodBuilder)
+        CodeBlock.Builder setters = CodeBlock.builder()
+        protocol.findAll {
+            it instanceof JavaProperty && !it.localOnly
+        }.eachWithIndex { JavaProperty it, int i ->
+            if(i == 0 && it.typeName == TypeName.BOOLEAN) {
+                setters.addStatement('$L.$L($L > 0)', 'javaObject', it.setterName, it.name)
+            } else if (i == 0 && it instanceof JavaEnumProperty) {
+                setters.addStatement('$L.$L($T.getByCode($L))', 'javaObject', it.setterName, it.typeName, it.name)
+            } else {
+                setters.addStatement('$L.$L($L)', 'javaObject', it.setterName, it.name)
+            }
+        }
+        methodBuilder.addCode(setters.build())
         if(fixedSize && fixedSize.get() % 4 == 0) {
             return
         }
         methodBuilder.addStatement('in.readPadAlign(javaObject.getSize())')
-    }
-
-    void addWriteParameters(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addParameter(ParameterSpec.builder(short.class, 'sequenceNumber').build())
-        super.addReadParameters(methodBuilder)
     }
 
     @Override

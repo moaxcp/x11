@@ -26,9 +26,53 @@ class JavaReplySpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('QueryTree')
+        JavaRequest javaRequest = request.javaType
         JavaReply javaReply = request.reply.javaType
 
         then:
+        javaRequest.typeSpec.toString() == '''\
+            @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
+            public class QueryTreeRequest implements com.github.moaxcp.x11client.protocol.XRequest {
+              public static final byte OPCODE = 15;
+            
+              private int window;
+            
+              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplyFunction> getReplyFunction(
+                  ) {
+                return Optional.of((field, sequenceNumber, in) -> com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.readQueryTreeReply(field, sequenceNumber, in));
+              }
+            
+              public byte getOpCode() {
+                return OPCODE;
+              }
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest readQueryTreeRequest(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                in.readPad(1);
+                short length = in.readCard16();
+                int window = in.readCard32();
+                com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest javaObject = new com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest();
+                javaObject.setWindow(window);
+                return javaObject;
+              }
+            
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8(OPCODE);
+                out.writePad(1);
+                out.writeCard16((short) getLength());
+                out.writeCard32(window);
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 1 + 1 + 2 + 4;
+              }
+            }
+        '''.stripIndent()
+
         javaReply.typeSpec.toString() == '''\
             @lombok.Data
             @lombok.AllArgsConstructor
@@ -45,9 +89,8 @@ class JavaReplySpec extends XmlSpec {
               private int[] children;
             
               public static com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply readQueryTreeReply(
-                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
-                in.readPad(1);
-                short sequenceNumber = in.readCard16();
+                  byte pad, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
+                  java.io.IOException {
                 int length = in.readCard32();
                 int root = in.readCard32();
                 int parent = in.readCard32();
@@ -65,8 +108,7 @@ class JavaReplySpec extends XmlSpec {
               }
             
               @java.lang.Override
-              public void write(com.github.moaxcp.x11client.protocol.X11Output out, short sequenceNumber) throws
-                  java.io.IOException {
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8((byte) 1);
                 out.writePad(1);
                 out.writeCard16(sequenceNumber);
@@ -82,6 +124,169 @@ class JavaReplySpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 1 + 1 + 2 + 4 + 4 + 4 + 2 + 14 + 4 * children.length;
+              }
+            }
+        '''.stripIndent()
+    }
+
+    def translateCoordinates() {
+        given:
+        xmlBuilder.xcb() {
+            xidtype(name:'WINDOW')
+            request(name:'TranslateCoordinates', opcode:'40') {
+                pad(bytes:'1')
+                field(type:'WINDOW', name:'src_window')
+                field(type:'WINDOW', name:'dst_window')
+                field(type:'INT16', name:'src_x')
+                field(type:'INT16', name:'src_y')
+                reply {
+                    field(type:'BOOL', name:'same_screen')
+                    field(type:'WINDOW', name:'child', altenum:'Window')
+                    field(type:'INT16', name:'dst_y')
+                    field(type:'INT16', name:'dst_x')
+                }
+            }
+        }
+
+        when:
+        addChildNodes()
+        XTypeRequest request = result.resolveXType('TranslateCoordinates')
+        JavaRequest javaRequest = request.javaType
+        JavaReply javaReply = request.reply.javaType
+
+        then:
+        javaReply.typeSpec.toString() == '''\
+            @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
+            public class TranslateCoordinatesReply implements com.github.moaxcp.x11client.protocol.XReply {
+              private boolean sameScreen;
+            
+              private short sequenceNumber;
+            
+              private int child;
+            
+              private short dstY;
+            
+              private short dstX;
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply readTranslateCoordinatesReply(
+                  byte sameScreen, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in)
+                  throws java.io.IOException {
+                int length = in.readCard32();
+                int child = in.readCard32();
+                short dstY = in.readInt16();
+                short dstX = in.readInt16();
+                com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply javaObject = new com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply();
+                javaObject.setSameScreen(sameScreen > 0);
+                javaObject.setSequenceNumber(sequenceNumber);
+                javaObject.setChild(child);
+                javaObject.setDstY(dstY);
+                javaObject.setDstX(dstX);
+                return javaObject;
+              }
+            
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8((byte) 1);
+                out.writeBool(sameScreen);
+                out.writeCard16(sequenceNumber);
+                out.writeCard32(getLength());
+                out.writeCard32(child);
+                out.writeInt16(dstY);
+                out.writeInt16(dstX);
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 1 + 1 + 2 + 4 + 4 + 2 + 2;
+              }
+            }
+        '''.stripIndent()
+    }
+
+    def listHosts() {
+        given:
+        xmlBuilder.xcb() {
+            'enum'(name:'AccessControl') {
+                item(name:'Disable') {
+                    value('0')
+                }
+                item(name:'Enable') {
+                    value('1')
+                }
+            }
+            struct(name:'HOST') {
+                field(type:'CARD8', name:'family')
+            }
+            request(name:'ListHosts', opcode:'110') {
+                reply {
+                    field(type:'BYTE', name:'mode', enum:'AccessControl')
+                    field(type:'CARD16', name:'hosts_len')
+                    pad(bytes:'22')
+                    list(type:'HOST', name:'hosts') {
+                        fieldref('hosts_len')
+                    }
+                }
+            }
+        }
+
+        when:
+        addChildNodes()
+        XTypeRequest request = result.resolveXType('ListHosts')
+        JavaRequest javaRequest = request.javaType
+        JavaReply javaReply = request.reply.javaType
+
+        then:
+        javaReply.typeSpec.toString() == '''\
+            @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
+            public class ListHostsReply implements com.github.moaxcp.x11client.protocol.XReply {
+              private com.github.moaxcp.x11client.protocol.xproto.AccessControlEnum mode;
+            
+              private short sequenceNumber;
+            
+              private short hostsLen;
+            
+              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.HostStruct> hosts;
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.ListHostsReply readListHostsReply(
+                  byte mode, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
+                  java.io.IOException {
+                int length = in.readCard32();
+                short hostsLen = in.readCard16();
+                in.readPad(22);
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.HostStruct> hosts = new java.util.ArrayList<>(Short.toUnsignedInt(hostsLen));
+                for(int i = 0; i < Short.toUnsignedInt(hostsLen); i++) {
+                  hosts.add(com.github.moaxcp.x11client.protocol.xproto.HostStruct.readHostStruct(in));
+                }
+                com.github.moaxcp.x11client.protocol.xproto.ListHostsReply javaObject = new com.github.moaxcp.x11client.protocol.xproto.ListHostsReply();
+                javaObject.setMode(com.github.moaxcp.x11client.protocol.xproto.AccessControlEnum.getByCode(mode));
+                javaObject.setSequenceNumber(sequenceNumber);
+                javaObject.setHostsLen(hostsLen);
+                javaObject.setHosts(hosts);
+                in.readPadAlign(javaObject.getSize());
+                return javaObject;
+              }
+            
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8((byte) 1);
+                out.writeByte((byte) mode.getValue());
+                out.writeCard16(sequenceNumber);
+                out.writeCard32(getLength());
+                out.writeCard16(hostsLen);
+                out.writePad(22);
+                for(com.github.moaxcp.x11client.protocol.xproto.HostStruct t : hosts) {
+                  t.write(out);
+                }
+                out.writePadAlign(getSize());
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 1 + 1 + 2 + 4 + 2 + 22 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(hosts);
               }
             }
         '''.stripIndent()

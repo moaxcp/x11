@@ -170,7 +170,7 @@ class JavaStructSpec extends XmlSpec {
               private int[] axisvalues;
             
               public static com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct readDeviceTimeCoordStruct(
-                  com.github.moaxcp.x11client.protocol.X11Input in, byte numAxes) throws java.io.IOException {
+                  byte numAxes, com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int time = in.readCard32();
                 int[] axisvalues = in.readInt32(numAxes);
                 com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct();

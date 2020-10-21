@@ -82,7 +82,7 @@ class JavaEventSpec extends XmlSpec {
               }
             
               public static com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent readKeyPressEvent(
-                  com.github.moaxcp.x11client.protocol.X11Input in, boolean sentEvent) throws
+                  boolean sentEvent, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
                 byte eventDetail = in.readCard8();
                 short sequenceNumber = in.readCard16();
@@ -197,7 +197,7 @@ class JavaEventSpec extends XmlSpec {
               }
             
               public static com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent readMapRequestEvent(
-                  com.github.moaxcp.x11client.protocol.X11Input in, boolean sentEvent) throws
+                  boolean sentEvent, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
                 byte eventDetail = in.readCard8();
                 short sequenceNumber = in.readCard16();

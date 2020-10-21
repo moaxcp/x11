@@ -81,9 +81,9 @@ abstract class JavaObjectType implements JavaType {
         MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("read${simpleName}")
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
             .returns(className)
-            .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
             .addException(IOException)
         addReadParameters(methodBuilder)
+        methodBuilder.addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
         addHeaderStatements(methodBuilder)
         addReadStatements(methodBuilder)
         methodBuilder.addStatement('$1T $2L = new $1T()', className, 'javaObject')
@@ -95,6 +95,23 @@ abstract class JavaObjectType implements JavaType {
     }
     
     void addReadParameters(MethodSpec.Builder methodBuilder) {
+        List<ParameterSpec> readParams = protocol.findAll {
+            it.readParam
+        }.collect {
+            if(it instanceof JavaEnumProperty) {
+                return ParameterSpec.builder(it.ioTypeName, it.name).build()
+            } else if(it instanceof JavaProperty) {
+                return ParameterSpec.builder(it.typeName, it.name).build()
+            } else if(it instanceof JavaPad) {
+                if(it.bytes == 1) {
+                    return ParameterSpec.builder(TypeName.BYTE, 'pad').build()
+                } else {
+                    throw new IllegalStateException("found pad but ${it.bytes} bytes not supported")
+                }
+            } else {
+                throw new IllegalStateException("${it.getClass().simpleName} not supported.")
+            }
+        }
         List<ParameterSpec> params = protocol.findAll {
             it instanceof JavaListProperty
         }.collect { JavaListProperty it ->
@@ -102,7 +119,7 @@ abstract class JavaObjectType implements JavaType {
         }.flatten().collect { ParamRefExpression it ->
             ParameterSpec.builder(x11PrimativeToStorageTypeName(it.x11Type), it.paramName).build()
         }
-        methodBuilder.addParameters(params)
+        methodBuilder.addParameters(readParams).addParameters(params)
     }
 
     void addHeaderStatements(MethodSpec.Builder builder) {
@@ -112,7 +129,9 @@ abstract class JavaObjectType implements JavaType {
     void addReadStatements(MethodSpec.Builder methodBuilder) {
         CodeBlock.Builder readProtocol = CodeBlock.builder()
         protocol.each {
-            readProtocol.add(it.readCode)
+            if(!it.readParam) {
+                readProtocol.add(it.readCode)
+            }
         }
 
         methodBuilder.addCode(readProtocol.build())

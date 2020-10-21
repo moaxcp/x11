@@ -44,7 +44,9 @@ public class X11ConnectionIT {
         //error
       } else if(status == 1) {
         //success
-        QueryExtensionReply reply = QueryExtensionReply.readQueryExtensionReply(in);
+        byte field = in.readByte();
+        short sequenceNumber = in.readCard16();
+        QueryExtensionReply reply = QueryExtensionReply.readQueryExtensionReply(field, sequenceNumber, in);
         System.out.println(reply);
       } else {
         //event
