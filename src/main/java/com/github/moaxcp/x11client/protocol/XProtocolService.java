@@ -26,14 +26,14 @@ public class XProtocolService {
     return nextSequenceNumber++;
   }
 
-  public XResponse read() throws IOException {
+  public <T extends XResponse> T read() throws IOException {
     byte responseCode = in.readByte();
     if(responseCode == 0) {
-      return readError();
+      return (T) readError();
     } else if(responseCode == 1) {
-      return readReply();
+      return (T) readReply();
     } else {
-      return readEvent(responseCode);
+      return (T) readEvent(responseCode);
     }
   }
 

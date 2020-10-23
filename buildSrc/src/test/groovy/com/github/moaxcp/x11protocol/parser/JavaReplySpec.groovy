@@ -103,7 +103,9 @@ class JavaReplySpec extends XmlSpec {
                 javaObject.setParent(parent);
                 javaObject.setChildrenLen(childrenLen);
                 javaObject.setChildren(children);
-                in.readPadAlign(javaObject.getSize());
+                if(javaObject.getSize() < 32) {
+                  in.readPad(32 - javaObject.getSize());
+                }
                 return javaObject;
               }
             
@@ -183,6 +185,7 @@ class JavaReplySpec extends XmlSpec {
                 javaObject.setChild(child);
                 javaObject.setDstY(dstY);
                 javaObject.setDstX(dstX);
+                in.readPad(16);
                 return javaObject;
               }
             
@@ -266,7 +269,9 @@ class JavaReplySpec extends XmlSpec {
                 javaObject.setSequenceNumber(sequenceNumber);
                 javaObject.setHostsLen(hostsLen);
                 javaObject.setHosts(hosts);
-                in.readPadAlign(javaObject.getSize());
+                if(javaObject.getSize() < 32) {
+                  in.readPad(32 - javaObject.getSize());
+                }
                 return javaObject;
               }
             
@@ -287,6 +292,86 @@ class JavaReplySpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 1 + 1 + 2 + 4 + 2 + 22 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(hosts);
+              }
+            }
+        '''.stripIndent()
+    }
+
+    def queryExtension() {
+        given:
+        xmlBuilder.xcb() {
+            request(name:'QueryExtension', opcode:'98') {
+                pad(bytes: '1')
+                field(type: 'CARD16', name: 'name_len')
+                pad(bytes: '2')
+                list(type: 'char', name: 'name') {
+                    fieldref('name_len')
+                }
+                reply {
+                    pad(bytes:'1')
+                    field(type:'BOOL', name:'present')
+                    field(type:'CARD8', name:'major_opcode')
+                    field(type:'CARD8', name:'first_event')
+                    field(type:'CARD8', name:'first_error')
+                }
+            }
+        }
+
+        when:
+        addChildNodes()
+        XTypeRequest request = result.resolveXType('QueryExtension')
+        JavaRequest javaRequest = request.javaType
+        JavaReply javaReply = request.reply.javaType
+
+        then:
+        javaReply.typeSpec.toString() == '''\
+            @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
+            public class QueryExtensionReply implements com.github.moaxcp.x11client.protocol.XReply {
+              private short sequenceNumber;
+            
+              private boolean present;
+            
+              private byte majorOpcode;
+            
+              private byte firstEvent;
+            
+              private byte firstError;
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply readQueryExtensionReply(
+                  byte pad, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
+                  java.io.IOException {
+                int length = in.readCard32();
+                boolean present = in.readBool();
+                byte majorOpcode = in.readCard8();
+                byte firstEvent = in.readCard8();
+                byte firstError = in.readCard8();
+                com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply javaObject = new com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply();
+                javaObject.setSequenceNumber(sequenceNumber);
+                javaObject.setPresent(present);
+                javaObject.setMajorOpcode(majorOpcode);
+                javaObject.setFirstEvent(firstEvent);
+                javaObject.setFirstError(firstError);
+                in.readPad(20);
+                return javaObject;
+              }
+            
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8((byte) 1);
+                out.writePad(1);
+                out.writeCard16(sequenceNumber);
+                out.writeCard32(getLength());
+                out.writeBool(present);
+                out.writeCard8(majorOpcode);
+                out.writeCard8(firstEvent);
+                out.writeCard8(firstError);
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 1 + 1 + 2 + 4 + 1 + 1 + 1 + 1;
               }
             }
         '''.stripIndent()

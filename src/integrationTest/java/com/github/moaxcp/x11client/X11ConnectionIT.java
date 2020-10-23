@@ -4,13 +4,14 @@ import java.io.IOException;
 
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
-import com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest;
-import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
-import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionRequest;
+import com.github.moaxcp.x11client.protocol.XResponse;
+import com.github.moaxcp.x11client.protocol.xproto.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class X11ConnectionIT {
   private XephyrRunner runner;
@@ -51,6 +52,32 @@ public class X11ConnectionIT {
       } else {
         //event
       }
+    }
+  }
+
+  @Test
+  void clientTest() throws IOException {
+    try(X11Client client = X11Client.connect(new DisplayName(":1"))) {
+      SetupStruct setup = client.getSetup();
+      GetKeyboardMappingRequest keyboard = new GetKeyboardMappingRequest();
+      keyboard.setFirstKeycode(setup.getMinKeycode());
+      keyboard.setCount((byte) (setup.getMaxKeycode() - setup.getMinKeycode() + 1));
+      client.send(keyboard);
+      GetKeyboardMappingReply keyboardReply = client.read();
+      System.out.println(keyboardReply);
+
+      QueryExtensionRequest bigRequests = new QueryExtensionRequest();
+      bigRequests.setName("BIG-REQUESTS");
+      //assertThat(bigRequests.getLength()).isEqualTo(5);
+      client.send(bigRequests);
+      QueryExtensionReply bigRequestReply = client.read();
+      System.out.println(bigRequestReply);
+
+      QueryExtensionRequest xcMisc = new QueryExtensionRequest();
+      xcMisc.setName("XC-MISC");
+      client.send(xcMisc);
+      XResponse xcMiscReply = client.read();
+      System.out.println(xcMiscReply);
     }
   }
 }

@@ -4,6 +4,7 @@ import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.XProtocolService;
 import com.github.moaxcp.x11client.protocol.XRequest;
 import com.github.moaxcp.x11client.protocol.XResponse;
+import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
 import lombok.NonNull;
 
 import java.io.IOException;
@@ -34,11 +35,15 @@ public class X11Client implements AutoCloseable {
     service = new XProtocolService(connection.getX11Input(), connection.getX11Output());
   }
 
+  public SetupStruct getSetup() {
+    return connection.getSetupStruct();
+  }
+
   public int send(XRequest request) throws IOException {
     return service.send(request);
   }
 
-  public XResponse read() throws IOException {
+  public <T extends XResponse> T read() throws IOException {
     return service.read();
   }
 
@@ -47,7 +52,7 @@ public class X11Client implements AutoCloseable {
   }
 
   @Override
-  public void close() throws Exception {
+  public void close() throws IOException {
     connection.close();
   }
 }

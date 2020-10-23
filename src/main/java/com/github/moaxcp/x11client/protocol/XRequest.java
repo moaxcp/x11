@@ -7,7 +7,10 @@ public interface XRequest extends XObject {
   Optional<XReplyFunction> getReplyFunction();
   byte getOpCode();
   default int getLength() {
-    return (short) ((getSize() + 4 - getSize() % 4) / 4);
+    if(getSize() % 4 == 0) {
+      return getSize() / 4;
+    }
+    return (getSize() + 4 - getSize() % 4) / 4;
   }
   void write(X11Output out) throws IOException;
 }

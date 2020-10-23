@@ -70,6 +70,16 @@ class JavaReply extends JavaObjectType {
             }
         }
         methodBuilder.addCode(setters.build())
+        if(fixedSize && fixedSize.get() < 32) {
+            methodBuilder.addStatement('in.readPad($L)', 32 - fixedSize.get())
+            return
+        } else if(!fixedSize) {
+            methodBuilder.beginControlFlow('if(javaObject.getSize() < 32)')
+            methodBuilder.addStatement('in.readPad(32 - javaObject.getSize())')
+            methodBuilder.endControlFlow()
+            return
+        }
+
         if(fixedSize && fixedSize.get() % 4 == 0) {
             return
         }
