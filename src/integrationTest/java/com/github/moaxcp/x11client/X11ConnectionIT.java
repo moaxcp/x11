@@ -5,6 +5,8 @@ import java.io.IOException;
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
 import com.github.moaxcp.x11client.protocol.XResponse;
+import com.github.moaxcp.x11client.protocol.bigreq.EnableReply;
+import com.github.moaxcp.x11client.protocol.bigreq.EnableRequest;
 import com.github.moaxcp.x11client.protocol.xproto.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -72,6 +74,11 @@ public class X11ConnectionIT {
       client.send(bigRequests);
       QueryExtensionReply bigRequestReply = client.read();
       System.out.println(bigRequestReply);
+
+      EnableRequest enableRequest = new EnableRequest();
+      client.send(enableRequest);
+      XResponse enableReply = client.read();
+      System.out.println(enableReply);
 
       QueryExtensionRequest xcMisc = new QueryExtensionRequest();
       xcMisc.setName("XC-MISC");

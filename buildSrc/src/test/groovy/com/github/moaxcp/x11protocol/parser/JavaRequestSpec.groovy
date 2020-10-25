@@ -261,4 +261,57 @@ class JavaRequestSpec extends XmlSpec {
             }
         '''.stripIndent()
     }
+
+    def bigRequestEnable() {
+        given:
+        xmlBuilder.xcb(header:'bigreq') {
+            request(name:'Enable', opcode:'0') {
+                reply {
+                    pad(bytes:'1')
+                    field(type:'CARD32', name:'maximum_request_length')
+                }
+            }
+        }
+
+        when:
+        addChildNodes()
+        XTypeRequest request = result.resolveXType('Enable')
+        JavaRequest javaRequest = request.javaType
+
+        then:
+        javaRequest.typeSpec.toString() == '''\
+            public class EnableRequest implements com.github.moaxcp.x11client.protocol.XRequest {
+              public static final byte OPCODE = 0;
+            
+              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplyFunction> getReplyFunction(
+                  ) {
+                return Optional.of((field, sequenceNumber, in) -> com.github.moaxcp.x11client.protocol.xproto.EnableReply.readEnableReply(field, sequenceNumber, in));
+              }
+            
+              public byte getOpCode() {
+                return OPCODE;
+              }
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.EnableRequest readEnableRequest(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                in.readByte();
+                short length = in.readCard16();
+                com.github.moaxcp.x11client.protocol.xproto.EnableRequest javaObject = new com.github.moaxcp.x11client.protocol.xproto.EnableRequest();
+                return javaObject;
+              }
+            
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8(OPCODE);
+                out.writePad(1);
+                out.writeCard16((short) 1);
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 4;
+              }
+            }
+        '''.stripIndent()
+    }
 }

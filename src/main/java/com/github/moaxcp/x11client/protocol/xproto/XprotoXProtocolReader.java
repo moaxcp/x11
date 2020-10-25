@@ -43,6 +43,8 @@ public class XprotoXProtocolReader implements XProtocolReader {
   @Override
   public XError readError(byte code, X11Input in) throws IOException {
     switch(code) {
+      case 1:
+        return RequestError.readRequestEvent(in);
       case 5:
         return AtomError.readAtomEvent(in);
       default:

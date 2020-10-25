@@ -100,7 +100,7 @@ class JavaRequest extends JavaObjectType {
             methodBuilder.addCode(writeProtocol.build())
         } else {
             methodBuilder.addStatement('out.writePad(1)')
-            methodBuilder.addStatement('out.writeCard16((short) 0)')
+            methodBuilder.addStatement('out.writeCard16((short) 1)')
         }
         if(fixedSize && fixedSize.get() % 4 == 0) {
             return
@@ -110,6 +110,9 @@ class JavaRequest extends JavaObjectType {
 
     @Override
     CodeBlock getSizeExpression() {
+        if(protocol.isEmpty()) {
+            return CodeBlock.of('4')
+        }
         CodeBlock.of('$L + $L',
             CodeBlock.of('1'),
             super.getSizeExpression())
@@ -119,6 +122,9 @@ class JavaRequest extends JavaObjectType {
     Optional<Integer> getFixedSize() {
         boolean empty = protocol.find {
             it.fixedSize.isEmpty()
+        }
+        if(protocol.isEmpty()) {
+            return Optional.of(4)
         }
         if(empty) {
             return Optional.empty()
