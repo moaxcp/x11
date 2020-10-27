@@ -1,4 +1,6 @@
-package com.github.moaxcp.x11client.protocol;
+package com.github.moaxcp.x11client;
+
+import com.github.moaxcp.x11client.protocol.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -7,19 +9,32 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 
 public class XProtocolService {
-  private final ServiceLoader<XProtocolReader> loader = ServiceLoader.load(XProtocolReader.class);
+  private final ServiceLoader<XProtocolPlugin> loader = ServiceLoader.load(XProtocolPlugin.class);
   private final Map<Short, XReplyFunction> replySequences = new HashMap<>();
   private final X11Input in;
   private final X11Output out;
   private int nextSequenceNumber = 1;
 
-  public XProtocolService(X11Input in, X11Output out) {
+  XProtocolService(X11Input in, X11Output out) throws IOException {
     this.in = in;
     this.out = out;
+    for(XProtocolPlugin plugin : loader) {
+      plugin.setupOffset(this);
+    }
   }
 
   public int send(XRequest request) throws IOException {
-    request.write(out);
+    boolean sent = false;
+    for(XProtocolPlugin plugin : loader) {
+      if(plugin.supportedRequest(request)) {
+        request.write(plugin.getOffset(), out);
+        sent = true;
+        break;
+      }
+    }
+    if(!sent) {
+      throw new UnsupportedOperationException(String.format("could not find plugin for request \"%s\"", request));
+    }
     Optional<XReplyFunction> function = request.getReplyFunction();
     //nextSequenceNumber is truncated to match reply sequence numbers
     function.ifPresent(f -> replySequences.put((short) nextSequenceNumber, f));
@@ -39,12 +54,12 @@ public class XProtocolService {
 
   private XError readError() throws IOException {
     byte code = in.readCard8();
-    for(XProtocolReader reader : loader) {
+    for(XProtocolPlugin reader : loader) {
       if(reader.supportedError(code)) {
         return reader.readError(code, in);
       }
     }
-    throw new IllegalStateException(XProtocolReader.class.getSimpleName() + " not found for error code " + code);
+    throw new IllegalStateException(XProtocolPlugin.class.getSimpleName() + " not found for error code " + code);
   }
 
   private XEvent readEvent(byte responseCode) throws IOException {
@@ -53,12 +68,12 @@ public class XProtocolService {
     if(sentEvent) {
       number = (byte) (responseCode ^ (byte) 0b10000000);
     }
-    for(XProtocolReader reader : loader) {
+    for(XProtocolPlugin reader : loader) {
       if(reader.supportedEvent(number)) {
         return reader.readEvent(number, sentEvent, in);
       }
     }
-    throw new IllegalStateException(XProtocolReader.class.getSimpleName() + " not found for number " + number);
+    throw new IllegalStateException(XProtocolPlugin.class.getSimpleName() + " not found for number " + number);
 
   }
 

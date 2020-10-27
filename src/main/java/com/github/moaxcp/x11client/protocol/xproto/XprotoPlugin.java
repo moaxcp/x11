@@ -1,15 +1,32 @@
 package com.github.moaxcp.x11client.protocol.xproto;
 
+import com.github.moaxcp.x11client.XProtocolService;
 import com.github.moaxcp.x11client.protocol.*;
 import lombok.Getter;
 
 import java.io.IOException;
 
-public class XprotoXProtocolReader implements XProtocolReader {
+public class XprotoPlugin implements XProtocolPlugin {
   @Getter
   private final String name = "xproto";
+  @Getter
+  private byte offset;
 
+  @Override
+  public void setupOffset(XProtocolService service) {
 
+  }
+
+  @Override
+  public boolean supportedRequest(XRequest request) {
+    if(request instanceof GetKeyboardMappingRequest) {
+      return true;
+    }
+    if(request instanceof QueryExtensionRequest) {
+      return true;
+    }
+    return false;
+  }
 
   @Override
   public boolean supportedEvent(byte number) {

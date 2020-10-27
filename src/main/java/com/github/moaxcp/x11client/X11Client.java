@@ -1,17 +1,13 @@
 package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.X11Input;
-import com.github.moaxcp.x11client.protocol.XProtocolService;
+import com.github.moaxcp.x11client.protocol.X11Output;
 import com.github.moaxcp.x11client.protocol.XRequest;
 import com.github.moaxcp.x11client.protocol.XResponse;
 import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
 import lombok.NonNull;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ServiceLoader;
 
 public class X11Client implements AutoCloseable {
   private final X11Connection connection;
@@ -30,9 +26,17 @@ public class X11Client implements AutoCloseable {
     return new X11Client(X11Connection.connect(name));
   }
 
-  X11Client(X11Connection connection) {
+  private X11Client(X11Connection connection) throws IOException {
     this.connection = connection;
     service = new XProtocolService(connection.getX11Input(), connection.getX11Output());
+  }
+
+  X11Input getX11Input() {
+    return connection.getX11Input();
+  }
+
+  X11Output getX11Output() {
+    return connection.getX11Output();
   }
 
   public SetupStruct getSetup() {

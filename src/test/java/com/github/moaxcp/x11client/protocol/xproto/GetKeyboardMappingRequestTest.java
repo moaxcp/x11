@@ -31,7 +31,7 @@ public class GetKeyboardMappingRequestTest {
     GetKeyboardMappingRequest request = new GetKeyboardMappingRequest();
     request.setFirstKeycode((byte) 22);
     request.setCount((byte) 44);
-    request.write(out);
+    request.write((byte) 0, out);
 
     then(out).should().writeCard8(GetKeyboardMappingRequest.OPCODE);
     then(out).should().writePad(1);

@@ -1,19 +1,15 @@
 package com.github.moaxcp.x11client;
 
-import java.io.IOException;
-
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
 import com.github.moaxcp.x11client.protocol.XResponse;
-import com.github.moaxcp.x11client.protocol.bigreq.EnableReply;
 import com.github.moaxcp.x11client.protocol.bigreq.EnableRequest;
 import com.github.moaxcp.x11client.protocol.xproto.*;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.io.IOException;
 
 public class X11ConnectionIT {
   private XephyrRunner runner;
@@ -41,7 +37,7 @@ public class X11ConnectionIT {
       X11Input in = connection.getX11Input();
       QueryExtensionRequest extensionRequest = new QueryExtensionRequest();
       extensionRequest.setName("XC-MISC");
-      extensionRequest.write(out);
+      extensionRequest.write((byte) 0, out);
       byte status = in.readByte();
       if(status == 0) {
         //error

@@ -15,7 +15,7 @@ public class QueryExtensionRequestTest {
     QueryExtensionRequest request = new QueryExtensionRequest();
     request.setName("XC-MISC");
 
-    request.write(out);
+    request.write((byte) 0, out);
 
     then(out).should().writeCard8(QueryExtensionRequest.OPCODE);
     then(out).should().writePad(1);
@@ -31,7 +31,7 @@ public class QueryExtensionRequestTest {
     QueryExtensionRequest request = new QueryExtensionRequest();
     request.setName("BIG-REQUESTS");
 
-    request.write(out);
+    request.write((byte) 0, out);
 
     then(out).should().writeCard8(QueryExtensionRequest.OPCODE);
     then(out).should().writePad(1);

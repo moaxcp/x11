@@ -12,5 +12,5 @@ public interface XRequest extends XObject {
     }
     return (getSize() + 4 - getSize() % 4) / 4;
   }
-  void write(X11Output out) throws IOException;
+  void write(byte offset, X11Output out) throws IOException;
 }

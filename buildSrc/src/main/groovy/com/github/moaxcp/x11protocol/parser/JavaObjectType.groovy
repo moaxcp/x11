@@ -151,9 +151,9 @@ abstract class JavaObjectType implements JavaType {
         MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder("write")
             .addAnnotation(Override)
             .addModifiers(Modifier.PUBLIC)
-            .addParameter(ClassName.get(basePackage, 'X11Output'), 'out')
             .addException(IOException)
         addWriteParameters(methodBuilder)
+        methodBuilder.addParameter(ClassName.get(basePackage, 'X11Output'), 'out')
         addWriteStatements(methodBuilder)
         
         return methodBuilder.build()

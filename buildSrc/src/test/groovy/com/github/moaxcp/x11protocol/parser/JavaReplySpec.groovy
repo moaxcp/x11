@@ -59,8 +59,9 @@ class JavaReplySpec extends XmlSpec {
               }
             
               @java.lang.Override
-              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
-                out.writeCard8(OPCODE);
+              public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
+                  java.io.IOException {
+                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
                 out.writePad(1);
                 out.writeCard16((short) getLength());
                 out.writeCard32(window);

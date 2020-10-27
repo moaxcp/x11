@@ -86,8 +86,13 @@ class JavaRequest extends JavaObjectType {
     }
 
     @Override
+    void addWriteParameters(MethodSpec.Builder methodBuilder) {
+        methodBuilder.addParameter(byte.class, 'offset')
+    }
+
+    @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addStatement('out.writeCard8(OPCODE)')
+        methodBuilder.addStatement('out.writeCard8((byte)($1T.toUnsignedInt(OPCODE) + $1T.toUnsignedInt(offset)))', ClassName.get('java.lang', 'Byte'))
         if(protocol.size() > 1) {
             CodeBlock.Builder writeProtocol = CodeBlock.builder()
             protocol.each { it ->
