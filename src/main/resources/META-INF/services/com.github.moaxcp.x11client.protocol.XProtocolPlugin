@@ -1,2 +1,3 @@
 com.github.moaxcp.x11client.protocol.xproto.XprotoPlugin
 com.github.moaxcp.x11client.protocol.bigreq.BigreqPlugin
+com.github.moaxcp.x11client.protocol.xc_misc.XCMISCPlugin

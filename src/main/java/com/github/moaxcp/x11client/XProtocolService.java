@@ -1,6 +1,8 @@
 package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.*;
+import com.github.moaxcp.x11client.protocol.xproto.ScreenStruct;
+import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,16 +13,26 @@ import java.util.ServiceLoader;
 public class XProtocolService {
   private final ServiceLoader<XProtocolPlugin> loader = ServiceLoader.load(XProtocolPlugin.class);
   private final Map<Short, XReplyFunction> replySequences = new HashMap<>();
+  private final SetupStruct setup;
   private final X11Input in;
   private final X11Output out;
   private int nextSequenceNumber = 1;
+  private int nextResourceId;
 
-  XProtocolService(X11Input in, X11Output out) throws IOException {
+  XProtocolService(SetupStruct setup, X11Input in, X11Output out) throws IOException {
+    this.setup = setup;
     this.in = in;
     this.out = out;
     for(XProtocolPlugin plugin : loader) {
       plugin.setupOffset(this);
     }
+  }
+
+  public int getNextResourceId() {
+    if ((nextResourceId + 1 & ~setup.getResourceIdMask()) == 0) {
+      return nextResourceId++ | setup.getResourceIdBase();
+    }
+    throw new UnsupportedOperationException("must use xc_misc to get resource id");
   }
 
   public int send(XRequest request) throws IOException {
@@ -87,5 +99,22 @@ public class XProtocolService {
     XReply reply = function.get(field, sequenceNumber, in);
     replySequences.remove(sequenceNumber);
     return reply;
+  }
+
+  public ScreenStruct getDefaultScreen() {
+    return setup.getRoots().get(0);
+  }
+
+  public int getDefaultRoot() {
+    return getDefaultScreen().getRoot();
+  }
+
+  public byte getDefaultDepth() {
+    return getDefaultScreen().getRootDepth();
+  }
+
+
+  public int getDefaultVisualId() {
+    return getDefaultScreen().getRootVisual();
   }
 }

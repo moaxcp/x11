@@ -2,7 +2,7 @@ package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
-import com.github.moaxcp.x11client.protocol.XResponse;
+import com.github.moaxcp.x11client.protocol.bigreq.EnableReply;
 import com.github.moaxcp.x11client.protocol.bigreq.EnableRequest;
 import com.github.moaxcp.x11client.protocol.xproto.*;
 import org.junit.jupiter.api.AfterEach;
@@ -73,14 +73,22 @@ public class X11ConnectionIT {
 
       EnableRequest enableRequest = new EnableRequest();
       client.send(enableRequest);
-      XResponse enableReply = client.read();
+      EnableReply enableReply = client.read();
       System.out.println(enableReply);
 
-      QueryExtensionRequest xcMisc = new QueryExtensionRequest();
-      xcMisc.setName("XC-MISC");
-      client.send(xcMisc);
-      XResponse xcMiscReply = client.read();
-      System.out.println(xcMiscReply);
+      CreateWindowRequest window = new CreateWindowRequest();
+      window.setDepth(client.getDefaultDepth());
+      window.setWid(client.nextResourceId());
+      window.setParent(client.getDefaultRoot());
+      window.setX((short) 10);
+      window.setY((short) 10);
+      window.setWidth((short) 600);
+      window.setHeight((short) 480);
+      window.setBorderWidth((short) 5);
+      window.setClazz(WindowClassEnum.COPY_FROM_PARENT);
+      window.setVisual(client.getDefaultVisualId());
+      client.send(window);
+      System.out.println(window);
     }
   }
 }

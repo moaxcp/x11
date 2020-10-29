@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11client.protocol.bigreq;
+package com.github.moaxcp.x11client.protocol.xc_misc;
 
 import com.github.moaxcp.x11client.XProtocolService;
 import com.github.moaxcp.x11client.protocol.*;
@@ -8,24 +8,31 @@ import lombok.Getter;
 
 import java.io.IOException;
 
-public class BigreqPlugin implements XProtocolPlugin {
+public class XCMISCPlugin implements XProtocolPlugin {
+
   @Getter
-  private final String name = "BIG-REQUESTS";
+  private final String name = "XC-MISC";
   @Getter
   private byte offset;
 
   @Override
   public void setupOffset(XProtocolService service) throws IOException {
-    QueryExtensionRequest bigRequests = new QueryExtensionRequest();
-    bigRequests.setName(name);
-    service.send(bigRequests);
-    QueryExtensionReply bigRequestReply = service.read();
-    offset = bigRequestReply.getMajorOpcode();
+    QueryExtensionRequest request = new QueryExtensionRequest();
+    request.setName(name);
+    service.send(request);
+    QueryExtensionReply reply = service.read();
+    offset = reply.getMajorOpcode();
   }
 
   @Override
   public boolean supportedRequest(XRequest request) {
-    if(request instanceof EnableRequest) {
+    if(request instanceof GetVersionRequest) {
+      return true;
+    }
+    if(request instanceof GetXIDListRequest) {
+      return true;
+    }
+    if(request instanceof GetXIDRangeRequest) {
       return true;
     }
     return false;
@@ -43,11 +50,11 @@ public class BigreqPlugin implements XProtocolPlugin {
 
   @Override
   public XEvent readEvent(byte number, boolean sentEvent, X11Input in) throws IOException {
-    throw new UnsupportedOperationException(name + " has no events");
+    return null;
   }
 
   @Override
   public XError readError(byte code, X11Input in) throws IOException {
-    throw new UnsupportedOperationException(name + " has no errors");
+    return null;
   }
 }

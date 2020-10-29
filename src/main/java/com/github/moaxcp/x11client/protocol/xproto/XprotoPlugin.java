@@ -25,6 +25,9 @@ public class XprotoPlugin implements XProtocolPlugin {
     if(request instanceof QueryExtensionRequest) {
       return true;
     }
+    if(request instanceof CreateWindowRequest) {
+      return true;
+    }
     return false;
   }
 

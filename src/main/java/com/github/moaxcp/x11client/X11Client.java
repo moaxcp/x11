@@ -4,6 +4,7 @@ import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
 import com.github.moaxcp.x11client.protocol.XRequest;
 import com.github.moaxcp.x11client.protocol.XResponse;
+import com.github.moaxcp.x11client.protocol.xproto.ScreenStruct;
 import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
 import lombok.NonNull;
 
@@ -11,7 +12,6 @@ import java.io.IOException;
 
 public class X11Client implements AutoCloseable {
   private final X11Connection connection;
-  private int nextResourceNumber = 1;
   private final XProtocolService service;
 
   public static X11Client connect(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority) throws IOException {
@@ -28,7 +28,7 @@ public class X11Client implements AutoCloseable {
 
   private X11Client(X11Connection connection) throws IOException {
     this.connection = connection;
-    service = new XProtocolService(connection.getX11Input(), connection.getX11Output());
+    service = new XProtocolService(connection.getSetupStruct(), connection.getX11Input(), connection.getX11Output());
   }
 
   X11Input getX11Input() {
@@ -51,12 +51,28 @@ public class X11Client implements AutoCloseable {
     return service.read();
   }
 
-  public int nextResource() {
-    return nextResourceNumber++;
+  public int nextResourceId() {
+    return service.getNextResourceId();
   }
 
   @Override
   public void close() throws IOException {
     connection.close();
+  }
+
+  public ScreenStruct getDefaultScreen() {
+    return service.getDefaultScreen();
+  }
+
+  public int getDefaultRoot() {
+    return service.getDefaultRoot();
+  }
+
+  public byte getDefaultDepth() {
+    return service.getDefaultDepth();
+  }
+
+  public int getDefaultVisualId() {
+    return service.getDefaultVisualId();
   }
 }
