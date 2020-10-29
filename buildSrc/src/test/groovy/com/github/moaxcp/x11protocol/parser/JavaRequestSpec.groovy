@@ -318,4 +318,254 @@ class JavaRequestSpec extends XmlSpec {
             }
         '''.stripIndent()
     }
+
+    def createWindow() {
+        given:
+        xmlBuilder.xcb() {
+            xidtype(name:'WINDOW')
+            xidtype(name:'PIXMAP')
+            xidtype(name:'CURSOR')
+            typedef(oldname:'CARD32', newname:'VISUALID')
+            'enum'(name:'WindowClass') {
+                item(name:'CopyFromParent') {
+                    value('0')
+                }
+                item(name:'InputOutput') {
+                    value('1')
+                }
+                item(name:'InputOnly') {
+                    value('2')
+                }
+            }
+            'enum'(name:'CW') {
+                item(name:'BackPixmap') {
+                    bit('0')
+                }
+                item(name:'BackPixel') {
+                    bit('1')
+                }
+                item(name:'BorderPixmap') {
+                    bit('2')
+                }
+                item(name:'BorderPixel') {
+                    bit('3')
+                }
+                item(name:'BitGravity') {
+                    bit('4')
+                }
+                item(name:'WinGravity') {
+                    bit('5')
+                }
+                item(name:'BackingStore') {
+                    bit('6')
+                }
+                item(name:'BackingPlanes') {
+                    bit('7')
+                }
+                item(name:'BackingPixel') {
+                    bit('8')
+                }
+                item(name:'OverrideRedirect') {
+                    bit('9')
+                }
+                item(name:'SaveUnder') {
+                    bit('10')
+                }
+                item(name:'EventMask') {
+                    bit('11')
+                }
+                item(name:'DontPropagate') {
+                    bit('12')
+                }
+                item(name:'Colormap') {
+                    bit('13')
+                }
+                item(name:'Cursor') {
+                    bit('14')
+                }
+            }
+            request(name:'CreateWindow', opcode:'1') {
+                field(type:'CARD8', name:'depth')
+                field(type:'WINDOW', name:'wid')
+                field(type:'WINDOW', name:'parent')
+                field(type:'INT16', name:'x')
+                field(type:'CARD16', name:'y')
+                field(type:'CARD16', name:'width')
+                field(type:'CARD16', name:'height')
+                field(type:'CARD16', name:'border_width')
+                field(type:'CARD16', name:'class', 'enum':"WindowClass")
+                field(type:'VISUALID', name:'visual')
+                field(type:'CARD32', name:'value_mask', mask:'CW')
+                'switch'(name:'value_list') {
+                    fieldref('value_mask')
+                    bitcase {
+                        enumref(ref:'CW', 'BackPixmap')
+                        field(type:'PIXMAP', name:'background_pixmap', altenum:'BackPixmap')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'BackPixel')
+                        field(type:'CARD32', name:'background_pixel')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'BorderPixmap')
+                        field(type:'PIXMAP', name:'border_pixmap', altenum:'Pixmap')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'BorderPixel')
+                        field(type:'CARD32', name:'border_pixel')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'BitGravity')
+                        field(type:'CARD32', name:'bit_gravity', enum:'Gravity')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'WinGravity')
+                        field(type:'CARD32', name:'win_gravity', enum:'Gravity')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'BackingStore')
+                        field(type:'CARD32', name:'backing_store', enum:'BackingStore')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'BackingPlanes')
+                        field(type:'CARD32', name:'backing_planes')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'BackingPixel')
+                        field(type:'CARD32', name:'backing_pixel')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'OverrideRedirect')
+                        field(type:'BOOL32', name:'override_redirect')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'SaveUnder')
+                        field(type:'BOOL32', name:'save_under')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'EventMask')
+                        field(type:'CARD32', name:'event_mask', mask:'EventMask')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'DontPropagate')
+                        field(type:'CARD32', name:'do_not_propogate_mask', mask:'EventMask')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'Colormap')
+                        field(type:'COLORMAP', name:'colormap', altenum:'Colormap')
+                    }
+                    bitcase {
+                        enumref(ref:'CW', 'Cursor')
+                        field(type:'CURSOR', name:'cursor', altenum:'Cursor')
+                    }
+                }
+            }
+        }
+
+        when:
+        addChildNodes()
+        XTypeRequest request = result.resolveXType('CreateWindow')
+        JavaRequest javaRequest = request.javaType
+
+        then:
+        javaRequest.typeSpec.toString() == '''\
+            @lombok.Data
+            @lombok.AllArgsConstructor
+            @lombok.NoArgsConstructor
+            public class CreateWindowRequest implements com.github.moaxcp.x11client.protocol.XRequest {
+              public static final byte OPCODE = 1;
+            
+              private byte depth;
+            
+              private int wid;
+            
+              private int parent;
+            
+              private short x;
+            
+              private short y;
+            
+              private short width;
+            
+              private short height;
+            
+              private short borderWidth;
+            
+              private com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum clazz;
+            
+              private int visual;
+            
+              private int valueMask;
+            
+              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplyFunction> getReplyFunction(
+                  ) {
+                return Optional.empty();
+              }
+            
+              public byte getOpCode() {
+                return OPCODE;
+              }
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest readCreateWindowRequest(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                byte depth = in.readCard8();
+                short length = in.readCard16();
+                int wid = in.readCard32();
+                int parent = in.readCard32();
+                short x = in.readInt16();
+                short y = in.readCard16();
+                short width = in.readCard16();
+                short height = in.readCard16();
+                short borderWidth = in.readCard16();
+                com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum clazz = com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum.getByCode(in.readCard16());
+                int visual = in.readCard32();
+                int valueMask = in.readCard32();
+                com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest javaObject = new com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest();
+                javaObject.setDepth(depth);
+                javaObject.setWid(wid);
+                javaObject.setParent(parent);
+                javaObject.setX(x);
+                javaObject.setY(y);
+                javaObject.setWidth(width);
+                javaObject.setHeight(height);
+                javaObject.setBorderWidth(borderWidth);
+                javaObject.setClazz(clazz);
+                javaObject.setVisual(visual);
+                javaObject.setValueMask(valueMask);
+                return javaObject;
+              }
+            
+              @java.lang.Override
+              public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
+                  java.io.IOException {
+                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
+                out.writeCard8(depth);
+                out.writeCard16((short) getLength());
+                out.writeCard32(wid);
+                out.writeCard32(parent);
+                out.writeInt16(x);
+                out.writeCard16(y);
+                out.writeCard16(width);
+                out.writeCard16(height);
+                out.writeCard16(borderWidth);
+                out.writeCard16((short) clazz.getValue());
+                out.writeCard32(visual);
+                out.writeCard32(valueMask);
+              }
+            
+              public void valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum) {
+                valueMask = (int) maskEnum.enableFor(valueMask);
+              }
+            
+              public void valueMaskDisable(com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum) {
+                valueMask = (int) maskEnum.disableFor(valueMask);
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 1 + 1 + 2 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 2 + 4 + 4;
+              }
+            }
+        '''.stripIndent()
+    }
 }

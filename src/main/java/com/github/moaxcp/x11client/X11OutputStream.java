@@ -2,8 +2,11 @@ package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.X11Output;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 class X11OutputStream implements X11Output {
   private final DataOutputStream out;
@@ -38,7 +41,7 @@ class X11OutputStream implements X11Output {
   }
 
   @Override
-  public void writeInt32(int[] int32) throws IOException {
+  public void writeInt32(List<Integer> int32) throws IOException {
     for(int i : int32) {
       writeInt32(i);
     }
@@ -55,7 +58,7 @@ class X11OutputStream implements X11Output {
   }
 
   @Override
-  public void writeCard8(byte[] card8) throws IOException {
+  public void writeCard8(List<Byte> card8) throws IOException {
     for(byte i : card8) {
       writeCard8(i);
     }
@@ -67,7 +70,7 @@ class X11OutputStream implements X11Output {
   }
 
   @Override
-  public void writeCard16(short[] card16) throws IOException {
+  public void writeCard16(List<Short> card16) throws IOException {
     for(short i : card16) {
       writeCard16(i);
     }
@@ -79,7 +82,7 @@ class X11OutputStream implements X11Output {
   }
 
   @Override
-  public void writeCard32(int[] card32) throws IOException {
+  public void writeCard32(List<Integer> card32) throws IOException {
     for(int i : card32) {
       writeCard32(i);
     }
@@ -91,7 +94,7 @@ class X11OutputStream implements X11Output {
   }
 
   @Override
-  public void writeChar(byte[] string) throws IOException {
+  public void writeChar(List<Byte> string) throws IOException {
     writeByte(string);
   }
 
@@ -101,14 +104,14 @@ class X11OutputStream implements X11Output {
   }
 
   @Override
-  public void writeByte(byte[] bytes) throws IOException {
+  public void writeByte(List<Byte> bytes) throws IOException {
     for(byte i : bytes) {
       writeByte(i);
     }
   }
 
   @Override
-  public void writeVoid(byte[] bytes) throws IOException {
+  public void writeVoid(List<Byte> bytes) throws IOException {
     writeByte(bytes);
   }
 

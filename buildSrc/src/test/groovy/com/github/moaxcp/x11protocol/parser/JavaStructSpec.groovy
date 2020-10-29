@@ -167,12 +167,12 @@ class JavaStructSpec extends XmlSpec {
             public class DeviceTimeCoordStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private int time;
             
-              private int[] axisvalues;
+              private java.util.List<java.lang.Integer> axisvalues;
             
               public static com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct readDeviceTimeCoordStruct(
                   byte numAxes, com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int time = in.readCard32();
-                int[] axisvalues = in.readInt32(numAxes);
+                java.util.List<java.lang.Integer> axisvalues = in.readInt32(numAxes);
                 com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct();
                 javaObject.setTime(time);
                 javaObject.setAxisvalues(axisvalues);
@@ -187,7 +187,7 @@ class JavaStructSpec extends XmlSpec {
               
               @java.lang.Override
               public int getSize() {
-                return 4 + 4 * axisvalues.length;
+                return 4 + 4 * axisvalues.size();
               }
             }
         '''.stripIndent()
@@ -223,13 +223,13 @@ class JavaStructSpec extends XmlSpec {
             
               private byte nMapEntries;
             
-              private int[] preserveEntries;
+              private java.util.List<java.lang.Integer> preserveEntries;
             
               public static com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct readSetKeyTypeStruct(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 boolean preserve = in.readBool();
                 byte nMapEntries = in.readCard8();
-                int[] preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
+                java.util.List<java.lang.Integer> preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
                 com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct();
                 javaObject.setPreserve(preserve);
                 javaObject.setNMapEntries(nMapEntries);
@@ -246,7 +246,7 @@ class JavaStructSpec extends XmlSpec {
               
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 4 * preserveEntries.length;
+                return 1 + 1 + 4 * preserveEntries.size();
               }
             }
         '''.stripIndent()

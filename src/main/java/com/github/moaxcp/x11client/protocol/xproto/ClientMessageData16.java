@@ -4,14 +4,15 @@ import com.github.moaxcp.x11client.protocol.X11Output;
 import lombok.Value;
 
 import java.io.IOException;
+import java.util.List;
 
 @Value
 public class ClientMessageData16 implements ClientMessageDataUnion {
-  short[] data16;
+  List<Short> data16;
 
-  public ClientMessageData16(short[] data16) {
-    if(data16.length != 10) {
-      throw new IllegalArgumentException("data16 must have length of 20. Got: \"" + data16.length + "\"");
+  public ClientMessageData16(List<Short> data16) {
+    if(data16.size() != 10) {
+      throw new IllegalArgumentException("data16 must have length of 20. Got: \"" + data16.size() + "\"");
     }
     this.data16 = data16;
   }

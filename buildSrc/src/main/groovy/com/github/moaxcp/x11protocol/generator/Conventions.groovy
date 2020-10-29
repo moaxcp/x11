@@ -82,6 +82,33 @@ class Conventions {
         throw new IllegalArgumentException("Could not convert $x11Type")
     }
 
+    static ClassName x11PrimativeToBoxedType(String x11Type) {
+        if(x11Type == 'void') {
+            return ClassName.get(Byte.class)
+        }
+        String primative = x11PrimativeToStoragePrimative(x11Type)
+        switch(primative) {
+            case 'boolean':
+                return ClassName.get(Boolean.class)
+            case 'byte':
+                return ClassName.get(Byte.class)
+            case 'short':
+                return ClassName.get(Short.class)
+            case 'char':
+                return ClassName.get(Byte.class)
+            case 'int':
+                return ClassName.get(Integer.class)
+            case 'long':
+                return ClassName.get(Long.class)
+            case 'float':
+                return ClassName.get(Float.class)
+            case 'double':
+                return ClassName.get(Double.class)
+        }
+        throw new IllegalArgumentException("Could not convert $x11Type")
+
+    }
+
     static TypeName x11PrimativeToStorageTypeName(String x11Type) {
         if(x11Type == 'void') {
             return TypeName.BYTE

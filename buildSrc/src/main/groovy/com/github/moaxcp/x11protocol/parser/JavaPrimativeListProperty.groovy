@@ -1,12 +1,13 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.parser.expression.EmptyExpression
-import com.squareup.javapoet.ArrayTypeName
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
-import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToStorageTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToBoxedType 
 
 class JavaPrimativeListProperty extends JavaListProperty {
 
@@ -15,13 +16,13 @@ class JavaPrimativeListProperty extends JavaListProperty {
     }
 
     @Override
-    TypeName getBaseTypeName() {
-        return x11PrimativeToStorageTypeName(x11Field.resolvedType.name)
+    ClassName getBaseTypeName() {
+        return x11PrimativeToBoxedType(x11Field.resolvedType.name)
     }
 
     @Override
     TypeName getTypeName() {
-        return ArrayTypeName.of(baseTypeName)
+        return ParameterizedTypeName.get(ClassName.get(List.class), baseTypeName)
     }
 
     static JavaPrimativeListProperty javaPrimativeListProperty(JavaType javaType, XUnitListField field) {
@@ -54,18 +55,18 @@ class JavaPrimativeListProperty extends JavaListProperty {
             case 'CARD8':
             case 'char':
             case 'void':
-                return CodeBlock.of('1 * $L.length', name)
+                return CodeBlock.of('1 * $L.size()', name)
             case 'INT16':
             case 'CARD16':
-                return CodeBlock.of('2 * $L.length', name)
+                return CodeBlock.of('2 * $L.size()', name)
             case 'INT32':
             case 'CARD32':
             case 'float':
             case 'fd':
-                return CodeBlock.of('4 * $L.length', name)
+                return CodeBlock.of('4 * $L.size()', name)
             case 'CARD64':
             case 'double':
-                return CodeBlock.of('8 * $L.length', name)
+                return CodeBlock.of('8 * $L.size()', name)
         }
         throw new UnsupportedOperationException("type not supported $x11Type")
     }

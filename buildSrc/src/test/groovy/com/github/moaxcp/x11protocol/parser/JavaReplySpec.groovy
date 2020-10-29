@@ -87,7 +87,7 @@ class JavaReplySpec extends XmlSpec {
             
               private short childrenLen;
             
-              private int[] children;
+              private java.util.List<java.lang.Integer> children;
             
               public static com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply readQueryTreeReply(
                   byte pad, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
@@ -97,7 +97,7 @@ class JavaReplySpec extends XmlSpec {
                 int parent = in.readCard32();
                 short childrenLen = in.readCard16();
                 in.readPad(14);
-                int[] children = in.readCard32(Short.toUnsignedInt(childrenLen));
+                java.util.List<java.lang.Integer> children = in.readCard32(Short.toUnsignedInt(childrenLen));
                 com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply javaObject = new com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply();
                 javaObject.setSequenceNumber(sequenceNumber);
                 javaObject.setRoot(root);
@@ -126,7 +126,7 @@ class JavaReplySpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 2 + 4 + 4 + 4 + 2 + 14 + 4 * children.length;
+                return 1 + 1 + 2 + 4 + 4 + 4 + 2 + 14 + 4 * children.size();
               }
             }
         '''.stripIndent()

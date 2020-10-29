@@ -2,8 +2,12 @@ package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.X11Input;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 class X11InputStream implements X11Input {
   private final DataInputStream in;
@@ -38,10 +42,18 @@ class X11InputStream implements X11Input {
   }
 
   @Override
-  public int[] readInt32(int length) throws IOException {
-    int[] result = new int[length];
+  public List<Integer> readInt32(int length) throws IOException {
+    return readList(length, this::readInt32);
+  }
+
+  private interface IOSupplier<T> {
+    T get() throws IOException;
+  }
+
+  private <T> List<T> readList(int length, IOSupplier<T> supplier) throws IOException {
+    List<T> result = new ArrayList<>(length);
     for(int i = 0; i < length; i++) {
-      result[i] = readInt32();
+      result.set(i, supplier.get());
     }
     return result;
   }
@@ -57,12 +69,8 @@ class X11InputStream implements X11Input {
   }
 
   @Override
-  public byte[] readCard8(int length) throws IOException {
-    byte[] result = new byte[length];
-    for(int i = 0; i < length; i++) {
-      result[i] = readCard8();
-    }
-    return result;
+  public List<Byte> readCard8(int length) throws IOException {
+    return readList(length, this::readCard8);
   }
 
   @Override
@@ -71,12 +79,8 @@ class X11InputStream implements X11Input {
   }
 
   @Override
-  public short[] readCard16(int length) throws IOException {
-    short[] result = new short[length];
-    for(int i = 0; i < length; i++) {
-      result[i] = readCard16();
-    }
-    return result;
+  public List<Short> readCard16(int length) throws IOException {
+    return readList(length, this::readCard16);
   }
 
   @Override
@@ -85,12 +89,8 @@ class X11InputStream implements X11Input {
   }
 
   @Override
-  public int[] readCard32(int length) throws IOException {
-    int[] result = new int[length];
-    for(int i = 0; i < length; i++) {
-      result[i] = readCard32();
-    }
-    return result;
+  public List<Integer> readCard32(int length) throws IOException {
+    return readList(length, this::readCard32);
   }
 
   @Override
@@ -99,32 +99,36 @@ class X11InputStream implements X11Input {
   }
 
   @Override
-  public byte[] readChar(int length) throws IOException {
-    byte[] result = new byte[length];
-    for(int i = 0; i < length; i++) {
-      result[i] = readByte();
-    }
-    return result;
+  public List<Byte> readChar(int length) throws IOException {
+    return readList(length, this::readByte);
   }
 
   @Override
   public String readString8(int length) throws IOException {
-    byte[] bytes = readByte(length);
-    return new String(bytes, StandardCharsets.US_ASCII);
-  }
-
-  @Override
-  public byte[] readByte(int length) throws IOException {
     byte[] bytes = new byte[length];
     int read = in.read(bytes);
     if(read != bytes.length) {
       throw new IllegalStateException("could not read all bytes for length: \"" + bytes.length + "\"");
     }
-    return bytes;
+    return new String(bytes, StandardCharsets.US_ASCII);
   }
 
   @Override
-  public byte[] readVoid(int length) throws IOException {
+  public List<Byte> readByte(int length) throws IOException {
+    byte[] bytes = new byte[length];
+    int read = in.read(bytes);
+    if(read != bytes.length) {
+      throw new IllegalStateException("could not read all bytes for length: \"" + bytes.length + "\"");
+    }
+    List<Byte> result = new ArrayList<>(length);
+    for(byte b : bytes) {
+      result.add(b);
+    }
+    return result;
+  }
+
+  @Override
+  public List<Byte> readVoid(int length) throws IOException {
     return readByte(length);
   }
 

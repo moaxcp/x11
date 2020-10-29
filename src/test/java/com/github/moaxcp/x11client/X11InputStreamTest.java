@@ -1,11 +1,15 @@
 package com.github.moaxcp.x11client;
 
-import java.io.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -78,8 +82,8 @@ public class X11InputStreamTest {
   @Test
   void readBytes() throws IOException {
     X11InputStream in = makeInputStream(1, 2, 3, 4);
-    byte[] bytes = in.readByte(4);
-    assertThat(bytes).containsExactly(1, 2, 3, 4);
+    List<Byte> bytes = in.readByte(4);
+    assertThat(bytes).containsExactly((byte) 1, (byte) 2, (byte) 3, (byte) 4);
   }
 
   @Test
