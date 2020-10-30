@@ -23,6 +23,7 @@ class JavaRequestSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class DestroyWindowRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 4;
             
@@ -99,15 +100,18 @@ class JavaRequestSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class PolyPointRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 64;
             
+              @lombok.NonNull
               private com.github.moaxcp.x11client.protocol.xproto.CoordModeEnum coordinateMode;
             
               private int drawable;
             
               private int gc;
             
+              @lombok.NonNull
               private java.util.List<com.github.moaxcp.x11client.protocol.xproto.PointStruct> points;
               
               public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplyFunction> getReplyFunction(
@@ -202,11 +206,13 @@ class JavaRequestSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class QueryTextExtendsRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 48;
             
               private int font;
             
+              @lombok.NonNull
               private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2bStruct> string;
             
               public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplyFunction> getReplyFunction(
@@ -472,6 +478,7 @@ class JavaRequestSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class CreateWindowRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 1;
             
@@ -491,6 +498,7 @@ class JavaRequestSpec extends XmlSpec {
             
               private short borderWidth;
             
+              @lombok.NonNull
               private com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum clazz;
             
               private int visual;

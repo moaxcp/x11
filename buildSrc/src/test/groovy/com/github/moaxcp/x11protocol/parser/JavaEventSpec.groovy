@@ -45,6 +45,7 @@ class JavaEventSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class KeyPressEvent implements com.github.moaxcp.x11client.protocol.XEvent {
               public static final byte NUMBER = 2;
             
@@ -178,6 +179,7 @@ class JavaEventSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class MapRequestEvent implements com.github.moaxcp.x11client.protocol.XEvent {
               public static final byte NUMBER = 20;
             

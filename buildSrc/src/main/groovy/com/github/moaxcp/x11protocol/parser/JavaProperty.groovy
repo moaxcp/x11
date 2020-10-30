@@ -2,6 +2,7 @@ package com.github.moaxcp.x11protocol.parser
 
 import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
+import lombok.NonNull
 import lombok.Setter
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
@@ -43,6 +44,8 @@ abstract class JavaProperty implements JavaUnit {
     }
     
     abstract TypeName getTypeName()
+    
+    abstract boolean isNonNull()
 
     FieldSpec getMember() {
         if(localOnly) {
@@ -50,6 +53,9 @@ abstract class JavaProperty implements JavaUnit {
         }
         FieldSpec.Builder builder = FieldSpec.builder(typeName, name)
             .addModifiers(Modifier.PRIVATE)
+        if(nonNull) {
+            builder.addAnnotation(NonNull)
+        }
         if(readOnly) {
             builder.addAnnotation(
                 AnnotationSpec.builder(Setter)

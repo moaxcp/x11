@@ -29,6 +29,11 @@ class JavaEnumProperty extends JavaProperty {
     TypeName getIoTypeName() {
         x11PrimativeToStorageTypeName(x11Field.resolvedType.name)
     }
+    
+    @Override
+    boolean isNonNull() {
+        return true
+    }
 
     @Override
     CodeBlock getReadCode() {

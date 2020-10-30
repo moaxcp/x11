@@ -34,6 +34,7 @@ class JavaReplySpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class QueryTreeRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 15;
             
@@ -78,6 +79,7 @@ class JavaReplySpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class QueryTreeReply implements com.github.moaxcp.x11client.protocol.XReply {
               private short sequenceNumber;
             
@@ -87,6 +89,7 @@ class JavaReplySpec extends XmlSpec {
             
               private short childrenLen;
             
+              @lombok.NonNull
               private java.util.List<java.lang.Integer> children;
             
               public static com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply readQueryTreeReply(
@@ -162,6 +165,7 @@ class JavaReplySpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class TranslateCoordinatesReply implements com.github.moaxcp.x11client.protocol.XReply {
               private boolean sameScreen;
             
@@ -246,13 +250,16 @@ class JavaReplySpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class ListHostsReply implements com.github.moaxcp.x11client.protocol.XReply {
+              @lombok.NonNull
               private com.github.moaxcp.x11client.protocol.xproto.AccessControlEnum mode;
             
               private short sequenceNumber;
             
               private short hostsLen;
             
+              @lombok.NonNull
               private java.util.List<com.github.moaxcp.x11client.protocol.xproto.HostStruct> hosts;
             
               public static com.github.moaxcp.x11client.protocol.xproto.ListHostsReply readListHostsReply(
@@ -329,6 +336,7 @@ class JavaReplySpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class QueryExtensionReply implements com.github.moaxcp.x11client.protocol.XReply {
               private short sequenceNumber;
             

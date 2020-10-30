@@ -49,6 +49,7 @@ abstract class JavaObjectType implements JavaType {
             typeSpec.addAnnotation(ClassName.get('lombok', 'Data'))
                 .addAnnotation(ClassName.get('lombok', 'AllArgsConstructor'))
                 .addAnnotation(ClassName.get('lombok', 'NoArgsConstructor'))
+                .addAnnotation(ClassName.get('lombok', 'Builder'))
         }
 
         typeSpec.build()

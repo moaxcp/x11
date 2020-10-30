@@ -13,5 +13,10 @@ abstract class JavaListProperty extends JavaProperty {
         lengthExpression = Expressions.getExpression(javaType, field.lengthExpression)
     }
     
+    @Override
+    boolean isNonNull() {
+        return true
+    }
+    
     abstract TypeName getBaseTypeName()
 }

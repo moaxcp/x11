@@ -26,6 +26,7 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class FormatStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private byte depth;
             
@@ -93,6 +94,7 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class ScreenStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private int root;
             
@@ -100,6 +102,7 @@ class JavaStructSpec extends XmlSpec {
             
               private int currentInputMasks;
             
+              @lombok.NonNull
               private com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores;
             
               public static com.github.moaxcp.x11client.protocol.xproto.ScreenStruct readScreenStruct(
@@ -164,9 +167,11 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class DeviceTimeCoordStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private int time;
             
+              @lombok.NonNull
               private java.util.List<java.lang.Integer> axisvalues;
             
               public static com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct readDeviceTimeCoordStruct(
@@ -218,11 +223,13 @@ class JavaStructSpec extends XmlSpec {
             @lombok.Data
             @lombok.AllArgsConstructor
             @lombok.NoArgsConstructor
+            @lombok.Builder
             public class SetKeyTypeStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private boolean preserve;
             
               private byte nMapEntries;
             
+              @lombok.NonNull
               private java.util.List<java.lang.Integer> preserveEntries;
             
               public static com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct readSetKeyTypeStruct(

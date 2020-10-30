@@ -13,8 +13,14 @@ class JavaTypeProperty extends JavaProperty {
         return new JavaTypeProperty(javaType, field)
     }
 
+    @Override
     ClassName getTypeName() {
         return x11Field.resolvedType.javaType.className
+    }
+
+    @Override
+    boolean isNonNull() {
+        return true
     }
 
     @Override

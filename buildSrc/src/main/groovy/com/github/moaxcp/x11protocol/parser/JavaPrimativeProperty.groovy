@@ -35,6 +35,11 @@ class JavaPrimativeProperty extends JavaProperty {
     TypeName getTypeName() {
         return memberTypeName
     }
+    
+    @Override
+    boolean isNonNull() {
+        return false
+    }
 
     TypeName getMemberTypeName() {
         if(!x11Primatives.contains(x11Field.resolvedType.name)) {
