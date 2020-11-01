@@ -53,7 +53,7 @@ class X11InputStream implements X11Input {
   private <T> List<T> readList(int length, IOSupplier<T> supplier) throws IOException {
     List<T> result = new ArrayList<>(length);
     for(int i = 0; i < length; i++) {
-      result.set(i, supplier.get());
+      result.add(supplier.get());
     }
     return result;
   }

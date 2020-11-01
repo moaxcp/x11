@@ -17,8 +17,9 @@ public class XCMISCPlugin implements XProtocolPlugin {
 
   @Override
   public void setupOffset(XProtocolService service) throws IOException {
-    QueryExtensionRequest request = new QueryExtensionRequest();
-    request.setName(name);
+    QueryExtensionRequest request = QueryExtensionRequest.builder()
+      .name(name)
+      .build();
     service.send(request);
     QueryExtensionReply reply = service.read();
     offset = reply.getMajorOpcode();

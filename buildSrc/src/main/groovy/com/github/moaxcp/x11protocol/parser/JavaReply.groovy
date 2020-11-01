@@ -56,20 +56,22 @@ class JavaReply extends JavaObjectType {
     }
 
     @Override
-    void addSetterStatements(MethodSpec.Builder methodBuilder) {
-        CodeBlock.Builder setters = CodeBlock.builder()
+    void addBuilderStatement(MethodSpec.Builder methodBuilder, CodeBlock... fields) {
+        CodeBlock.Builder builder = CodeBlock.builder()
+        builder.add('$1T $2L = $1T.builder()', className, 'javaObject')
         protocol.findAll {
             it instanceof JavaProperty && !it.localOnly
         }.eachWithIndex { JavaProperty it, int i ->
             if(i == 0 && it.typeName == TypeName.BOOLEAN) {
-                setters.addStatement('$L.$L($L > 0)', 'javaObject', it.setterName, it.name)
+                builder.add('\n.$L($L > 0)', it.name, it.name)
             } else if (i == 0 && it instanceof JavaEnumProperty) {
-                setters.addStatement('$L.$L($T.getByCode($L))', 'javaObject', it.setterName, it.typeName, it.name)
+                builder.add('\n.$L($T.getByCode($L))', it.name, it.typeName, it.name)
             } else {
-                setters.addStatement('$L.$L($L)', 'javaObject', it.setterName, it.name)
+                builder.add('\n.$L($L)', it.name, it.name)
             }
         }
-        methodBuilder.addCode(setters.build())
+        builder.add('\n.build()')
+        methodBuilder.addStatement(builder.build())
         if(fixedSize && fixedSize.get() < 32) {
             methodBuilder.addStatement('in.readPad($L)', 32 - fixedSize.get())
             return

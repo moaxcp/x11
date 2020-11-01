@@ -15,6 +15,10 @@ abstract class JavaObjectType implements JavaType {
     ClassName className
     List<JavaUnit> protocol
 
+    ClassName getBuilderClassName() {
+        ClassName.get(javaPackage, "${simpleName}Builder")
+    }
+
     JavaProperty getField(String name) {
         (JavaProperty) protocol.find {
             it instanceof JavaProperty &&
@@ -46,13 +50,30 @@ abstract class JavaObjectType implements JavaType {
             typeSpec.addSuperinterfaces(superTypes)
         }
         if(hasFields()) {
-            typeSpec.addAnnotation(ClassName.get('lombok', 'Data'))
-                .addAnnotation(ClassName.get('lombok', 'AllArgsConstructor'))
-                .addAnnotation(ClassName.get('lombok', 'NoArgsConstructor'))
+            typeSpec.addAnnotation(ClassName.get('lombok', 'Value'))
                 .addAnnotation(ClassName.get('lombok', 'Builder'))
+            addBuilder(typeSpec)
         }
 
         typeSpec.build()
+    }
+
+    void addBuilder(TypeSpec.Builder parent) {
+        if(!builderMethods) {
+            return
+        }
+        TypeSpec.Builder builder = TypeSpec.classBuilder(builderClassName)
+            .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+        builder.addMethods(getBuilderMethods())
+        parent.addType(builder.build())
+    }
+    
+    List<MethodSpec> getBuilderMethods() {
+        return protocol.findAll {
+            it instanceof JavaProperty
+        }.collect { JavaProperty it ->
+            it.getBuilderMethods(className)
+        }.flatten()
     }
 
     void addFields(TypeSpec.Builder typeBuilder) {
@@ -87,9 +108,7 @@ abstract class JavaObjectType implements JavaType {
         methodBuilder.addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
         addHeaderStatements(methodBuilder)
         addReadStatements(methodBuilder)
-        methodBuilder.addStatement('$1T $2L = new $1T()', className, 'javaObject')
-        addSetterStatements(methodBuilder)
-
+        addBuilderStatement(methodBuilder)
         methodBuilder.addStatement('return $L', 'javaObject')
 
         return methodBuilder.build()
@@ -138,14 +157,23 @@ abstract class JavaObjectType implements JavaType {
         methodBuilder.addCode(readProtocol.build())
     }
     
-    void addSetterStatements(MethodSpec.Builder methodBuilder) {
-        CodeBlock.Builder setters = CodeBlock.builder()
+    void addBuilderStatement(MethodSpec.Builder method, CodeBlock... fields) {
+        if(protocol.findAll{it instanceof JavaProperty}.isEmpty()) {
+            method.addStatement('$1T $2L = new $1T()', className, 'javaObject')
+            return
+        }
+        CodeBlock.Builder builder = CodeBlock.builder()
+        builder.add('$1T $2L = $1T.builder()', className, 'javaObject')
         protocol.findAll {
             it instanceof JavaProperty && !it.localOnly
         }.each { JavaProperty it ->
-            setters.addStatement('$L.$L($L)', 'javaObject', it.setterName, it.name)
+            builder.add('\n.$L($L)', it.name, it.name)
         }
-        methodBuilder.addCode(setters.build())
+        fields.each {
+            builder.add('\n$L', it)
+        }
+        builder.add('\n.build()')
+        method.addStatement(builder.build())
     }
 
     MethodSpec getWriteMethod() {

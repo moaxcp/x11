@@ -17,20 +17,21 @@ public class GetKeyboardMappingRequestTest {
 
   @Test
   void length() {
-    assertThat(new GetKeyboardMappingRequest().getLength()).isEqualTo(2);
+    assertThat(GetKeyboardMappingRequest.builder().build().getLength()).isEqualTo(2);
   }
 
   @Test
   void size() {
-    assertThat(new GetKeyboardMappingRequest().getSize()).isEqualTo(6);
+    assertThat(GetKeyboardMappingRequest.builder().build().getSize()).isEqualTo(6);
   }
 
   @Test
   void write() throws IOException {
     X11Output out = mock(X11Output.class);
-    GetKeyboardMappingRequest request = new GetKeyboardMappingRequest();
-    request.setFirstKeycode((byte) 22);
-    request.setCount((byte) 44);
+    GetKeyboardMappingRequest request = GetKeyboardMappingRequest.builder()
+      .firstKeycode((byte) 22)
+      .count((byte) 44)
+      .build();
     request.write((byte) 0, out);
 
     then(out).should().writeCard8(GetKeyboardMappingRequest.OPCODE);

@@ -42,9 +42,7 @@ class JavaEventSpec extends XmlSpec {
 
         then:
         javaEvent.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class KeyPressEvent implements com.github.moaxcp.x11client.protocol.XEvent {
               public static final byte NUMBER = 2;
@@ -99,21 +97,22 @@ class JavaEventSpec extends XmlSpec {
                 short state = in.readCard16();
                 boolean sameScreen = in.readBool();
                 in.readPad(1);
-                com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent javaObject = new com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent();
-                javaObject.setSentEvent(sentEvent);
-                javaObject.setEventDetail(eventDetail);
-                javaObject.setSequenceNumber(sequenceNumber);
-                javaObject.setDetail(detail);
-                javaObject.setTime(time);
-                javaObject.setRoot(root);
-                javaObject.setEvent(event);
-                javaObject.setChild(child);
-                javaObject.setRootX(rootX);
-                javaObject.setRootY(rootY);
-                javaObject.setEventX(eventX);
-                javaObject.setEventY(eventY);
-                javaObject.setState(state);
-                javaObject.setSameScreen(sameScreen);
+                com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent javaObject = com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.builder()
+                    .eventDetail(eventDetail)
+                    .sequenceNumber(sequenceNumber)
+                    .detail(detail)
+                    .time(time)
+                    .root(root)
+                    .event(event)
+                    .child(child)
+                    .rootX(rootX)
+                    .rootY(rootY)
+                    .eventX(eventX)
+                    .eventY(eventY)
+                    .state(state)
+                    .sameScreen(sameScreen)
+                    .sentEvent(sentEvent)
+                    .build();
                 if(javaObject.getSize() < 32) {
                   in.readPad(32 - javaObject.getSize());
                 }
@@ -142,17 +141,28 @@ class JavaEventSpec extends XmlSpec {
                 }
               }
             
-              public void stateEnable(com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
-                state = (short) maskEnum.enableFor(state);
-              }
-            
-              public void stateDisable(com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
-                state = (short) maskEnum.disableFor(state);
+              public boolean isStateEnabled(
+                  com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
+                return maskEnum.isEnabled(state);
               }
             
               @java.lang.Override
               public int getSize() {
                 return 1 + 2 + 1 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 1 + 1;
+              }
+            
+              public static class KeyPressEventBuilder {
+                public com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder stateEnable(
+                    com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
+                  state = (short) maskEnum.enableFor(state);
+                  return this;
+                }
+            
+                public com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder stateDisable(
+                    com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
+                  state = (short) maskEnum.disableFor(state);
+                  return this;
+                }
               }
             }
         '''.stripIndent()
@@ -176,9 +186,7 @@ class JavaEventSpec extends XmlSpec {
 
         then:
         javaEvent.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class MapRequestEvent implements com.github.moaxcp.x11client.protocol.XEvent {
               public static final byte NUMBER = 20;
@@ -206,12 +214,13 @@ class JavaEventSpec extends XmlSpec {
                 in.readPad(1);
                 int parent = in.readCard32();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent javaObject = new com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent();
-                javaObject.setSentEvent(sentEvent);
-                javaObject.setEventDetail(eventDetail);
-                javaObject.setSequenceNumber(sequenceNumber);
-                javaObject.setParent(parent);
-                javaObject.setWindow(window);
+                com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent javaObject = com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.builder()
+                    .eventDetail(eventDetail)
+                    .sequenceNumber(sequenceNumber)
+                    .parent(parent)
+                    .window(window)
+                    .sentEvent(sentEvent)
+                    .build();
                 if(javaObject.getSize() < 32) {
                   in.readPad(32 - javaObject.getSize());
                 }

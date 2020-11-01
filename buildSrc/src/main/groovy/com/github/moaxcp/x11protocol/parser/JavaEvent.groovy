@@ -70,9 +70,9 @@ class JavaEvent extends JavaObjectType {
     }
 
     @Override
-    void addSetterStatements(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addStatement('$L.$L($L)', 'javaObject', 'setSentEvent', 'sentEvent')
-        super.addSetterStatements(methodBuilder)
+    void addBuilderStatement(MethodSpec.Builder methodBuilder, CodeBlock... fields) {
+        CodeBlock sentEvent = CodeBlock.builder().add('.$L($L)', 'sentEvent', 'sentEvent').build()
+        super.addBuilderStatement(methodBuilder, sentEvent)
         //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
         methodBuilder.beginControlFlow('if(javaObject.getSize() < 32)')
             .addStatement('in.readPad(32 - javaObject.getSize())')

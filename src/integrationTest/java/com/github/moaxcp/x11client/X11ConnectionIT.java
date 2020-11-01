@@ -35,8 +35,9 @@ public class X11ConnectionIT {
     try(X11Connection connection = X11Connection.connect(new DisplayName(":1"))) {
       X11Output out = connection.getX11Output();
       X11Input in = connection.getX11Input();
-      QueryExtensionRequest extensionRequest = new QueryExtensionRequest();
-      extensionRequest.setName("XC-MISC");
+      QueryExtensionRequest extensionRequest = QueryExtensionRequest.builder()
+        .name("XC-MISC")
+        .build();
       extensionRequest.write((byte) 0, out);
       byte status = in.readByte();
       if(status == 0) {
@@ -57,15 +58,17 @@ public class X11ConnectionIT {
   void clientTest() throws IOException {
     try(X11Client client = X11Client.connect(new DisplayName(":1"))) {
       SetupStruct setup = client.getSetup();
-      GetKeyboardMappingRequest keyboard = new GetKeyboardMappingRequest();
-      keyboard.setFirstKeycode(setup.getMinKeycode());
-      keyboard.setCount((byte) (setup.getMaxKeycode() - setup.getMinKeycode() + 1));
+      GetKeyboardMappingRequest keyboard = GetKeyboardMappingRequest.builder()
+        .firstKeycode(setup.getMinKeycode())
+        .count((byte) (setup.getMaxKeycode() - setup.getMinKeycode() + 1))
+        .build();
       client.send(keyboard);
       GetKeyboardMappingReply keyboardReply = client.read();
       System.out.println(keyboardReply);
 
-      QueryExtensionRequest bigRequests = new QueryExtensionRequest();
-      bigRequests.setName("BIG-REQUESTS");
+      QueryExtensionRequest bigRequests = QueryExtensionRequest.builder()
+        .name("BIG-REQUESTS")
+        .build();
       //assertThat(bigRequests.getLength()).isEqualTo(5);
       client.send(bigRequests);
       QueryExtensionReply bigRequestReply = client.read();
@@ -76,17 +79,18 @@ public class X11ConnectionIT {
       EnableReply enableReply = client.read();
       System.out.println(enableReply);
 
-      CreateWindowRequest window = new CreateWindowRequest();
-      window.setDepth(client.getDefaultDepth());
-      window.setWid(client.nextResourceId());
-      window.setParent(client.getDefaultRoot());
-      window.setX((short) 10);
-      window.setY((short) 10);
-      window.setWidth((short) 600);
-      window.setHeight((short) 480);
-      window.setBorderWidth((short) 5);
-      window.setClazz(WindowClassEnum.COPY_FROM_PARENT);
-      window.setVisual(client.getDefaultVisualId());
+      CreateWindowRequest window = CreateWindowRequest.builder()
+        .depth(client.getDefaultDepth())
+        .wid(client.nextResourceId())
+        .parent(client.getDefaultRoot())
+        .x((short) 10)
+        .y((short) 10)
+        .width((short) 600)
+        .height((short) 480)
+        .borderWidth((short) 5)
+        .clazz(WindowClassEnum.COPY_FROM_PARENT)
+        .visual(client.getDefaultVisualId())
+        .build();
       client.send(window);
       System.out.println(window);
     }

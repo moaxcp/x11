@@ -20,9 +20,7 @@ class JavaRequestSpec extends XmlSpec {
 
         then:
         javaRequest.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class DestroyWindowRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 4;
@@ -43,8 +41,9 @@ class JavaRequestSpec extends XmlSpec {
                 in.readPad(1);
                 short length = in.readCard16();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequest javaObject = new com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequest();
-                javaObject.setWindow(window);
+                com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequest javaObject = com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequest.builder()
+                    .window(window)
+                    .build();
                 return javaObject;
               }
             
@@ -97,9 +96,7 @@ class JavaRequestSpec extends XmlSpec {
 
         then:
         javaRequest.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class PolyPointRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 64;
@@ -140,11 +137,12 @@ class JavaRequestSpec extends XmlSpec {
                   points.add(baseObject);
                   javaStart += baseObject.getSize();
                 }
-                com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest javaObject = new com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest();
-                javaObject.setCoordinateMode(coordinateMode);
-                javaObject.setDrawable(drawable);
-                javaObject.setGc(gc);
-                javaObject.setPoints(points);
+                com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest javaObject = com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest.builder()
+                    .coordinateMode(coordinateMode)
+                    .drawable(drawable)
+                    .gc(gc)
+                    .points(points)
+                    .build();
                 in.readPadAlign(javaObject.getSize());
                 return javaObject;
               }
@@ -203,9 +201,7 @@ class JavaRequestSpec extends XmlSpec {
 
         then:
         javaRequest.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class QueryTextExtendsRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 48;
@@ -239,9 +235,10 @@ class JavaRequestSpec extends XmlSpec {
                   string.add(baseObject);
                   javaStart += baseObject.getSize();
                 }
-                com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest javaObject = new com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest();
-                javaObject.setFont(font);
-                javaObject.setString(string);
+                com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest javaObject = com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest.builder()
+                    .font(font)
+                    .string(string)
+                    .build();
                 in.readPadAlign(javaObject.getSize());
                 return javaObject;
               }
@@ -475,9 +472,7 @@ class JavaRequestSpec extends XmlSpec {
 
         then:
         javaRequest.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class CreateWindowRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 1;
@@ -528,18 +523,19 @@ class JavaRequestSpec extends XmlSpec {
                 com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum clazz = com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum.getByCode(in.readCard16());
                 int visual = in.readCard32();
                 int valueMask = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest javaObject = new com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest();
-                javaObject.setDepth(depth);
-                javaObject.setWid(wid);
-                javaObject.setParent(parent);
-                javaObject.setX(x);
-                javaObject.setY(y);
-                javaObject.setWidth(width);
-                javaObject.setHeight(height);
-                javaObject.setBorderWidth(borderWidth);
-                javaObject.setClazz(clazz);
-                javaObject.setVisual(visual);
-                javaObject.setValueMask(valueMask);
+                com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest javaObject = com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.builder()
+                    .depth(depth)
+                    .wid(wid)
+                    .parent(parent)
+                    .x(x)
+                    .y(y)
+                    .width(width)
+                    .height(height)
+                    .borderWidth(borderWidth)
+                    .clazz(clazz)
+                    .visual(visual)
+                    .valueMask(valueMask)
+                    .build();
                 return javaObject;
               }
             
@@ -561,17 +557,27 @@ class JavaRequestSpec extends XmlSpec {
                 out.writeCard32(valueMask);
               }
             
-              public void valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum) {
-                valueMask = (int) maskEnum.enableFor(valueMask);
-              }
-            
-              public void valueMaskDisable(com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum) {
-                valueMask = (int) maskEnum.disableFor(valueMask);
+              public boolean isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum) {
+                return maskEnum.isEnabled(valueMask);
               }
             
               @java.lang.Override
               public int getSize() {
                 return 1 + 1 + 2 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 2 + 4 + 4;
+              }
+            
+              public static class CreateWindowRequestBuilder {
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder valueMaskEnable(
+                    com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum) {
+                  valueMask = (int) maskEnum.enableFor(valueMask);
+                  return this;
+                }
+            
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder valueMaskDisable(
+                    com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum) {
+                  valueMask = (int) maskEnum.disableFor(valueMask);
+                  return this;
+                }
               }
             }
         '''.stripIndent()

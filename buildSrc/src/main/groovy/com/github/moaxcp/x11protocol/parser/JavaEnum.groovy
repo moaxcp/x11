@@ -15,10 +15,15 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumValueNa
 
 class JavaEnum implements JavaType {
     String basePackage
+    String javaPackage
     String simpleName
     ClassName className
     ClassName superInterface
     Map<String, String> values
+
+    ClassName getBuilderClassName() {
+        ClassName.get(javaPackage, "${simpleName}Builder")
+    }
 
     @Override
     JavaProperty getField(String name) {
@@ -80,6 +85,7 @@ class JavaEnum implements JavaType {
         }
         return new JavaEnum(
             basePackage: xEnum.basePackage,
+            javaPackage: xEnum.javaPackage,
             simpleName: simpleName,
             className: getEnumTypeName(xEnum.javaPackage, xEnum.name),
             superInterface: ClassName.get(xEnum.basePackage, 'IntValue'),

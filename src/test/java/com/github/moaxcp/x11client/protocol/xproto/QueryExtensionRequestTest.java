@@ -12,8 +12,9 @@ public class QueryExtensionRequestTest {
   @Test
   void writeQueryExtensionXCMISC() throws IOException {
     X11Output out = mock(X11Output.class);
-    QueryExtensionRequest request = new QueryExtensionRequest();
-    request.setName("XC-MISC");
+    QueryExtensionRequest request = QueryExtensionRequest.builder()
+      .name("XC-MISC")
+      .build();
 
     request.write((byte) 0, out);
 
@@ -28,8 +29,9 @@ public class QueryExtensionRequestTest {
   @Test
   void writeQueryExtensionBIGREQUESTS() throws IOException {
     X11Output out = mock(X11Output.class);
-    QueryExtensionRequest request = new QueryExtensionRequest();
-    request.setName("BIG-REQUESTS");
+    QueryExtensionRequest request = QueryExtensionRequest.builder()
+      .name("BIG-REQUESTS")
+      .build();
 
     request.write((byte) 0, out);
 

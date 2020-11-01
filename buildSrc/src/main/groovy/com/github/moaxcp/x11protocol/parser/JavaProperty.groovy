@@ -82,6 +82,10 @@ abstract class JavaProperty implements JavaUnit {
     List<MethodSpec> getMethods() {
         return []
     }
+    
+    List<MethodSpec> getBuilderMethods(ClassName thisClass) {
+        return []
+    }
 
     CodeBlock declareAndInitializeTo(String readCall) {
         return CodeBlock.builder().addStatement('$T $L = $L', typeName, name, readCall).build()

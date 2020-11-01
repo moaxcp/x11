@@ -16,8 +16,9 @@ public class BigreqPlugin implements XProtocolPlugin {
 
   @Override
   public void setupOffset(XProtocolService service) throws IOException {
-    QueryExtensionRequest bigRequests = new QueryExtensionRequest();
-    bigRequests.setName(name);
+    QueryExtensionRequest bigRequests = QueryExtensionRequest.builder()
+      .name(name)
+      .build();
     service.send(bigRequests);
     QueryExtensionReply bigRequestReply = service.read();
     offset = bigRequestReply.getMajorOpcode();

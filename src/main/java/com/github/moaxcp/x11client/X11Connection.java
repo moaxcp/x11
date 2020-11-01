@@ -1,13 +1,5 @@
 package com.github.moaxcp.x11client;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
 import com.github.moaxcp.x11client.protocol.xproto.SetupAuthenticateStruct;
@@ -18,6 +10,14 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.newsclub.net.unix.AFUNIXSocket;
 import org.newsclub.net.unix.AFUNIXSocketAddress;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.List;
+import java.util.Optional;
 
 import static com.github.moaxcp.x11client.XAuthority.*;
 
@@ -75,12 +75,13 @@ public class X11Connection implements AutoCloseable {
   }
 
   private void sendConnectionSetup() throws IOException {
-    SetupRequestStruct setup = new SetupRequestStruct();
-    setup.setByteOrder((byte) 'B');
-    setup.setProtocolMajorVersion((short) 11);
-    setup.setProtocolMinorVersion((short) 0);
-    setup.setAuthorizationProtocolName(xAuthority.getProtocolName());
-    setup.setAuthorizationProtocolData(xAuthority.getProtocolData());
+    SetupRequestStruct setup = SetupRequestStruct.builder()
+      .byteOrder((byte) 'B')
+      .protocolMajorVersion((short) 11)
+      .protocolMinorVersion((short) 0)
+      .authorizationProtocolName(xAuthority.getProtocolName())
+      .authorizationProtocolData(xAuthority.getProtocolData())
+      .build();
     setup.write(out);
     out.flush();
   }

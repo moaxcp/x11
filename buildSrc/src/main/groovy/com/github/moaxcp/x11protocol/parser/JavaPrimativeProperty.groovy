@@ -1,11 +1,12 @@
 package com.github.moaxcp.x11protocol.parser
 
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.*
+import static com.github.moaxcp.x11protocol.generator.Conventions.* 
 /**
  * for x11 primative properties
  */
@@ -64,15 +65,35 @@ class JavaPrimativeProperty extends JavaProperty {
     List<MethodSpec> getMethods() {
         if(maskTypeName) {
             return [
+                MethodSpec.methodBuilder("is${name.capitalize()}Enabled")
+                    .addModifiers(Modifier.PUBLIC)
+                    .returns(boolean.class)
+                    .addParameter(maskTypeName, 'maskEnum')
+                    .addStatement('return maskEnum.isEnabled($1L)', name)
+                    .build()
+            ]
+        }
+        return []
+    }
+
+    @Override
+    List<MethodSpec> getBuilderMethods(ClassName outer) {
+        if(maskTypeName) {
+            ClassName builderClassName = ClassName.get(outer.packageName(), "${outer.simpleName()}.${outer.simpleName()}Builder")
+            return [
                 MethodSpec.methodBuilder("${name}Enable")
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(maskTypeName, 'maskEnum')
+                    .returns(builderClassName)
                     .addStatement('$1L = ($2T) maskEnum.enableFor($1L)', name, memberTypeName)
+                    .addStatement('return this')
                     .build(),
                 MethodSpec.methodBuilder("${name}Disable")
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(maskTypeName, 'maskEnum')
+                    .returns(builderClassName)
                     .addStatement('$1L = ($2T) maskEnum.disableFor($1L)', name, memberTypeName)
+                    .addStatement('return this')
                     .build()
             ]
         }

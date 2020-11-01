@@ -31,9 +31,7 @@ class JavaReplySpec extends XmlSpec {
 
         then:
         javaRequest.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class QueryTreeRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 15;
@@ -54,8 +52,9 @@ class JavaReplySpec extends XmlSpec {
                 in.readPad(1);
                 short length = in.readCard16();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest javaObject = new com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest();
-                javaObject.setWindow(window);
+                com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest javaObject = com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest.builder()
+                    .window(window)
+                    .build();
                 return javaObject;
               }
             
@@ -76,9 +75,7 @@ class JavaReplySpec extends XmlSpec {
         '''.stripIndent()
 
         javaReply.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class QueryTreeReply implements com.github.moaxcp.x11client.protocol.XReply {
               private short sequenceNumber;
@@ -101,12 +98,13 @@ class JavaReplySpec extends XmlSpec {
                 short childrenLen = in.readCard16();
                 in.readPad(14);
                 java.util.List<java.lang.Integer> children = in.readCard32(Short.toUnsignedInt(childrenLen));
-                com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply javaObject = new com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply();
-                javaObject.setSequenceNumber(sequenceNumber);
-                javaObject.setRoot(root);
-                javaObject.setParent(parent);
-                javaObject.setChildrenLen(childrenLen);
-                javaObject.setChildren(children);
+                com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply javaObject = com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.builder()
+                    .sequenceNumber(sequenceNumber)
+                    .root(root)
+                    .parent(parent)
+                    .childrenLen(childrenLen)
+                    .children(children)
+                    .build();
                 if(javaObject.getSize() < 32) {
                   in.readPad(32 - javaObject.getSize());
                 }
@@ -162,9 +160,7 @@ class JavaReplySpec extends XmlSpec {
 
         then:
         javaReply.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class TranslateCoordinatesReply implements com.github.moaxcp.x11client.protocol.XReply {
               private boolean sameScreen;
@@ -184,12 +180,13 @@ class JavaReplySpec extends XmlSpec {
                 int child = in.readCard32();
                 short dstY = in.readInt16();
                 short dstX = in.readInt16();
-                com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply javaObject = new com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply();
-                javaObject.setSameScreen(sameScreen > 0);
-                javaObject.setSequenceNumber(sequenceNumber);
-                javaObject.setChild(child);
-                javaObject.setDstY(dstY);
-                javaObject.setDstX(dstX);
+                com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply javaObject = com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply.builder()
+                    .sameScreen(sameScreen > 0)
+                    .sequenceNumber(sequenceNumber)
+                    .child(child)
+                    .dstY(dstY)
+                    .dstX(dstX)
+                    .build();
                 in.readPad(16);
                 return javaObject;
               }
@@ -247,9 +244,7 @@ class JavaReplySpec extends XmlSpec {
 
         then:
         javaReply.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class ListHostsReply implements com.github.moaxcp.x11client.protocol.XReply {
               @lombok.NonNull
@@ -272,11 +267,12 @@ class JavaReplySpec extends XmlSpec {
                 for(int i = 0; i < Short.toUnsignedInt(hostsLen); i++) {
                   hosts.add(com.github.moaxcp.x11client.protocol.xproto.HostStruct.readHostStruct(in));
                 }
-                com.github.moaxcp.x11client.protocol.xproto.ListHostsReply javaObject = new com.github.moaxcp.x11client.protocol.xproto.ListHostsReply();
-                javaObject.setMode(com.github.moaxcp.x11client.protocol.xproto.AccessControlEnum.getByCode(mode));
-                javaObject.setSequenceNumber(sequenceNumber);
-                javaObject.setHostsLen(hostsLen);
-                javaObject.setHosts(hosts);
+                com.github.moaxcp.x11client.protocol.xproto.ListHostsReply javaObject = com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.builder()
+                    .mode(com.github.moaxcp.x11client.protocol.xproto.AccessControlEnum.getByCode(mode))
+                    .sequenceNumber(sequenceNumber)
+                    .hostsLen(hostsLen)
+                    .hosts(hosts)
+                    .build();
                 if(javaObject.getSize() < 32) {
                   in.readPad(32 - javaObject.getSize());
                 }
@@ -333,9 +329,7 @@ class JavaReplySpec extends XmlSpec {
 
         then:
         javaReply.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class QueryExtensionReply implements com.github.moaxcp.x11client.protocol.XReply {
               private short sequenceNumber;
@@ -356,12 +350,13 @@ class JavaReplySpec extends XmlSpec {
                 byte majorOpcode = in.readCard8();
                 byte firstEvent = in.readCard8();
                 byte firstError = in.readCard8();
-                com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply javaObject = new com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply();
-                javaObject.setSequenceNumber(sequenceNumber);
-                javaObject.setPresent(present);
-                javaObject.setMajorOpcode(majorOpcode);
-                javaObject.setFirstEvent(firstEvent);
-                javaObject.setFirstError(firstError);
+                com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply javaObject = com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply.builder()
+                    .sequenceNumber(sequenceNumber)
+                    .present(present)
+                    .majorOpcode(majorOpcode)
+                    .firstEvent(firstEvent)
+                    .firstError(firstError)
+                    .build();
                 in.readPad(20);
                 return javaObject;
               }

@@ -23,9 +23,7 @@ class JavaStructSpec extends XmlSpec {
 
         then:
         javaStruct.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class FormatStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private byte depth;
@@ -40,13 +38,14 @@ class JavaStructSpec extends XmlSpec {
                 byte bitsPerPixel = in.readCard8();
                 byte scanlinePad = in.readCard8();
                 in.readPad(5);
-                com.github.moaxcp.x11client.protocol.xproto.FormatStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.FormatStruct();
-                javaObject.setDepth(depth);
-                javaObject.setBitsPerPixel(bitsPerPixel);
-                javaObject.setScanlinePad(scanlinePad);
+                com.github.moaxcp.x11client.protocol.xproto.FormatStruct javaObject = com.github.moaxcp.x11client.protocol.xproto.FormatStruct.builder()
+                    .depth(depth)
+                    .bitsPerPixel(bitsPerPixel)
+                    .scanlinePad(scanlinePad)
+                    .build();
                 return javaObject;
               }
-              
+            
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(depth);
@@ -54,7 +53,7 @@ class JavaStructSpec extends XmlSpec {
                 out.writeCard8(scanlinePad);
                 out.writePad(5);
               }
-              
+            
               @java.lang.Override
               public int getSize() {
                 return 1 + 1 + 1 + 5;
@@ -91,9 +90,7 @@ class JavaStructSpec extends XmlSpec {
 
         then:
         javaStruct.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class ScreenStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private int root;
@@ -111,11 +108,12 @@ class JavaStructSpec extends XmlSpec {
                 int defaultColormap = in.readCard32();
                 int currentInputMasks = in.readCard32();
                 com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores = com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum.getByCode(in.readByte());
-                com.github.moaxcp.x11client.protocol.xproto.ScreenStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.ScreenStruct();
-                javaObject.setRoot(root);
-                javaObject.setDefaultColormap(defaultColormap);
-                javaObject.setCurrentInputMasks(currentInputMasks);
-                javaObject.setBackingStores(backingStores);
+                com.github.moaxcp.x11client.protocol.xproto.ScreenStruct javaObject = com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.builder()
+                    .root(root)
+                    .defaultColormap(defaultColormap)
+                    .currentInputMasks(currentInputMasks)
+                    .backingStores(backingStores)
+                    .build();
                 return javaObject;
               }
             
@@ -127,19 +125,28 @@ class JavaStructSpec extends XmlSpec {
                 out.writeByte((byte) backingStores.getValue());
               }
             
-              public void currentInputMasksEnable(
+              public boolean isCurrentInputMasksEnabled(
                   com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
-                currentInputMasks = (int) maskEnum.enableFor(currentInputMasks);
+                return maskEnum.isEnabled(currentInputMasks);
               }
             
-              public void currentInputMasksDisable(
-                  com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
-                currentInputMasks = (int) maskEnum.disableFor(currentInputMasks);
-              }
-              
               @java.lang.Override
               public int getSize() {
                 return 4 + 4 + 4 + 1;
+              }
+            
+              public static class ScreenStructBuilder {
+                public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder currentInputMasksEnable(
+                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
+                  currentInputMasks = (int) maskEnum.enableFor(currentInputMasks);
+                  return this;
+                }
+            
+                public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder currentInputMasksDisable(
+                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
+                  currentInputMasks = (int) maskEnum.disableFor(currentInputMasks);
+                  return this;
+                }
               }
             }
         '''.stripIndent()
@@ -164,9 +171,7 @@ class JavaStructSpec extends XmlSpec {
 
         then:
         javaStruct.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class DeviceTimeCoordStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private int time;
@@ -178,9 +183,10 @@ class JavaStructSpec extends XmlSpec {
                   byte numAxes, com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int time = in.readCard32();
                 java.util.List<java.lang.Integer> axisvalues = in.readInt32(numAxes);
-                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct();
-                javaObject.setTime(time);
-                javaObject.setAxisvalues(axisvalues);
+                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct javaObject = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct.builder()
+                    .time(time)
+                    .axisvalues(axisvalues)
+                    .build();
                 return javaObject;
               }
             
@@ -220,9 +226,7 @@ class JavaStructSpec extends XmlSpec {
 
         then:
         javaStruct.typeSpec.toString() == '''\
-            @lombok.Data
-            @lombok.AllArgsConstructor
-            @lombok.NoArgsConstructor
+            @lombok.Value
             @lombok.Builder
             public class SetKeyTypeStruct implements com.github.moaxcp.x11client.protocol.XStruct {
               private boolean preserve;
@@ -237,10 +241,11 @@ class JavaStructSpec extends XmlSpec {
                 boolean preserve = in.readBool();
                 byte nMapEntries = in.readCard8();
                 java.util.List<java.lang.Integer> preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
-                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct javaObject = new com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct();
-                javaObject.setPreserve(preserve);
-                javaObject.setNMapEntries(nMapEntries);
-                javaObject.setPreserveEntries(preserveEntries);
+                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct javaObject = com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct.builder()
+                    .preserve(preserve)
+                    .nMapEntries(nMapEntries)
+                    .preserveEntries(preserveEntries)
+                    .build();
                 return javaObject;
               }
             

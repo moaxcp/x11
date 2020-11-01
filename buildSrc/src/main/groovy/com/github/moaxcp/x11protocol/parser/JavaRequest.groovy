@@ -77,8 +77,8 @@ class JavaRequest extends JavaObjectType {
     }
 
     @Override
-    void addSetterStatements(MethodSpec.Builder methodBuilder) {
-        super.addSetterStatements(methodBuilder)
+    void addBuilderStatement(MethodSpec.Builder methodBuilder, CodeBlock... fields) {
+        super.addBuilderStatement(methodBuilder)
         if(fixedSize && fixedSize.get() % 4 == 0) {
             return
         }
