@@ -2,8 +2,6 @@ package com.github.moaxcp.x11protocol.parser
 
 import com.squareup.javapoet.CodeBlock
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
-
 class JavaClientMessageDataUnionProperty extends JavaTypeProperty {
     JavaClientMessageDataUnionProperty(JavaType javaType, XUnitField field) {
         super(javaType, field)
@@ -15,6 +13,6 @@ class JavaClientMessageDataUnionProperty extends JavaTypeProperty {
 
     @Override
     CodeBlock getReadCode() {
-        return declareAndInitializeTo(CodeBlock.of('$T.read$L(in, format)', typeName, typeName.simpleName()))
+        return CodeBlock.of('$T.read$L(in, format)', typeName, typeName.simpleName())
     }
 }

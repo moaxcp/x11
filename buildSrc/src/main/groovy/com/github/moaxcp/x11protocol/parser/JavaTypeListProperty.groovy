@@ -38,7 +38,7 @@ class JavaTypeListProperty extends JavaListProperty {
     }
 
     @Override
-    CodeBlock getReadCode() {
+    CodeBlock getDeclareAndReadCode() {
         if(lengthExpression instanceof EmptyExpression) {
             return CodeBlock.builder()
                 .addStatement('$1T $2L = new $3T<>(length - javaStart)', typeName, name, ArrayList.class)
@@ -55,6 +55,11 @@ class JavaTypeListProperty extends JavaListProperty {
             .addStatement('$L.add($T.read$L(in))', name, baseTypeName, baseTypeName.simpleName())
             .endControlFlow()
             .build()
+    }
+
+    @Override
+    CodeBlock getReadCode() {
+        throw new IllegalStateException()
     }
 
     @Override

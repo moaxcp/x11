@@ -17,18 +17,25 @@ abstract class JavaProperty implements JavaUnit {
     boolean readOnly
     boolean localOnly
     boolean readParam
+    JavaBitcaseInfo bitcaseInfo
 
     JavaProperty(Map map) {
         javaType = requireNonNull(map.javaType, 'javaType must not be null')
         x11Field = requireNonNull(map.x11Field, 'field must not be null')
         readOnly = map.readOnly
         localOnly = map.localOnly
+        if(map.x11Field.bitcaseInfo) {
+            bitcaseInfo = new JavaBitcaseInfo(map.x11Field.result, map.x11Field.bitcaseInfo)
+        }
     }
     
     JavaProperty(JavaType javaType, XUnitField field) {
         this.javaType = requireNonNull(javaType, 'javaType must not be null')
         this.x11Field = requireNonNull(field, 'field must not be null')
         this.localOnly = field.localOnly
+        if(field.bitcaseInfo) {
+            this.bitcaseInfo = new JavaBitcaseInfo(field.result, field.bitcaseInfo)
+        }
     }
     
     XUnitField getXUnit() {

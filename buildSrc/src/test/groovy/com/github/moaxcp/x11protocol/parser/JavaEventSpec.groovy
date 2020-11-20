@@ -97,26 +97,26 @@ class JavaEventSpec extends XmlSpec {
                 short state = in.readCard16();
                 boolean sameScreen = in.readBool();
                 in.readPad(1);
-                com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent javaObject = com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.builder()
-                    .eventDetail(eventDetail)
-                    .sequenceNumber(sequenceNumber)
-                    .detail(detail)
-                    .time(time)
-                    .root(root)
-                    .event(event)
-                    .child(child)
-                    .rootX(rootX)
-                    .rootY(rootY)
-                    .eventX(eventX)
-                    .eventY(eventY)
-                    .state(state)
-                    .sameScreen(sameScreen)
-                    .sentEvent(sentEvent)
-                    .build();
-                if(javaObject.getSize() < 32) {
-                  in.readPad(32 - javaObject.getSize());
+                com.github.moaxcp.x11client.protocol.xproto.KeyPressEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.KeyPressEventBuilder.builder();
+                javaBuilder.eventDetail(eventDetail);
+                javaBuilder.sequenceNumber(sequenceNumber);
+                javaBuilder.detail(detail);
+                javaBuilder.time(time);
+                javaBuilder.root(root);
+                javaBuilder.event(event);
+                javaBuilder.child(child);
+                javaBuilder.rootX(rootX);
+                javaBuilder.rootY(rootY);
+                javaBuilder.eventX(eventX);
+                javaBuilder.eventY(eventY);
+                javaBuilder.state(state);
+                javaBuilder.sameScreen(sameScreen);
+                
+                javaBuilder.sentEvent(sentEvent);
+                if(javaBuilder.getSize() < 32) {
+                  in.readPad(32 - javaBuilder.getSize());
                 }
-                return javaObject;
+                return javaBuilder.build();
               }
             
               @java.lang.Override
@@ -162,6 +162,11 @@ class JavaEventSpec extends XmlSpec {
                     com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
                   state = (short) maskEnum.disableFor(state);
                   return this;
+                }
+            
+                @java.lang.Override
+                public int getSize() {
+                  return 1 + 2 + 1 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 1 + 1;
                 }
               }
             }
@@ -214,17 +219,17 @@ class JavaEventSpec extends XmlSpec {
                 in.readPad(1);
                 int parent = in.readCard32();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent javaObject = com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.builder()
-                    .eventDetail(eventDetail)
-                    .sequenceNumber(sequenceNumber)
-                    .parent(parent)
-                    .window(window)
-                    .sentEvent(sentEvent)
-                    .build();
-                if(javaObject.getSize() < 32) {
-                  in.readPad(32 - javaObject.getSize());
+                com.github.moaxcp.x11client.protocol.xproto.MapRequestEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.MapRequestEventBuilder.builder();
+                javaBuilder.eventDetail(eventDetail);
+                javaBuilder.sequenceNumber(sequenceNumber);
+                javaBuilder.parent(parent);
+                javaBuilder.window(window);
+                
+                javaBuilder.sentEvent(sentEvent);
+                if(javaBuilder.getSize() < 32) {
+                  in.readPad(32 - javaBuilder.getSize());
                 }
-                return javaObject;
+                return javaBuilder.build();
               }
             
               @java.lang.Override
@@ -243,6 +248,13 @@ class JavaEventSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 1 + 2 + 1 + 4 + 4;
+              }
+              
+              public static class MapRequestEventBuilder {
+                @java.lang.Override
+                public int getSize() {
+                  return 1 + 2 + 1 + 4 + 4;
+                }
               }
             }
         '''.stripIndent()

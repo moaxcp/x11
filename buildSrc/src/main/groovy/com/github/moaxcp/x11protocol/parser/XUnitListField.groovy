@@ -18,8 +18,17 @@ class XUnitListField extends XUnitField {
         lengthExpression = (Node) node.childNodes().next()
     }
 
+    XUnitListField(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
+        super(result, node, bitcaseInfo)
+        lengthExpression = (Node) node.childNodes().next()
+    }
+
     static XUnitListField xUnitListField(XResult result, Node node) {
         return new XUnitListField(result, node)
+    }
+
+    static XUnitListField xUnitListField(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
+        return new XUnitListField(result, node, bitcaseInfo)
     }
 
     @Override

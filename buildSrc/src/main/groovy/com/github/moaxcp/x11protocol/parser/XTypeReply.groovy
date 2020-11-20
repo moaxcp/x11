@@ -18,15 +18,13 @@ class XTypeReply extends XTypeObject {
     @Override
     void addUnits(XResult result, Node node) {
         node.childNodes().eachWithIndex { Node it, int i ->
-            XUnit unit = parseXUnit(result, it)
-            if(unit) {
-                protocol.add(unit)
-                if(i == 0) {
-                    XUnit sequence = new XUnitField(result: result, name: 'sequenceNumber', type: 'CARD16')
-                    protocol.add(sequence)
-                    XUnit length = new XUnitField(result: result, name: 'length', type: 'CARD32', localOnly: true)
-                    protocol.add(length)
-                }
+            List<XUnit> unit = parseXUnit(result, it)
+            protocol.addAll(unit)
+            if(i == 0) {
+                XUnit sequence = new XUnitField(result: result, name: 'sequenceNumber', type: 'CARD16')
+                protocol.add(sequence)
+                XUnit length = new XUnitField(result: result, name: 'length', type: 'CARD32', localOnly: true)
+                protocol.add(length)
             }
         }
     }

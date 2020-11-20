@@ -27,7 +27,7 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
         property.baseTypeName == ClassName.get(Long.class)
         property.typeName == ParameterizedTypeName.get(ClassName.get(List.class), ClassName.get(Long.class))
         property.lengthExpression.expression.toString() == 'Integer.toUnsignedLong(numWindowModifiers)'
-        property.readCode.toString() == 'java.util.List<java.lang.Long> windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));\n'
+        property.declareAndReadCode.toString() == 'java.util.List<java.lang.Long> windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));\n'
         property.writeCode.toString() == 'out.writeCard64(windowModifiers);\n'
     }
 }

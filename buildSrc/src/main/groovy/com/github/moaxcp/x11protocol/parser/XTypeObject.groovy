@@ -37,35 +37,72 @@ abstract class XTypeObject extends XType implements XTypeUnit {
 
     void addUnits(XResult result, Node node) {
         node.childNodes().each { Node it ->
-            XUnit unit = parseXUnit(result, it)
-            if(unit) {
-                protocol.add(unit)
-            }
+            List<XUnit> unit = parseXUnit(result, it)
+            protocol.addAll(unit)
         }
     }
 
-    XUnit parseXUnit(XResult result, Node node) {
+    List<XUnit> parseXUnit(XResult result, Node node) {
         switch(node.name()) {
             case 'required_start_align':
-                return xUnitRequiredStartAlign(result, node)
+                return [xUnitRequiredStartAlign(result, node)]
             case 'field':
-                return xUnitField(result, node)
+                return [xUnitField(result, node)]
             case 'list':
-                return xUnitListField(result, node)
+                return [xUnitListField(result, node)]
             case 'pad':
-                return xUnitPad(node)
+                return [xUnitPad(node)]
             case 'switch':
-                System.out.println("switch")
-                return null
+                if(node.childNodes().find { Node it -> it.name() == 'bitcase'}) {
+                    return parseValueList(result, node)
+                } else {
+                    System.out.println('switch')
+                    return []
+                }
             case 'exprfield':
-                return xUnitExprField(result, node)
+                return [xUnitExprField(result, node)]
             case 'doc':
-                return null
+                return []
             case 'reply':
-                return null
+                return []
             default:
                 throw new IllegalArgumentException("cannot parse ${node.name()}")
         }
+    }
+
+    XUnit parseXUnit(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
+        switch(node.name()) {
+            case 'field':
+                return xUnitField(result, node, bitcaseInfo)
+            case 'list':
+                return xUnitListField(result, node, bitcaseInfo)
+            default:
+                throw new IllegalArgumentException("cannot parse ${node.name()}")
+        }
+    }
+
+    List<XUnit> parseValueList(XResult result, Node node) {
+        String fieldRef = node.childNodes().find{Node it -> it.name() == 'fieldref'}.text()
+        List<XUnit> fields = []
+        node.childNodes().each { Node it ->
+            if(it.name() == 'fieldref') {
+                return
+            }
+            if(it.name() == 'bitcase') {
+                String enumRef
+                String enumItem
+                it.childNodes().each { Node bitcaseNode ->
+                    if(bitcaseNode.name() == 'enumref') {
+                        enumRef = bitcaseNode.attributes().get('ref')
+                        enumItem = bitcaseNode.text()
+                    } else {
+                        XUnit unit = parseXUnit(result, bitcaseNode, new XBitcaseInfo(maskField: fieldRef, enumType: enumRef, enumItem: enumItem))
+                        fields.add(unit)
+                    }
+                }
+            }
+        }
+        return fields
     }
 
     List<JavaUnit> toJavaProtocol(JavaType javaType) {

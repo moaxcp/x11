@@ -38,12 +38,11 @@ class JavaStructSpec extends XmlSpec {
                 byte bitsPerPixel = in.readCard8();
                 byte scanlinePad = in.readCard8();
                 in.readPad(5);
-                com.github.moaxcp.x11client.protocol.xproto.FormatStruct javaObject = com.github.moaxcp.x11client.protocol.xproto.FormatStruct.builder()
-                    .depth(depth)
-                    .bitsPerPixel(bitsPerPixel)
-                    .scanlinePad(scanlinePad)
-                    .build();
-                return javaObject;
+                com.github.moaxcp.x11client.protocol.xproto.FormatStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.FormatStructBuilder.builder();
+                javaBuilder.depth(depth);
+                javaBuilder.bitsPerPixel(bitsPerPixel);
+                javaBuilder.scanlinePad(scanlinePad);
+                return javaBuilder.build();
               }
             
               @java.lang.Override
@@ -57,6 +56,13 @@ class JavaStructSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 1 + 1 + 1 + 5;
+              }
+              
+              public static class FormatStructBuilder {
+                @java.lang.Override
+                public int getSize() {
+                  return 1 + 1 + 1 + 5;
+                }
               }
             }
         '''.stripIndent()
@@ -108,13 +114,12 @@ class JavaStructSpec extends XmlSpec {
                 int defaultColormap = in.readCard32();
                 int currentInputMasks = in.readCard32();
                 com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores = com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum.getByCode(in.readByte());
-                com.github.moaxcp.x11client.protocol.xproto.ScreenStruct javaObject = com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.builder()
-                    .root(root)
-                    .defaultColormap(defaultColormap)
-                    .currentInputMasks(currentInputMasks)
-                    .backingStores(backingStores)
-                    .build();
-                return javaObject;
+                com.github.moaxcp.x11client.protocol.xproto.ScreenStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ScreenStructBuilder.builder();
+                javaBuilder.root(root);
+                javaBuilder.defaultColormap(defaultColormap);
+                javaBuilder.currentInputMasks(currentInputMasks);
+                javaBuilder.backingStores(backingStores);
+                return javaBuilder.build();
               }
             
               @java.lang.Override
@@ -146,6 +151,11 @@ class JavaStructSpec extends XmlSpec {
                     com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
                   currentInputMasks = (int) maskEnum.disableFor(currentInputMasks);
                   return this;
+                }
+                
+                @java.lang.Override
+                public int getSize() {
+                  return 4 + 4 + 4 + 1;
                 }
               }
             }
@@ -183,11 +193,10 @@ class JavaStructSpec extends XmlSpec {
                   byte numAxes, com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int time = in.readCard32();
                 java.util.List<java.lang.Integer> axisvalues = in.readInt32(numAxes);
-                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct javaObject = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct.builder()
-                    .time(time)
-                    .axisvalues(axisvalues)
-                    .build();
-                return javaObject;
+                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStructBuilder.builder();
+                javaBuilder.time(time);
+                javaBuilder.axisvalues(axisvalues);
+                return javaBuilder.build();
               }
             
               @java.lang.Override
@@ -195,10 +204,17 @@ class JavaStructSpec extends XmlSpec {
                 out.writeCard32(time);
                 out.writeInt32(axisvalues);
               }
-              
+            
               @java.lang.Override
               public int getSize() {
                 return 4 + 4 * axisvalues.size();
+              }
+              
+              public static class DeviceTimeCoordStructBuilder {
+                @java.lang.Override
+                public int getSize() {
+                  return 4 + 4 * axisvalues.size();
+                }
               }
             }
         '''.stripIndent()
@@ -241,12 +257,11 @@ class JavaStructSpec extends XmlSpec {
                 boolean preserve = in.readBool();
                 byte nMapEntries = in.readCard8();
                 java.util.List<java.lang.Integer> preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
-                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct javaObject = com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct.builder()
-                    .preserve(preserve)
-                    .nMapEntries(nMapEntries)
-                    .preserveEntries(preserveEntries)
-                    .build();
-                return javaObject;
+                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStructBuilder.builder();
+                javaBuilder.preserve(preserve);
+                javaBuilder.nMapEntries(nMapEntries);
+                javaBuilder.preserveEntries(preserveEntries);
+                return javaBuilder.build();
               }
             
               @java.lang.Override
@@ -255,10 +270,17 @@ class JavaStructSpec extends XmlSpec {
                 out.writeCard8(nMapEntries);
                 out.writeInt32(preserveEntries);
               }
-              
+            
               @java.lang.Override
               public int getSize() {
                 return 1 + 1 + 4 * preserveEntries.size();
+              }
+              
+              public static class SetKeyTypeStructBuilder {
+                @java.lang.Override
+                public int getSize() {
+                  return 1 + 1 + 4 * preserveEntries.size();
+                }
               }
             }
         '''.stripIndent()

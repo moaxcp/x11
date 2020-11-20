@@ -26,6 +26,11 @@ class JavaRequiredStartAlign implements JavaUnit {
     }
 
     @Override
+    CodeBlock getDeclareAndReadCode() {
+        return CodeBlock.of('//todo align')
+    }
+
+    @Override
     CodeBlock getWriteCode() {
         return CodeBlock.of('//todo align')
     }

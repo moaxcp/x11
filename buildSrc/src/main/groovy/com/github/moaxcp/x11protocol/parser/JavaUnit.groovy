@@ -7,6 +7,7 @@ interface JavaUnit {
     JavaType getJavaType()
     TypeName getTypeName()
     XUnit getXUnit()
+    CodeBlock getDeclareAndReadCode()
     CodeBlock getReadCode()
     CodeBlock getWriteCode()
     void setReadParam(boolean readParam)

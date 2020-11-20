@@ -23,7 +23,7 @@ class JavaPrimativeStringListProperty extends JavaPrimativeListProperty {
     }
 
     @Override
-    CodeBlock getReadCode() {
+    CodeBlock getDeclareAndReadCode() {
         return declareAndInitializeTo("in.readString8(${lengthExpression.getExpression(TypeName.INT)})")
     }
 

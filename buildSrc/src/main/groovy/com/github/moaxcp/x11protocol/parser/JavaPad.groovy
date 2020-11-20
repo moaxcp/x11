@@ -25,8 +25,13 @@ class JavaPad implements JavaUnit {
     }
 
     @Override
+    CodeBlock getDeclareAndReadCode() {
+        return CodeBlock.builder().addStatement(getReadCode()).build()
+    }
+
+    @Override
     CodeBlock getReadCode() {
-        return CodeBlock.builder().addStatement("in.readPad($bytes)").build()
+        CodeBlock.of("in.readPad($bytes)")
     }
 
     @Override

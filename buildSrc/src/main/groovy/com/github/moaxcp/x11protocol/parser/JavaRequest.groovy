@@ -61,7 +61,7 @@ class JavaRequest extends JavaObjectType {
         if(lastListNoLength) {
             methodBuilder.addStatement('int javaStart = 1')
             protocol.eachWithIndex { it, i ->
-                methodBuilder.addCode(it.readCode)
+                methodBuilder.addCode(it.declareAndReadCode)
                 if(i != protocol.size() - 1) {
                     methodBuilder.addStatement('javaStart += $L', it.getSizeExpression())
                 }
@@ -94,15 +94,17 @@ class JavaRequest extends JavaObjectType {
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
         methodBuilder.addStatement('out.writeCard8((byte)($1T.toUnsignedInt(OPCODE) + $1T.toUnsignedInt(offset)))', ClassName.get('java.lang', 'Byte'))
         if(protocol.size() > 1) {
-            CodeBlock.Builder writeProtocol = CodeBlock.builder()
             protocol.each { it ->
                 if(it instanceof JavaProperty && it.name == 'length') {
                     methodBuilder.addStatement('out.writeCard16((short) getLength())')
+                } else if(it instanceof JavaProperty && it.bitcaseInfo) {
+                    methodBuilder.beginControlFlow('if(is$LEnabled($T.$L)', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
+                    methodBuilder.addCode(it.writeCode)
+                    methodBuilder.endControlFlow()
                 } else {
                     methodBuilder.addCode(it.writeCode)
                 }
             }
-            methodBuilder.addCode(writeProtocol.build())
         } else {
             methodBuilder.addStatement('out.writePad(1)')
             methodBuilder.addStatement('out.writeCard16((short) 1)')
@@ -132,6 +134,12 @@ class JavaRequest extends JavaObjectType {
             return Optional.of(4)
         }
         if(empty) {
+            return Optional.empty()
+        }
+        boolean bitcase = protocol.find {
+            it instanceof JavaProperty && it.bitcaseInfo
+        }
+        if(bitcase) {
             return Optional.empty()
         }
         Optional.of(protocol.stream().mapToInt({it.fixedSize.get()}).sum() + 1)

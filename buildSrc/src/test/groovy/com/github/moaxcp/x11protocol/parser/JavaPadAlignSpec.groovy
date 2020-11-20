@@ -13,7 +13,7 @@ class JavaPadAlignSpec extends XmlSpec {
             list: new JavaPrimativeListProperty(javaType, new XUnitListField(result, getFirstNode())))
 
         expect:
-        align.readCode.toString() == 'in.readPadAlign(5);\n'
+        align.declareAndReadCode.toString() == 'in.readPadAlign(5);\n'
     }
 
     def 'XPadAlign read expression'() {
@@ -26,7 +26,7 @@ class JavaPadAlignSpec extends XmlSpec {
             list: new JavaPrimativeListProperty(javaType, new XUnitListField(result, getFirstNode())))
 
         expect:
-        align.readCode.toString() == 'in.readPadAlign(5, 5);\n'
+        align.declareAndReadCode.toString() == 'in.readPadAlign(5, 5);\n'
     }
 
     def 'XPadAlign write expression 4'() {

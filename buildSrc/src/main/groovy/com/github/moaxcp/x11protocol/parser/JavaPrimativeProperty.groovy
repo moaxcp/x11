@@ -101,8 +101,13 @@ class JavaPrimativeProperty extends JavaProperty {
     }
 
     @Override
+    CodeBlock getDeclareAndReadCode() {
+        return declareAndInitializeTo(readCode)
+    }
+
+    @Override
     CodeBlock getReadCode() {
-        return declareAndInitializeTo("in.read${fromUpperUnderscoreToUpperCamel(x11Type)}()")
+        return CodeBlock.of("in.read${fromUpperUnderscoreToUpperCamel(x11Type)}()")
     }
 
     @Override

@@ -36,10 +36,15 @@ class JavaEnumProperty extends JavaProperty {
     }
 
     @Override
-    CodeBlock getReadCode() {
+    CodeBlock getDeclareAndReadCode() {
         return CodeBlock.builder()
-            .addStatement("\$1T \$2L = \$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Type)}())", memberTypeName, name)
+            .addStatement(readCode)
             .build()
+    }
+
+    @Override
+    CodeBlock getReadCode() {
+        return CodeBlock.of("\$1T \$2L = \$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Type)}())", memberTypeName, name)
     }
 
     @Override

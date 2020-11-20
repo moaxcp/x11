@@ -41,7 +41,7 @@ class JavaReply extends JavaObjectType {
         if(lastListNoLength) {
             methodBuilder.addStatement('int javaStart = 1')
             protocol.eachWithIndex { it, i ->
-                methodBuilder.addCode(it.readCode)
+                methodBuilder.addCode(it.declareAndReadCode)
                 if(i != protocol.size() - 1) {
                     methodBuilder.addStatement('javaStart += $L', it.getSizeExpression())
                 }
@@ -58,26 +58,25 @@ class JavaReply extends JavaObjectType {
     @Override
     void addBuilderStatement(MethodSpec.Builder methodBuilder, CodeBlock... fields) {
         CodeBlock.Builder builder = CodeBlock.builder()
-        builder.add('$1T $2L = $1T.builder()', className, 'javaObject')
+        builder.addStatement('$1T $2L = $1T.builder()', className, 'javaBuilder')
         protocol.findAll {
             it instanceof JavaProperty && !it.localOnly
         }.eachWithIndex { JavaProperty it, int i ->
             if(i == 0 && it.typeName == TypeName.BOOLEAN) {
-                builder.add('\n.$L($L > 0)', it.name, it.name)
+                builder.addStatement('javaBuilder.$L($L > 0)', it.name, it.name)
             } else if (i == 0 && it instanceof JavaEnumProperty) {
-                builder.add('\n.$L($T.getByCode($L))', it.name, it.typeName, it.name)
+                builder.addStatement('javaBuilder.$L($T.getByCode($L))', it.name, it.typeName, it.name)
             } else {
-                builder.add('\n.$L($L)', it.name, it.name)
+                builder.addStatement('javaBuilder.$L($L)', it.name, it.name)
             }
         }
-        builder.add('\n.build()')
-        methodBuilder.addStatement(builder.build())
+        methodBuilder.addCode(builder.build())
         if(fixedSize && fixedSize.get() < 32) {
             methodBuilder.addStatement('in.readPad($L)', 32 - fixedSize.get())
             return
         } else if(!fixedSize) {
-            methodBuilder.beginControlFlow('if(javaObject.getSize() < 32)')
-            methodBuilder.addStatement('in.readPad(32 - javaObject.getSize())')
+            methodBuilder.beginControlFlow('if(javaBuilder.getSize() < 32)')
+            methodBuilder.addStatement('in.readPad(32 - javaBuilder.getSize())')
             methodBuilder.endControlFlow()
             return
         }
@@ -96,6 +95,10 @@ class JavaReply extends JavaObjectType {
             protocol.each { it ->
                 if(it instanceof JavaProperty && it.name == 'length') {
                     methodBuilder.addStatement('out.writeCard32(getLength())')
+                } else if(it instanceof JavaProperty && it.bitcaseInfo) {
+                    methodBuilder.beginControlFlow('if(is$LEnabled($T.$L)', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
+                    methodBuilder.addCode(it.writeCode)
+                    methodBuilder.endControlFlow()
                 } else {
                     methodBuilder.addCode(it.writeCode)
                 }

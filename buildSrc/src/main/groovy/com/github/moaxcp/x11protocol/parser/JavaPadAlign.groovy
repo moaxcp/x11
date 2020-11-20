@@ -22,15 +22,16 @@ class JavaPadAlign implements JavaUnit {
     }
 
     @Override
+    CodeBlock getDeclareAndReadCode() {
+        return CodeBlock.builder().addStatement(readCode).build()
+    }
+
+    @Override
     CodeBlock getReadCode() {
         if(align == 4) {
-            return CodeBlock.builder()
-                .addStatement("in.readPadAlign(${list.lengthExpression.getExpression(TypeName.INT)})")
-                .build()
+            return CodeBlock.of("in.readPadAlign(${list.lengthExpression.getExpression(TypeName.INT)})")
         }
-        return CodeBlock.builder()
-            .addStatement("in.readPadAlign($align, ${list.lengthExpression.getExpression(TypeName.INT)})")
-            .build()
+        return CodeBlock.of("in.readPadAlign($align, ${list.lengthExpression.getExpression(TypeName.INT)})")
     }
 
     @Override

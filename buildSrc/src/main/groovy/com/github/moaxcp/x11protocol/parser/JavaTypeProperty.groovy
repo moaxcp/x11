@@ -24,8 +24,13 @@ class JavaTypeProperty extends JavaProperty {
     }
 
     @Override
+    CodeBlock getDeclareAndReadCode() {
+        return declareAndInitializeTo(readCode)
+    }
+
+    @Override
     CodeBlock getReadCode() {
-        return declareAndInitializeTo(CodeBlock.of('$T.read$L(in)', typeName, typeName.simpleName()))
+        return CodeBlock.of('$T.read$L(in)', typeName, typeName.simpleName())
     }
 
     @Override

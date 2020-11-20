@@ -16,6 +16,7 @@ class XUnitField implements XUnit {
     final String maskType
     final String altMaskType
     final boolean localOnly
+    final XBitcaseInfo bitcaseInfo
 
     XUnitField(Map map) {
         result = requireNonNull(map.result, 'result must not be null')
@@ -26,6 +27,7 @@ class XUnitField implements XUnit {
         maskType = map.maskType
         altMaskType = map.altMaskType
         localOnly = map.localOnly ?: false
+        bitcaseInfo = map.bitcaseInfo
     }
 
     XUnitField(XResult result, Node node) {
@@ -38,8 +40,17 @@ class XUnitField implements XUnit {
         altMaskType = node.attributes().get('altmask')
     }
 
+    XUnitField(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
+        this(result, node)
+        this.bitcaseInfo = bitcaseInfo
+    }
+
     static XUnitField xUnitField(XResult result, Node node) {
         return new XUnitField(result, node)
+    }
+
+    static XUnitField xUnitField(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
+        return new XUnitField(result, node, bitcaseInfo)
     }
 
     XType getResolvedType() {

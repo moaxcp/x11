@@ -30,11 +30,16 @@ class JavaPrimativeListProperty extends JavaListProperty {
     }
 
     @Override
+    CodeBlock getDeclareAndReadCode() {
+        return declareAndInitializeTo(readCode)
+    }
+
+    @Override
     CodeBlock getReadCode() {
         if(lengthExpression instanceof EmptyExpression) {
-            return declareAndInitializeTo(CodeBlock.of('in.read$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), CodeBlock.of('javaStart - length')))
+            return CodeBlock.of('in.read$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), CodeBlock.of('javaStart - length'))
         } else {
-            return declareAndInitializeTo(CodeBlock.of('in.read$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), lengthExpression.getExpression(TypeName.INT)))
+            return CodeBlock.of('in.read$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), lengthExpression.getExpression(TypeName.INT))
         }
     }
 

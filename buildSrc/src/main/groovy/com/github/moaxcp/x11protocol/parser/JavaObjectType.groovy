@@ -59,12 +59,10 @@ abstract class JavaObjectType implements JavaType {
     }
 
     void addBuilder(TypeSpec.Builder parent) {
-        if(!builderMethods) {
-            return
-        }
         TypeSpec.Builder builder = TypeSpec.classBuilder(builderClassName)
             .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
         builder.addMethods(getBuilderMethods())
+        addSizeMethod(builder)
         parent.addType(builder.build())
     }
     
@@ -108,8 +106,12 @@ abstract class JavaObjectType implements JavaType {
         methodBuilder.addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
         addHeaderStatements(methodBuilder)
         addReadStatements(methodBuilder)
+        if(protocol.findAll{it instanceof JavaProperty}.isEmpty()) {
+            methodBuilder.addStatement('return new $T()', className)
+            return methodBuilder.build()
+        }
         addBuilderStatement(methodBuilder)
-        methodBuilder.addStatement('return $L', 'javaObject')
+        methodBuilder.addStatement('return $L', 'javaBuilder.build()')
 
         return methodBuilder.build()
     }
@@ -149,31 +151,33 @@ abstract class JavaObjectType implements JavaType {
     void addReadStatements(MethodSpec.Builder methodBuilder) {
         CodeBlock.Builder readProtocol = CodeBlock.builder()
         protocol.each {
-            if(!it.readParam) {
-                readProtocol.add(it.readCode)
+            if(it.readParam || (it instanceof JavaProperty && it.bitcaseInfo)) {
+                return
             }
+            readProtocol.add(it.declareAndReadCode)
         }
 
         methodBuilder.addCode(readProtocol.build())
     }
     
     void addBuilderStatement(MethodSpec.Builder method, CodeBlock... fields) {
-        if(protocol.findAll{it instanceof JavaProperty}.isEmpty()) {
-            method.addStatement('$1T $2L = new $1T()', className, 'javaObject')
-            return
-        }
         CodeBlock.Builder builder = CodeBlock.builder()
-        builder.add('$1T $2L = $1T.builder()', className, 'javaObject')
+        builder.addStatement('$1T $2L = $1T.builder()', builderClassName, 'javaBuilder')
         protocol.findAll {
             it instanceof JavaProperty && !it.localOnly
-        }.each { JavaProperty it ->
-            builder.add('\n.$L($L)', it.name, it.name)
+        }.each { it ->
+            if(it instanceof JavaProperty && it.bitcaseInfo) {
+                builder.beginControlFlow('if(javaBuilder.is$LEnabled($T.$L))', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
+                builder.addStatement('javaBuilder.$L($L)', it.name, it.readCode)
+                builder.endControlFlow()
+            } else {
+                builder.addStatement('javaBuilder.$L($L)', it.name, it.name)
+            }
         }
         fields.each {
             builder.add('\n$L', it)
         }
-        builder.add('\n.build()')
-        method.addStatement(builder.build())
+        method.addCode(builder.build())
     }
 
     MethodSpec getWriteMethod() {
@@ -195,7 +199,13 @@ abstract class JavaObjectType implements JavaType {
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
         CodeBlock.Builder writeProtocol = CodeBlock.builder()
         protocol.each {
-            writeProtocol.add(it.writeCode)
+            if(it instanceof JavaProperty && it.bitcaseInfo) {
+                writeProtocol.beginControlFlow('if(is$LEnabled($T.$L)', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
+                writeProtocol.add(it.writeCode)
+                writeProtocol.endControlFlow()
+            } else {
+                writeProtocol.add(it.writeCode)
+            }
         }
         methodBuilder.addCode(writeProtocol.build())
     }

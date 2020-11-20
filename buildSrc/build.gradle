@@ -25,8 +25,8 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.12'
 
     implementation 'com.squareup:javapoet:1.13.0'
-    testImplementation platform("org.spockframework:spock-bom:2.0-M1-groovy-2.5")
+    testImplementation platform("org.spockframework:spock-bom:2.0-M4-groovy-2.5")
     testImplementation "org.spockframework:spock-core"
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }

@@ -39,7 +39,7 @@ class JavaEnumPropertySpec extends XmlSpec {
                 @lombok.NonNull
                 private com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask;
             '''.stripIndent()
-        property.readCode.toString() == 'com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask = com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum.getByCode(in.readCard32());\n'
+        property.declareAndReadCode.toString() == 'com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask = com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum.getByCode(in.readCard32());\n'
         property.writeCode.toString() == 'out.writeCard32(mask.getValue());\n'
     }
 }

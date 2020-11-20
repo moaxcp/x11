@@ -35,13 +35,11 @@ class XTypeRequest extends XTypeObject {
     @Override
     void addUnits(XResult result, Node node) {
         node.childNodes().eachWithIndex { Node it, int i ->
-            XUnit unit = parseXUnit(result, it)
-            if(unit) {
-                protocol.add(unit)
-                if(i == 0) {
-                    XUnit length = new XUnitField(result: result, name: 'length', type: 'CARD16', localOnly: true)
-                    protocol.add(length)
-                }
+            List<XUnit> units = parseXUnit(result, it)
+            protocol.addAll(units)
+            if(units && i == 0) {
+                XUnit length = new XUnitField(result: result, name: 'length', type: 'CARD16', localOnly: true)
+                protocol.add(length)
             }
         }
     }
