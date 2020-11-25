@@ -21,15 +21,13 @@ class JavaError extends JavaObjectType {
             number: error.number
         )
         javaError.protocol = error.toJavaProtocol(javaError)
+        JavaProperty c = javaError.getJavaProperty('CODE')
+        c.constantField = true
+        JavaProperty r = javaError.getJavaProperty('RESPONSECODE')
+        r.constantField = true
+        r.localOnly = true
+        r.writeValueExpression = 'getResponseCode()'
         return javaError
-    }
-
-    @Override
-    void addFields(TypeSpec.Builder typeBuilder) {
-        typeBuilder.addField(FieldSpec.builder(TypeName.BYTE, 'CODE', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-            .initializer('$L', number)
-            .build())
-        super.addFields(typeBuilder)
     }
 
     @Override
@@ -46,8 +44,6 @@ class JavaError extends JavaObjectType {
 
     @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addStatement('out.writeCard8((byte) 0)')
-        methodBuilder.addStatement('out.writeCard8(CODE)')
         super.addWriteStatements(methodBuilder)
         //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
         methodBuilder.beginControlFlow('if(getSize() < 32)')
@@ -62,23 +58,5 @@ class JavaError extends JavaObjectType {
         methodBuilder.beginControlFlow('if(javaObject.getSize() < 32)')
             .addStatement('in.readPad(32 - javaObject.getSize())')
             .endControlFlow()
-    }
-
-    @Override
-    CodeBlock getSizeExpression() {
-        CodeBlock.of('$L + $L',
-            CodeBlock.of('1 + 1'),
-            super.getSizeExpression())
-    }
-
-    @Override
-    Optional<Integer> getFixedSize() {
-        boolean empty = protocol.find {
-            it.fixedSize.isEmpty()
-        }
-        if(empty) {
-            return Optional.empty()
-        }
-        Optional.of(protocol.stream().mapToInt({it.fixedSize.get()}).sum() + 2)
     }
 }
