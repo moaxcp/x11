@@ -9,7 +9,9 @@ interface JavaUnit {
     XUnit getXUnit()
     CodeBlock getDeclareAndReadCode()
     CodeBlock getReadCode()
-    CodeBlock getWriteCode()
+    void addBuilderCode(CodeBlock.Builder code)
+    void addWriteCode(CodeBlock.Builder code)
+    boolean isReadProtocol()
     void setReadParam(boolean readParam)
     boolean isReadParam()
     /**

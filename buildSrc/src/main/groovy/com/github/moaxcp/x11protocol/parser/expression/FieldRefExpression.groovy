@@ -29,14 +29,14 @@ class FieldRefExpression implements Expression {
 
     @Override
     TypeName getTypeName() {
-        return x11PrimativeToExpressionTypeName(javaType.getField(fieldName).x11Type)
+        return x11PrimativeToExpressionTypeName(javaType.getJavaProperty(fieldName).x11Type)
     }
 
     CodeBlock getExpression() {
-        JavaProperty field = javaType.getField(fieldName)
+        JavaProperty field = javaType.getJavaProperty(fieldName)
         if(field == null && fieldName.endsWith('Len')) {
             String lengthField = fieldName.replace('Len', '')
-            field = javaType.getField(lengthField)
+            field = javaType.getJavaProperty(lengthField)
             if(field instanceof JavaListProperty && field.x11Type == 'CHAR2B') {
                 return CodeBlock.of('$L.size()', lengthField)
             }

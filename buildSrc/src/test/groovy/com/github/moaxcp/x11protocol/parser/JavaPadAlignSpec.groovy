@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.squareup.javapoet.CodeBlock
 
 class JavaPadAlignSpec extends XmlSpec {
     def 'XPadAlign read expression 4'() {
@@ -38,8 +39,12 @@ class JavaPadAlignSpec extends XmlSpec {
         JavaPadAlign align = new JavaPadAlign(align:4,
             list: new JavaPrimativeListProperty(javaType, new XUnitListField(result, getFirstNode())))
 
-        expect:
-        align.writeCode.toString() == 'out.writePadAlign(5);\n'
+        when:
+        CodeBlock.Builder builder = CodeBlock.builder()
+        align.addWriteCode(builder)
+
+        then:
+        builder.build().toString() == 'out.writePadAlign(5);\n'
     }
 
     def 'XPadAlign write expression'() {
@@ -51,7 +56,11 @@ class JavaPadAlignSpec extends XmlSpec {
         JavaPadAlign align = new JavaPadAlign(align:5,
             list: new JavaPrimativeListProperty(javaType, new XUnitListField(result, getFirstNode())))
 
-        expect:
-        align.writeCode.toString() == 'out.writePadAlign(5, 5);\n'
+        when:
+        CodeBlock.Builder builder = CodeBlock.builder()
+        align.addWriteCode(builder)
+
+        then:
+        builder.build().toString() == 'out.writePadAlign(5, 5);\n'
     }
 }

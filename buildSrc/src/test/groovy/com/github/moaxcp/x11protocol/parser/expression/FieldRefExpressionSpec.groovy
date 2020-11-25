@@ -15,7 +15,7 @@ class FieldRefExpressionSpec extends Specification {
         XResult xResult = new XResult()
         JavaType javaType = Mock(JavaType)
         javaType.simpleName >> 'SimpleName'
-        javaType.getField(_) >> {
+        javaType.getJavaProperty(_) >> {
             new JavaPrimativeProperty(
                 javaType,
                 new XUnitField(result: xResult, name: it[0], type: 'CARD32')

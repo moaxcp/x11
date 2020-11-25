@@ -148,7 +148,7 @@ class JavaEventSpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 2 + 1 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 1 + 1;
+                return 1 + 1 + 2 + 1 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 1 + 1;
               }
             
               public static class KeyPressEventBuilder {
@@ -166,7 +166,7 @@ class JavaEventSpec extends XmlSpec {
             
                 @java.lang.Override
                 public int getSize() {
-                  return 1 + 2 + 1 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 1 + 1;
+                  return 1 + 1 + 2 + 1 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 1 + 1;
                 }
               }
             }
@@ -247,13 +247,13 @@ class JavaEventSpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 2 + 1 + 4 + 4;
+                return 1 + 1 + 2 + 1 + 4 + 4;
               }
               
               public static class MapRequestEventBuilder {
                 @java.lang.Override
                 public int getSize() {
-                  return 1 + 2 + 1 + 4 + 4;
+                  return 1 + 1 + 2 + 1 + 4 + 4;
                 }
               }
             }

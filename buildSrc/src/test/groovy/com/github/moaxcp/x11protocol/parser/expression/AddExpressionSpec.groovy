@@ -30,7 +30,7 @@ class AddExpressionSpec extends Specification {
         given:
         XResult xResult = new XResult()
         JavaType javaType = Mock(JavaType)
-        javaType.getField('a') >> new JavaPrimativeProperty(
+        javaType.getJavaProperty('a') >> new JavaPrimativeProperty(
             javaType,
             new XUnitField(result: xResult, name: 'a', type: 'CARD8')
         )

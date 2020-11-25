@@ -28,10 +28,8 @@ class JavaPrimativeStringListProperty extends JavaPrimativeListProperty {
     }
 
     @Override
-    CodeBlock getWriteCode() {
-        return CodeBlock.builder()
-            .addStatement("out.writeString8($name)")
-            .build()
+    void addWriteCode(CodeBlock.Builder code) {
+        code.addStatement("out.writeString8($name)")
     }
 
     @Override

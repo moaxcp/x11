@@ -3,7 +3,6 @@ package com.github.moaxcp.x11protocol.parser
 import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
 import lombok.NonNull
-import lombok.Setter
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
 import static java.util.Objects.requireNonNull
@@ -13,16 +12,31 @@ import static java.util.Objects.requireNonNull
 abstract class JavaProperty implements JavaUnit {
     final JavaType javaType
     final XUnitField x11Field
-    
-    boolean readOnly
+    /**
+     * the field is public static final in the java class
+     */
+    boolean constantField
+    /**
+     * not a field. used locally in read and write methods only
+     */
     boolean localOnly
+    /**
+     * a parameter to the read method
+     */
     boolean readParam
+    /**
+     * write expression which wraps normal value in an expression. Should contain $L or $1L to take the normal expression.
+     */
+    String writeValueExpression
+    /**
+     * field is optional. must set the bitmask to use field
+     */
     JavaBitcaseInfo bitcaseInfo
 
     JavaProperty(Map map) {
         javaType = requireNonNull(map.javaType, 'javaType must not be null')
         x11Field = requireNonNull(map.x11Field, 'field must not be null')
-        readOnly = map.readOnly
+        constantField = map.constantField
         localOnly = map.localOnly
         if(map.x11Field.bitcaseInfo) {
             bitcaseInfo = new JavaBitcaseInfo(map.x11Field.result, map.x11Field.bitcaseInfo)
@@ -53,37 +67,41 @@ abstract class JavaProperty implements JavaUnit {
     abstract TypeName getTypeName()
     
     abstract boolean isNonNull()
+    
+    boolean isReadProtocol() {
+        return !constantField && !readParam
+    }
 
     FieldSpec getMember() {
         if(localOnly) {
-            return null
+            throw new IllegalStateException("$name is a localOnly property")
+        }
+        if(constantField) {
+            if(!x11Field.constantValue) {
+                throw new IllegalStateException("$name missing constantValue in x11Field")
+            }
+            return FieldSpec.builder(typeName, name, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).initializer(x11Field.constantValue).build()
         }
         FieldSpec.Builder builder = FieldSpec.builder(typeName, name)
             .addModifiers(Modifier.PRIVATE)
         if(nonNull) {
             builder.addAnnotation(NonNull)
         }
-        if(readOnly) {
-            builder.addAnnotation(
-                AnnotationSpec.builder(Setter)
-                    .addMember('value', CodeBlock.of('$T.PRIVATE', ClassName.get('lombok', 'AccessLevel')))
-                    .build())
-        }
         return builder.build()
     }
 
-    String getSetterName() {
-        if(localOnly) {
-            return null
+    @Override
+    void addBuilderCode(CodeBlock.Builder code) {
+        if(constantField || localOnly) {
+            return
         }
-        return "set${name.capitalize()}"
-    }
-
-    String getGetterName() {
-        if(localOnly) {
-            return null
+        if(bitcaseInfo) {
+            code.beginControlFlow('if(javaBuilder.is$LEnabled($T.$L))', bitcaseInfo.maskField.capitalize(), bitcaseInfo.enumType, bitcaseInfo.enumItem)
+            code.addStatement('javaBuilder.$L($L)', name, readCode)
+            code.endControlFlow()
+        } else {
+            code.addStatement('javaBuilder.$L($L)', name, name)
         }
-        return "get${name.capitalize()}"
     }
 
     List<MethodSpec> getMethods() {

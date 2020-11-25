@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.squareup.javapoet.TypeSpec
 
 import static com.github.moaxcp.x11protocol.parser.JavaStruct.javaStruct
 
@@ -18,11 +19,10 @@ class JavaStructSpec extends XmlSpec {
         addChildNodes()
 
         when:
-        XTypeStruct struct = result.resolveXType('Format')
-        JavaStruct javaStruct = javaStruct(struct)
+        TypeSpec typeSpec = result.resolveXType('Format').javaType.typeSpec
 
         then:
-        javaStruct.typeSpec.toString() == '''\
+        typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class FormatStruct implements com.github.moaxcp.x11client.protocol.XStruct {

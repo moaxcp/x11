@@ -48,15 +48,11 @@ class JavaEnumProperty extends JavaProperty {
     }
 
     @Override
-    CodeBlock getWriteCode() {
+    void addWriteCode(CodeBlock.Builder code) {
         if(ioTypeName != TypeName.INT) {
-            return CodeBlock.builder()
-                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}((\$T) \$L.getValue())", ioTypeName, name)
-                .build()
+            code.addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}((\$T) \$L.getValue())", ioTypeName, name)
         } else {
-            return CodeBlock.builder()
-                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}(\$L.getValue())", name)
-                .build()
+            code.addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}(\$L.getValue())", name)
         }
     }
 

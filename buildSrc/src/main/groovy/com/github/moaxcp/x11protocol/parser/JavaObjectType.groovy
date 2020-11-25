@@ -19,17 +19,22 @@ abstract class JavaObjectType implements JavaType {
         ClassName.get(javaPackage, "${simpleName}Builder")
     }
 
-    JavaProperty getField(String name) {
-        (JavaProperty) protocol.find {
-            it instanceof JavaProperty &&
+    List<JavaProperty> getProperties() {
+        return protocol.findAll {
+            it instanceof JavaProperty
+        }.collect {
+            (JavaProperty) it
+        }
+    }
+
+    JavaProperty getJavaProperty(String name) {
+        return properties.find {
             it.name == name
         }
     }
 
     boolean hasFields() {
-        protocol.find {
-            it instanceof JavaProperty
-        }
+        return properties
     }
     
     boolean isLastListNoLength() {
@@ -67,9 +72,7 @@ abstract class JavaObjectType implements JavaType {
     }
     
     List<MethodSpec> getBuilderMethods() {
-        return protocol.findAll {
-            it instanceof JavaProperty
-        }.collect { JavaProperty it ->
+        return properties.collect {
             it.getBuilderMethods(className)
         }.flatten()
     }
@@ -84,9 +87,7 @@ abstract class JavaObjectType implements JavaType {
     }
 
     void addMethods(TypeSpec.Builder typeBuilder) {
-        List<MethodSpec> methods = protocol.findAll {
-            it instanceof JavaProperty
-        }.collect { JavaProperty it ->
+        List<MethodSpec> methods = properties.collect {
             it.methods
         }.flatten()
 
@@ -106,7 +107,7 @@ abstract class JavaObjectType implements JavaType {
         methodBuilder.addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
         addHeaderStatements(methodBuilder)
         addReadStatements(methodBuilder)
-        if(protocol.findAll{it instanceof JavaProperty}.isEmpty()) {
+        if(properties.isEmpty()) {
             methodBuilder.addStatement('return new $T()', className)
             return methodBuilder.build()
         }
@@ -134,7 +135,7 @@ abstract class JavaObjectType implements JavaType {
                 throw new IllegalStateException("${it.getClass().simpleName} not supported.")
             }
         }
-        List<ParameterSpec> params = protocol.findAll {
+        List<ParameterSpec> params = properties.findAll {
             it instanceof JavaListProperty
         }.collect { JavaListProperty it ->
             it.lengthExpression.paramRefs
@@ -151,7 +152,8 @@ abstract class JavaObjectType implements JavaType {
     void addReadStatements(MethodSpec.Builder methodBuilder) {
         CodeBlock.Builder readProtocol = CodeBlock.builder()
         protocol.each {
-            if(it.readParam || (it instanceof JavaProperty && it.bitcaseInfo)) {
+            if(!it.readProtocol
+                || (it instanceof JavaProperty && it.bitcaseInfo)) {
                 return
             }
             readProtocol.add(it.declareAndReadCode)
@@ -163,16 +165,8 @@ abstract class JavaObjectType implements JavaType {
     void addBuilderStatement(MethodSpec.Builder method, CodeBlock... fields) {
         CodeBlock.Builder builder = CodeBlock.builder()
         builder.addStatement('$1T $2L = $1T.builder()', builderClassName, 'javaBuilder')
-        protocol.findAll {
-            it instanceof JavaProperty && !it.localOnly
-        }.each { it ->
-            if(it instanceof JavaProperty && it.bitcaseInfo) {
-                builder.beginControlFlow('if(javaBuilder.is$LEnabled($T.$L))', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
-                builder.addStatement('javaBuilder.$L($L)', it.name, it.readCode)
-                builder.endControlFlow()
-            } else {
-                builder.addStatement('javaBuilder.$L($L)', it.name, it.name)
-            }
+        properties.each {
+            it.addBuilderCode(builder)
         }
         fields.each {
             builder.add('\n$L', it)
@@ -201,10 +195,10 @@ abstract class JavaObjectType implements JavaType {
         protocol.each {
             if(it instanceof JavaProperty && it.bitcaseInfo) {
                 writeProtocol.beginControlFlow('if(is$LEnabled($T.$L)', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
-                writeProtocol.add(it.writeCode)
+                it.addWriteCode(writeProtocol)
                 writeProtocol.endControlFlow()
             } else {
-                writeProtocol.add(it.writeCode)
+                it.addWriteCode(writeProtocol)
             }
         }
         methodBuilder.addCode(writeProtocol.build())

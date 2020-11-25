@@ -1,8 +1,7 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.ParameterizedTypeName
+import com.squareup.javapoet.TypeSpec
 
 class JavaPrimativeListPropertySpec extends XmlSpec {
     def create() {
@@ -16,18 +15,48 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
             }
         }
         addChildNodes()
-        JavaObjectType javaType = result.resolveXType('Window').javaType
 
         when:
-        JavaPrimativeListProperty property = javaType.protocol[1]
+        TypeSpec typeSpec = result.resolveXType('Window').javaType.typeSpec
 
         then:
-        property.name == 'windowModifiers'
-        property.x11Type == 'CARD64'
-        property.baseTypeName == ClassName.get(Long.class)
-        property.typeName == ParameterizedTypeName.get(ClassName.get(List.class), ClassName.get(Long.class))
-        property.lengthExpression.expression.toString() == 'Integer.toUnsignedLong(numWindowModifiers)'
-        property.declareAndReadCode.toString() == 'java.util.List<java.lang.Long> windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));\n'
-        property.writeCode.toString() == 'out.writeCard64(windowModifiers);\n'
+        typeSpec.toString() == '''\
+            @lombok.Value
+            @lombok.Builder
+            public class WindowStruct implements com.github.moaxcp.x11client.protocol.XStruct {
+              private int numWindowModifiers;
+             
+              @lombok.NonNull
+              private java.util.List<java.lang.Long> windowModifiers;
+             
+              public static com.github.moaxcp.x11client.protocol.xproto.WindowStruct readWindowStruct(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                int numWindowModifiers = in.readCard32();
+                java.util.List<java.lang.Long> windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));
+                com.github.moaxcp.x11client.protocol.xproto.WindowStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.WindowStructBuilder.builder();
+                javaBuilder.numWindowModifiers(numWindowModifiers);
+                javaBuilder.windowModifiers(windowModifiers);
+                return javaBuilder.build();
+              }
+             
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard32(numWindowModifiers);
+                out.writeCard64(windowModifiers);
+              }
+             
+              @java.lang.Override
+              public int getSize() {
+                return 4 + 8 * windowModifiers.size();
+              }
+             
+              public static class WindowStructBuilder {
+                @java.lang.Override
+                public int getSize() {
+                  return 4 + 8 * windowModifiers.size();
+                }
+              }
+            }
+        '''.stripIndent()
     }
 }

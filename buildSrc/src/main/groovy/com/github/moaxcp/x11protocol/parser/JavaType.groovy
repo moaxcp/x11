@@ -9,5 +9,5 @@ interface JavaType {
     ClassName getClassName()
     ClassName getBuilderClassName()
     TypeSpec getTypeSpec()
-    JavaProperty getField(String name)
+    JavaProperty getJavaProperty(String name)
 }

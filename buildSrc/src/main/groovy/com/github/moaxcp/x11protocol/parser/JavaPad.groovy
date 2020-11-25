@@ -35,8 +35,18 @@ class JavaPad implements JavaUnit {
     }
 
     @Override
-    CodeBlock getWriteCode() {
-        return CodeBlock.builder().addStatement("out.writePad($bytes)").build()
+    void addBuilderCode(CodeBlock.Builder code) {
+        throw new IllegalStateException('JavaPad cannot be used with builder')
+    }
+
+    @Override
+    void addWriteCode(CodeBlock.Builder code) {
+        code.addStatement("out.writePad($bytes)")
+    }
+
+    @Override
+    boolean isReadProtocol() {
+        return !readParam
     }
 
     @Override

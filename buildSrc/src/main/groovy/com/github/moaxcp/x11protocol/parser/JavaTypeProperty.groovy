@@ -34,10 +34,8 @@ class JavaTypeProperty extends JavaProperty {
     }
 
     @Override
-    CodeBlock getWriteCode() {
-        return CodeBlock.builder()
-            .addStatement('$L.write(out)', name)
-            .build()
+    void addWriteCode(CodeBlock.Builder code) {
+        code.addStatement('$L.write(out)', name)
     }
 
     @Override

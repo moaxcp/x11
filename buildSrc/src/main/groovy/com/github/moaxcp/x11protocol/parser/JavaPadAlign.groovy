@@ -35,16 +35,23 @@ class JavaPadAlign implements JavaUnit {
     }
 
     @Override
-    CodeBlock getWriteCode() {
-        if(align == 4) {
-            return CodeBlock.builder()
-                .addStatement("out.writePadAlign(${list.lengthExpression.getExpression(TypeName.INT)})")
-                .build()
-        }
-        return CodeBlock.builder()
-            .addStatement("out.writePadAlign($align, ${list.lengthExpression.getExpression(TypeName.INT)})")
-            .build()
+    void addBuilderCode(CodeBlock.Builder code) {
+        throw new IllegalStateException('JavaPadAlign cannot be used with builder')
+    }
 
+    @Override
+    void addWriteCode(CodeBlock.Builder code) {
+        if(align == 4) {
+            code.addStatement("out.writePadAlign(${list.lengthExpression.getExpression(TypeName.INT)})")
+            return
+        }
+        code.addStatement("out.writePadAlign($align, ${list.lengthExpression.getExpression(TypeName.INT)})")
+
+    }
+
+    @Override
+    boolean isReadProtocol() {
+        return !readParam
     }
 
     @Override

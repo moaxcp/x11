@@ -111,19 +111,22 @@ class JavaPrimativeProperty extends JavaProperty {
     }
 
     @Override
-    CodeBlock getWriteCode() {
+    void addWriteCode(CodeBlock.Builder code) {
         if(lengthOfField) {
-            CodeBlock.Builder builder = CodeBlock.builder()
             if(memberTypeName != TypeName.INT) {
-                builder.addStatement('$1T $2L = ($1T) $3L.length()', memberTypeName, name, lengthOfField)
+                code.addStatement('$1T $2L = ($1T) $3L.length()', memberTypeName, name, lengthOfField)
             } else {
-                builder.addStatement('$1T $2L = $3L.length()', memberTypeName, name, lengthOfField)
+                code.addStatement('$1T $2L = $3L.length()', memberTypeName, name, lengthOfField)
             }
-            return builder
-                .addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}($name)")
-                .build()
         }
-        return CodeBlock.builder().addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}($name)").build()
+        code.addStatement('out.write$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), getValueWriteExpressionCodeBlock())
+    }
+
+    CodeBlock getValueWriteExpressionCodeBlock() {
+        if(writeValueExpression) {
+            return CodeBlock.of(writeValueExpression, name)
+        }
+        return CodeBlock.of(name)
     }
 
     @Override

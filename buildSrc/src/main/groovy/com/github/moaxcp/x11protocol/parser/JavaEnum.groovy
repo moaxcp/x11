@@ -26,7 +26,7 @@ class JavaEnum implements JavaType {
     }
 
     @Override
-    JavaProperty getField(String name) {
+    JavaProperty getJavaProperty(String name) {
         if(name == 'value') {
             return new JavaPrimativeProperty(
                 name: 'value',

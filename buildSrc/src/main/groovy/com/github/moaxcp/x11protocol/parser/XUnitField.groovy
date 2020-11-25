@@ -11,6 +11,7 @@ class XUnitField implements XUnit {
     final XResult result
     final String name
     final String type
+    final String constantValue
     final String enumType
     final String altEnumType
     final String maskType
@@ -22,6 +23,7 @@ class XUnitField implements XUnit {
         result = requireNonNull(map.result, 'result must not be null')
         name = requireNonNull(map.name, 'name must not be null')
         type = requireNonNull(map.type, 'type must not be null')
+        constantValue = map.constantValue
         enumType = map.enumType
         altEnumType = map.altEnumType
         maskType = map.maskType

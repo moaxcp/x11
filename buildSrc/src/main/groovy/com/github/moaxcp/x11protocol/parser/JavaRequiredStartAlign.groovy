@@ -26,13 +26,23 @@ class JavaRequiredStartAlign implements JavaUnit {
     }
 
     @Override
+    void addBuilderCode(CodeBlock.Builder code) {
+        throw new IllegalStateException('JavaRequredStartAlign cannot be used with builder')
+    }
+
+    @Override
     CodeBlock getDeclareAndReadCode() {
         return CodeBlock.of('//todo align')
     }
 
     @Override
-    CodeBlock getWriteCode() {
-        return CodeBlock.of('//todo align')
+    void addWriteCode(CodeBlock.Builder code) {
+        code.add('//todo align')
+    }
+
+    @Override
+    boolean isReadProtocol() {
+        return !readParam
     }
 
     @Override

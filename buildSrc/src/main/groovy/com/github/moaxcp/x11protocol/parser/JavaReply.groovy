@@ -89,29 +89,30 @@ class JavaReply extends JavaObjectType {
 
     @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addStatement('out.writeCard8((byte) 1)')
+        CodeBlock.Builder writeProtocol = CodeBlock.builder()
+        writeProtocol.addStatement('out.writeCard8((byte) 1)')
         if(protocol.size() > 1) {
-            CodeBlock.Builder writeProtocol = CodeBlock.builder()
             protocol.each { it ->
                 if(it instanceof JavaProperty && it.name == 'length') {
-                    methodBuilder.addStatement('out.writeCard32(getLength())')
+                    writeProtocol.addStatement('out.writeCard32(getLength())')
                 } else if(it instanceof JavaProperty && it.bitcaseInfo) {
-                    methodBuilder.beginControlFlow('if(is$LEnabled($T.$L)', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
-                    methodBuilder.addCode(it.writeCode)
-                    methodBuilder.endControlFlow()
+                    writeProtocol.beginControlFlow('if(is$LEnabled($T.$L)', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
+                    it.addWriteCode(writeProtocol)
+                    writeProtocol.endControlFlow()
                 } else {
-                    methodBuilder.addCode(it.writeCode)
+                    it.addWriteCode(writeProtocol)
                 }
             }
-            methodBuilder.addCode(writeProtocol.build())
         } else {
-            methodBuilder.addStatement('out.writePad(1)')
-            methodBuilder.addStatement('out.writeCard32(0)')
+            writeProtocol.addStatement('out.writePad(1)')
+            writeProtocol.addStatement('out.writeCard32(0)')
         }
         if(fixedSize && fixedSize.get() % 4 == 0) {
+            methodBuilder.addCode(writeProtocol.build())
             return
         }
-        methodBuilder.addStatement('out.writePadAlign(getSize())')
+        writeProtocol.addStatement('out.writePadAlign(getSize())')
+        methodBuilder.addCode(writeProtocol.build())
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.github.moaxcp.x11protocol.parser
 import com.github.moaxcp.x11protocol.XmlSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.ParameterizedTypeName
+import com.squareup.javapoet.TypeSpec
 import spock.lang.Ignore
 
 import static com.github.moaxcp.x11protocol.parser.JavaTypeListProperty.javaTypeListProperty
@@ -25,26 +26,52 @@ class JavaTypeListPropertySpec extends XmlSpec {
             }
         }
         addChildNodes()
-        JavaStruct struct = result.resolveXType('Setup').javaType
-
 
         when:
-        JavaTypeListProperty property = struct.getField('pixmapFormats')
+        TypeSpec typeSpec = result.resolveXType('Setup').javaType.typeSpec
 
         then:
-        property.name == 'pixmapFormats'
-        property.baseTypeName == ClassName.get(result.javaPackage, 'FormatStruct')
-        property.typeName == ParameterizedTypeName.get(ClassName.get(List), property.baseTypeName)
-        property.lengthExpression.expression.toString() == 'Byte.toUnsignedInt(pixmapFormatsLen)'
-        property.declareAndReadCode.toString() == '''\
-            java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> pixmapFormats = new java.util.ArrayList<>(Byte.toUnsignedInt(pixmapFormatsLen));
-            for(int i = 0; i < Byte.toUnsignedInt(pixmapFormatsLen); i++) {
-              pixmapFormats.add(com.github.moaxcp.x11client.protocol.xproto.FormatStruct.readFormatStruct(in));
-            }
-        '''.stripIndent()
-        property.writeCode.toString() == '''\
-            for(com.github.moaxcp.x11client.protocol.xproto.FormatStruct t : pixmapFormats) {
-              t.write(out);
+        typeSpec.toString() == '''\
+            @lombok.Value
+            @lombok.Builder
+            public class SetupStruct implements com.github.moaxcp.x11client.protocol.XStruct {
+              private byte pixmapFormatsLen;
+             
+              @lombok.NonNull
+              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> pixmapFormats;
+             
+              public static com.github.moaxcp.x11client.protocol.xproto.SetupStruct readSetupStruct(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                byte pixmapFormatsLen = in.readCard8();
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> pixmapFormats = new java.util.ArrayList<>(Byte.toUnsignedInt(pixmapFormatsLen));
+                for(int i = 0; i < Byte.toUnsignedInt(pixmapFormatsLen); i++) {
+                  pixmapFormats.add(com.github.moaxcp.x11client.protocol.xproto.FormatStruct.readFormatStruct(in));
+                }
+                com.github.moaxcp.x11client.protocol.xproto.SetupStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetupStructBuilder.builder();
+                javaBuilder.pixmapFormatsLen(pixmapFormatsLen);
+                javaBuilder.pixmapFormats(pixmapFormats);
+                return javaBuilder.build();
+              }
+             
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8(pixmapFormatsLen);
+                for(com.github.moaxcp.x11client.protocol.xproto.FormatStruct t : pixmapFormats) {
+                  t.write(out);
+                }
+              }
+             
+              @java.lang.Override
+              public int getSize() {
+                return 1 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(pixmapFormats);
+              }
+             
+              public static class SetupStructBuilder {
+                @java.lang.Override
+                public int getSize() {
+                  return 1 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(pixmapFormats);
+                }
+              }
             }
         '''.stripIndent()
     }
@@ -83,7 +110,7 @@ class JavaTypeListPropertySpec extends XmlSpec {
               formats.add(FormatStruct.readFormatStruct(in));
             }
         '''.stripIndent()
-        property.writeCode.toString() == '''\
+        property.addWriteCode().toString() == '''\
             for(com.github.moaxcp.x11client.protocol.xproto.FormatStruct t : formats) {
               t.write(out);
             }

@@ -51,12 +51,10 @@ class JavaEnumListProperty extends JavaListProperty {
     }
 
     @Override
-    CodeBlock getWriteCode() {
-        return CodeBlock.builder()
-            .beginControlFlow('for($T e : $L)', baseTypeName, name)
+    void addWriteCode(CodeBlock.Builder code) {
+        code.beginControlFlow('for($T e : $L)', baseTypeName, name)
             .addStatement('out.write$L(e.getValue())', fromUpperUnderscoreToUpperCamel(x11Type))
             .endControlFlow()
-            .build()
     }
 
     @Override

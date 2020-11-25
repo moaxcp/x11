@@ -63,12 +63,10 @@ class JavaTypeListProperty extends JavaListProperty {
     }
 
     @Override
-    CodeBlock getWriteCode() {
-        return CodeBlock.of('''\
-            for($1T t : $2L) {
-              t.write(out);
-            }
-        '''.stripIndent(), baseTypeName, name)
+    void addWriteCode(CodeBlock.Builder code) {
+        code.beginControlFlow('for($T t : $L)', baseTypeName, name)
+        code.addStatement('t.write(out)')
+        code.endControlFlow()
     }
 
     @Override

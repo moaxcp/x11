@@ -20,10 +20,7 @@ class JavaError extends JavaObjectType {
             className:getErrorTypeName(error.javaPackage, error.name),
             number: error.number
         )
-        javaError.protocol = [new JavaPrimativeProperty(
-            javaError,
-            new XUnitField(result: error.result, name: 'sequence_number', type:'CARD16')
-        )] + error.toJavaProtocol(javaError)
+        javaError.protocol = error.toJavaProtocol(javaError)
         return javaError
     }
 

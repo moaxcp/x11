@@ -2,6 +2,7 @@ package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
 import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.CodeBlock
 
 import static com.github.moaxcp.x11protocol.parser.JavaTypeProperty.javaTypeProperty
 
@@ -22,11 +23,13 @@ class JavaTypePropertySpec extends XmlSpec {
 
         when:
         JavaTypeProperty property = javaTypeProperty(javaType, field)
+        CodeBlock.Builder writeCode = CodeBlock.builder()
+        property.addWriteCode(writeCode)
 
         then:
         property.name == 'format'
         property.typeName == ClassName.get(result.javaPackage, 'FormatStruct')
         property.declareAndReadCode.toString() == 'com.github.moaxcp.x11client.protocol.xproto.FormatStruct format = com.github.moaxcp.x11client.protocol.xproto.FormatStruct.readFormatStruct(in);\n'
-        property.writeCode.toString() == 'format.write(out);\n'
+        writeCode.build().toString() == 'format.write(out);\n'
     }
 }

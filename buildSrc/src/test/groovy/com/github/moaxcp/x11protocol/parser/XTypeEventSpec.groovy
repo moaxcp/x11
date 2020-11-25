@@ -21,9 +21,9 @@ class XTypeEventSpec extends XmlSpec {
         then:
         event.name == 'CompleteNotify'
         event.number == 1
-        event.protocol[0].align == 8
-        event.protocol[1].name == 'kind'
-        event.protocol[2].name == 'serial'
+        event.protocol[3].align == 8
+        event.protocol[4].name == 'kind'
+        event.protocol[5].name == 'serial'
 
     }
 }

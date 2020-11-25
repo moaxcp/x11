@@ -20,22 +20,15 @@ class JavaEvent extends JavaObjectType {
             className:getEventTypeName(event.javaPackage, event.name),
             number: event.number
         )
-        javaEvent.protocol = [new JavaPrimativeProperty(
-            javaEvent,
-            new XUnitField(result: event.result, name:'event_detail', type: 'CARD8')
-        ),
-        new JavaPrimativeProperty(
-            javaEvent,
-            new XUnitField(result: event.result, name:'sequence_number', type: 'CARD16')
-        )] + event.toJavaProtocol(javaEvent)
+        javaEvent.protocol = event.toJavaProtocol(javaEvent)
+        JavaProperty p = javaEvent.getJavaProperty('NUMBER')
+        p.constantField = true
+        p.writeValueExpression = 'sentEvent ? 0b10000000 & $1L : $1L'
         return javaEvent
     }
 
     @Override
     void addFields(TypeSpec.Builder typeBuilder) {
-        typeBuilder.addField(FieldSpec.builder(TypeName.BYTE, 'NUMBER', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-            .initializer('$L', number)
-            .build())
         typeBuilder.addField(FieldSpec.builder(TypeName.BOOLEAN, 'sentEvent', Modifier.PRIVATE)
             .build())
         super.addFields(typeBuilder)
@@ -61,7 +54,6 @@ class JavaEvent extends JavaObjectType {
 
     @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addStatement('out.writeCard8(sentEvent ? 0b10000000 & NUMBER : NUMBER)')
         super.addWriteStatements(methodBuilder)
         //todo could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
         methodBuilder.beginControlFlow('if(getSize() < 32)')

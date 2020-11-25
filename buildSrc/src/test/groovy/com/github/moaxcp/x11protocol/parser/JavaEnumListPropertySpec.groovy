@@ -2,6 +2,7 @@ package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
 import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 
@@ -35,6 +36,8 @@ class JavaEnumListPropertySpec extends XmlSpec {
 
         when:
         JavaEnumListProperty property = javaEnumListProperty(javaType, field)
+        CodeBlock.Builder writeCode = CodeBlock.builder()
+        property.addWriteCode(writeCode)
 
         then:
         property.name == 'masks'
@@ -49,7 +52,7 @@ class JavaEnumListPropertySpec extends XmlSpec {
               masks.add(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum.getByCode(in.readCard32()));
             }
         '''.stripIndent()
-        property.writeCode.toString() == '''\
+        writeCode.build().toString() == '''\
             for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum e : masks) {
               out.writeCard32(e.getValue());
             }

@@ -17,8 +17,8 @@ class JavaExprProperty extends JavaPrimativeProperty {
     }
 
     @Override
-    CodeBlock getWriteCode() {
-        return CodeBlock.builder().addStatement('out.write$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), "get${name.capitalize()}()").build()
+    void addWriteCode(CodeBlock.Builder code) {
+        code.addStatement('out.write$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), "get${name.capitalize()}()")
     }
 
     @Override
