@@ -16,12 +16,18 @@ class XTypeRequest extends XTypeObject {
     static XTypeRequest xTypeRequest(XResult result, Node node) {
         XTypeRequest request = new XTypeRequest(result: result, name: node.attributes().get('name'), opCode: Integer.valueOf((String) node.attributes().get('opcode')), basePackage: result.basePackage, javaPackage: result.javaPackage)
         request.addUnits(result, node)
+        request.protocol.add(0, new XUnitField(result: result, name: 'OPCODE', type:'CARD8', constantValue: request.opCode))
+        if(request.protocol.size() == 1) {
+            request.protocol.add(new XUnitPad(bytes: 1))
+            request.protocol.add(new XUnitField(result: result, name: 'length', type: 'CARD16', localOnly: true))
+        } else {
+            request.protocol.add(2, new XUnitField(result: result, name: 'length', type: 'CARD16', localOnly: true))
+        }
 
         Node replyNode = node.childNodes().find { it.name() == 'reply' }
 
         if(replyNode) {
-            XTypeReply reply = new XTypeReply(result: result, name: node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
-            reply.addUnits(result, replyNode)
+            XTypeReply reply = XTypeReply.xTypeReply((String) node.attributes().get('name'), result, replyNode)
             request.reply = reply
         }
         return request
@@ -30,17 +36,5 @@ class XTypeRequest extends XTypeObject {
     @Override
     JavaType getJavaType() {
         return javaRequest(this)
-    }
-
-    @Override
-    void addUnits(XResult result, Node node) {
-        node.childNodes().eachWithIndex { Node it, int i ->
-            List<XUnit> units = parseXUnit(result, it)
-            protocol.addAll(units)
-            if(units && i == 0) {
-                XUnit length = new XUnitField(result: result, name: 'length', type: 'CARD16', localOnly: true)
-                protocol.add(length)
-            }
-        }
     }
 }

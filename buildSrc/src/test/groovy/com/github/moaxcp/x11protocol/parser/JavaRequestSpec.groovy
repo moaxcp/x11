@@ -41,7 +41,7 @@ class JavaRequestSpec extends XmlSpec {
                 in.readPad(1);
                 short length = in.readCard16();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequestBuilder.builder();
+                com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequest.builder();
                 javaBuilder.window(window);
                 return javaBuilder.build();
               }
@@ -143,7 +143,7 @@ class JavaRequestSpec extends XmlSpec {
                   points.add(baseObject);
                   javaStart += baseObject.getSize();
                 }
-                com.github.moaxcp.x11client.protocol.xproto.PolyPointRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.PolyPointRequestBuilder.builder();
+                com.github.moaxcp.x11client.protocol.xproto.PolyPointRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest.builder();
                 javaBuilder.coordinateMode(coordinateMode);
                 javaBuilder.drawable(drawable);
                 javaBuilder.gc(gc);
@@ -247,7 +247,7 @@ class JavaRequestSpec extends XmlSpec {
                   string.add(baseObject);
                   javaStart += baseObject.getSize();
                 }
-                com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequestBuilder.builder();
+                com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest.builder();
                 javaBuilder.font(font);
                 javaBuilder.string(string);
                 in.readPadAlign(javaObject.getSize());
@@ -304,6 +304,8 @@ class JavaRequestSpec extends XmlSpec {
 
         then:
         javaRequest.typeSpec.toString() == '''\
+            @lombok.Value
+            @lombok.Builder
             public class EnableRequest implements com.github.moaxcp.x11client.protocol.XRequest {
               public static final byte OPCODE = 0;
             
@@ -318,9 +320,10 @@ class JavaRequestSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.EnableRequest readEnableRequest(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
-                in.readByte();
+                in.readPad(1);
                 short length = in.readCard16();
-                return new com.github.moaxcp.x11client.protocol.xproto.EnableRequest();
+                com.github.moaxcp.x11client.protocol.xproto.EnableRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.EnableRequest.builder();
+                return javaBuilder.build();
               }
             
               @java.lang.Override
@@ -328,12 +331,19 @@ class JavaRequestSpec extends XmlSpec {
                   java.io.IOException {
                 out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
                 out.writePad(1);
-                out.writeCard16((short) 1);
+                out.writeCard16((short) getLength());
               }
             
               @java.lang.Override
               public int getSize() {
-                return 4;
+                return 1 + 1 + 2;
+              }
+            
+              public static class EnableRequestBuilder {
+                @java.lang.Override
+                public int getSize() {
+                  return 1 + 1 + 2;
+                }
               }
             }
         '''.stripIndent()

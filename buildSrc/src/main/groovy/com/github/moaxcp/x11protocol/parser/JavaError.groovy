@@ -3,14 +3,14 @@ package com.github.moaxcp.x11protocol.parser
 import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
 
+import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorTypeName
-import static com.github.moaxcp.x11protocol.generator.Conventions.getEventJavaName
 
 class JavaError extends JavaObjectType {
     int number
 
     static JavaError javaError(XTypeError error) {
-        String simpleName = getEventJavaName(error.name)
+        String simpleName = getErrorJavaName(error.name)
 
         JavaError javaError = new JavaError(
             superTypes: error.superTypes + ClassName.get(error.basePackage, 'XError'),
@@ -26,7 +26,7 @@ class JavaError extends JavaObjectType {
         JavaProperty r = javaError.getJavaProperty('RESPONSECODE')
         r.constantField = true
         r.localOnly = true
-        r.writeValueExpression = 'getResponseCode()'
+        r.writeValueExpression = CodeBlock.of('getResponseCode()')
         return javaError
     }
 
@@ -55,8 +55,8 @@ class JavaError extends JavaObjectType {
     void addBuilderStatement(MethodSpec.Builder methodBuilder, CodeBlock... fields) {
         super.addBuilderStatement(methodBuilder)
         //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
-        methodBuilder.beginControlFlow('if(javaObject.getSize() < 32)')
-            .addStatement('in.readPad(32 - javaObject.getSize())')
+        methodBuilder.beginControlFlow('if(javaBuilder.getSize() < 32)')
+            .addStatement('in.readPad(32 - javaBuilder.getSize())')
             .endControlFlow()
     }
 }

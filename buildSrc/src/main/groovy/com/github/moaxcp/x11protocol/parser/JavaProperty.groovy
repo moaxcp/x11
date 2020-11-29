@@ -9,7 +9,7 @@ import static java.util.Objects.requireNonNull
 /**
  * A JavaProperty represents a property within a JavaType.
  */
-abstract class JavaProperty implements JavaUnit {
+abstract class JavaProperty implements JavaUnit, JavaReadParameter {
     final JavaType javaType
     final XUnitField x11Field
     /**
@@ -25,9 +25,17 @@ abstract class JavaProperty implements JavaUnit {
      */
     boolean readParam
     /**
+     * the type for the read parameter
+     */
+    TypeName readTypeName
+    /**
      * write expression which wraps normal value in an expression. Should contain $L or $1L to take the normal expression.
      */
-    String writeValueExpression
+    CodeBlock writeValueExpression
+    /**
+     * expression used when assigning value to builder in read method
+     */
+    CodeBlock builderValueExpression
     /**
      * field is optional. must set the bitmask to use field
      */
@@ -51,11 +59,13 @@ abstract class JavaProperty implements JavaUnit {
             this.bitcaseInfo = new JavaBitcaseInfo(field.result, field.bitcaseInfo)
         }
     }
-    
+
+    @Override
     XUnitField getXUnit() {
         return x11Field
     }
-    
+
+    @Override
     String getName() {
         return convertX11VariableNameToJava(x11Field.name)
     }
@@ -67,9 +77,18 @@ abstract class JavaProperty implements JavaUnit {
     abstract TypeName getTypeName()
     
     abstract boolean isNonNull()
-    
+
+    @Override
     boolean isReadProtocol() {
         return !constantField && !readParam
+    }
+
+    @Override
+    TypeName getReadTypeName() {
+        if(readTypeName) {
+            return readTypeName
+        }
+        return typeName
     }
 
     FieldSpec getMember() {
@@ -99,9 +118,18 @@ abstract class JavaProperty implements JavaUnit {
             code.beginControlFlow('if(javaBuilder.is$LEnabled($T.$L))', bitcaseInfo.maskField.capitalize(), bitcaseInfo.enumType, bitcaseInfo.enumItem)
             code.addStatement('javaBuilder.$L($L)', name, readCode)
             code.endControlFlow()
+        } else if(getBuilderValueExpression()) {
+            code.addStatement('javaBuilder.$L($L)', name, getBuilderValueExpression())
         } else {
             code.addStatement('javaBuilder.$L($L)', name, name)
         }
+    }
+
+    CodeBlock getValueWriteExpressionCodeBlock() {
+        if(writeValueExpression) {
+            return writeValueExpression
+        }
+        return CodeBlock.of(name)
     }
 
     List<MethodSpec> getMethods() {

@@ -10,17 +10,6 @@ class XTypeError extends XTypeObject {
     XTypeError(Map map) {
         super(map)
         number = map.number ?: 0
-        protocol.add(0, new XUnitField(result: result, name: 'RESPONSECODE', type:'CARD8', constantValue: 0))
-        protocol.add(1, new XUnitField(result: result, name: 'CODE', type:'CARD8', constantValue: number))
-        protocol.add(2, new XUnitField(result: result, name: 'sequence_number', type:'CARD16'))
-        XUnitField minor = this.getField('minor_opcode')
-        if(!minor) {
-            this.protocol.add(3, new XUnitField(result: result, name: 'minor_opcode', type: 'CARD16'))
-        }
-        XUnitField major = this.getField('major_opcode')
-        if(!major) {
-            this.protocol.add(4, new XUnitField(result: result, name: 'major_opcode', type: 'CARD8'))
-        }
     }
 
     static XTypeError xTypeError(XResult result, Node node) {
@@ -31,6 +20,17 @@ class XTypeError extends XTypeObject {
             basePackage: result.basePackage,
             javaPackage: result.javaPackage)
         error.addUnits(result, node)
+        error.protocol.add(0, new XUnitField(result: result, name: 'RESPONSECODE', type:'CARD8', constantValue: 0))
+        error.protocol.add(1, new XUnitField(result: result, name: 'CODE', type:'CARD8', constantValue: error.number))
+        error.protocol.add(2, new XUnitField(result: result, name: 'sequence_number', type:'CARD16'))
+        XUnitField minor = error.getField('minor_opcode')
+        if(!minor) {
+            error.protocol.add(3, new XUnitField(result: result, name: 'minor_opcode', type: 'CARD16'))
+        }
+        XUnitField major = error.getField('major_opcode')
+        if(!major) {
+            error.protocol.add(4, new XUnitField(result: result, name: 'major_opcode', type: 'CARD8'))
+        }
         return error
     }
     

@@ -97,7 +97,7 @@ class JavaEventSpec extends XmlSpec {
                 short state = in.readCard16();
                 boolean sameScreen = in.readBool();
                 in.readPad(1);
-                com.github.moaxcp.x11client.protocol.xproto.KeyPressEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.KeyPressEventBuilder.builder();
+                com.github.moaxcp.x11client.protocol.xproto.KeyPressEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.builder();
                 javaBuilder.eventDetail(eventDetail);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.detail(detail);
@@ -219,7 +219,7 @@ class JavaEventSpec extends XmlSpec {
                 in.readPad(1);
                 int parent = in.readCard32();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.MapRequestEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.MapRequestEventBuilder.builder();
+                com.github.moaxcp.x11client.protocol.xproto.MapRequestEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.builder();
                 javaBuilder.eventDetail(eventDetail);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.parent(parent);

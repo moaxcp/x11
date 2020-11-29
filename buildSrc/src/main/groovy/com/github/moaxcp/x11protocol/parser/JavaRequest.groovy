@@ -23,15 +23,12 @@ class JavaRequest extends JavaObjectType {
             reply: request.reply
         )
         javaRequest.protocol = request.toJavaProtocol(javaRequest)
+        JavaProperty c = javaRequest.getJavaProperty('OPCODE')
+        c.constantField = true
+        c.writeValueExpression = CodeBlock.of('(byte)($1T.toUnsignedInt(OPCODE) + $1T.toUnsignedInt(offset))', ClassName.get('java.lang', 'Byte'))
+        JavaProperty l = javaRequest.getJavaProperty('length')
+        l.writeValueExpression = CodeBlock.of('(short) getLength()')
         return javaRequest
-    }
-
-    @Override
-    void addFields(TypeSpec.Builder typeBuilder) {
-        typeBuilder.addField(FieldSpec.builder(TypeName.BYTE, 'OPCODE', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-            .initializer('$L', opCode)
-            .build())
-        super.addFields(typeBuilder)
     }
 
     @Override
@@ -61,18 +58,17 @@ class JavaRequest extends JavaObjectType {
         if(lastListNoLength) {
             methodBuilder.addStatement('int javaStart = 1')
             protocol.eachWithIndex { it, i ->
+                if(!it.readProtocol
+                    || (it instanceof JavaProperty && it.bitcaseInfo)) {
+                    return
+                }
                 methodBuilder.addCode(it.declareAndReadCode)
                 if(i != protocol.size() - 1) {
                     methodBuilder.addStatement('javaStart += $L', it.getSizeExpression())
                 }
             }
         } else {
-            if(protocol.size() > 1) {
-                super.addReadStatements(methodBuilder)
-            } else {
-                methodBuilder.addStatement('in.readByte()')
-                methodBuilder.addStatement('short length = in.readCard16()')
-            }
+            super.addReadStatements(methodBuilder)
         }
     }
 
@@ -92,59 +88,10 @@ class JavaRequest extends JavaObjectType {
 
     @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
-        CodeBlock.Builder writeProtocol = CodeBlock.builder()
-        writeProtocol.addStatement('out.writeCard8((byte)($1T.toUnsignedInt(OPCODE) + $1T.toUnsignedInt(offset)))', ClassName.get('java.lang', 'Byte'))
-        if(protocol.size() > 1) {
-            protocol.each { it ->
-                if(it instanceof JavaProperty && it.name == 'length') {
-                    writeProtocol.addStatement('out.writeCard16((short) getLength())')
-                } else if(it instanceof JavaProperty && it.bitcaseInfo) {
-                    writeProtocol.beginControlFlow('if(is$LEnabled($T.$L)', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
-                    it.addWriteCode(writeProtocol)
-                    writeProtocol.endControlFlow()
-                } else {
-                    it.addWriteCode(writeProtocol)
-                }
-            }
-        } else {
-            writeProtocol.addStatement('out.writePad(1)')
-            writeProtocol.addStatement('out.writeCard16((short) 1)')
-        }
+        super.addWriteStatements(methodBuilder)
         if(fixedSize && fixedSize.get() % 4 == 0) {
-            methodBuilder.addCode(writeProtocol.build())
             return
         }
-        writeProtocol.addStatement('out.writePadAlign(getSize())')
-        methodBuilder.addCode(writeProtocol.build())
-    }
-
-    @Override
-    CodeBlock getSizeExpression() {
-        if(protocol.isEmpty()) {
-            return CodeBlock.of('4')
-        }
-        CodeBlock.of('$L + $L',
-            CodeBlock.of('1'),
-            super.getSizeExpression())
-    }
-
-    @Override
-    Optional<Integer> getFixedSize() {
-        boolean empty = protocol.find {
-            it.fixedSize.isEmpty()
-        }
-        if(protocol.isEmpty()) {
-            return Optional.of(4)
-        }
-        if(empty) {
-            return Optional.empty()
-        }
-        boolean bitcase = protocol.find {
-            it instanceof JavaProperty && it.bitcaseInfo
-        }
-        if(bitcase) {
-            return Optional.empty()
-        }
-        Optional.of(protocol.stream().mapToInt({it.fixedSize.get()}).sum() + 1)
+        methodBuilder.addStatement('out.writePadAlign(getSize())')
     }
 }

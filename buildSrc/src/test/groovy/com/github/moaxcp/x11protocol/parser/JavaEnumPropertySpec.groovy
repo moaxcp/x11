@@ -38,7 +38,7 @@ class JavaEnumPropertySpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.StructStruct readStructStruct(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask = com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum.getByCode(in.readCard8());
-                com.github.moaxcp.x11client.protocol.xproto.StructStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.StructStructBuilder.builder();
+                com.github.moaxcp.x11client.protocol.xproto.StructStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.StructStruct.builder();
                 javaBuilder.mask(mask);
                 return javaBuilder.build();
               }

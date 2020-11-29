@@ -36,6 +36,25 @@ class JavaEnumProperty extends JavaProperty {
     }
 
     @Override
+    TypeName getReadTypeName() {
+        if(super.readTypeName) {
+            return super.readTypeName
+        }
+        return ioTypeName
+    }
+
+    @Override
+    CodeBlock getBuilderValueExpression() {
+        if(super.builderValueExpression) {
+            return super.builderValueExpression
+        }
+        if(readTypeName in [TypeName.BYTE, TypeName.CHAR, TypeName.SHORT, TypeName.INT, TypeName.LONG, TypeName.FLOAT, TypeName.DOUBLE]) {
+            return CodeBlock.of('$T.getByCode($L)', typeName, name)
+        }
+        return null
+    }
+
+    @Override
     CodeBlock getDeclareAndReadCode() {
         return CodeBlock.builder()
             .addStatement(readCode)

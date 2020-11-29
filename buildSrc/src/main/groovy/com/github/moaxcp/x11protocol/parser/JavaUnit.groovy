@@ -12,8 +12,6 @@ interface JavaUnit {
     void addBuilderCode(CodeBlock.Builder code)
     void addWriteCode(CodeBlock.Builder code)
     boolean isReadProtocol()
-    void setReadParam(boolean readParam)
-    boolean isReadParam()
     /**
      * expression of size in bytes
      * @return

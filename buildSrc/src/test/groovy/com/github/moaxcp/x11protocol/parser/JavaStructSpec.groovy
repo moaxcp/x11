@@ -38,7 +38,7 @@ class JavaStructSpec extends XmlSpec {
                 byte bitsPerPixel = in.readCard8();
                 byte scanlinePad = in.readCard8();
                 in.readPad(5);
-                com.github.moaxcp.x11client.protocol.xproto.FormatStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.FormatStructBuilder.builder();
+                com.github.moaxcp.x11client.protocol.xproto.FormatStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.FormatStruct.builder();
                 javaBuilder.depth(depth);
                 javaBuilder.bitsPerPixel(bitsPerPixel);
                 javaBuilder.scanlinePad(scanlinePad);
@@ -114,7 +114,7 @@ class JavaStructSpec extends XmlSpec {
                 int defaultColormap = in.readCard32();
                 int currentInputMasks = in.readCard32();
                 com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores = com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum.getByCode(in.readByte());
-                com.github.moaxcp.x11client.protocol.xproto.ScreenStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ScreenStructBuilder.builder();
+                com.github.moaxcp.x11client.protocol.xproto.ScreenStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.builder();
                 javaBuilder.root(root);
                 javaBuilder.defaultColormap(defaultColormap);
                 javaBuilder.currentInputMasks(currentInputMasks);
@@ -193,7 +193,7 @@ class JavaStructSpec extends XmlSpec {
                   byte numAxes, com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int time = in.readCard32();
                 java.util.List<java.lang.Integer> axisvalues = in.readInt32(numAxes);
-                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStructBuilder.builder();
+                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct.builder();
                 javaBuilder.time(time);
                 javaBuilder.axisvalues(axisvalues);
                 return javaBuilder.build();
@@ -257,7 +257,7 @@ class JavaStructSpec extends XmlSpec {
                 boolean preserve = in.readBool();
                 byte nMapEntries = in.readCard8();
                 java.util.List<java.lang.Integer> preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
-                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStructBuilder.builder();
+                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct.builder();
                 javaBuilder.preserve(preserve);
                 javaBuilder.nMapEntries(nMapEntries);
                 javaBuilder.preserveEntries(preserveEntries);

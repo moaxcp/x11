@@ -122,11 +122,15 @@ class JavaPrimativeProperty extends JavaProperty {
         code.addStatement('out.write$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), getValueWriteExpressionCodeBlock())
     }
 
-    CodeBlock getValueWriteExpressionCodeBlock() {
-        if(writeValueExpression) {
-            return CodeBlock.of(writeValueExpression, name)
+    @Override
+    CodeBlock getBuilderValueExpression() {
+        if(super.builderValueExpression) {
+            return super.builderValueExpression
         }
-        return CodeBlock.of(name)
+        if(typeName == TypeName.BOOLEAN && readTypeName in [TypeName.BYTE, TypeName.CHAR, TypeName.SHORT, TypeName.INT, TypeName.LONG, TypeName.FLOAT, TypeName.DOUBLE]) {
+            return CodeBlock.of('$L > 0', name)
+        }
+        return null
     }
 
     @Override

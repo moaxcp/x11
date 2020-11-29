@@ -10,22 +10,26 @@ class XTypeReply extends XTypeObject {
         super(map)
     }
 
-    @Override
-    JavaType getJavaType() {
-        return javaReply(this)
+    static XTypeReply xTypeReply(String name, XResult result, Node node) {
+        XTypeReply reply = new XTypeReply(result: result, name: name, basePackage: result.basePackage, javaPackage: result.javaPackage)
+        reply.addUnits(result, node)
+        reply.protocol.add(0, new XUnitField(result: result, name: 'RESPONSECODE', type:'CARD8', constantValue: 1))
+        if(reply.protocol.size() == 1) {
+            reply.protocol.add(new XUnitPad(bytes: 1))
+        }
+        if(reply.protocol.size() == 2) {
+            reply.protocol.add(new XUnitField(result: result, name: 'sequenceNumber', type: 'CARD16'))
+            reply.protocol.add(new XUnitField(result: result, name: 'length', type: 'CARD32', localOnly: true))
+        } else {
+            reply.protocol.add(2, new XUnitField(result: result, name: 'sequenceNumber', type: 'CARD16'))
+            reply.protocol.add(3, new XUnitField(result: result, name: 'length', type: 'CARD32', localOnly: true))
+
+        }
+        return reply
     }
 
     @Override
-    void addUnits(XResult result, Node node) {
-        node.childNodes().eachWithIndex { Node it, int i ->
-            List<XUnit> unit = parseXUnit(result, it)
-            protocol.addAll(unit)
-            if(i == 0) {
-                XUnit sequence = new XUnitField(result: result, name: 'sequenceNumber', type: 'CARD16')
-                protocol.add(sequence)
-                XUnit length = new XUnitField(result: result, name: 'length', type: 'CARD32', localOnly: true)
-                protocol.add(length)
-            }
-        }
+    JavaType getJavaType() {
+        return javaReply(this)
     }
 }

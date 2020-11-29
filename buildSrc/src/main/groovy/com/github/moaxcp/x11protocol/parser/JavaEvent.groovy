@@ -23,7 +23,7 @@ class JavaEvent extends JavaObjectType {
         javaEvent.protocol = event.toJavaProtocol(javaEvent)
         JavaProperty p = javaEvent.getJavaProperty('NUMBER')
         p.constantField = true
-        p.writeValueExpression = 'sentEvent ? 0b10000000 & $1L : $1L'
+        p.writeValueExpression = CodeBlock.of('sentEvent ? 0b10000000 & NUMBER : NUMBER')
         return javaEvent
     }
 

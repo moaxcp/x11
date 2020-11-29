@@ -27,6 +27,14 @@ abstract class JavaObjectType implements JavaType {
         }
     }
 
+    List<JavaReadParameter> getReadParameters() {
+        return protocol.findAll {
+            it instanceof JavaReadParameter && it.readParam
+        }.collect {
+            (JavaReadParameter) it
+        }
+    }
+
     JavaProperty getJavaProperty(String name) {
         return properties.find {
             it.name == name
@@ -118,22 +126,8 @@ abstract class JavaObjectType implements JavaType {
     }
     
     void addReadParameters(MethodSpec.Builder methodBuilder) {
-        List<ParameterSpec> readParams = protocol.findAll {
-            it.readParam
-        }.collect {
-            if(it instanceof JavaEnumProperty) {
-                return ParameterSpec.builder(it.ioTypeName, it.name).build()
-            } else if(it instanceof JavaProperty) {
-                return ParameterSpec.builder(it.typeName, it.name).build()
-            } else if(it instanceof JavaPad) {
-                if(it.bytes == 1) {
-                    return ParameterSpec.builder(TypeName.BYTE, 'pad').build()
-                } else {
-                    throw new IllegalStateException("found pad but ${it.bytes} bytes not supported")
-                }
-            } else {
-                throw new IllegalStateException("${it.getClass().simpleName} not supported.")
-            }
+        List<ParameterSpec> readParams = readParameters.collect {
+            return ParameterSpec.builder(it.readTypeName, it.name).build()
         }
         List<ParameterSpec> params = properties.findAll {
             it instanceof JavaListProperty
@@ -164,7 +158,7 @@ abstract class JavaObjectType implements JavaType {
     
     void addBuilderStatement(MethodSpec.Builder method, CodeBlock... fields) {
         CodeBlock.Builder builder = CodeBlock.builder()
-        builder.addStatement('$1T $2L = $1T.builder()', builderClassName, 'javaBuilder')
+        builder.addStatement('$T $L = $T.builder()', builderClassName, 'javaBuilder', className)
         properties.each {
             it.addBuilderCode(builder)
         }
@@ -218,6 +212,10 @@ abstract class JavaObjectType implements JavaType {
         if(protocol.isEmpty()) {
             return CodeBlock.of('0')
         }
+        //todo use fixed size when possible
+//        if(fixedSize) {
+//            return CodeBlock.of("${fixedSize.get()}")
+//        }
         protocol.stream()
             .map({it.getSizeExpression()})
             .collect(CodeBlock.joining(' + '))
@@ -228,6 +226,12 @@ abstract class JavaObjectType implements JavaType {
             it.fixedSize.isEmpty()
         }
         if(empty) {
+            return Optional.empty()
+        }
+        boolean bitcase = protocol.find {
+            it instanceof JavaProperty && it.bitcaseInfo
+        }
+        if(bitcase) {
             return Optional.empty()
         }
         Optional.of(protocol.stream().mapToInt({it.fixedSize.get()}).sum())
