@@ -59,6 +59,7 @@ class JavaEnumListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getSizeExpression() {
+        CodeBlock actualSize
         switch(x11Type) {
             case 'BOOL':
             case 'byte':
@@ -67,20 +68,30 @@ class JavaEnumListProperty extends JavaListProperty {
             case 'CARD8':
             case 'char':
             case 'void':
-                return CodeBlock.of('1 * $L.size()', name)
+                actualSize = CodeBlock.of('1 * $L.size()', name)
+                break
             case 'INT16':
             case 'CARD16':
-                return CodeBlock.of('2 * $L.size()', name)
+                actualSize = CodeBlock.of('2 * $L.size()', name)
+                break
             case 'INT32':
             case 'CARD32':
             case 'float':
             case 'fd':
-                return CodeBlock.of('4 * $L.size()', name)
+                actualSize = CodeBlock.of('4 * $L.size()', name)
+                break
             case 'CARD64':
             case 'double':
-                return CodeBlock.of('8 * $L.size()', name)
+                actualSize = CodeBlock.of('8 * $L.size()', name)
+                break
+            default:
+                throw new UnsupportedOperationException("type not supported $x11Type")
         }
-        throw new UnsupportedOperationException("type not supported $x11Type")
+
+        if(bitcaseInfo) {
+            return CodeBlock.of('(is$LEnabled($T.$L) ? $L : 0)', bitcaseInfo.maskField.capitalize(), bitcaseInfo.enumType, bitcaseInfo.enumItem, actualSize)
+        }
+        return actualSize
     }
 
     @Override

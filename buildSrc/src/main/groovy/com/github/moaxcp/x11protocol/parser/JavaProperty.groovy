@@ -76,7 +76,12 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
     
     abstract TypeName getTypeName()
     
-    abstract boolean isNonNull()
+    boolean isNonNull() {
+        if(bitcaseInfo) {
+            return false
+        }
+        return true
+    }
 
     @Override
     boolean isReadProtocol() {
@@ -136,7 +141,19 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
         return []
     }
     
-    List<MethodSpec> getBuilderMethods(ClassName thisClass) {
+    List<MethodSpec> getBuilderMethods(ClassName outer) {
+        if(bitcaseInfo) {
+            return [
+                MethodSpec.methodBuilder(name)
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(typeName, name)
+                    .returns(javaType.builderClassName)
+                    .addStatement('this.$1L = $1L', name)
+                    .addStatement('$LEnable($T.$L)', bitcaseInfo.maskField, bitcaseInfo.enumType, bitcaseInfo.enumItem)
+                    .addStatement('return this')
+                    .build()
+            ]
+        }
         return []
     }
 

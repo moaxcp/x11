@@ -50,7 +50,7 @@ class JavaPadAlign implements JavaUnit {
 
     @Override
     boolean isReadProtocol() {
-        return !readParam
+        return true
     }
 
     @Override
@@ -60,6 +60,6 @@ class JavaPadAlign implements JavaUnit {
 
     @Override
     Optional<Integer> getFixedSize() {
-        return null
+        return Optional.empty()
     }
 }

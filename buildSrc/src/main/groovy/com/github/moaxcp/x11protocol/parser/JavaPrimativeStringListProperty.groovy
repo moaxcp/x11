@@ -34,6 +34,10 @@ class JavaPrimativeStringListProperty extends JavaPrimativeListProperty {
 
     @Override
     CodeBlock getSizeExpression() {
-        return CodeBlock.of('$L.length()', name)
+        CodeBlock actualSize = CodeBlock.of('$L.length()', name)
+        if(bitcaseInfo) {
+            return CodeBlock.of('(is$LEnabled($T.$L) ? $L : 0)', bitcaseInfo.maskField.capitalize(), bitcaseInfo.enumType, bitcaseInfo.enumItem, actualSize)
+        }
+        return actualSize
     }
 }

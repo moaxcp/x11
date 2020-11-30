@@ -24,6 +24,9 @@ class JavaEvent extends JavaObjectType {
         JavaProperty p = javaEvent.getJavaProperty('NUMBER')
         p.constantField = true
         p.writeValueExpression = CodeBlock.of('sentEvent ? 0b10000000 & NUMBER : NUMBER')
+        if(javaEvent.fixedSize && javaEvent.fixedSize.get() < 32) {
+            javaEvent.protocol.add(new JavaPad(bytes: 32 - javaEvent.fixedSize.get()))
+        }
         return javaEvent
     }
 
@@ -55,7 +58,9 @@ class JavaEvent extends JavaObjectType {
     @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
         super.addWriteStatements(methodBuilder)
-        //todo could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
+        if(fixedSize && fixedSize.get() >= 32) {
+            return
+        }
         methodBuilder.beginControlFlow('if(getSize() < 32)')
             .addStatement('out.writePad(32 - getSize())')
             .endControlFlow()
@@ -65,7 +70,9 @@ class JavaEvent extends JavaObjectType {
     void addBuilderStatement(MethodSpec.Builder methodBuilder, CodeBlock... fields) {
         CodeBlock sentEvent = CodeBlock.builder().addStatement('javaBuilder.$L($L)', 'sentEvent', 'sentEvent').build()
         super.addBuilderStatement(methodBuilder, sentEvent)
-        //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
+        if(fixedSize && fixedSize.get() >= 32) {
+            return
+        }
         methodBuilder.beginControlFlow('if(javaBuilder.getSize() < 32)')
             .addStatement('in.readPad(32 - javaBuilder.getSize())')
             .endControlFlow()

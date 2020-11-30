@@ -2,6 +2,7 @@ package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
+import com.github.moaxcp.x11client.protocol.XResponse;
 import com.github.moaxcp.x11client.protocol.bigreq.EnableReply;
 import com.github.moaxcp.x11client.protocol.bigreq.EnableRequest;
 import com.github.moaxcp.x11client.protocol.xproto.*;
@@ -74,7 +75,7 @@ public class X11ConnectionIT {
       QueryExtensionReply bigRequestReply = client.read();
       System.out.println(bigRequestReply);
 
-      EnableRequest enableRequest = new EnableRequest();
+      EnableRequest enableRequest = EnableRequest.builder().build();
       client.send(enableRequest);
       EnableReply enableReply = client.read();
       System.out.println(enableReply);
@@ -90,9 +91,18 @@ public class X11ConnectionIT {
         .borderWidth((short) 5)
         .clazz(WindowClassEnum.COPY_FROM_PARENT)
         .visual(client.getDefaultVisualId())
+        .backgroundPixel(client.getDefaultScreen().getWhitePixel())
+        .borderPixel(client.getDefaultScreen().getBlackPixel())
+        .eventMaskEnable(EventMaskEnum.EXPOSURE)
+        .eventMaskEnable(EventMaskEnum.KEY_PRESS)
         .build();
       client.send(window);
-      System.out.println(window);
+      MapWindowRequest mapWindow = MapWindowRequest.builder()
+        .window(window.getWid())
+        .build();
+      client.send(mapWindow);
+      XResponse read = client.read();
+      System.out.println(read);
     }
   }
 }

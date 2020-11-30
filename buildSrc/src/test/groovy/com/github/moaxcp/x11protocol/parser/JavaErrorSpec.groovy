@@ -46,14 +46,12 @@ class JavaErrorSpec extends XmlSpec {
                 short minorOpcode = in.readCard16();
                 byte majorOpcode = in.readCard8();
                 in.readPad(1);
-                com.github.moaxcp.x11client.protocol.xproto.RequestErrorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.RequestError.builder();
+                in.readPad(20);
+                com.github.moaxcp.x11client.protocol.xproto.RequestError.RequestErrorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.RequestError.builder();
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.badValue(badValue);
                 javaBuilder.minorOpcode(minorOpcode);
                 javaBuilder.majorOpcode(majorOpcode);
-                if(javaBuilder.getSize() < 32) {
-                  in.readPad(32 - javaBuilder.getSize());
-                }
                 return javaBuilder.build();
               }
             
@@ -66,20 +64,17 @@ class JavaErrorSpec extends XmlSpec {
                 out.writeCard16(minorOpcode);
                 out.writeCard8(majorOpcode);
                 out.writePad(1);
-                if(getSize() < 32) {
-                  out.writePad(32 - getSize());
-                }
+                out.writePad(20);
               }
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 2 + 4 + 2 + 1 + 1;
+                return 32;
               }
             
               public static class RequestErrorBuilder {
-                @java.lang.Override
                 public int getSize() {
-                  return 1 + 1 + 2 + 4 + 2 + 1 + 1;
+                  return 32;
                 }
               }
             }

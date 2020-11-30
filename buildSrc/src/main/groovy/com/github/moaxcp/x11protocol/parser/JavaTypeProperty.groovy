@@ -19,11 +19,6 @@ class JavaTypeProperty extends JavaProperty {
     }
 
     @Override
-    boolean isNonNull() {
-        return true
-    }
-
-    @Override
     CodeBlock getDeclareAndReadCode() {
         return declareAndInitializeTo(readCode)
     }
@@ -40,7 +35,11 @@ class JavaTypeProperty extends JavaProperty {
 
     @Override
     CodeBlock getSizeExpression() {
-        return CodeBlock.of('$L.getSize()', name)
+        CodeBlock actualSize = CodeBlock.of('$L.getSize()', name)
+        if(bitcaseInfo) {
+            return CodeBlock.of('(is$LEnabled($T.$L) ? $L : 0)', bitcaseInfo.maskField.capitalize(), bitcaseInfo.enumType, bitcaseInfo.enumItem, actualSize)
+        }
+        return actualSize
     }
 
     @Override

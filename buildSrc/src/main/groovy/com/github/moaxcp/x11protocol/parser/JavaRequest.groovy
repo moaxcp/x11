@@ -78,7 +78,7 @@ class JavaRequest extends JavaObjectType {
         if(fixedSize && fixedSize.get() % 4 == 0) {
             return
         }
-        methodBuilder.addStatement('in.readPadAlign(javaObject.getSize())')
+        methodBuilder.addStatement('in.readPadAlign(javaBuilder.getSize())')
     }
 
     @Override

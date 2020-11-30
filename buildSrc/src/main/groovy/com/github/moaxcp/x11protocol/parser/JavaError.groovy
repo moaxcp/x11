@@ -27,6 +27,9 @@ class JavaError extends JavaObjectType {
         r.constantField = true
         r.localOnly = true
         r.writeValueExpression = CodeBlock.of('getResponseCode()')
+        if(javaError.fixedSize && javaError.fixedSize.get() < 32) {
+            javaError.protocol.add(new JavaPad(bytes: 32 - javaError.fixedSize.get()))
+        }
         return javaError
     }
 
@@ -45,7 +48,9 @@ class JavaError extends JavaObjectType {
     @Override
     void addWriteStatements(MethodSpec.Builder methodBuilder) {
         super.addWriteStatements(methodBuilder)
-        //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
+        if(fixedSize && fixedSize.get() >= 32) {
+            return
+        }
         methodBuilder.beginControlFlow('if(getSize() < 32)')
             .addStatement('out.writePad(32 - getSize())')
             .endControlFlow()
@@ -54,7 +59,9 @@ class JavaError extends JavaObjectType {
     @Override
     void addBuilderStatement(MethodSpec.Builder methodBuilder, CodeBlock... fields) {
         super.addBuilderStatement(methodBuilder)
-        //could be optimized if each JavaUnit could return the int size and if the size is static (no lists/switch fields)
+        if(fixedSize && fixedSize.get() >= 32) {
+            return
+        }
         methodBuilder.beginControlFlow('if(javaBuilder.getSize() < 32)')
             .addStatement('in.readPad(32 - javaBuilder.getSize())')
             .endControlFlow()

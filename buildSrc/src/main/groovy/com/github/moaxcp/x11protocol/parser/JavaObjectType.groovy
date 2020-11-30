@@ -16,7 +16,7 @@ abstract class JavaObjectType implements JavaType {
     List<JavaUnit> protocol
 
     ClassName getBuilderClassName() {
-        ClassName.get(javaPackage, "${simpleName}Builder")
+        ClassName.get(javaPackage, "${simpleName}.${simpleName}Builder")
     }
 
     List<JavaProperty> getProperties() {
@@ -72,10 +72,15 @@ abstract class JavaObjectType implements JavaType {
     }
 
     void addBuilder(TypeSpec.Builder parent) {
-        TypeSpec.Builder builder = TypeSpec.classBuilder(builderClassName)
+        TypeSpec.Builder builder = TypeSpec.classBuilder(ClassName.get(javaPackage, "${simpleName}Builder"))
             .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
         builder.addMethods(getBuilderMethods())
-        addSizeMethod(builder)
+        CodeBlock sizes = getSizeExpression()
+        builder.addMethod(MethodSpec.methodBuilder('getSize')
+            .addModifiers(Modifier.PUBLIC)
+            .returns(TypeName.INT)
+            .addStatement('return $L', sizes)
+            .build())
         parent.addType(builder.build())
     }
     
@@ -188,7 +193,7 @@ abstract class JavaObjectType implements JavaType {
         CodeBlock.Builder writeProtocol = CodeBlock.builder()
         protocol.each {
             if(it instanceof JavaProperty && it.bitcaseInfo) {
-                writeProtocol.beginControlFlow('if(is$LEnabled($T.$L)', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
+                writeProtocol.beginControlFlow('if(is$LEnabled($T.$L))', it.bitcaseInfo.maskField.capitalize(), it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem)
                 it.addWriteCode(writeProtocol)
                 writeProtocol.endControlFlow()
             } else {
@@ -212,13 +217,20 @@ abstract class JavaObjectType implements JavaType {
         if(protocol.isEmpty()) {
             return CodeBlock.of('0')
         }
-        //todo use fixed size when possible
-//        if(fixedSize) {
-//            return CodeBlock.of("${fixedSize.get()}")
-//        }
-        protocol.stream()
-            .map({it.getSizeExpression()})
+        if(fixedSize) {
+            return CodeBlock.of("${fixedSize.get()}")
+        }
+        int fixedSizes = protocol.stream()
+            .filter({it.fixedSize.isPresent()})
+            .mapToInt{it.fixedSize.get()}
+            .sum()
+
+        CodeBlock dynamicSizes = protocol.stream()
+            .filter { !it.fixedSize.isPresent() }
+            .map{it.getSizeExpression()}
             .collect(CodeBlock.joining(' + '))
+
+        return CodeBlock.of('$L + $L', fixedSizes, dynamicSizes)
     }
 
     Optional<Integer> getFixedSize() {

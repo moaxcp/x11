@@ -52,7 +52,7 @@ class JavaReplySpec extends XmlSpec {
                 in.readPad(1);
                 short length = in.readCard16();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest.builder();
+                com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest.QueryTreeRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest.builder();
                 javaBuilder.window(window);
                 return javaBuilder.build();
               }
@@ -68,13 +68,12 @@ class JavaReplySpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 2 + 4;
+                return 8;
               }
               
               public static class QueryTreeRequestBuilder {
-                @java.lang.Override
                 public int getSize() {
-                  return 1 + 1 + 2 + 4;
+                  return 8;
                 }
               }
             }
@@ -104,7 +103,7 @@ class JavaReplySpec extends XmlSpec {
                 short childrenLen = in.readCard16();
                 in.readPad(14);
                 java.util.List<java.lang.Integer> children = in.readCard32(Short.toUnsignedInt(childrenLen));
-                com.github.moaxcp.x11client.protocol.xproto.QueryTreeReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.builder();
+                com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.QueryTreeReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.builder();
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.root(root);
                 javaBuilder.parent(parent);
@@ -132,13 +131,12 @@ class JavaReplySpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 2 + 4 + 4 + 4 + 2 + 14 + 4 * children.size();
+                return 32 + 4 * children.size();
               }
               
               public static class QueryTreeReplyBuilder {
-                @java.lang.Override
                 public int getSize() {
-                  return 1 + 1 + 2 + 4 + 4 + 4 + 2 + 14 + 4 * children.size();
+                  return 32 + 4 * children.size();
                 }
               }
             }
@@ -193,7 +191,7 @@ class JavaReplySpec extends XmlSpec {
                 short dstY = in.readInt16();
                 short dstX = in.readInt16();
                 in.readPad(16);
-                com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply.builder();
+                com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply.TranslateCoordinatesReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply.builder();
                 javaBuilder.sameScreen(sameScreen > 0);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.child(child);
@@ -215,13 +213,12 @@ class JavaReplySpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 2 + 4 + 4 + 2 + 2;
+                return 16;
               }
             
               public static class TranslateCoordinatesReplyBuilder {
-                @java.lang.Override
                 public int getSize() {
-                  return 1 + 1 + 2 + 4 + 4 + 2 + 2;
+                  return 16;
                 }
               }
             }
@@ -285,7 +282,7 @@ class JavaReplySpec extends XmlSpec {
                 for(int i = 0; i < Short.toUnsignedInt(hostsLen); i++) {
                   hosts.add(com.github.moaxcp.x11client.protocol.xproto.HostStruct.readHostStruct(in));
                 }
-                com.github.moaxcp.x11client.protocol.xproto.ListHostsReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.builder();
+                com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.ListHostsReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.builder();
                 javaBuilder.mode(com.github.moaxcp.x11client.protocol.xproto.AccessControlEnum.getByCode(mode));
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.hostsLen(hostsLen);
@@ -312,13 +309,12 @@ class JavaReplySpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 2 + 4 + 2 + 22 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(hosts);
+                return 32 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(hosts);
               }
             
               public static class ListHostsReplyBuilder {
-                @java.lang.Override
                 public int getSize() {
-                  return 1 + 1 + 2 + 4 + 2 + 22 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(hosts);
+                  return 32 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(hosts);
                 }
               }
             }
@@ -375,7 +371,7 @@ class JavaReplySpec extends XmlSpec {
                 byte firstEvent = in.readCard8();
                 byte firstError = in.readCard8();
                 in.readPad(20);
-                com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply.builder();
+                com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply.QueryExtensionReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply.builder();
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.present(present);
                 javaBuilder.majorOpcode(majorOpcode);
@@ -398,13 +394,12 @@ class JavaReplySpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 2 + 4 + 1 + 1 + 1 + 1;
+                return 12;
               }
           
               public static class QueryExtensionReplyBuilder {
-                @java.lang.Override
                 public int getSize() {
-                  return 1 + 1 + 2 + 4 + 1 + 1 + 1 + 1;
+                  return 12;
                 }
               }
             }

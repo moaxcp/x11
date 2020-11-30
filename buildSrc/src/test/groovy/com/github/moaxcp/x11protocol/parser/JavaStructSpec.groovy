@@ -38,7 +38,7 @@ class JavaStructSpec extends XmlSpec {
                 byte bitsPerPixel = in.readCard8();
                 byte scanlinePad = in.readCard8();
                 in.readPad(5);
-                com.github.moaxcp.x11client.protocol.xproto.FormatStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.FormatStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.FormatStruct.FormatStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.FormatStruct.builder();
                 javaBuilder.depth(depth);
                 javaBuilder.bitsPerPixel(bitsPerPixel);
                 javaBuilder.scanlinePad(scanlinePad);
@@ -55,13 +55,12 @@ class JavaStructSpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 1 + 5;
+                return 8;
               }
               
               public static class FormatStructBuilder {
-                @java.lang.Override
                 public int getSize() {
-                  return 1 + 1 + 1 + 5;
+                  return 8;
                 }
               }
             }
@@ -114,7 +113,7 @@ class JavaStructSpec extends XmlSpec {
                 int defaultColormap = in.readCard32();
                 int currentInputMasks = in.readCard32();
                 com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores = com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum.getByCode(in.readByte());
-                com.github.moaxcp.x11client.protocol.xproto.ScreenStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.builder();
                 javaBuilder.root(root);
                 javaBuilder.defaultColormap(defaultColormap);
                 javaBuilder.currentInputMasks(currentInputMasks);
@@ -137,10 +136,15 @@ class JavaStructSpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 4 + 4 + 4 + 1;
+                return 13;
               }
             
               public static class ScreenStructBuilder {
+                public boolean isCurrentInputMasksEnabled(
+                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
+                  return maskEnum.isEnabled(currentInputMasks);
+                }
+            
                 public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder currentInputMasksEnable(
                     com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
                   currentInputMasks = (int) maskEnum.enableFor(currentInputMasks);
@@ -152,10 +156,9 @@ class JavaStructSpec extends XmlSpec {
                   currentInputMasks = (int) maskEnum.disableFor(currentInputMasks);
                   return this;
                 }
-                
-                @java.lang.Override
+            
                 public int getSize() {
-                  return 4 + 4 + 4 + 1;
+                  return 13;
                 }
               }
             }
@@ -193,7 +196,7 @@ class JavaStructSpec extends XmlSpec {
                   byte numAxes, com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int time = in.readCard32();
                 java.util.List<java.lang.Integer> axisvalues = in.readInt32(numAxes);
-                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct.DeviceTimeCoordStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct.builder();
                 javaBuilder.time(time);
                 javaBuilder.axisvalues(axisvalues);
                 return javaBuilder.build();
@@ -211,7 +214,6 @@ class JavaStructSpec extends XmlSpec {
               }
               
               public static class DeviceTimeCoordStructBuilder {
-                @java.lang.Override
                 public int getSize() {
                   return 4 + 4 * axisvalues.size();
                 }
@@ -257,7 +259,7 @@ class JavaStructSpec extends XmlSpec {
                 boolean preserve = in.readBool();
                 byte nMapEntries = in.readCard8();
                 java.util.List<java.lang.Integer> preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
-                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct.SetKeyTypeStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct.builder();
                 javaBuilder.preserve(preserve);
                 javaBuilder.nMapEntries(nMapEntries);
                 javaBuilder.preserveEntries(preserveEntries);
@@ -273,13 +275,12 @@ class JavaStructSpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 4 * preserveEntries.size();
+                return 2 + 4 * preserveEntries.size();
               }
               
               public static class SetKeyTypeStructBuilder {
-                @java.lang.Override
                 public int getSize() {
-                  return 1 + 1 + 4 * preserveEntries.size();
+                  return 2 + 4 * preserveEntries.size();
                 }
               }
             }

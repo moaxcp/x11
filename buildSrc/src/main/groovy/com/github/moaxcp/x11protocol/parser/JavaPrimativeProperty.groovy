@@ -63,8 +63,9 @@ class JavaPrimativeProperty extends JavaProperty {
 
     @Override
     List<MethodSpec> getMethods() {
+        List<MethodSpec> methods = super.getMethods()
         if(maskTypeName) {
-            return [
+            methods += [
                 MethodSpec.methodBuilder("is${name.capitalize()}Enabled")
                     .addModifiers(Modifier.PUBLIC)
                     .returns(boolean.class)
@@ -73,31 +74,41 @@ class JavaPrimativeProperty extends JavaProperty {
                     .build()
             ]
         }
-        return []
+        return methods
     }
 
     @Override
     List<MethodSpec> getBuilderMethods(ClassName outer) {
+        List<MethodSpec> methods = super.getBuilderMethods(outer)
         if(maskTypeName) {
-            ClassName builderClassName = ClassName.get(outer.packageName(), "${outer.simpleName()}.${outer.simpleName()}Builder")
-            return [
-                MethodSpec.methodBuilder("${name}Enable")
+            Modifier modifier = Modifier.PUBLIC
+            if(name == 'valueMask') {
+                modifier = Modifier.PRIVATE
+            }
+            methods += [
+                MethodSpec.methodBuilder("is${name.capitalize()}Enabled")
                     .addModifiers(Modifier.PUBLIC)
+                    .returns(boolean.class)
                     .addParameter(maskTypeName, 'maskEnum')
-                    .returns(builderClassName)
+                    .addStatement('return maskEnum.isEnabled($1L)', name)
+                    .build(),
+                MethodSpec.methodBuilder("${name}Enable")
+                    .addModifiers(modifier)
+                    .addParameter(maskTypeName, 'maskEnum')
+                    .returns(javaType.builderClassName)
                     .addStatement('$1L = ($2T) maskEnum.enableFor($1L)', name, memberTypeName)
                     .addStatement('return this')
                     .build(),
                 MethodSpec.methodBuilder("${name}Disable")
-                    .addModifiers(Modifier.PUBLIC)
+                    .addModifiers(modifier)
                     .addParameter(maskTypeName, 'maskEnum')
-                    .returns(builderClassName)
+                    .returns(javaType.builderClassName)
                     .addStatement('$1L = ($2T) maskEnum.disableFor($1L)', name, memberTypeName)
                     .addStatement('return this')
                     .build()
             ]
         }
-        return []
+        return methods
     }
 
     @Override
@@ -135,6 +146,7 @@ class JavaPrimativeProperty extends JavaProperty {
 
     @Override
     CodeBlock getSizeExpression() {
+        CodeBlock actualSize
         switch(x11Type) {
             case 'BOOL':
             case 'byte':
@@ -143,24 +155,37 @@ class JavaPrimativeProperty extends JavaProperty {
             case 'CARD8':
             case 'char':
             case 'void':
-                return CodeBlock.of('1')
+                actualSize = CodeBlock.of('1')
+                break
             case 'INT16':
             case 'CARD16':
-                return CodeBlock.of('2')
+                actualSize = CodeBlock.of('2')
+                break
             case 'INT32':
             case 'CARD32':
             case 'float':
             case 'fd':
-                return CodeBlock.of('4')
+                actualSize = CodeBlock.of('4')
+                break
             case 'CARD64':
             case 'double':
-                return CodeBlock.of('8')
+                actualSize = CodeBlock.of('8')
+                break
+            default:
+                throw new UnsupportedOperationException("type not supported $x11Type")
         }
-        throw new UnsupportedOperationException("type not supported $x11Primative")
+
+        if(bitcaseInfo) {
+            return CodeBlock.of('(is$LEnabled($T.$L) ? $L : 0)', bitcaseInfo.maskField.capitalize(), bitcaseInfo.enumType, bitcaseInfo.enumItem, actualSize)
+        }
+        return actualSize
     }
 
     @Override
     Optional<Integer> getFixedSize() {
+        if(bitcaseInfo) {
+            return Optional.empty()
+        }
         switch(x11Type) {
             case 'BOOL':
             case 'byte':

@@ -29,11 +29,6 @@ class JavaEnumProperty extends JavaProperty {
     TypeName getIoTypeName() {
         x11PrimativeToStorageTypeName(x11Field.resolvedType.name)
     }
-    
-    @Override
-    boolean isNonNull() {
-        return true
-    }
 
     @Override
     TypeName getReadTypeName() {
@@ -57,13 +52,13 @@ class JavaEnumProperty extends JavaProperty {
     @Override
     CodeBlock getDeclareAndReadCode() {
         return CodeBlock.builder()
-            .addStatement(readCode)
+            .addStatement('$T $L = $L', memberTypeName, name, readCode)
             .build()
     }
 
     @Override
     CodeBlock getReadCode() {
-        return CodeBlock.of("\$1T \$2L = \$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Type)}())", memberTypeName, name)
+        return CodeBlock.of("\$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Type)}())", memberTypeName)
     }
 
     @Override
@@ -77,6 +72,7 @@ class JavaEnumProperty extends JavaProperty {
 
     @Override
     CodeBlock getSizeExpression() {
+        CodeBlock actualSize
         switch(x11Type) {
             case 'BOOL':
             case 'byte':
@@ -85,24 +81,37 @@ class JavaEnumProperty extends JavaProperty {
             case 'CARD8':
             case 'char':
             case 'void':
-                return CodeBlock.of('1')
+                actualSize = CodeBlock.of('1')
+                break
             case 'INT16':
             case 'CARD16':
-                return CodeBlock.of('2')
+                actualSize = CodeBlock.of('2')
+                break
             case 'INT32':
             case 'CARD32':
             case 'float':
             case 'fd':
-                return CodeBlock.of('4')
+                actualSize = CodeBlock.of('4')
+                break
             case 'CARD64':
             case 'double':
-                return CodeBlock.of('8')
+                actualSize = CodeBlock.of('8')
+                break
+            default:
+                throw new UnsupportedOperationException("type not supported $x11Type")
         }
-        throw new UnsupportedOperationException("type not supported $x11Type")
+
+        if(bitcaseInfo) {
+            return CodeBlock.of('(is$LEnabled($T.$L) ? $L : 0)', bitcaseInfo.maskField.capitalize(), bitcaseInfo.enumType, bitcaseInfo.enumItem, actualSize)
+        }
+        return actualSize
     }
 
     @Override
     Optional<Integer> getFixedSize() {
+        if(bitcaseInfo) {
+            return Optional.empty()
+        }
         switch(x11Type) {
             case 'BOOL':
             case 'byte':

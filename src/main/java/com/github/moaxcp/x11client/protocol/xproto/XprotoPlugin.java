@@ -28,6 +28,9 @@ public class XprotoPlugin implements XProtocolPlugin {
     if(request instanceof CreateWindowRequest) {
       return true;
     }
+    if(request instanceof MapWindowRequest) {
+      return true;
+    }
     return false;
   }
 
@@ -64,11 +67,11 @@ public class XprotoPlugin implements XProtocolPlugin {
   public XError readError(byte code, X11Input in) throws IOException {
     switch(code) {
       case 1:
-        return RequestError.readRequestEvent(in);
+        return RequestError.readRequestError(in);
       case 5:
-        return AtomError.readAtomEvent(in);
+        return AtomError.readAtomError(in);
       default:
-        throw new IllegalArgumentException("code not supported by " + name);
+        throw new IllegalArgumentException("code " + code + " not supported by " + name);
     }
   }
 }

@@ -97,7 +97,7 @@ class JavaEventSpec extends XmlSpec {
                 short state = in.readCard16();
                 boolean sameScreen = in.readBool();
                 in.readPad(1);
-                com.github.moaxcp.x11client.protocol.xproto.KeyPressEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.builder();
+                com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.builder();
                 javaBuilder.eventDetail(eventDetail);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.detail(detail);
@@ -113,9 +113,6 @@ class JavaEventSpec extends XmlSpec {
                 javaBuilder.sameScreen(sameScreen);
                 
                 javaBuilder.sentEvent(sentEvent);
-                if(javaBuilder.getSize() < 32) {
-                  in.readPad(32 - javaBuilder.getSize());
-                }
                 return javaBuilder.build();
               }
             
@@ -136,9 +133,6 @@ class JavaEventSpec extends XmlSpec {
                 out.writeCard16(state);
                 out.writeBool(sameScreen);
                 out.writePad(1);
-                if(getSize() < 32) {
-                  out.writePad(32 - getSize());
-                }
               }
             
               public boolean isStateEnabled(
@@ -148,10 +142,15 @@ class JavaEventSpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 2 + 1 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 1 + 1;
+                return 33;
               }
             
               public static class KeyPressEventBuilder {
+                public boolean isStateEnabled(
+                    com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
+                  return maskEnum.isEnabled(state);
+                }
+            
                 public com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder stateEnable(
                     com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
                   state = (short) maskEnum.enableFor(state);
@@ -164,9 +163,8 @@ class JavaEventSpec extends XmlSpec {
                   return this;
                 }
             
-                @java.lang.Override
                 public int getSize() {
-                  return 1 + 1 + 2 + 1 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 2 + 2 + 1 + 1;
+                  return 33;
                 }
               }
             }
@@ -219,16 +217,14 @@ class JavaEventSpec extends XmlSpec {
                 in.readPad(1);
                 int parent = in.readCard32();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.MapRequestEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.builder();
+                in.readPad(19);
+                com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.MapRequestEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.builder();
                 javaBuilder.eventDetail(eventDetail);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.parent(parent);
                 javaBuilder.window(window);
                 
                 javaBuilder.sentEvent(sentEvent);
-                if(javaBuilder.getSize() < 32) {
-                  in.readPad(32 - javaBuilder.getSize());
-                }
                 return javaBuilder.build();
               }
             
@@ -240,20 +236,17 @@ class JavaEventSpec extends XmlSpec {
                 out.writePad(1);
                 out.writeCard32(parent);
                 out.writeCard32(window);
-                if(getSize() < 32) {
-                  out.writePad(32 - getSize());
-                }
+                out.writePad(19);
               }
             
               @java.lang.Override
               public int getSize() {
-                return 1 + 1 + 2 + 1 + 4 + 4;
+                return 32;
               }
               
               public static class MapRequestEventBuilder {
-                @java.lang.Override
                 public int getSize() {
-                  return 1 + 1 + 2 + 1 + 4 + 4;
+                  return 32;
                 }
               }
             }
