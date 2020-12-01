@@ -153,13 +153,13 @@ class JavaEventSpec extends XmlSpec {
             
                 public com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder stateEnable(
                     com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
-                  state = (short) maskEnum.enableFor(state);
+                  state((short) maskEnum.enableFor(state));
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder stateDisable(
                     com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum) {
-                  state = (short) maskEnum.disableFor(state);
+                  state((short) maskEnum.disableFor(state));
                   return this;
                 }
             

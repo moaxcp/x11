@@ -96,14 +96,14 @@ class JavaPrimativeProperty extends JavaProperty {
                     .addModifiers(modifier)
                     .addParameter(maskTypeName, 'maskEnum')
                     .returns(javaType.builderClassName)
-                    .addStatement('$1L = ($2T) maskEnum.enableFor($1L)', name, memberTypeName)
+                    .addStatement('$1L(($2T) maskEnum.enableFor($1L))', name, memberTypeName)
                     .addStatement('return this')
                     .build(),
                 MethodSpec.methodBuilder("${name}Disable")
                     .addModifiers(modifier)
                     .addParameter(maskTypeName, 'maskEnum')
                     .returns(javaType.builderClassName)
-                    .addStatement('$1L = ($2T) maskEnum.disableFor($1L)', name, memberTypeName)
+                    .addStatement('$1L(($2T) maskEnum.disableFor($1L))', name, memberTypeName)
                     .addStatement('return this')
                     .build()
             ]

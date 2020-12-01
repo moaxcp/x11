@@ -147,13 +147,13 @@ class JavaStructSpec extends XmlSpec {
             
                 public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder currentInputMasksEnable(
                     com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
-                  currentInputMasks = (int) maskEnum.enableFor(currentInputMasks);
+                  currentInputMasks((int) maskEnum.enableFor(currentInputMasks));
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder currentInputMasksDisable(
                     com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
-                  currentInputMasks = (int) maskEnum.disableFor(currentInputMasks);
+                  currentInputMasks((int) maskEnum.disableFor(currentInputMasks));
                   return this;
                 }
             

@@ -4,7 +4,7 @@ public interface IntValue {
   int getValue();
 
   default boolean isEnabled(int value) {
-    return false;
+    return (value & getValue()) > 0;
   }
 
   default int enableFor(int value) {

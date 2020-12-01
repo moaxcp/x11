@@ -56,8 +56,12 @@ public class XprotoPlugin implements XProtocolPlugin {
   @Override
   public XEvent readEvent(byte number, boolean sentEvent, X11Input in) throws IOException {
     switch(number) {
+      case 12:
+        return ExposeEvent.readExposeEvent(sentEvent, in);
       case 26:
         return CirculateNotifyEvent.readCirculateNotifyEvent(sentEvent, in);
+      case 34:
+        return KeyPressEvent.readKeyPressEvent(sentEvent, in);
       default:
         throw new IllegalArgumentException("number " + number + " is not supported");
     }
@@ -70,6 +74,8 @@ public class XprotoPlugin implements XProtocolPlugin {
         return RequestError.readRequestError(in);
       case 5:
         return AtomError.readAtomError(in);
+      case 16:
+        return LengthError.readLengthError(in);
       default:
         throw new IllegalArgumentException("code " + code + " not supported by " + name);
     }

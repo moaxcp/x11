@@ -744,13 +744,13 @@ class JavaRequestSpec extends XmlSpec {
             
                 private com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder valueMaskEnable(
                     com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum) {
-                  valueMask = (int) maskEnum.enableFor(valueMask);
+                  valueMask((int) maskEnum.enableFor(valueMask));
                   return this;
                 }
             
                 private com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder valueMaskDisable(
                     com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum) {
-                  valueMask = (int) maskEnum.disableFor(valueMask);
+                  valueMask((int) maskEnum.disableFor(valueMask));
                   return this;
                 }
             
@@ -845,13 +845,13 @@ class JavaRequestSpec extends XmlSpec {
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder eventMaskEnable(
                     com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
-                  eventMask = (int) maskEnum.enableFor(eventMask);
+                  eventMask((int) maskEnum.enableFor(eventMask));
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder eventMaskDisable(
                     com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
-                  eventMask = (int) maskEnum.disableFor(eventMask);
+                  eventMask((int) maskEnum.disableFor(eventMask));
                   return this;
                 }
             
@@ -869,13 +869,13 @@ class JavaRequestSpec extends XmlSpec {
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder doNotPropogateMaskEnable(
                     com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
-                  doNotPropogateMask = (int) maskEnum.enableFor(doNotPropogateMask);
+                  doNotPropogateMask((int) maskEnum.enableFor(doNotPropogateMask));
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder doNotPropogateMaskDisable(
                     com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
-                  doNotPropogateMask = (int) maskEnum.disableFor(doNotPropogateMask);
+                  doNotPropogateMask((int) maskEnum.disableFor(doNotPropogateMask));
                   return this;
                 }
             

@@ -63,6 +63,7 @@ public class X11ConnectionIT {
         .firstKeycode(setup.getMinKeycode())
         .count((byte) (setup.getMaxKeycode() - setup.getMinKeycode() + 1))
         .build();
+      System.out.println(keyboard);
       client.send(keyboard);
       GetKeyboardMappingReply keyboardReply = client.read();
       System.out.println(keyboardReply);
@@ -70,12 +71,14 @@ public class X11ConnectionIT {
       QueryExtensionRequest bigRequests = QueryExtensionRequest.builder()
         .name("BIG-REQUESTS")
         .build();
+      System.out.println(bigRequests);
       //assertThat(bigRequests.getLength()).isEqualTo(5);
       client.send(bigRequests);
       QueryExtensionReply bigRequestReply = client.read();
       System.out.println(bigRequestReply);
 
       EnableRequest enableRequest = EnableRequest.builder().build();
+      System.out.println(enableRequest);
       client.send(enableRequest);
       EnableReply enableReply = client.read();
       System.out.println(enableReply);
@@ -96,13 +99,22 @@ public class X11ConnectionIT {
         .eventMaskEnable(EventMaskEnum.EXPOSURE)
         .eventMaskEnable(EventMaskEnum.KEY_PRESS)
         .build();
+      System.out.println(window);
       client.send(window);
       MapWindowRequest mapWindow = MapWindowRequest.builder()
         .window(window.getWid())
         .build();
+      System.out.println(mapWindow);
       client.send(mapWindow);
-      XResponse read = client.read();
-      System.out.println(read);
+      while(true) {
+        XResponse read = client.read();
+        System.out.println(read);
+        if(read instanceof ExposeEvent) {
+
+        } else if(read instanceof KeyPressEvent) {
+          break;
+        }
+      }
     }
   }
 }
