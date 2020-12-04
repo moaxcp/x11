@@ -1,6 +1,5 @@
 package com.github.moaxcp.x11client.protocol.bigreq;
 
-import com.github.moaxcp.x11client.XProtocolService;
 import com.github.moaxcp.x11client.protocol.*;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionRequest;
@@ -19,8 +18,7 @@ public class BigreqPlugin implements XProtocolPlugin {
     QueryExtensionRequest bigRequests = QueryExtensionRequest.builder()
       .name(name)
       .build();
-    service.send(bigRequests);
-    QueryExtensionReply bigRequestReply = service.read();
+    QueryExtensionReply bigRequestReply = service.send(bigRequests);
     offset = bigRequestReply.getMajorOpcode();
   }
 

@@ -12,9 +12,9 @@ class JavaRequest extends JavaObjectType {
 
     static JavaRequest javaRequest(XTypeRequest request) {
         String simpleName = getRequestJavaName(request.name)
-
+        TypeName superType = request.reply ? ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.javaType.className) : ClassName.get(request.basePackage, 'OneWayRequest')
         JavaRequest javaRequest = new JavaRequest(
-            superTypes: request.superTypes + ClassName.get(request.basePackage, 'XRequest'),
+            superTypes: request.superTypes + superType,
             basePackage: request.basePackage,
             javaPackage: request.javaPackage,
             simpleName:simpleName,
@@ -33,17 +33,13 @@ class JavaRequest extends JavaObjectType {
 
     @Override
     void addMethods(TypeSpec.Builder typeBuilder) {
-        CodeBlock replyReturn
         if(reply) {
-            replyReturn = CodeBlock.builder().addStatement('return Optional.of((field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in))', reply.javaType.className, reply.javaType.simpleName).build()
-        } else {
-            replyReturn = CodeBlock.builder().addStatement('return Optional.empty()').build()
+            typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
+                .returns(ParameterizedTypeName.get(ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction'), reply.javaType.className))
+                .addModifiers(Modifier.PUBLIC)
+                .addStatement('return (field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in)', reply.javaType.className, reply.javaType.simpleName)
+                .build())
         }
-        typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
-            .returns(ParameterizedTypeName.get(ClassName.get('java.util', 'Optional'), ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction')))
-            .addModifiers(Modifier.PUBLIC)
-            .addCode(replyReturn)
-            .build())
         typeBuilder.addMethod(MethodSpec.methodBuilder('getOpCode')
             .returns(TypeName.BYTE)
             .addModifiers(Modifier.PUBLIC)

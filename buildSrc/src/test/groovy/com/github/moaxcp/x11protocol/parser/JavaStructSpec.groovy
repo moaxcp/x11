@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.google.common.truth.Truth
 import com.squareup.javapoet.TypeSpec
 
 import static com.github.moaxcp.x11protocol.parser.JavaStruct.javaStruct
@@ -94,7 +95,7 @@ class JavaStructSpec extends XmlSpec {
         JavaStruct javaStruct = javaStruct(struct)
 
         then:
-        javaStruct.typeSpec.toString() == '''\
+        Truth.assertThat(javaStruct.typeSpec.toString()).isEqualTo '''\
             @lombok.Value
             @lombok.Builder
             public class ScreenStruct implements com.github.moaxcp.x11client.protocol.XStruct {
@@ -130,8 +131,20 @@ class JavaStructSpec extends XmlSpec {
               }
             
               public boolean isCurrentInputMasksEnabled(
-                  com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
-                return maskEnum.isEnabled(currentInputMasks);
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                boolean enabled = maskEnum.isEnabled(currentInputMasks);
+                if(!enabled) {
+                  return false;
+                }
+                for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                  java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
+                  enabled &= m.isEnabled(currentInputMasks);
+                  if(!enabled) {
+                    return false;
+                  }
+                }
+                return enabled;
               }
             
               @java.lang.Override
@@ -141,19 +154,41 @@ class JavaStructSpec extends XmlSpec {
             
               public static class ScreenStructBuilder {
                 public boolean isCurrentInputMasksEnabled(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
-                  return maskEnum.isEnabled(currentInputMasks);
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                  boolean enabled = maskEnum.isEnabled(currentInputMasks);
+                  if(!enabled) {
+                    return false;
+                  }
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
+                    enabled &= m.isEnabled(currentInputMasks);
+                    if(!enabled) {
+                      return false;
+                    }
+                  }
+                  return enabled;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder currentInputMasksEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
+                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
                   currentInputMasks((int) maskEnum.enableFor(currentInputMasks));
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
+                    currentInputMasks((int) m.enableFor(currentInputMasks));
+                  }
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder currentInputMasksDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum) {
+                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
                   currentInputMasks((int) maskEnum.disableFor(currentInputMasks));
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
+                    currentInputMasks((int) m.disableFor(currentInputMasks));
+                  }
                   return this;
                 }
             

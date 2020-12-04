@@ -1,6 +1,5 @@
 package com.github.moaxcp.x11client.protocol.xproto;
 
-import com.github.moaxcp.x11client.XProtocolService;
 import com.github.moaxcp.x11client.protocol.*;
 import lombok.Getter;
 
@@ -28,8 +27,18 @@ public class XprotoPlugin implements XProtocolPlugin {
     if(request instanceof CreateWindowRequest) {
       return true;
     }
+    if(request instanceof CreateGCRequest) {
+      return true;
+    }
     if(request instanceof MapWindowRequest) {
       return true;
+    }
+    if(request instanceof PolyFillRectangleRequest) {
+      return true;
+    }
+    switch(request.getOpCode()) {
+      case 76:
+        return true;
     }
     return false;
   }
@@ -72,8 +81,12 @@ public class XprotoPlugin implements XProtocolPlugin {
     switch(code) {
       case 1:
         return RequestError.readRequestError(in);
+      case 2:
+        return ValueError.readValueError(in);
       case 5:
         return AtomError.readAtomError(in);
+      case 13:
+        return GContextError.readGContextError(in);
       case 16:
         return LengthError.readLengthError(in);
       default:

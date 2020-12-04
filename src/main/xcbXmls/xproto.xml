@@ -5113,7 +5113,7 @@ The specified colormap `cmap` does not exist.
 Creates a cursor from a font glyph. X provides a set of standard cursor shapes
 in a special font named cursor. Applications are encouraged to use this
 interface for their cursors because the font can be customized for the
-individual display type.
+individual x11Client type.
 
 All pixels which are set to 1 in the source will use the foreground color (as
 specified by `fore_red`, `fore_green` and `fore_blue`). All pixels set to 0

@@ -1,7 +1,5 @@
 package com.github.moaxcp.x11client.protocol;
 
-import com.github.moaxcp.x11client.XProtocolService;
-
 import java.io.IOException;
 
 public interface XProtocolPlugin {

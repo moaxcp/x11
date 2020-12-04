@@ -1,12 +1,11 @@
 package com.github.moaxcp.x11protocol.parser
 
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeName
+import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
+import lombok.NonNull
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.* 
+import static com.github.moaxcp.x11protocol.generator.Conventions.*
+
 /**
  * for x11 primative properties
  */
@@ -69,8 +68,21 @@ class JavaPrimativeProperty extends JavaProperty {
                 MethodSpec.methodBuilder("is${name.capitalize()}Enabled")
                     .addModifiers(Modifier.PUBLIC)
                     .returns(boolean.class)
-                    .addParameter(maskTypeName, 'maskEnum')
-                    .addStatement('return maskEnum.isEnabled($1L)', name)
+                    .addParameter(ParameterSpec.builder(maskTypeName, 'maskEnum').addAnnotation(NonNull.class).build())
+                    .addParameter(ParameterSpec.builder(ArrayTypeName.of(maskTypeName), 'maskEnums').addAnnotation(NonNull.class).build())
+                    .varargs()
+                    .addStatement('boolean enabled = maskEnum.isEnabled($L)', name)
+                    .beginControlFlow('if(!enabled)')
+                    .addStatement('return false')
+                    .endControlFlow()
+                    .beginControlFlow('for($T m : maskEnums)', maskTypeName)
+                    .addStatement('$T.requireNonNull(m, "maskEnums must not contain null")', Objects.class)
+                    .addStatement('enabled &= m.isEnabled($L)', name)
+                    .beginControlFlow('if(!enabled)')
+                    .addStatement('return false')
+                    .endControlFlow()
+                    .endControlFlow()
+                    .addStatement('return enabled')
                     .build()
             ]
         }
@@ -84,26 +96,58 @@ class JavaPrimativeProperty extends JavaProperty {
             Modifier modifier = Modifier.PUBLIC
             if(name == 'valueMask') {
                 modifier = Modifier.PRIVATE
+                methods += MethodSpec.methodBuilder(name)
+                    .addModifiers(Modifier.PRIVATE)
+                    .returns(javaType.builderClassName)
+                    .addParameter(typeName, name)
+                    .addStatement('this.$1L = $1L', name)
+                    .addStatement('return this')
+                    .build()
             }
             methods += [
                 MethodSpec.methodBuilder("is${name.capitalize()}Enabled")
                     .addModifiers(Modifier.PUBLIC)
                     .returns(boolean.class)
-                    .addParameter(maskTypeName, 'maskEnum')
-                    .addStatement('return maskEnum.isEnabled($1L)', name)
+                    .addParameter(ParameterSpec.builder(maskTypeName, 'maskEnum').addAnnotation(NonNull.class).build())
+                    .addParameter(ParameterSpec.builder(ArrayTypeName.of(maskTypeName), 'maskEnums').addAnnotation(NonNull.class).build())
+                    .varargs()
+                    .addStatement('boolean enabled = maskEnum.isEnabled($L)', name)
+                    .beginControlFlow('if(!enabled)')
+                    .addStatement('return false')
+                    .endControlFlow()
+                    .beginControlFlow('for($T m : maskEnums)', maskTypeName)
+                    .addStatement('$T.requireNonNull(m, "maskEnums must not contain null")', Objects.class)
+                    .addStatement('enabled &= m.isEnabled($L)', name)
+                    .beginControlFlow('if(!enabled)')
+                    .addStatement('return false')
+                    .endControlFlow()
+                    .endControlFlow()
+                    .addStatement('return enabled')
                     .build(),
                 MethodSpec.methodBuilder("${name}Enable")
                     .addModifiers(modifier)
                     .addParameter(maskTypeName, 'maskEnum')
+                    .addParameter(ArrayTypeName.of(maskTypeName), 'maskEnums')
+                    .varargs()
                     .returns(javaType.builderClassName)
                     .addStatement('$1L(($2T) maskEnum.enableFor($1L))', name, memberTypeName)
+                    .beginControlFlow('for($T m : maskEnums)', maskTypeName)
+                    .addStatement('$T.requireNonNull(m, "maskEnums must not contain null")', Objects.class)
+                    .addStatement('$1L(($2T) m.enableFor($1L))', name, memberTypeName)
+                    .endControlFlow()
                     .addStatement('return this')
                     .build(),
                 MethodSpec.methodBuilder("${name}Disable")
                     .addModifiers(modifier)
                     .addParameter(maskTypeName, 'maskEnum')
+                    .addParameter(ArrayTypeName.of(maskTypeName), 'maskEnums')
+                    .varargs()
                     .returns(javaType.builderClassName)
                     .addStatement('$1L(($2T) maskEnum.disableFor($1L))', name, memberTypeName)
+                    .beginControlFlow('for($T m : maskEnums)', maskTypeName)
+                    .addStatement('$T.requireNonNull(m, "maskEnums must not contain null")', Objects.class)
+                    .addStatement('$1L(($2T) m.disableFor($1L))', name, memberTypeName)
+                    .endControlFlow()
                     .addStatement('return this')
                     .build()
             ]

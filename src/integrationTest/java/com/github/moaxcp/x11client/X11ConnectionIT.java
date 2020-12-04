@@ -2,15 +2,16 @@ package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
-import com.github.moaxcp.x11client.protocol.XResponse;
+import com.github.moaxcp.x11client.protocol.XEvent;
 import com.github.moaxcp.x11client.protocol.bigreq.EnableReply;
 import com.github.moaxcp.x11client.protocol.bigreq.EnableRequest;
 import com.github.moaxcp.x11client.protocol.xproto.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
 
 public class X11ConnectionIT {
   private XephyrRunner runner;
@@ -57,61 +58,76 @@ public class X11ConnectionIT {
 
   @Test
   void clientTest() throws IOException {
-    try(X11Client client = X11Client.connect(new DisplayName(":1"))) {
-      SetupStruct setup = client.getSetup();
+    try(X11Client x11Client = X11Client.connect(new DisplayName(":1"))) {
+      SetupStruct setup = x11Client.getSetup();
       GetKeyboardMappingRequest keyboard = GetKeyboardMappingRequest.builder()
         .firstKeycode(setup.getMinKeycode())
         .count((byte) (setup.getMaxKeycode() - setup.getMinKeycode() + 1))
         .build();
       System.out.println(keyboard);
-      client.send(keyboard);
-      GetKeyboardMappingReply keyboardReply = client.read();
+      GetKeyboardMappingReply keyboardReply = x11Client.send(keyboard);
       System.out.println(keyboardReply);
-
-      QueryExtensionRequest bigRequests = QueryExtensionRequest.builder()
-        .name("BIG-REQUESTS")
-        .build();
-      System.out.println(bigRequests);
-      //assertThat(bigRequests.getLength()).isEqualTo(5);
-      client.send(bigRequests);
-      QueryExtensionReply bigRequestReply = client.read();
-      System.out.println(bigRequestReply);
 
       EnableRequest enableRequest = EnableRequest.builder().build();
       System.out.println(enableRequest);
-      client.send(enableRequest);
-      EnableReply enableReply = client.read();
+      EnableReply enableReply = x11Client.send(enableRequest);
       System.out.println(enableReply);
 
       CreateWindowRequest window = CreateWindowRequest.builder()
-        .depth(client.getDefaultDepth())
-        .wid(client.nextResourceId())
-        .parent(client.getDefaultRoot())
+        .depth(x11Client.getDefaultDepth())
+        .wid(x11Client.nextResourceId())
+        .parent(x11Client.getDefaultRoot())
         .x((short) 10)
         .y((short) 10)
         .width((short) 600)
         .height((short) 480)
         .borderWidth((short) 5)
         .clazz(WindowClassEnum.COPY_FROM_PARENT)
-        .visual(client.getDefaultVisualId())
-        .backgroundPixel(client.getDefaultScreen().getWhitePixel())
-        .borderPixel(client.getDefaultScreen().getBlackPixel())
+        .visual(x11Client.getDefaultVisualId())
+        .backgroundPixel(x11Client.getDefaultScreen().getWhitePixel())
+        .borderPixel(x11Client.getDefaultScreen().getBlackPixel())
         .eventMaskEnable(EventMaskEnum.EXPOSURE)
         .eventMaskEnable(EventMaskEnum.KEY_PRESS)
         .build();
       System.out.println(window);
-      client.send(window);
+      x11Client.send(window);
       MapWindowRequest mapWindow = MapWindowRequest.builder()
         .window(window.getWid())
         .build();
       System.out.println(mapWindow);
-      client.send(mapWindow);
+      x11Client.send(mapWindow);
+      CreateGCRequest gc = CreateGCRequest.builder()
+        .cid(x11Client.nextResourceId())
+        .drawable(window.getWid())
+        .background(x11Client.getDefaultScreen().getWhitePixel())
+        .foreground(x11Client.getDefaultScreen().getBlackPixel())
+        .build();
+      x11Client.send(gc);
       while(true) {
-        XResponse read = client.read();
-        System.out.println(read);
-        if(read instanceof ExposeEvent) {
-
-        } else if(read instanceof KeyPressEvent) {
+        XEvent event = x11Client.getNextEvent();
+        System.out.println(event);
+        if(event instanceof ExposeEvent) {
+          List<RectangleStruct> rectangles = new ArrayList<>();
+          rectangles.add(RectangleStruct.builder()
+            .x((short) 20)
+            .y((short) 20)
+            .width((short) 10)
+            .height((short) 10)
+            .build());
+          x11Client.send(PolyFillRectangleRequest.builder()
+            .drawable(window.getWid())
+            .gc(gc.getCid())
+            .rectangles(rectangles)
+            .build());
+          x11Client.send(ImageText8Request.builder()
+            .drawable(window.getWid())
+            .gc(gc.getCid())
+            .string("Hello World!")
+            .x((short) 10)
+            .y((short) 50)
+          .build());
+          x11Client.flush();
+        } else if(event instanceof KeyPressEvent) {
           break;
         }
       }

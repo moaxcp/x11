@@ -11,7 +11,7 @@ abstract class JavaObjectType implements JavaType {
     String basePackage
     String javaPackage
     String simpleName
-    Set<ClassName> superTypes = []
+    Set<TypeName> superTypes = []
     ClassName className
     List<JavaUnit> protocol
 

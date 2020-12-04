@@ -28,6 +28,18 @@ public class CreateWindowRequestTest {
   }
 
   @Test
+  void withBackgroundPixelAndBorderPixel() {
+    CreateWindowRequest request = CreateWindowRequest.builder()
+      .clazz(WindowClassEnum.COPY_FROM_PARENT)
+      .backgroundPixel(10)
+      .borderPixel(11)
+      .build();
+    assertThat(request.isValueMaskEnabled(CwEnum.BACK_PIXEL));
+    assertThat(request.getSize()).isEqualTo(40);
+    assertThat(request.getLength()).isEqualTo(10);
+  }
+
+  @Test
   void withEventMask() {
     CreateWindowRequest request = CreateWindowRequest.builder()
       .clazz(WindowClassEnum.COPY_FROM_PARENT)

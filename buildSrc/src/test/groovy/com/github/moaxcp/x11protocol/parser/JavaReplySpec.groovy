@@ -33,14 +33,14 @@ class JavaReplySpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryTreeRequest implements com.github.moaxcp.x11client.protocol.XRequest {
+            public class QueryTreeRequest implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply> {
               public static final byte OPCODE = 15;
             
               private int window;
             
-              public java.util.Optional<com.github.moaxcp.x11client.protocol.XReplyFunction> getReplyFunction(
+              public com.github.moaxcp.x11client.protocol.XReplyFunction<com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply> getReplyFunction(
                   ) {
-                return Optional.of((field, sequenceNumber, in) -> com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.readQueryTreeReply(field, sequenceNumber, in));
+                return (field, sequenceNumber, in) -> com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.readQueryTreeReply(field, sequenceNumber, in);
               }
             
               public byte getOpCode() {

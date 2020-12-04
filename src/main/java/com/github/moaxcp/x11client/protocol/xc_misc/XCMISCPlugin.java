@@ -1,6 +1,5 @@
 package com.github.moaxcp.x11client.protocol.xc_misc;
 
-import com.github.moaxcp.x11client.XProtocolService;
 import com.github.moaxcp.x11client.protocol.*;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionRequest;
@@ -20,8 +19,7 @@ public class XCMISCPlugin implements XProtocolPlugin {
     QueryExtensionRequest request = QueryExtensionRequest.builder()
       .name(name)
       .build();
-    service.send(request);
-    QueryExtensionReply reply = service.read();
+    QueryExtensionReply reply = service.send(request);
     offset = reply.getMajorOpcode();
   }
 
