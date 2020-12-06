@@ -11,7 +11,6 @@ public class X11Client implements AutoCloseable {
   private final X11Connection connection;
   private final XProtocolService service;
   private int nextResourceId;
-  private final DisplayConventions conventions;
 
   public static X11Client connect(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority) throws IOException {
     return new X11Client(X11Connection.connect(displayName, xAuthority));
@@ -27,7 +26,6 @@ public class X11Client implements AutoCloseable {
 
   private X11Client(X11Connection connection) throws IOException {
     this.connection = connection;
-    conventions = new DisplayConventions(connection.getSetupStruct());
     service = new XProtocolService(connection.getSetupStruct(), connection.getX11Input(), connection.getX11Output());
   }
 
@@ -35,20 +33,28 @@ public class X11Client implements AutoCloseable {
     return connection.getSetupStruct();
   }
 
-  public ScreenStruct getDefaultScreen() {
-    return conventions.getDefaultScreen();
+  public ScreenStruct getScreen(int screen) {
+    return getSetup().getRoots().get(screen);
   }
 
-  public int getDefaultRoot() {
-    return conventions.getDefaultRoot();
+  public int getRoot(int screen) {
+    return getScreen(screen).getRoot();
   }
 
-  public byte getDefaultDepth() {
-    return conventions.getDefaultDepth();
+  public int getWhitePixel(int screen) {
+    return getScreen(screen).getWhitePixel();
   }
 
-  public int getDefaultVisualId() {
-    return conventions.getDefaultVisualId();
+  public int getBlackPixel(int screen) {
+    return getScreen(screen).getBlackPixel();
+  }
+
+  public byte getDepth(int screen) {
+    return getScreen(screen).getRootDepth();
+  }
+
+  public int getVisualId(int screen) {
+    return getScreen(screen).getRootVisual();
   }
 
   public void send(OneWayRequest request) {
@@ -68,10 +74,18 @@ public class X11Client implements AutoCloseable {
   }
 
   public int nextResourceId() {
-    if (conventions.hasValidNextResourceFor(nextResourceId)) {
-      return conventions.maskNextResourceId(nextResourceId++);
+    if (hasValidNextResourceFor(nextResourceId)) {
+      return maskNextResourceId(nextResourceId++);
     }
     throw new UnsupportedOperationException("must use xc_misc to get resource id");
+  }
+
+  private boolean hasValidNextResourceFor(int resourceId) {
+    return (resourceId + 1 & ~getSetup().getResourceIdMask()) == 0;
+  }
+
+  private int maskNextResourceId(int resourceId) {
+    return resourceId | getSetup().getResourceIdBase();
   }
 
   @Override

@@ -8,7 +8,11 @@ import lombok.NonNull;
 public class X11ErrorException extends RuntimeException {
   private XError error;
   public X11ErrorException(@NonNull XError error) {
-    super("Error \"" + error.getCode() + "\" for request \"" + error.getSequenceNumber() + "\"");
+    super("Error {\"name\":\"" + error.getClass().getSimpleName() + "\", "
+      + "\"code\":\"" + error.getCode() + "\", "
+      + "\"sequenceNumber\":\"" + error.getSequenceNumber() + "\", "
+      + "\"majorOpcode\":\"" + error.getMajorOpcode() + "\", "
+      + "\"minorOpcode\":\"" + error.getMinorOpcode() + "\", ");
     this.error = error;
   }
 }

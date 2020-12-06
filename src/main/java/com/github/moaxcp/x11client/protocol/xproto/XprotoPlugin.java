@@ -83,6 +83,8 @@ public class XprotoPlugin implements XProtocolPlugin {
         return RequestError.readRequestError(in);
       case 2:
         return ValueError.readValueError(in);
+      case 3:
+        return WindowError.readWindowError(in);
       case 5:
         return AtomError.readAtomError(in);
       case 13:

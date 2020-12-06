@@ -2,6 +2,7 @@ package com.github.moaxcp.x11client.protocol;
 
 import com.github.moaxcp.x11client.X11ClientException;
 import com.github.moaxcp.x11client.X11ErrorException;
+import com.github.moaxcp.x11client.protocol.bigreq.EnableRequest;
 import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -15,15 +16,31 @@ public final class XProtocolService {
   private final X11Output out;
   @Getter
   private int nextSequenceNumber = 1;
+  @Getter
+  private int maximumRequestLength;
   private final Queue<OneWayRequest> requests = new LinkedList<>();
   private final Queue<XEvent> events = new LinkedList<>();
 
   public XProtocolService(SetupStruct setup, X11Input in, X11Output out) throws IOException {
     this.in = in;
     this.out = out;
+    maximumRequestLength = setup.getMaximumRequestLength();
     for(XProtocolPlugin plugin : loader) {
       plugin.setupOffset(this);
     }
+    if(hasPlugin("BIG-REQUEST")) {
+      maximumRequestLength = send(EnableRequest.builder().build())
+        .getMaximumRequestLength();
+    }
+  }
+
+  public boolean hasPlugin(String name) {
+    for(XProtocolPlugin plugin : loader) {
+      if(plugin.getName().equals(name)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public <T extends XReply> T send(TwoWayRequest<T> request) {
