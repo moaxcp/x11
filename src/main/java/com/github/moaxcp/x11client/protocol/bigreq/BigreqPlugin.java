@@ -7,6 +7,8 @@ import lombok.Getter;
 
 import java.io.IOException;
 
+import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+
 public class BigreqPlugin implements XProtocolPlugin {
   @Getter
   private final String name = "BIG-REQUESTS";
@@ -16,7 +18,8 @@ public class BigreqPlugin implements XProtocolPlugin {
   @Override
   public void setupOffset(XProtocolService service) throws IOException {
     QueryExtensionRequest bigRequests = QueryExtensionRequest.builder()
-      .name(name)
+      .nameLen((short) name.length())
+      .name(stringToByteList(name))
       .build();
     QueryExtensionReply bigRequestReply = service.send(bigRequests);
     offset = bigRequestReply.getMajorOpcode();

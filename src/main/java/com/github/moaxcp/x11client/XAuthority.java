@@ -4,11 +4,16 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import lombok.NonNull;
+import lombok.ToString;
+import lombok.Value;
 
-import static com.github.moaxcp.x11client.ParametersCheck.requireNonBlank;
 import static com.github.moaxcp.x11client.ParametersCheck.requireNonEmpty;
+import static com.github.moaxcp.x11client.Utilities.byteArrayToList;
+import static com.github.moaxcp.x11client.Utilities.byteListToString;
 
 /**
  * An X11 Authority defines a secret key used when authenticating with the x11 server. family, address and displayNumber
@@ -17,10 +22,10 @@ import static com.github.moaxcp.x11client.ParametersCheck.requireNonEmpty;
 @Value
 public class XAuthority {
   @NonNull Family family;
-  @NonNull byte[] address;
+  @NonNull List<Byte> address;
   int displayNumber;
-  @NonNull String protocolName;
-  @NonNull String protocolData;
+  @NonNull List<Byte> protocolName;
+  @NonNull List<Byte> protocolData;
 
   /**
    * Represents a Family or connection type used in authentication.
@@ -73,36 +78,37 @@ public class XAuthority {
    * @throws NullPointerException if any parameter is null.
    * @throws IllegalArgumentException if displayNumber is < 0 or protocolName is empty.
    */
-  XAuthority(@NonNull Family family, @NonNull byte[] address, int displayNumber, @NonNull String protocolName, @NonNull String protocolData) {
+  XAuthority(@NonNull Family family, @NonNull List<Byte> address, int displayNumber, @NonNull List<Byte> protocolName, @NonNull List<Byte> protocolData) {
     this.family = family;
     this.address = requireNonEmpty("address", address);
     if(displayNumber < 0) {
       throw new IllegalArgumentException("displayNumber was \"" + displayNumber + "\" expected >= 0.");
     }
     this.displayNumber = displayNumber;
-    this.protocolName = requireNonBlank("protocolName", protocolName);
-    this.protocolData = requireNonBlank("protocolData", protocolData);
+    this.protocolName = requireNonEmpty("protocolName", protocolName);
+    this.protocolData = requireNonEmpty("protocolData", protocolData);
   }
 
   public static Optional<XAuthority> read(DataInput in) {
     try {
       Family family = Family.getByCode(in.readUnsignedShort());
       int dataLength = in.readUnsignedShort();
-      byte[] address = readBytes(in, dataLength);
+      List<Byte> address = readBytes(in, dataLength);
       int number = Integer.parseInt(in.readUTF());
-      String name = in.readUTF();
       dataLength = in.readUnsignedShort();
-      String data = new String(readBytes(in, dataLength));
+      List<Byte> name = readBytes(in, dataLength);
+      dataLength = in.readUnsignedShort();
+      List<Byte> data = readBytes(in, dataLength);
       return Optional.of(new XAuthority(family, address, number, name, data));
     } catch (IOException ex) {
       return Optional.empty();
     }
   }
 
-  private static byte[] readBytes(DataInput in, int length) throws IOException {
+  private static List<Byte> readBytes(DataInput in, int length) throws IOException {
     byte[] bytes = new byte[length];
     in.readFully(bytes);
-    return bytes;
+    return byteArrayToList(bytes);
   }
 
   public static Optional<XAuthority> getAuthority(List<XAuthority> authorities, DisplayName displayName) throws UnknownHostException {
@@ -119,7 +125,7 @@ public class XAuthority {
             hostNameAddress = InetAddress.getByName(displayName.getHostName());
           }
           try {
-            InetAddress authAddress = InetAddress.getByName(new String(auth.getAddress(), StandardCharsets.UTF_8));
+            InetAddress authAddress = InetAddress.getByName(byteListToString(auth.getAddress(), StandardCharsets.UTF_8));
             if(authAddress.equals(hostNameAddress)) {
               return Optional.of(auth);
             }

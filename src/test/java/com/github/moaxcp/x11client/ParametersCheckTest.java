@@ -16,7 +16,7 @@ public class ParametersCheckTest {
 
   @Test
   void requreNonBlank_fails_with_null_value() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> requireNonBlank("value", null));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> requireNonBlank("value", (byte[]) null));
     assertThat(exception).hasMessage("value is marked non-null but is null");
   }
 

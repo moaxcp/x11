@@ -1,10 +1,6 @@
 package com.github.moaxcp.x11client;
 
-import java.io.*;
-import java.math.BigInteger;
 import java.net.Socket;
-import java.nio.ByteOrder;
-import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -14,14 +10,13 @@ import static com.github.moaxcp.x11client.X11Connection.connect;
 import static com.github.moaxcp.x11client.XAuthority.Family.LOCAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class X11ConnectionTest {
   @Mock
   private Socket socket;
 
-  private XAuthority xAuthority = new XAuthority(LOCAL, "host".getBytes(), 0, "MIT-MAGIC-COOKIE-1", "123");
+  private XAuthority xAuthority = new XAuthority(LOCAL, "host".getBytes(), 0, "MIT-MAGIC-COOKIE-1", new byte[] { 1, 2, 3 });
 
   @Test
   void constructor_fails_on_null_displayName() {

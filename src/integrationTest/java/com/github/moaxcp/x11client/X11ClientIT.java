@@ -9,6 +9,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+
 public class X11ClientIT {
   private XephyrRunner runner;
 
@@ -47,13 +49,10 @@ public class X11ClientIT {
         .eventMaskEnable(EventMaskEnum.EXPOSURE)
         .eventMaskEnable(EventMaskEnum.KEY_PRESS)
         .build();
-      System.out.println(window);
       x11Client.send(window);
-      MapWindowRequest mapWindow = MapWindowRequest.builder()
+      x11Client.send(MapWindowRequest.builder()
         .window(window.getWid())
-        .build();
-      System.out.println(mapWindow);
-      x11Client.send(mapWindow);
+        .build());
       CreateGCRequest gc = CreateGCRequest.builder()
         .cid(x11Client.nextResourceId())
         .drawable(window.getWid())
@@ -63,7 +62,6 @@ public class X11ClientIT {
       x11Client.send(gc);
       while(true) {
         XEvent event = x11Client.getNextEvent();
-        System.out.println(event);
         if(event instanceof ExposeEvent) {
           List<RectangleStruct> rectangles = new ArrayList<>();
           rectangles.add(RectangleStruct.builder()
@@ -80,7 +78,8 @@ public class X11ClientIT {
           x11Client.send(ImageText8Request.builder()
             .drawable(window.getWid())
             .gc(gc.getCid())
-            .string("Hello World!")
+            .stringLen((byte) "Hello World!".length())
+            .string(stringToByteList("Hello World!"))
             .x((short) 10)
             .y((short) 50)
             .build());

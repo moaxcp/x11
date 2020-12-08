@@ -7,6 +7,8 @@ import lombok.Getter;
 
 import java.io.IOException;
 
+import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+
 public class XCMISCPlugin implements XProtocolPlugin {
 
   @Getter
@@ -17,7 +19,8 @@ public class XCMISCPlugin implements XProtocolPlugin {
   @Override
   public void setupOffset(XProtocolService service) throws IOException {
     QueryExtensionRequest request = QueryExtensionRequest.builder()
-      .name(name)
+      .nameLen((short) name.length())
+      .name(stringToByteList(name))
       .build();
     QueryExtensionReply reply = service.send(request);
     offset = reply.getMajorOpcode();

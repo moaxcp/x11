@@ -9,32 +9,15 @@ import com.github.moaxcp.x11client.protocol.xproto.RectangleStruct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+
 public class DisplayIT {
-  private XephyrRunner runner;
-
-  @BeforeEach
-  void setup() throws IOException {
-    runner = XephyrRunner.builder()
-      .ac(true)
-      .br(true)
-      .noreset(true)
-      .arg(":1")
-      .build();
-    runner.start();
-  }
-
-  @AfterEach
-  void teardown() throws InterruptedException {
-    runner.stop();
-  }
 
   @Test
   void displayTest() throws IOException {
-    try (Display display = new Display(X11Client.connect(new DisplayName(":1")))) {
+    try (Display display = new Display(X11Client.connect())) {
       Window window = display.createSimpleWindow(0, 10, 10, 600, 480, 5);
       window.map();
       GraphicsContext gc = window.createGC();
@@ -54,7 +37,8 @@ public class DisplayIT {
         d.send(ImageText8Request.builder()
           .drawable(window.getId())
           .gc(gc.getId())
-          .string("Hello World!")
+          .stringLen((byte) "Hello World!".length())
+          .string(stringToByteList("Hello World!"))
           .x((short) 10)
           .y((short) 50)
           .build());

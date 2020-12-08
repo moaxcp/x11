@@ -9,6 +9,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+
 public class X11ConnectionIT {
   private XephyrRunner runner;
 
@@ -34,7 +36,7 @@ public class X11ConnectionIT {
       X11Output out = connection.getX11Output();
       X11Input in = connection.getX11Input();
       QueryExtensionRequest extensionRequest = QueryExtensionRequest.builder()
-        .name("XC-MISC")
+        .name(stringToByteList("XC-MISC"))
         .build();
       extensionRequest.write((byte) 0, out);
       byte status = in.readByte();

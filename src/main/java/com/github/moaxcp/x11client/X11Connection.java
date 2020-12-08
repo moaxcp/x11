@@ -6,11 +6,6 @@ import com.github.moaxcp.x11client.protocol.xproto.SetupAuthenticateStruct;
 import com.github.moaxcp.x11client.protocol.xproto.SetupFailedStruct;
 import com.github.moaxcp.x11client.protocol.xproto.SetupRequestStruct;
 import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
-import lombok.Getter;
-import lombok.NonNull;
-import org.newsclub.net.unix.AFUNIXSocket;
-import org.newsclub.net.unix.AFUNIXSocketAddress;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +13,10 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.NonNull;
+import org.newsclub.net.unix.AFUNIXSocket;
+import org.newsclub.net.unix.AFUNIXSocketAddress;
 
 import static com.github.moaxcp.x11client.XAuthority.*;
 
@@ -79,6 +78,8 @@ public class X11Connection implements AutoCloseable {
       .byteOrder((byte) 'B')
       .protocolMajorVersion((short) 11)
       .protocolMinorVersion((short) 0)
+      .authorizationProtocolNameLen((short) xAuthority.getProtocolName().size())
+      .authorizationProtocolDataLen((short) xAuthority.getProtocolData().size())
       .authorizationProtocolName(xAuthority.getProtocolName())
       .authorizationProtocolData(xAuthority.getProtocolData())
       .build();

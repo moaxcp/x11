@@ -28,7 +28,7 @@ public final class XProtocolService {
     for(XProtocolPlugin plugin : loader) {
       plugin.setupOffset(this);
     }
-    if(hasPlugin("BIG-REQUEST")) {
+    if(hasPlugin("BIG-REQUESTS")) {
       maximumRequestLength = send(EnableRequest.builder().build())
         .getMaximumRequestLength();
     }

@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-class X11InputStream implements X11Input {
+public class X11InputStream implements X11Input {
   private final DataInputStream in;
 
   public X11InputStream(InputStream inputStream) {

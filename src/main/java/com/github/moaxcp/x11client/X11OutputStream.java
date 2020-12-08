@@ -1,14 +1,12 @@
 package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.X11Output;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-class X11OutputStream implements X11Output {
+public class X11OutputStream implements X11Output {
   private final DataOutputStream out;
 
   public X11OutputStream(OutputStream outputStream) {
@@ -100,7 +98,7 @@ class X11OutputStream implements X11Output {
 
   @Override
   public void writeString8(String string8) throws IOException {
-    writeString8(string8.getBytes(StandardCharsets.US_ASCII));
+    writeString8(string8.getBytes());
   }
 
   @Override
