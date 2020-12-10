@@ -2,10 +2,10 @@ package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
-import com.github.moaxcp.x11client.protocol.xproto.SetupAuthenticateStruct;
-import com.github.moaxcp.x11client.protocol.xproto.SetupFailedStruct;
-import com.github.moaxcp.x11client.protocol.xproto.SetupRequestStruct;
-import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
+import com.github.moaxcp.x11client.protocol.xproto.SetupAuthenticate;
+import com.github.moaxcp.x11client.protocol.xproto.SetupFailed;
+import com.github.moaxcp.x11client.protocol.xproto.SetupRequest;
+import com.github.moaxcp.x11client.protocol.xproto.Setup;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class X11Connection implements AutoCloseable {
   @Getter
   private final XAuthority xAuthority;
   @Getter
-  private final SetupStruct setupStruct;
+  private final Setup setup;
 
   private final Socket socket;
   private final X11InputStream in;
@@ -52,13 +52,13 @@ public class X11Connection implements AutoCloseable {
     in.reset();
     switch(result) {
       case 0: //failure
-        SetupFailedStruct failure = SetupFailedStruct.readSetupFailedStruct(getX11Input());
+        SetupFailed failure = SetupFailed.readSetupFailed(getX11Input());
         throw new ConnectionFailureException(failure);
       case 1: //success
-        setupStruct = SetupStruct.readSetupStruct(getX11Input());
+        setup = Setup.readSetup(getX11Input());
         break;
       case 2: //authenticate
-        SetupAuthenticateStruct authenticate = SetupAuthenticateStruct.readSetupAuthenticateStruct(getX11Input());
+        SetupAuthenticate authenticate = SetupAuthenticate.readSetupAuthenticate(getX11Input());
         throw new UnsupportedOperationException("authenticate not supported " + authenticate);
       default:
         throw new UnsupportedOperationException(result + " not supported");
@@ -74,7 +74,7 @@ public class X11Connection implements AutoCloseable {
   }
 
   private void sendConnectionSetup() throws IOException {
-    SetupRequestStruct setup = SetupRequestStruct.builder()
+    SetupRequest setup = SetupRequest.builder()
       .byteOrder((byte) 'B')
       .protocolMajorVersion((short) 11)
       .protocolMinorVersion((short) 0)

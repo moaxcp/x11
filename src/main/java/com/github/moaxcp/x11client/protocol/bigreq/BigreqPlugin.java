@@ -14,7 +14,7 @@ public class BigreqPlugin implements XProtocolPlugin {
 
   @Override
   public boolean supportedRequest(XRequest request) {
-    if(request instanceof EnableRequest) {
+    if(request instanceof Enable) {
       return true;
     }
     return false;

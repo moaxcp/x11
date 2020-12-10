@@ -138,13 +138,13 @@ class JavaEventSpec extends XmlSpec {
               }
             
               public boolean isStateEnabled(
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum,
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum... maskEnums) {
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMask maskEnum,
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMask... maskEnums) {
                 boolean enabled = maskEnum.isEnabled(state);
                 if(!enabled) {
                   return false;
                 }
-                for(com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum m : maskEnums) {
+                for(com.github.moaxcp.x11client.protocol.xproto.KeyButMask m : maskEnums) {
                   java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                   enabled &= m.isEnabled(state);
                   if(!enabled) {
@@ -161,13 +161,13 @@ class JavaEventSpec extends XmlSpec {
             
               public static class KeyPressEventBuilder {
                 public boolean isStateEnabled(
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum,
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum... maskEnums) {
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMask maskEnum,
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMask... maskEnums) {
                   boolean enabled = maskEnum.isEnabled(state);
                   if(!enabled) {
                     return false;
                   }
-                  for(com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.KeyButMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     enabled &= m.isEnabled(state);
                     if(!enabled) {
@@ -178,10 +178,10 @@ class JavaEventSpec extends XmlSpec {
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder stateEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum,
-                    com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum... maskEnums) {
+                    com.github.moaxcp.x11client.protocol.xproto.KeyButMask maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.KeyButMask... maskEnums) {
                   state((short) maskEnum.enableFor(state));
-                  for(com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.KeyButMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     state((short) m.enableFor(state));
                   }
@@ -189,10 +189,10 @@ class JavaEventSpec extends XmlSpec {
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder stateDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum maskEnum,
-                    com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum... maskEnums) {
+                    com.github.moaxcp.x11client.protocol.xproto.KeyButMask maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.KeyButMask... maskEnums) {
                   state((short) maskEnum.disableFor(state));
-                  for(com.github.moaxcp.x11client.protocol.xproto.KeyButMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.KeyButMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     state((short) m.disableFor(state));
                   }

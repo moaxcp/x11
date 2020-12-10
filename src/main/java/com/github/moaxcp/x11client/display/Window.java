@@ -11,7 +11,7 @@ public class Window extends Resource {
 
   Window(Display display, int screen, short x, short y, short width, short height, short borderWidth) {
     super(display);
-    display.send(CreateWindowRequest.builder()
+    display.send(CreateWindow.builder()
         .depth(display.getDepth(screen))
         .wid(display.nextResourceId())
         .parent(display.getRoot(screen))
@@ -20,17 +20,17 @@ public class Window extends Resource {
         .width(width)
         .height(height)
         .borderWidth(borderWidth)
-        .clazz(WindowClassEnum.COPY_FROM_PARENT)
+        .clazz(WindowClass.COPY_FROM_PARENT)
         .visual(display.getVisualId(screen))
         .backgroundPixel(display.getWhitePixel(screen))
         .borderPixel(display.getBlackPixel(screen))
-        .eventMaskEnable(EventMaskEnum.EXPOSURE)
-        .eventMaskEnable(EventMaskEnum.KEY_PRESS)
+        .eventMaskEnable(EventMask.EXPOSURE)
+        .eventMaskEnable(EventMask.KEY_PRESS)
         .build());
   }
 
   public void map() {
-    display.send(MapWindowRequest.builder()
+    display.send(MapWindow.builder()
       .window(getId())
       .build());
   }
@@ -41,7 +41,7 @@ public class Window extends Resource {
 
   @Override
   public void close() {
-    display.send(DestroyWindowRequest.builder()
+    display.send(DestroyWindow.builder()
       .window(getId())
       .build());
   }

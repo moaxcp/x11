@@ -3,9 +3,9 @@ package com.github.moaxcp.x11client;
 import com.github.moaxcp.x11client.display.Display;
 import com.github.moaxcp.x11client.display.GraphicsContext;
 import com.github.moaxcp.x11client.display.Window;
-import com.github.moaxcp.x11client.protocol.xproto.ImageText8Request;
-import com.github.moaxcp.x11client.protocol.xproto.PolyFillRectangleRequest;
-import com.github.moaxcp.x11client.protocol.xproto.RectangleStruct;
+import com.github.moaxcp.x11client.protocol.xproto.ImageText8;
+import com.github.moaxcp.x11client.protocol.xproto.PolyFillRectangle;
+import com.github.moaxcp.x11client.protocol.xproto.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +22,19 @@ public class DisplayIT {
       window.map();
       GraphicsContext gc = window.createGC();
       window.exposeEvent((d, e) -> {
-        List<RectangleStruct> rectangles = new ArrayList<>();
-        rectangles.add(RectangleStruct.builder()
+        List<Rectangle> rectangles = new ArrayList<>();
+        rectangles.add(Rectangle.builder()
           .x((short) 20)
           .y((short) 20)
           .width((short) 10)
           .height((short) 10)
           .build());
-        d.send(PolyFillRectangleRequest.builder()
+        d.send(PolyFillRectangle.builder()
           .drawable(window.getId())
           .gc(gc.getId())
           .rectangles(rectangles)
           .build());
-        d.send(ImageText8Request.builder()
+        d.send(ImageText8.builder()
           .drawable(window.getId())
           .gc(gc.getId())
           .stringLen((byte) "Hello World!".length())

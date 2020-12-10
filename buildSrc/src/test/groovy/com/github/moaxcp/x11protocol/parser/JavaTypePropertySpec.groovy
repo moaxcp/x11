@@ -28,8 +28,8 @@ class JavaTypePropertySpec extends XmlSpec {
 
         then:
         property.name == 'format'
-        property.typeName == ClassName.get(result.javaPackage, 'FormatStruct')
-        property.declareAndReadCode.toString() == 'com.github.moaxcp.x11client.protocol.xproto.FormatStruct format = com.github.moaxcp.x11client.protocol.xproto.FormatStruct.readFormatStruct(in);\n'
+        property.typeName == ClassName.get(result.javaPackage, 'Format')
+        property.declareAndReadCode.toString() == 'com.github.moaxcp.x11client.protocol.xproto.Format format = com.github.moaxcp.x11client.protocol.xproto.Format.readFormat(in);\n'
         writeCode.build().toString() == 'format.write(out);\n'
     }
 }

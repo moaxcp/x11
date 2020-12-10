@@ -34,20 +34,20 @@ class JavaTypeListPropertySpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class SetupStruct implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class Setup implements com.github.moaxcp.x11client.protocol.XStruct {
               private byte pixmapFormatsLen;
              
               @lombok.NonNull
-              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> pixmapFormats;
+              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Format> pixmapFormats;
              
-              public static com.github.moaxcp.x11client.protocol.xproto.SetupStruct readSetupStruct(
+              public static com.github.moaxcp.x11client.protocol.xproto.Setup readSetup(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 byte pixmapFormatsLen = in.readCard8();
-                java.util.List<com.github.moaxcp.x11client.protocol.xproto.FormatStruct> pixmapFormats = new java.util.ArrayList<>(Byte.toUnsignedInt(pixmapFormatsLen));
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Format> pixmapFormats = new java.util.ArrayList<>(Byte.toUnsignedInt(pixmapFormatsLen));
                 for(int i = 0; i < Byte.toUnsignedInt(pixmapFormatsLen); i++) {
-                  pixmapFormats.add(com.github.moaxcp.x11client.protocol.xproto.FormatStruct.readFormatStruct(in));
+                  pixmapFormats.add(com.github.moaxcp.x11client.protocol.xproto.Format.readFormat(in));
                 }
-                com.github.moaxcp.x11client.protocol.xproto.SetupStruct.SetupStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetupStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.Setup.SetupBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Setup.builder();
                 javaBuilder.pixmapFormatsLen(pixmapFormatsLen);
                 javaBuilder.pixmapFormats(pixmapFormats);
                 return javaBuilder.build();
@@ -56,7 +56,7 @@ class JavaTypeListPropertySpec extends XmlSpec {
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(pixmapFormatsLen);
-                for(com.github.moaxcp.x11client.protocol.xproto.FormatStruct t : pixmapFormats) {
+                for(com.github.moaxcp.x11client.protocol.xproto.Format t : pixmapFormats) {
                   t.write(out);
                 }
               }
@@ -66,7 +66,7 @@ class JavaTypeListPropertySpec extends XmlSpec {
                 return 1 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(pixmapFormats);
               }
              
-              public static class SetupStructBuilder {
+              public static class SetupBuilder {
                 public int getSize() {
                   return 1 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(pixmapFormats);
                 }

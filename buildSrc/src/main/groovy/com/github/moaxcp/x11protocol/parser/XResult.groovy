@@ -97,11 +97,25 @@ class XResult {
 
     void addEnum(Node node) {
         String name = node.attributes().get('name')
+        checkName(name)
         enums.put(name, XTypeEnum.xTypeEnum(this, node))
+    }
+
+    void checkName(String name) {
+        if(enums[name]) {
+            throw new IllegalStateException("enum already exists with name $name")
+        }
+        if(structs[name]) {
+            throw new IllegalStateException("struct already exists with name $name")
+        }
+        if(requests[name]) {
+            throw new IllegalStateException("request already exists with name $name")
+        }
     }
 
     void addStruct(Node node) {
         String name = node.attributes().get('name')
+        checkName(name)
         structs.put(name, XTypeStruct.xTypeStruct(this, node))
     }
 
@@ -136,6 +150,7 @@ class XResult {
 
     void addRequest(Node node) {
         String name = node.attributes().get('name')
+        checkName(name)
         requests.put(name, XTypeRequest.xTypeRequest(this, node))
     }
 

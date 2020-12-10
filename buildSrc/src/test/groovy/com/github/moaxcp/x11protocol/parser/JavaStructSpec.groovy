@@ -26,20 +26,20 @@ class JavaStructSpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class FormatStruct implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class Format implements com.github.moaxcp.x11client.protocol.XStruct {
               private byte depth;
             
               private byte bitsPerPixel;
             
               private byte scanlinePad;
             
-              public static com.github.moaxcp.x11client.protocol.xproto.FormatStruct readFormatStruct(
+              public static com.github.moaxcp.x11client.protocol.xproto.Format readFormat(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 byte depth = in.readCard8();
                 byte bitsPerPixel = in.readCard8();
                 byte scanlinePad = in.readCard8();
                 in.readPad(5);
-                com.github.moaxcp.x11client.protocol.xproto.FormatStruct.FormatStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.FormatStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.Format.FormatBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Format.builder();
                 javaBuilder.depth(depth);
                 javaBuilder.bitsPerPixel(bitsPerPixel);
                 javaBuilder.scanlinePad(scanlinePad);
@@ -59,7 +59,7 @@ class JavaStructSpec extends XmlSpec {
                 return 8;
               }
               
-              public static class FormatStructBuilder {
+              public static class FormatBuilder {
                 public int getSize() {
                   return 8;
                 }
@@ -98,7 +98,7 @@ class JavaStructSpec extends XmlSpec {
         Truth.assertThat(javaStruct.typeSpec.toString()).isEqualTo '''\
             @lombok.Value
             @lombok.Builder
-            public class ScreenStruct implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class Screen implements com.github.moaxcp.x11client.protocol.XStruct {
               private int root;
             
               private int defaultColormap;
@@ -107,13 +107,13 @@ class JavaStructSpec extends XmlSpec {
             
               private byte backingStores;
             
-              public static com.github.moaxcp.x11client.protocol.xproto.ScreenStruct readScreenStruct(
+              public static com.github.moaxcp.x11client.protocol.xproto.Screen readScreen(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int root = in.readCard32();
                 int defaultColormap = in.readCard32();
                 int currentInputMasks = in.readCard32();
                 byte backingStores = in.readByte();
-                com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.Screen.ScreenBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Screen.builder();
                 javaBuilder.root(root);
                 javaBuilder.defaultColormap(defaultColormap);
                 javaBuilder.currentInputMasks(currentInputMasks);
@@ -130,13 +130,13 @@ class JavaStructSpec extends XmlSpec {
               }
             
               public boolean isCurrentInputMasksEnabled(
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                 boolean enabled = maskEnum.isEnabled(currentInputMasks);
                 if(!enabled) {
                   return false;
                 }
-                for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                   java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                   enabled &= m.isEnabled(currentInputMasks);
                   if(!enabled) {
@@ -151,15 +151,15 @@ class JavaStructSpec extends XmlSpec {
                 return 13;
               }
             
-              public static class ScreenStructBuilder {
+              public static class ScreenBuilder {
                 public boolean isCurrentInputMasksEnabled(
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                   boolean enabled = maskEnum.isEnabled(currentInputMasks);
                   if(!enabled) {
                     return false;
                   }
-                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     enabled &= m.isEnabled(currentInputMasks);
                     if(!enabled) {
@@ -169,35 +169,35 @@ class JavaStructSpec extends XmlSpec {
                   return enabled;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder currentInputMasksEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                public com.github.moaxcp.x11client.protocol.xproto.Screen.ScreenBuilder currentInputMasksEnable(
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                   currentInputMasks((int) maskEnum.enableFor(currentInputMasks));
-                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     currentInputMasks((int) m.enableFor(currentInputMasks));
                   }
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder currentInputMasksDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                public com.github.moaxcp.x11client.protocol.xproto.Screen.ScreenBuilder currentInputMasksDisable(
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                   currentInputMasks((int) maskEnum.disableFor(currentInputMasks));
-                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     currentInputMasks((int) m.disableFor(currentInputMasks));
                   }
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder backingStores(
-                    com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores) {
+                public com.github.moaxcp.x11client.protocol.xproto.Screen.ScreenBuilder backingStores(
+                    com.github.moaxcp.x11client.protocol.xproto.BackingStore backingStores) {
                   this.backingStores = (byte) backingStores.getValue();
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder backingStores(
+                public com.github.moaxcp.x11client.protocol.xproto.Screen.ScreenBuilder backingStores(
                     byte backingStores) {
                   this.backingStores = backingStores;
                   return this;
@@ -232,17 +232,17 @@ class JavaStructSpec extends XmlSpec {
         javaStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class DeviceTimeCoordStruct implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class DeviceTimeCoord implements com.github.moaxcp.x11client.protocol.XStruct {
               private int time;
             
               @lombok.NonNull
               private java.util.List<java.lang.Integer> axisvalues;
             
-              public static com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct readDeviceTimeCoordStruct(
+              public static com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord readDeviceTimeCoord(
                   byte numAxes, com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int time = in.readCard32();
                 java.util.List<java.lang.Integer> axisvalues = in.readInt32(numAxes);
-                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct.DeviceTimeCoordStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoordStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord.DeviceTimeCoordBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord.builder();
                 javaBuilder.time(time);
                 javaBuilder.axisvalues(axisvalues);
                 return javaBuilder.build();
@@ -259,7 +259,7 @@ class JavaStructSpec extends XmlSpec {
                 return 4 + 4 * axisvalues.size();
               }
               
-              public static class DeviceTimeCoordStructBuilder {
+              public static class DeviceTimeCoordBuilder {
                 public int getSize() {
                   return 4 + 4 * axisvalues.size();
                 }
@@ -292,7 +292,7 @@ class JavaStructSpec extends XmlSpec {
         javaStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class SetKeyTypeStruct implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class SetKeyType implements com.github.moaxcp.x11client.protocol.XStruct {
               private boolean preserve;
             
               private byte nMapEntries;
@@ -300,12 +300,12 @@ class JavaStructSpec extends XmlSpec {
               @lombok.NonNull
               private java.util.List<java.lang.Integer> preserveEntries;
             
-              public static com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct readSetKeyTypeStruct(
+              public static com.github.moaxcp.x11client.protocol.xproto.SetKeyType readSetKeyType(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 boolean preserve = in.readBool();
                 byte nMapEntries = in.readCard8();
                 java.util.List<java.lang.Integer> preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
-                com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct.SetKeyTypeStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetKeyTypeStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.SetKeyType.SetKeyTypeBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetKeyType.builder();
                 javaBuilder.preserve(preserve);
                 javaBuilder.nMapEntries(nMapEntries);
                 javaBuilder.preserveEntries(preserveEntries);
@@ -324,7 +324,7 @@ class JavaStructSpec extends XmlSpec {
                 return 2 + 4 * preserveEntries.size();
               }
               
-              public static class SetKeyTypeStructBuilder {
+              public static class SetKeyTypeBuilder {
                 public int getSize() {
                   return 2 + 4 * preserveEntries.size();
                 }

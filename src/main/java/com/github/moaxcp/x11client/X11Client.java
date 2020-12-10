@@ -1,11 +1,10 @@
 package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.*;
-import com.github.moaxcp.x11client.protocol.xproto.ScreenStruct;
-import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
-import lombok.NonNull;
-
+import com.github.moaxcp.x11client.protocol.xproto.Screen;
+import com.github.moaxcp.x11client.protocol.xproto.Setup;
 import java.io.IOException;
+import lombok.NonNull;
 
 public class X11Client implements AutoCloseable {
   private final X11Connection connection;
@@ -26,14 +25,14 @@ public class X11Client implements AutoCloseable {
 
   private X11Client(X11Connection connection) throws IOException {
     this.connection = connection;
-    service = new XProtocolService(connection.getSetupStruct(), connection.getX11Input(), connection.getX11Output());
+    service = new XProtocolService(connection.getSetup(), connection.getX11Input(), connection.getX11Output());
   }
 
-  public SetupStruct getSetup() {
-    return connection.getSetupStruct();
+  public Setup getSetup() {
+    return connection.getSetup();
   }
 
-  public ScreenStruct getScreen(int screen) {
+  public Screen getScreen(int screen) {
     return getSetup().getRoots().get(screen);
   }
 

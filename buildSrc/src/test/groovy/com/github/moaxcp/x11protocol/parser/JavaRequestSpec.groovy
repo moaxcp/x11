@@ -23,7 +23,7 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class DestroyWindowRequest implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+            public class DestroyWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest {
               public static final byte OPCODE = 4;
             
               private int window;
@@ -32,12 +32,12 @@ class JavaRequestSpec extends XmlSpec {
                 return OPCODE;
               }
             
-              public static com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequest readDestroyWindowRequest(
+              public static com.github.moaxcp.x11client.protocol.xproto.DestroyWindow readDestroyWindow(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 in.readPad(1);
                 short length = in.readCard16();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequest.DestroyWindowRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DestroyWindowRequest.builder();
+                com.github.moaxcp.x11client.protocol.xproto.DestroyWindow.DestroyWindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DestroyWindow.builder();
                 javaBuilder.window(window);
                 return javaBuilder.build();
               }
@@ -56,7 +56,7 @@ class JavaRequestSpec extends XmlSpec {
                 return 8;
               }
             
-              public static class DestroyWindowRequestBuilder {
+              public static class DestroyWindowBuilder {
                 public int getSize() {
                   return 8;
                 }
@@ -99,7 +99,7 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class PolyPointRequest implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+            public class PolyPoint implements com.github.moaxcp.x11client.protocol.OneWayRequest {
               public static final byte OPCODE = 64;
             
               private byte coordinateMode;
@@ -109,13 +109,13 @@ class JavaRequestSpec extends XmlSpec {
               private int gc;
             
               @lombok.NonNull
-              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.PointStruct> points;
+              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Point> points;
             
               public byte getOpCode() {
                 return OPCODE;
               }
             
-              public static com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest readPolyPointRequest(
+              public static com.github.moaxcp.x11client.protocol.xproto.PolyPoint readPolyPoint(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int javaStart = 1;
                 byte coordinateMode = in.readByte();
@@ -126,13 +126,13 @@ class JavaRequestSpec extends XmlSpec {
                 javaStart += 4;
                 int gc = in.readCard32();
                 javaStart += 4;
-                java.util.List<com.github.moaxcp.x11client.protocol.xproto.PointStruct> points = new java.util.ArrayList<>(length - javaStart);
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Point> points = new java.util.ArrayList<>(length - javaStart);
                 while(javaStart < Short.toUnsignedInt(length) * 4) {
-                  com.github.moaxcp.x11client.protocol.xproto.PointStruct baseObject = com.github.moaxcp.x11client.protocol.xproto.PointStruct.readPointStruct(in);
+                  com.github.moaxcp.x11client.protocol.xproto.Point baseObject = com.github.moaxcp.x11client.protocol.xproto.Point.readPoint(in);
                   points.add(baseObject);
                   javaStart += baseObject.getSize();
                 }
-                com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest.PolyPointRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest.builder();
+                com.github.moaxcp.x11client.protocol.xproto.PolyPoint.PolyPointBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.PolyPoint.builder();
                 javaBuilder.coordinateMode(coordinateMode);
                 javaBuilder.drawable(drawable);
                 javaBuilder.gc(gc);
@@ -149,7 +149,7 @@ class JavaRequestSpec extends XmlSpec {
                 out.writeCard16((short) getLength());
                 out.writeCard32(drawable);
                 out.writeCard32(gc);
-                for(com.github.moaxcp.x11client.protocol.xproto.PointStruct t : points) {
+                for(com.github.moaxcp.x11client.protocol.xproto.Point t : points) {
                   t.write(out);
                 }
                 out.writePadAlign(getSize());
@@ -160,14 +160,14 @@ class JavaRequestSpec extends XmlSpec {
                 return 12 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(points);
               }
             
-              public static class PolyPointRequestBuilder {
-                public com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest.PolyPointRequestBuilder coordinateMode(
-                    com.github.moaxcp.x11client.protocol.xproto.CoordModeEnum coordinateMode) {
+              public static class PolyPointBuilder {
+                public com.github.moaxcp.x11client.protocol.xproto.PolyPoint.PolyPointBuilder coordinateMode(
+                    com.github.moaxcp.x11client.protocol.xproto.CoordMode coordinateMode) {
                   this.coordinateMode = (byte) coordinateMode.getValue();
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest.PolyPointRequestBuilder coordinateMode(
+                public com.github.moaxcp.x11client.protocol.xproto.PolyPoint.PolyPointBuilder coordinateMode(
                     byte coordinateMode) {
                   this.coordinateMode = coordinateMode;
                   return this;
@@ -215,19 +215,19 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryTextExtendsRequest implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+            public class QueryTextExtends implements com.github.moaxcp.x11client.protocol.OneWayRequest {
               public static final byte OPCODE = 48;
             
               private int font;
             
               @lombok.NonNull
-              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2bStruct> string;
+              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2b> string;
             
               public byte getOpCode() {
                 return OPCODE;
               }
             
-              public static com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest readQueryTextExtendsRequest(
+              public static com.github.moaxcp.x11client.protocol.xproto.QueryTextExtends readQueryTextExtends(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int javaStart = 1;
                 boolean oddLength = in.readBool();
@@ -236,13 +236,13 @@ class JavaRequestSpec extends XmlSpec {
                 javaStart += 2;
                 int font = in.readCard32();
                 javaStart += 4;
-                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2bStruct> string = new java.util.ArrayList<>(length - javaStart);
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2b> string = new java.util.ArrayList<>(length - javaStart);
                 while(javaStart < Short.toUnsignedInt(length) * 4) {
-                  com.github.moaxcp.x11client.protocol.xproto.Char2bStruct baseObject = com.github.moaxcp.x11client.protocol.xproto.Char2bStruct.readChar2bStruct(in);
+                  com.github.moaxcp.x11client.protocol.xproto.Char2b baseObject = com.github.moaxcp.x11client.protocol.xproto.Char2b.readChar2b(in);
                   string.add(baseObject);
                   javaStart += baseObject.getSize();
                 }
-                com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest.QueryTextExtendsRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTextExtendsRequest.builder();
+                com.github.moaxcp.x11client.protocol.xproto.QueryTextExtends.QueryTextExtendsBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTextExtends.builder();
                 javaBuilder.font(font);
                 javaBuilder.string(string);
                 in.readPadAlign(javaBuilder.getSize());
@@ -256,7 +256,7 @@ class JavaRequestSpec extends XmlSpec {
                 out.writeBool(getOddLength());
                 out.writeCard16((short) getLength());
                 out.writeCard32(font);
-                for(com.github.moaxcp.x11client.protocol.xproto.Char2bStruct t : string) {
+                for(com.github.moaxcp.x11client.protocol.xproto.Char2b t : string) {
                   t.write(out);
                 }
                 out.writePadAlign(getSize());
@@ -271,7 +271,7 @@ class JavaRequestSpec extends XmlSpec {
                 return 8 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(string);
               }
             
-              public static class QueryTextExtendsRequestBuilder {
+              public static class QueryTextExtendsBuilder {
                 public int getSize() {
                   return 8 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(string);
                 }
@@ -300,7 +300,7 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class EnableRequest implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.EnableReply> {
+            public class Enable implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.EnableReply> {
               public static final byte OPCODE = 0;
             
               public com.github.moaxcp.x11client.protocol.XReplyFunction<com.github.moaxcp.x11client.protocol.xproto.EnableReply> getReplyFunction(
@@ -312,11 +312,11 @@ class JavaRequestSpec extends XmlSpec {
                 return OPCODE;
               }
             
-              public static com.github.moaxcp.x11client.protocol.xproto.EnableRequest readEnableRequest(
+              public static com.github.moaxcp.x11client.protocol.xproto.Enable readEnable(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 in.readPad(1);
                 short length = in.readCard16();
-                com.github.moaxcp.x11client.protocol.xproto.EnableRequest.EnableRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.EnableRequest.builder();
+                com.github.moaxcp.x11client.protocol.xproto.Enable.EnableBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Enable.builder();
                 return javaBuilder.build();
               }
             
@@ -333,7 +333,7 @@ class JavaRequestSpec extends XmlSpec {
                 return 4;
               }
             
-              public static class EnableRequestBuilder {
+              public static class EnableBuilder {
                 public int getSize() {
                   return 4;
                 }
@@ -511,7 +511,7 @@ class JavaRequestSpec extends XmlSpec {
         Truth.assertThat(javaRequest.typeSpec.toString()).isEqualTo '''\
             @lombok.Value
             @lombok.Builder
-            public class CreateWindowRequest implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+            public class CreateWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest {
               public static final byte OPCODE = 1;
             
               private byte depth;
@@ -570,7 +570,7 @@ class JavaRequestSpec extends XmlSpec {
                 return OPCODE;
               }
             
-              public static com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest readCreateWindowRequest(
+              public static com.github.moaxcp.x11client.protocol.xproto.CreateWindow readCreateWindow(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 byte depth = in.readCard8();
                 short length = in.readCard16();
@@ -584,7 +584,7 @@ class JavaRequestSpec extends XmlSpec {
                 short clazz = in.readCard16();
                 int visual = in.readCard32();
                 int valueMask = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.builder();
+                com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.CreateWindow.builder();
                 javaBuilder.depth(depth);
                 javaBuilder.wid(wid);
                 javaBuilder.parent(parent);
@@ -596,49 +596,49 @@ class JavaRequestSpec extends XmlSpec {
                 javaBuilder.clazz(clazz);
                 javaBuilder.visual(visual);
                 javaBuilder.valueMask(valueMask);
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXMAP)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP)) {
                   javaBuilder.backgroundPixmap(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXEL)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL)) {
                   javaBuilder.backgroundPixel(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BORDER_PIXMAP)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP)) {
                   javaBuilder.borderPixmap(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BORDER_PIXEL)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL)) {
                   javaBuilder.borderPixel(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BIT_GRAVITY)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY)) {
                   javaBuilder.bitGravity(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.WIN_GRAVITY)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY)) {
                   javaBuilder.winGravity(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_STORE)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE)) {
                   javaBuilder.backingStore(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PLANES)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES)) {
                   javaBuilder.backingPlanes(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PIXEL)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL)) {
                   javaBuilder.backingPixel(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.OVERRIDE_REDIRECT)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT)) {
                   javaBuilder.overrideRedirect(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.SAVE_UNDER)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER)) {
                   javaBuilder.saveUnder(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.EVENT_MASK)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK)) {
                   javaBuilder.eventMask(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.DONT_PROPAGATE)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE)) {
                   javaBuilder.doNotPropogateMask(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.COLORMAP)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP)) {
                   javaBuilder.colormap(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.CURSOR)) {
+                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR)) {
                   javaBuilder.cursor(in.readCard32());
                 }
                 in.readPadAlign(javaBuilder.getSize());
@@ -661,62 +661,62 @@ class JavaRequestSpec extends XmlSpec {
                 out.writeCard16(clazz);
                 out.writeCard32(visual);
                 out.writeCard32(valueMask);
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXMAP)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP)) {
                   out.writeCard32(backgroundPixmap);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXEL)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL)) {
                   out.writeCard32(backgroundPixel);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BORDER_PIXMAP)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP)) {
                   out.writeCard32(borderPixmap);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BORDER_PIXEL)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL)) {
                   out.writeCard32(borderPixel);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BIT_GRAVITY)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY)) {
                   out.writeCard32(bitGravity);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.WIN_GRAVITY)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY)) {
                   out.writeCard32(winGravity);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_STORE)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE)) {
                   out.writeCard32(backingStore);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PLANES)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES)) {
                   out.writeCard32(backingPlanes);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PIXEL)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL)) {
                   out.writeCard32(backingPixel);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.OVERRIDE_REDIRECT)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT)) {
                   out.writeCard32(overrideRedirect);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.SAVE_UNDER)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER)) {
                   out.writeCard32(saveUnder);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.EVENT_MASK)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK)) {
                   out.writeCard32(eventMask);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.DONT_PROPAGATE)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE)) {
                   out.writeCard32(doNotPropogateMask);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.COLORMAP)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP)) {
                   out.writeCard32(colormap);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.CURSOR)) {
+                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR)) {
                   out.writeCard32(cursor);
                 }
                 out.writePadAlign(getSize());
               }
             
               public boolean isValueMaskEnabled(
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum,
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.CwEnum... maskEnums) {
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.Cw maskEnum,
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.Cw... maskEnums) {
                 boolean enabled = maskEnum.isEnabled(valueMask);
                 if(!enabled) {
                   return false;
                 }
-                for(com.github.moaxcp.x11client.protocol.xproto.CwEnum m : maskEnums) {
+                for(com.github.moaxcp.x11client.protocol.xproto.Cw m : maskEnums) {
                   java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                   enabled &= m.isEnabled(valueMask);
                   if(!enabled) {
@@ -727,13 +727,13 @@ class JavaRequestSpec extends XmlSpec {
               }
             
               public boolean isEventMaskEnabled(
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                 boolean enabled = maskEnum.isEnabled(eventMask);
                 if(!enabled) {
                   return false;
                 }
-                for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                   java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                   enabled &= m.isEnabled(eventMask);
                   if(!enabled) {
@@ -744,13 +744,13 @@ class JavaRequestSpec extends XmlSpec {
               }
             
               public boolean isDoNotPropogateMaskEnabled(
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                 boolean enabled = maskEnum.isEnabled(doNotPropogateMask);
                 if(!enabled) {
                   return false;
                 }
-                for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                   java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                   enabled &= m.isEnabled(doNotPropogateMask);
                   if(!enabled) {
@@ -762,36 +762,36 @@ class JavaRequestSpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 32 + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BORDER_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BORDER_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BIT_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.WIN_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_STORE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PLANES) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.OVERRIDE_REDIRECT) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.SAVE_UNDER) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.EVENT_MASK) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.DONT_PROPAGATE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.COLORMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.CURSOR) ? 4 : 0);
+                return 32 + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR) ? 4 : 0);
               }
             
-              public static class CreateWindowRequestBuilder {
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder clazz(
-                    com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum clazz) {
+              public static class CreateWindowBuilder {
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder clazz(
+                    com.github.moaxcp.x11client.protocol.xproto.WindowClass clazz) {
                   this.clazz = (short) clazz.getValue();
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder clazz(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder clazz(
                     short clazz) {
                   this.clazz = clazz;
                   return this;
                 }
             
-                private com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder valueMask(
+                private com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder valueMask(
                     int valueMask) {
                   this.valueMask = valueMask;
                   return this;
                 }
             
                 public boolean isValueMaskEnabled(
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum,
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.CwEnum... maskEnums) {
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.Cw maskEnum,
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.Cw... maskEnums) {
                   boolean enabled = maskEnum.isEnabled(valueMask);
                   if(!enabled) {
                     return false;
                   }
-                  for(com.github.moaxcp.x11client.protocol.xproto.CwEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.Cw m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     enabled &= m.isEnabled(valueMask);
                     if(!enabled) {
@@ -801,141 +801,141 @@ class JavaRequestSpec extends XmlSpec {
                   return enabled;
                 }
             
-                private com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder valueMaskEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum,
-                    com.github.moaxcp.x11client.protocol.xproto.CwEnum... maskEnums) {
+                private com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder valueMaskEnable(
+                    com.github.moaxcp.x11client.protocol.xproto.Cw maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.Cw... maskEnums) {
                   valueMask((int) maskEnum.enableFor(valueMask));
-                  for(com.github.moaxcp.x11client.protocol.xproto.CwEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.Cw m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     valueMask((int) m.enableFor(valueMask));
                   }
                   return this;
                 }
             
-                private com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder valueMaskDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.CwEnum maskEnum,
-                    com.github.moaxcp.x11client.protocol.xproto.CwEnum... maskEnums) {
+                private com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder valueMaskDisable(
+                    com.github.moaxcp.x11client.protocol.xproto.Cw maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.Cw... maskEnums) {
                   valueMask((int) maskEnum.disableFor(valueMask));
-                  for(com.github.moaxcp.x11client.protocol.xproto.CwEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.Cw m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     valueMask((int) m.disableFor(valueMask));
                   }
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder backgroundPixmap(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backgroundPixmap(
                     int backgroundPixmap) {
                   this.backgroundPixmap = backgroundPixmap;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXMAP);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder backgroundPixel(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backgroundPixel(
                     int backgroundPixel) {
                   this.backgroundPixel = backgroundPixel;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXEL);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder borderPixmap(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder borderPixmap(
                     int borderPixmap) {
                   this.borderPixmap = borderPixmap;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BORDER_PIXMAP);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder borderPixel(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder borderPixel(
                     int borderPixel) {
                   this.borderPixel = borderPixel;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BORDER_PIXEL);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder bitGravity(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder bitGravity(
                     int bitGravity) {
                   this.bitGravity = bitGravity;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BIT_GRAVITY);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder bitGravity(
-                    com.github.moaxcp.x11client.protocol.xproto.GravityEnum bitGravity) {
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder bitGravity(
+                    com.github.moaxcp.x11client.protocol.xproto.Gravity bitGravity) {
                   this.bitGravity = (int) bitGravity.getValue();
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BIT_GRAVITY);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder winGravity(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder winGravity(
                     int winGravity) {
                   this.winGravity = winGravity;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.WIN_GRAVITY);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder winGravity(
-                    com.github.moaxcp.x11client.protocol.xproto.GravityEnum winGravity) {
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder winGravity(
+                    com.github.moaxcp.x11client.protocol.xproto.Gravity winGravity) {
                   this.winGravity = (int) winGravity.getValue();
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.WIN_GRAVITY);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder backingStore(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backingStore(
                     int backingStore) {
                   this.backingStore = backingStore;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_STORE);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder backingStore(
-                    com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStore) {
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backingStore(
+                    com.github.moaxcp.x11client.protocol.xproto.BackingStore backingStore) {
                   this.backingStore = (int) backingStore.getValue();
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_STORE);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder backingPlanes(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backingPlanes(
                     int backingPlanes) {
                   this.backingPlanes = backingPlanes;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PLANES);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder backingPixel(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backingPixel(
                     int backingPixel) {
                   this.backingPixel = backingPixel;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PIXEL);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder overrideRedirect(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder overrideRedirect(
                     int overrideRedirect) {
                   this.overrideRedirect = overrideRedirect;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.OVERRIDE_REDIRECT);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder saveUnder(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder saveUnder(
                     int saveUnder) {
                   this.saveUnder = saveUnder;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.SAVE_UNDER);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder eventMask(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder eventMask(
                     int eventMask) {
                   this.eventMask = eventMask;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.EVENT_MASK);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK);
                   return this;
                 }
             
                 public boolean isEventMaskEnabled(
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                   boolean enabled = maskEnum.isEnabled(eventMask);
                   if(!enabled) {
                     return false;
                   }
-                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     enabled &= m.isEnabled(eventMask);
                     if(!enabled) {
@@ -945,43 +945,43 @@ class JavaRequestSpec extends XmlSpec {
                   return enabled;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder eventMaskEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder eventMaskEnable(
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                   eventMask((int) maskEnum.enableFor(eventMask));
-                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     eventMask((int) m.enableFor(eventMask));
                   }
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder eventMaskDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder eventMaskDisable(
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                   eventMask((int) maskEnum.disableFor(eventMask));
-                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     eventMask((int) m.disableFor(eventMask));
                   }
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder doNotPropogateMask(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder doNotPropogateMask(
                     int doNotPropogateMask) {
                   this.doNotPropogateMask = doNotPropogateMask;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.DONT_PROPAGATE);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE);
                   return this;
                 }
             
                 public boolean isDoNotPropogateMaskEnabled(
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                   boolean enabled = maskEnum.isEnabled(doNotPropogateMask);
                   if(!enabled) {
                     return false;
                   }
-                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     enabled &= m.isEnabled(doNotPropogateMask);
                     if(!enabled) {
@@ -991,44 +991,44 @@ class JavaRequestSpec extends XmlSpec {
                   return enabled;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder doNotPropogateMaskEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder doNotPropogateMaskEnable(
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                   doNotPropogateMask((int) maskEnum.enableFor(doNotPropogateMask));
-                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     doNotPropogateMask((int) m.enableFor(doNotPropogateMask));
                   }
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder doNotPropogateMaskDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum maskEnum,
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum... maskEnums) {
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder doNotPropogateMaskDisable(
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
                   doNotPropogateMask((int) maskEnum.disableFor(doNotPropogateMask));
-                  for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum m : maskEnums) {
+                  for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     doNotPropogateMask((int) m.disableFor(doNotPropogateMask));
                   }
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder colormap(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder colormap(
                     int colormap) {
                   this.colormap = colormap;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.COLORMAP);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP);
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder cursor(
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder cursor(
                     int cursor) {
                   this.cursor = cursor;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.CURSOR);
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR);
                   return this;
                 }
             
                 public int getSize() {
-                  return 32 + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BORDER_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BORDER_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BIT_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.WIN_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_STORE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PLANES) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.OVERRIDE_REDIRECT) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.SAVE_UNDER) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.EVENT_MASK) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.DONT_PROPAGATE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.COLORMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.CURSOR) ? 4 : 0);
+                  return 32 + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR) ? 4 : 0);
                 }
               }
             }

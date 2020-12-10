@@ -23,17 +23,17 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class WindowStruct implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class Window implements com.github.moaxcp.x11client.protocol.XStruct {
               private int numWindowModifiers;
              
               @lombok.NonNull
               private java.util.List<java.lang.Long> windowModifiers;
              
-              public static com.github.moaxcp.x11client.protocol.xproto.WindowStruct readWindowStruct(
+              public static com.github.moaxcp.x11client.protocol.xproto.Window readWindow(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int numWindowModifiers = in.readCard32();
                 java.util.List<java.lang.Long> windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));
-                com.github.moaxcp.x11client.protocol.xproto.WindowStruct.WindowStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.WindowStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.Window.WindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Window.builder();
                 javaBuilder.numWindowModifiers(numWindowModifiers);
                 javaBuilder.windowModifiers(windowModifiers);
                 return javaBuilder.build();
@@ -50,7 +50,7 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
                 return 4 + 8 * windowModifiers.size();
               }
              
-              public static class WindowStructBuilder {
+              public static class WindowBuilder {
                 public int getSize() {
                   return 4 + 8 * windowModifiers.size();
                 }

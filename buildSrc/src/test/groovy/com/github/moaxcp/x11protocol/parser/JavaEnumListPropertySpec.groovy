@@ -42,18 +42,18 @@ class JavaEnumListPropertySpec extends XmlSpec {
         then:
         property.name == 'masks'
         property.x11Type == 'CARD32'
-        property.baseTypeName == ClassName.get(field.result.javaPackage, 'EventMaskEnum')
+        property.baseTypeName == ClassName.get(field.result.javaPackage, 'EventMask')
         property.typeName == ParameterizedTypeName.get(ClassName.get(List), property.baseTypeName)
         property.ioTypeName == TypeName.INT
         property.lengthExpression.expression.toString() == '20'
         property.declareAndReadCode.toString() == '''\
-            java.util.List<com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum> masks = new java.util.ArrayList<>(20);
+            java.util.List<com.github.moaxcp.x11client.protocol.xproto.EventMask> masks = new java.util.ArrayList<>(20);
             for(int i = 0; i < 20; i++) {
-              masks.add(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum.getByCode(in.readCard32()));
+              masks.add(com.github.moaxcp.x11client.protocol.xproto.EventMask.getByCode(in.readCard32()));
             }
         '''.stripIndent()
         writeCode.build().toString() == '''\
-            for(com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum e : masks) {
+            for(com.github.moaxcp.x11client.protocol.xproto.EventMask e : masks) {
               out.writeCard32(e.getValue());
             }
         '''.stripIndent()

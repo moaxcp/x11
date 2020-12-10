@@ -8,26 +8,29 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
+import static com.github.moaxcp.x11client.Utilities.byteArrayToList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SetupRequestStructTest {
+public class SetupRequestTest {
   ByteArrayOutputStream outBytes = new ByteArrayOutputStream();
   X11Output out = new X11OutputStream(outBytes);
 
   @Test
   void writeAndRead() throws IOException {
-    SetupRequestStruct expected = SetupRequestStruct.builder()
+    SetupRequest expected = SetupRequest.builder()
       .byteOrder((byte) 'B')
       .protocolMajorVersion((short) 11)
       .protocolMinorVersion((short) 0)
-      .authorizationProtocolName("MIT-MAGIC-COOKIE-1")
-      .authorizationProtocolData("secret key 123457")
+      .authorizationProtocolNameLen((short) "MIT-MAGIC-COOKIE-1".length())
+      .authorizationProtocolDataLen((short) "secret key 123457".length())
+      .authorizationProtocolName(byteArrayToList("MIT-MAGIC-COOKIE-1".getBytes()))
+      .authorizationProtocolData(byteArrayToList("secret key 123457".getBytes()))
       .build();
 
     expected.write(out);
 
     ByteArrayInputStream inBytes = new ByteArrayInputStream(outBytes.toByteArray());
-    SetupRequestStruct result = SetupRequestStruct.readSetupRequestStruct(new X11InputStream(inBytes));
+    SetupRequest result = SetupRequest.readSetupRequest(new X11InputStream(inBytes));
     assertThat(result).isEqualTo(expected);
   }
 }

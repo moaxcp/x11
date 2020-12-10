@@ -31,13 +31,13 @@ class JavaEnumPropertySpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class StructStruct implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class Struct implements com.github.moaxcp.x11client.protocol.XStruct {
               private byte mask;
             
-              public static com.github.moaxcp.x11client.protocol.xproto.StructStruct readStructStruct(
+              public static com.github.moaxcp.x11client.protocol.xproto.Struct readStruct(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 byte mask = in.readCard8();
-                com.github.moaxcp.x11client.protocol.xproto.StructStruct.StructStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.StructStruct.builder();
+                com.github.moaxcp.x11client.protocol.xproto.Struct.StructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Struct.builder();
                 javaBuilder.mask(mask);
                 return javaBuilder.build();
               }
@@ -52,15 +52,14 @@ class JavaEnumPropertySpec extends XmlSpec {
                 return 1;
               }
             
-              public static class StructStructBuilder {
-                public com.github.moaxcp.x11client.protocol.xproto.StructStruct.StructStructBuilder mask(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMaskEnum mask) {
+              public static class StructBuilder {
+                public com.github.moaxcp.x11client.protocol.xproto.Struct.StructBuilder mask(
+                    com.github.moaxcp.x11client.protocol.xproto.EventMask mask) {
                   this.mask = (byte) mask.getValue();
                   return this;
                 }
             
-                public com.github.moaxcp.x11client.protocol.xproto.StructStruct.StructStructBuilder mask(
-                    byte mask) {
+                public com.github.moaxcp.x11client.protocol.xproto.Struct.StructBuilder mask(byte mask) {
                   this.mask = mask;
                   return this;
                 }

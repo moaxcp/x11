@@ -14,7 +14,7 @@ public class X11ClientIT {
   @Test
   void clientTest() throws IOException {
     try(X11Client x11Client = X11Client.connect()) {
-      CreateWindowRequest window = CreateWindowRequest.builder()
+      CreateWindow window = CreateWindow.builder()
         .depth(x11Client.getDepth(0))
         .wid(x11Client.nextResourceId())
         .parent(x11Client.getRoot(0))
@@ -23,17 +23,17 @@ public class X11ClientIT {
         .width((short) 600)
         .height((short) 480)
         .borderWidth((short) 5)
-        .clazz(WindowClassEnum.COPY_FROM_PARENT)
+        .clazz(WindowClass.COPY_FROM_PARENT)
         .visual(x11Client.getVisualId(0))
         .backgroundPixel(x11Client.getWhitePixel(0))
         .borderPixel(x11Client.getBlackPixel(0))
-        .eventMaskEnable(EventMaskEnum.EXPOSURE, EventMaskEnum.KEY_PRESS)
+        .eventMaskEnable(EventMask.EXPOSURE, EventMask.KEY_PRESS)
         .build();
       x11Client.send(window);
-      x11Client.send(MapWindowRequest.builder()
+      x11Client.send(MapWindow.builder()
         .window(window.getWid())
         .build());
-      CreateGCRequest gc = CreateGCRequest.builder()
+      CreateGC gc = CreateGC.builder()
         .cid(x11Client.nextResourceId())
         .drawable(window.getWid())
         .background(x11Client.getWhitePixel(0))
@@ -43,19 +43,19 @@ public class X11ClientIT {
       while(true) {
         XEvent event = x11Client.getNextEvent();
         if(event instanceof ExposeEvent) {
-          List<RectangleStruct> rectangles = new ArrayList<>();
-          rectangles.add(RectangleStruct.builder()
+          List<Rectangle> rectangles = new ArrayList<>();
+          rectangles.add(Rectangle.builder()
             .x((short) 20)
             .y((short) 20)
             .width((short) 10)
             .height((short) 10)
             .build());
-          x11Client.send(PolyFillRectangleRequest.builder()
+          x11Client.send(PolyFillRectangle.builder()
             .drawable(window.getWid())
             .gc(gc.getCid())
             .rectangles(rectangles)
             .build());
-          x11Client.send(ImageText8Request.builder()
+          x11Client.send(ImageText8.builder()
             .drawable(window.getWid())
             .gc(gc.getCid())
             .stringLen((byte) "Hello World!".length())

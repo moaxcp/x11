@@ -88,18 +88,18 @@ class JavaUnionSpec extends XmlSpec {
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 byte type = in.readCard8();
                 byte data = in.readCard8();
-                com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum typeEnum = com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.getByCode(type);
-                if(typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.DEFAULT || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.LOCK || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.PERMAMENT_LOCK) {
-                  return new com.github.moaxcp.x11client.protocol.xproto.DefaultBehaviorStruct(type);
+                com.github.moaxcp.x11client.protocol.xproto.BehaviorType typeEnum = com.github.moaxcp.x11client.protocol.xproto.BehaviorType.getByCode(type);
+                if(typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorType.DEFAULT || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorType.LOCK || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorType.PERMAMENT_LOCK) {
+                  return new com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior(type);
                 }
-                if(typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.RADIO_GROUP || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.PERMAMENT_RADIO_GROUP) {
-                  return new com.github.moaxcp.x11client.protocol.xproto.RadioGroupBehaviorStruct(type, data);
+                if(typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorType.RADIO_GROUP || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorType.PERMAMENT_RADIO_GROUP) {
+                  return new com.github.moaxcp.x11client.protocol.xproto.RadioGroupBehavior(type, data);
                 }
-                if(typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.OVERLAY1 || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.OVERLAY2 || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.PERMAMENT_OVERLAY1 || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorTypeEnum.PERMAMENT_OVERLAY2) {
-                  return new com.github.moaxcp.x11client.protocol.xproto.OverlayBehaviorStruct(type, data);
+                if(typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorType.OVERLAY1 || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorType.OVERLAY2 || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorType.PERMAMENT_OVERLAY1 || typeEnum == com.github.moaxcp.x11client.protocol.xproto.BehaviorType.PERMAMENT_OVERLAY2) {
+                  return new com.github.moaxcp.x11client.protocol.xproto.OverlayBehavior(type, data);
                 }
                 else {
-                  return new com.github.moaxcp.x11client.protocol.xproto.CommonBehaviorStruct(type, data);
+                  return new com.github.moaxcp.x11client.protocol.xproto.CommonBehavior(type, data);
                 }
               }
             

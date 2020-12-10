@@ -15,22 +15,22 @@ public class XprotoPlugin implements XProtocolPlugin {
 
   @Override
   public boolean supportedRequest(XRequest request) {
-    if(request instanceof GetKeyboardMappingRequest) {
+    if(request instanceof GetKeyboardMapping) {
       return true;
     }
-    if(request instanceof QueryExtensionRequest) {
+    if(request instanceof QueryExtension) {
       return true;
     }
-    if(request instanceof CreateWindowRequest) {
+    if(request instanceof CreateWindow) {
       return true;
     }
-    if(request instanceof CreateGCRequest) {
+    if(request instanceof CreateGC) {
       return true;
     }
-    if(request instanceof MapWindowRequest) {
+    if(request instanceof MapWindow) {
       return true;
     }
-    if(request instanceof PolyFillRectangleRequest) {
+    if(request instanceof PolyFillRectangle) {
       return true;
     }
     switch(request.getOpCode()) {

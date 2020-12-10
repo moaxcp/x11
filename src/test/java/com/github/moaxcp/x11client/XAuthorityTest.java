@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
+import static com.github.moaxcp.x11client.Utilities.byteArrayToList;
 import static com.github.moaxcp.x11client.XAuthority.Family.LOCAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -15,60 +16,60 @@ public class XAuthorityTest {
 
   @Test
   void constructor_fails_on_null_family() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> new XAuthority(null, "hostName".getBytes(), 0, "magic", new byte[] {1}));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> new XAuthority(null, byteArrayToList("hostName".getBytes()), 0, byteArrayToList("magic".getBytes()), byteArrayToList(new byte[] {1})));
     assertThat(exception).hasMessage("family is marked non-null but is null");
   }
 
   @Test
   void constructor_fails_on_null_address() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> new XAuthority(LOCAL, null, 0, "magic", new byte[] {1}));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> new XAuthority(LOCAL, null, 0, byteArrayToList("magic".getBytes()), byteArrayToList(new byte[] {1})));
     assertThat(exception).hasMessage("address is marked non-null but is null");
   }
 
   @Test
   void constructor_fails_on_empty_address() {
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new XAuthority(LOCAL, new byte[]{}, 0, "magic", new byte[] {1}));
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new XAuthority(LOCAL, byteArrayToList(new byte[]{}), 0, byteArrayToList("magic".getBytes()), byteArrayToList(new byte[] {1})));
     assertThat(exception).hasMessage("address must not be empty");
   }
 
   @Test
   void constructor_fails_on_negative_displayNumber() {
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new XAuthority(LOCAL, "host".getBytes(), -1, "magic", new byte[] {1}));
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new XAuthority(LOCAL, byteArrayToList("host".getBytes()), -1, byteArrayToList("magic".getBytes()), byteArrayToList(new byte[] {1})));
     assertThat(exception).hasMessage("displayNumber was \"-1\" expected >= 0.");
   }
 
   @Test
   void constructor_fails_on_null_protocolName() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> new XAuthority(LOCAL, "host".getBytes(), 0, null, new byte[] {1}));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> new XAuthority(LOCAL, byteArrayToList("host".getBytes()), 0, null, byteArrayToList(new byte[] {1})));
     assertThat(exception).hasMessage("protocolName is marked non-null but is null");
   }
 
   @Test
   void constructor_fails_on_blank_protocolName() {
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new XAuthority(LOCAL, "host".getBytes(), 0, " ", new byte[] {1}));
-    assertThat(exception).hasMessage("protocolName must not be blank");
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new XAuthority(LOCAL, byteArrayToList("host".getBytes()), 0, byteArrayToList(new byte[]{}), byteArrayToList(new byte[] {1})));
+    assertThat(exception).hasMessage("protocolName must not be empty");
   }
 
   @Test
   void constructor_fails_on_null_protocolData() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> new XAuthority(LOCAL, "host".getBytes(), 0, "MIT-MAGIC-COOKIE-1", null));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> new XAuthority(LOCAL, byteArrayToList("host".getBytes()), 0, byteArrayToList("MIT-MAGIC-COOKIE-1".getBytes()), null));
     assertThat(exception).hasMessage("protocolData is marked non-null but is null");
   }
 
   @Test
   void constructor_fails_on_empty_protocolData() {
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new XAuthority(LOCAL, new byte[]{1}, 0, "MIT-MAGIC-COOKIE-1", new byte[] {}));
-    assertThat(exception).hasMessage("protocolData must not be blank");
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new XAuthority(LOCAL, byteArrayToList(new byte[]{1}), 0, byteArrayToList("MIT-MAGIC-COOKIE-1".getBytes()), byteArrayToList(new byte[] {})));
+    assertThat(exception).hasMessage("protocolData must not be empty");
   }
 
   @Test
   void constructor() {
-    XAuthority xAuthority = new XAuthority(LOCAL, "host".getBytes(), 0, "MIT-MAGIC-COOKIE-1", new byte[] {1, 2, 3});
+    XAuthority xAuthority = new XAuthority(LOCAL, byteArrayToList("host".getBytes()), 0, byteArrayToList("MIT-MAGIC-COOKIE-1".getBytes()), byteArrayToList(new byte[] {1, 2, 3}));
     assertThat(xAuthority.getFamily()).isEqualTo(LOCAL);
-    assertThat(xAuthority.getAddress()).isEqualTo("host".getBytes());
+    assertThat(xAuthority.getAddress()).isEqualTo(byteArrayToList("host".getBytes()));
     assertThat(xAuthority.getDisplayNumber()).isEqualTo(0);
-    assertThat(xAuthority.getProtocolName()).isEqualTo("MIT-MAGIC-COOKIE-1");
-    assertThat(xAuthority.getProtocolData()).isEqualTo("123");
+    assertThat(xAuthority.getProtocolName()).isEqualTo(byteArrayToList("MIT-MAGIC-COOKIE-1".getBytes()));
+    assertThat(xAuthority.getProtocolData()).isEqualTo(byteArrayToList(new byte[] {1, 2, 3}));
   }
 
   private static void fillBytes(byte[] bytes) {

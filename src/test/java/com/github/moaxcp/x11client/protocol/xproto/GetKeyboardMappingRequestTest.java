@@ -12,29 +12,29 @@ import static org.mockito.Mockito.mock;
 public class GetKeyboardMappingRequestTest {
   @Test
   void opcode() {
-    assertThat(GetKeyboardMappingRequest.OPCODE).isEqualTo((byte) 101);
+    assertThat(GetKeyboardMapping.OPCODE).isEqualTo((byte) 101);
   }
 
   @Test
   void length() {
-    assertThat(GetKeyboardMappingRequest.builder().build().getLength()).isEqualTo(2);
+    assertThat(GetKeyboardMapping.builder().build().getLength()).isEqualTo(2);
   }
 
   @Test
   void size() {
-    assertThat(GetKeyboardMappingRequest.builder().build().getSize()).isEqualTo(6);
+    assertThat(GetKeyboardMapping.builder().build().getSize()).isEqualTo(6);
   }
 
   @Test
   void write() throws IOException {
     X11Output out = mock(X11Output.class);
-    GetKeyboardMappingRequest request = GetKeyboardMappingRequest.builder()
+    GetKeyboardMapping request = GetKeyboardMapping.builder()
       .firstKeycode((byte) 22)
       .count((byte) 44)
       .build();
     request.write((byte) 0, out);
 
-    then(out).should().writeCard8(GetKeyboardMappingRequest.OPCODE);
+    then(out).should().writeCard8(GetKeyboardMapping.OPCODE);
     then(out).should().writePad(1);
     then(out).should().writeCard16((short) 2);
     then(out).should().writeCard8((byte) 22);

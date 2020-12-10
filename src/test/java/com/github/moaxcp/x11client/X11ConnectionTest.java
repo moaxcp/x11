@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.github.moaxcp.x11client.Utilities.byteArrayToList;
 import static com.github.moaxcp.x11client.X11Connection.connect;
 import static com.github.moaxcp.x11client.XAuthority.Family.LOCAL;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +17,7 @@ public class X11ConnectionTest {
   @Mock
   private Socket socket;
 
-  private XAuthority xAuthority = new XAuthority(LOCAL, "host".getBytes(), 0, "MIT-MAGIC-COOKIE-1", new byte[] { 1, 2, 3 });
+  private XAuthority xAuthority = new XAuthority(LOCAL, byteArrayToList("host".getBytes()), 0, byteArrayToList("MIT-MAGIC-COOKIE-1".getBytes()), byteArrayToList(new byte[] { 1, 2, 3 }));
 
   @Test
   void constructor_fails_on_null_displayName() {

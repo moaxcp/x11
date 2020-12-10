@@ -2,10 +2,10 @@ package com.github.moaxcp.x11client.protocol;
 
 import com.github.moaxcp.x11client.X11ClientException;
 import com.github.moaxcp.x11client.X11ErrorException;
-import com.github.moaxcp.x11client.protocol.bigreq.EnableRequest;
+import com.github.moaxcp.x11client.protocol.bigreq.Enable;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
-import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionRequest;
-import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
+import com.github.moaxcp.x11client.protocol.xproto.QueryExtension;
+import com.github.moaxcp.x11client.protocol.xproto.Setup;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -21,27 +21,28 @@ public final class XProtocolService {
   @Getter
   private int nextSequenceNumber = 1;
   @Getter
-  private int maximumRequestLength;
+  private long maximumRequestLength;
   private final Queue<OneWayRequest> requests = new LinkedList<>();
   private final Queue<XEvent> events = new LinkedList<>();
 
-  public XProtocolService(SetupStruct setup, X11Input in, X11Output out) throws IOException {
+  public XProtocolService(Setup setup, X11Input in, X11Output out) throws IOException {
     this.in = in;
     this.out = out;
     maximumRequestLength = setup.getMaximumRequestLength();
     for(XProtocolPlugin plugin : loader) {
       String name = plugin.getName();
-      QueryExtensionRequest request = QueryExtensionRequest.builder()
+      QueryExtension request = QueryExtension.builder()
         .nameLen((short) name.length())
         .name(stringToByteList(name))
         .build();
       QueryExtensionReply reply = send(request);
-      byte offset = reply.getMajorOpcode();
-      plugin.setOffset(offset);
+      if(reply.isPresent()) {
+        plugin.setOffset(reply.getMajorOpcode());
+      }
     }
     if(hasPlugin("BIG-REQUESTS")) {
-      maximumRequestLength = send(EnableRequest.builder().build())
-        .getMaximumRequestLength();
+      maximumRequestLength = Integer.toUnsignedLong(send(Enable.builder().build())
+        .getMaximumRequestLength());
     }
   }
 

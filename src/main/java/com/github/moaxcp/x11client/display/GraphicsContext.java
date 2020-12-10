@@ -1,12 +1,12 @@
 package com.github.moaxcp.x11client.display;
 
-import com.github.moaxcp.x11client.protocol.xproto.CreateGCRequest;
-import com.github.moaxcp.x11client.protocol.xproto.FreeGCRequest;
+import com.github.moaxcp.x11client.protocol.xproto.CreateGC;
+import com.github.moaxcp.x11client.protocol.xproto.FreeGC;
 
 public class GraphicsContext extends Resource {
   GraphicsContext(Display display, int drawable, int background, int foreground) {
     super(display);
-    display.send(CreateGCRequest.builder()
+    display.send(CreateGC.builder()
       .cid(getId())
       .drawable(drawable)
       .background(background)
@@ -16,7 +16,7 @@ public class GraphicsContext extends Resource {
 
   public GraphicsContext(Display display, int drawable) {
     super(display);
-    display.send(CreateGCRequest.builder()
+    display.send(CreateGC.builder()
       .cid(getId())
       .drawable(drawable)
       .build());
@@ -24,7 +24,7 @@ public class GraphicsContext extends Resource {
 
   @Override
   public void close() {
-    display.send(FreeGCRequest.builder()
+    display.send(FreeGC.builder()
       .gc(getId())
       .build());
   }

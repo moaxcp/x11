@@ -33,7 +33,7 @@ class JavaReplySpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryTreeRequest implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply> {
+            public class QueryTree implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply> {
               public static final byte OPCODE = 15;
             
               private int window;
@@ -47,12 +47,12 @@ class JavaReplySpec extends XmlSpec {
                 return OPCODE;
               }
             
-              public static com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest readQueryTreeRequest(
+              public static com.github.moaxcp.x11client.protocol.xproto.QueryTree readQueryTree(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 in.readPad(1);
                 short length = in.readCard16();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest.QueryTreeRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTreeRequest.builder();
+                com.github.moaxcp.x11client.protocol.xproto.QueryTree.QueryTreeBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTree.builder();
                 javaBuilder.window(window);
                 return javaBuilder.build();
               }
@@ -71,7 +71,7 @@ class JavaReplySpec extends XmlSpec {
                 return 8;
               }
               
-              public static class QueryTreeRequestBuilder {
+              public static class QueryTreeBuilder {
                 public int getSize() {
                   return 8;
                 }
@@ -269,7 +269,7 @@ class JavaReplySpec extends XmlSpec {
               private short hostsLen;
             
               @lombok.NonNull
-              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.HostStruct> hosts;
+              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Host> hosts;
             
               public static com.github.moaxcp.x11client.protocol.xproto.ListHostsReply readListHostsReply(
                   byte mode, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
@@ -277,9 +277,9 @@ class JavaReplySpec extends XmlSpec {
                 int length = in.readCard32();
                 short hostsLen = in.readCard16();
                 in.readPad(22);
-                java.util.List<com.github.moaxcp.x11client.protocol.xproto.HostStruct> hosts = new java.util.ArrayList<>(Short.toUnsignedInt(hostsLen));
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Host> hosts = new java.util.ArrayList<>(Short.toUnsignedInt(hostsLen));
                 for(int i = 0; i < Short.toUnsignedInt(hostsLen); i++) {
-                  hosts.add(com.github.moaxcp.x11client.protocol.xproto.HostStruct.readHostStruct(in));
+                  hosts.add(com.github.moaxcp.x11client.protocol.xproto.Host.readHost(in));
                 }
                 com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.ListHostsReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.builder();
                 javaBuilder.mode(mode);
@@ -300,7 +300,7 @@ class JavaReplySpec extends XmlSpec {
                 out.writeCard32(getLength());
                 out.writeCard16(hostsLen);
                 out.writePad(22);
-                for(com.github.moaxcp.x11client.protocol.xproto.HostStruct t : hosts) {
+                for(com.github.moaxcp.x11client.protocol.xproto.Host t : hosts) {
                   t.write(out);
                 }
                 out.writePadAlign(getSize());
@@ -313,7 +313,7 @@ class JavaReplySpec extends XmlSpec {
             
               public static class ListHostsReplyBuilder {
                 public com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.ListHostsReplyBuilder mode(
-                    com.github.moaxcp.x11client.protocol.xproto.AccessControlEnum mode) {
+                    com.github.moaxcp.x11client.protocol.xproto.AccessControl mode) {
                   this.mode = (byte) mode.getValue();
                   return this;
                 }

@@ -14,13 +14,13 @@ public class XCMISCPlugin implements XProtocolPlugin {
 
   @Override
   public boolean supportedRequest(XRequest request) {
-    if(request instanceof GetVersionRequest) {
+    if(request instanceof GetVersion) {
       return true;
     }
-    if(request instanceof GetXIDListRequest) {
+    if(request instanceof GetXIDList) {
       return true;
     }
-    if(request instanceof GetXIDRangeRequest) {
+    if(request instanceof GetXIDRange) {
       return true;
     }
     return false;
