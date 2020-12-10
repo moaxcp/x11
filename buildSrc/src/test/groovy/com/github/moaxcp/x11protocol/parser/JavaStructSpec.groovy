@@ -105,15 +105,14 @@ class JavaStructSpec extends XmlSpec {
             
               private int currentInputMasks;
             
-              @lombok.NonNull
-              private com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores;
+              private byte backingStores;
             
               public static com.github.moaxcp.x11client.protocol.xproto.ScreenStruct readScreenStruct(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int root = in.readCard32();
                 int defaultColormap = in.readCard32();
                 int currentInputMasks = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores = com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum.getByCode(in.readByte());
+                byte backingStores = in.readByte();
                 com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.builder();
                 javaBuilder.root(root);
                 javaBuilder.defaultColormap(defaultColormap);
@@ -127,7 +126,7 @@ class JavaStructSpec extends XmlSpec {
                 out.writeCard32(root);
                 out.writeCard32(defaultColormap);
                 out.writeCard32(currentInputMasks);
-                out.writeByte((byte) backingStores.getValue());
+                out.writeByte(backingStores);
               }
             
               public boolean isCurrentInputMasksEnabled(
@@ -189,6 +188,18 @@ class JavaStructSpec extends XmlSpec {
                     java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     currentInputMasks((int) m.disableFor(currentInputMasks));
                   }
+                  return this;
+                }
+            
+                public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder backingStores(
+                    com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStores) {
+                  this.backingStores = (byte) backingStores.getValue();
+                  return this;
+                }
+            
+                public com.github.moaxcp.x11client.protocol.xproto.ScreenStruct.ScreenStructBuilder backingStores(
+                    byte backingStores) {
+                  this.backingStores = backingStores;
                   return this;
                 }
             

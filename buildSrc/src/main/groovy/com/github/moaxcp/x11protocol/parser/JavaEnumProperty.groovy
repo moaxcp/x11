@@ -7,7 +7,7 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.*
 /**
  * for converting fields that have an enum set
  */
-class JavaEnumProperty extends JavaProperty {
+class JavaEnumProperty extends JavaPrimativeProperty {
 
     JavaEnumProperty(JavaType javaType, XUnitField field) {
         super(javaType, field)
@@ -15,27 +15,6 @@ class JavaEnumProperty extends JavaProperty {
 
     static JavaEnumProperty javaEnumProperty(JavaType javaType, XUnitField field) {
         return new JavaEnumProperty(javaType, field)
-    }
-
-    @Override
-    TypeName getTypeName() {
-        return memberTypeName
-    }
-
-    TypeName getMemberTypeName() {
-        getEnumTypeName(x11Field.resolvedEnumType.javaPackage, x11Field.resolvedEnumType.name)
-    }
-
-    TypeName getIoTypeName() {
-        x11PrimativeToStorageTypeName(x11Field.resolvedType.name)
-    }
-
-    @Override
-    TypeName getReadTypeName() {
-        if(super.readTypeName) {
-            return super.readTypeName
-        }
-        return ioTypeName
     }
 
     @Override
@@ -52,22 +31,13 @@ class JavaEnumProperty extends JavaProperty {
     @Override
     CodeBlock getDeclareAndReadCode() {
         return CodeBlock.builder()
-            .addStatement('$T $L = $L', memberTypeName, name, readCode)
+            .addStatement('$T $L = $L', enumClassName, name, readCode)
             .build()
     }
 
     @Override
     CodeBlock getReadCode() {
-        return CodeBlock.of("\$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Type)}())", memberTypeName)
-    }
-
-    @Override
-    void addWriteCode(CodeBlock.Builder code) {
-        if(ioTypeName != TypeName.INT) {
-            code.addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}((\$T) \$L.getValue())", ioTypeName, name)
-        } else {
-            code.addStatement("out.write${fromUpperUnderscoreToUpperCamel(x11Type)}(\$L.getValue())", name)
-        }
+        return CodeBlock.of("\$1T.getByCode(in.read${fromUpperUnderscoreToUpperCamel(x11Type)}())", enumTypeName)
     }
 
     @Override

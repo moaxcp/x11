@@ -1,8 +1,7 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-
-import static org.assertj.core.api.Assertions.assertThat
+import com.google.common.truth.Truth
 
 class JavaRequestSpec extends XmlSpec {
     def destroyWindow() {
@@ -103,8 +102,7 @@ class JavaRequestSpec extends XmlSpec {
             public class PolyPointRequest implements com.github.moaxcp.x11client.protocol.OneWayRequest {
               public static final byte OPCODE = 64;
             
-              @lombok.NonNull
-              private com.github.moaxcp.x11client.protocol.xproto.CoordModeEnum coordinateMode;
+              private byte coordinateMode;
             
               private int drawable;
             
@@ -120,7 +118,7 @@ class JavaRequestSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest readPolyPointRequest(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 int javaStart = 1;
-                com.github.moaxcp.x11client.protocol.xproto.CoordModeEnum coordinateMode = com.github.moaxcp.x11client.protocol.xproto.CoordModeEnum.getByCode(in.readByte());
+                byte coordinateMode = in.readByte();
                 javaStart += 1;
                 short length = in.readCard16();
                 javaStart += 2;
@@ -147,7 +145,7 @@ class JavaRequestSpec extends XmlSpec {
               public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
                   java.io.IOException {
                 out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
-                out.writeByte((byte) coordinateMode.getValue());
+                out.writeByte(coordinateMode);
                 out.writeCard16((short) getLength());
                 out.writeCard32(drawable);
                 out.writeCard32(gc);
@@ -163,6 +161,18 @@ class JavaRequestSpec extends XmlSpec {
               }
             
               public static class PolyPointRequestBuilder {
+                public com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest.PolyPointRequestBuilder coordinateMode(
+                    com.github.moaxcp.x11client.protocol.xproto.CoordModeEnum coordinateMode) {
+                  this.coordinateMode = (byte) coordinateMode.getValue();
+                  return this;
+                }
+            
+                public com.github.moaxcp.x11client.protocol.xproto.PolyPointRequest.PolyPointRequestBuilder coordinateMode(
+                    byte coordinateMode) {
+                  this.coordinateMode = coordinateMode;
+                  return this;
+                }
+            
                 public int getSize() {
                   return 12 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(points);
                 }
@@ -498,7 +508,7 @@ class JavaRequestSpec extends XmlSpec {
         JavaRequest javaRequest = request.javaType
 
         then:
-        assertThat(javaRequest.typeSpec.toString()).isEqualTo '''\
+        Truth.assertThat(javaRequest.typeSpec.toString()).isEqualTo '''\
             @lombok.Value
             @lombok.Builder
             public class CreateWindowRequest implements com.github.moaxcp.x11client.protocol.OneWayRequest {
@@ -520,8 +530,7 @@ class JavaRequestSpec extends XmlSpec {
             
               private short borderWidth;
             
-              @lombok.NonNull
-              private com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum clazz;
+              private short clazz;
             
               private int visual;
             
@@ -535,11 +544,11 @@ class JavaRequestSpec extends XmlSpec {
             
               private int borderPixel;
             
-              private com.github.moaxcp.x11client.protocol.xproto.GravityEnum bitGravity;
+              private int bitGravity;
             
-              private com.github.moaxcp.x11client.protocol.xproto.GravityEnum winGravity;
+              private int winGravity;
             
-              private com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStore;
+              private int backingStore;
             
               private int backingPlanes;
             
@@ -572,7 +581,7 @@ class JavaRequestSpec extends XmlSpec {
                 short width = in.readCard16();
                 short height = in.readCard16();
                 short borderWidth = in.readCard16();
-                com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum clazz = com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum.getByCode(in.readCard16());
+                short clazz = in.readCard16();
                 int visual = in.readCard32();
                 int valueMask = in.readCard32();
                 com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.builder();
@@ -600,13 +609,13 @@ class JavaRequestSpec extends XmlSpec {
                   javaBuilder.borderPixel(in.readCard32());
                 }
                 if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BIT_GRAVITY)) {
-                  javaBuilder.bitGravity(com.github.moaxcp.x11client.protocol.xproto.GravityEnum.getByCode(in.readCard32()));
+                  javaBuilder.bitGravity(in.readCard32());
                 }
                 if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.WIN_GRAVITY)) {
-                  javaBuilder.winGravity(com.github.moaxcp.x11client.protocol.xproto.GravityEnum.getByCode(in.readCard32()));
+                  javaBuilder.winGravity(in.readCard32());
                 }
                 if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_STORE)) {
-                  javaBuilder.backingStore(com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum.getByCode(in.readCard32()));
+                  javaBuilder.backingStore(in.readCard32());
                 }
                 if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PLANES)) {
                   javaBuilder.backingPlanes(in.readCard32());
@@ -649,7 +658,7 @@ class JavaRequestSpec extends XmlSpec {
                 out.writeCard16(width);
                 out.writeCard16(height);
                 out.writeCard16(borderWidth);
-                out.writeCard16((short) clazz.getValue());
+                out.writeCard16(clazz);
                 out.writeCard32(visual);
                 out.writeCard32(valueMask);
                 if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACK_PIXMAP)) {
@@ -665,13 +674,13 @@ class JavaRequestSpec extends XmlSpec {
                   out.writeCard32(borderPixel);
                 }
                 if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BIT_GRAVITY)) {
-                  out.writeCard32(bitGravity.getValue());
+                  out.writeCard32(bitGravity);
                 }
                 if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.WIN_GRAVITY)) {
-                  out.writeCard32(winGravity.getValue());
+                  out.writeCard32(winGravity);
                 }
                 if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_STORE)) {
-                  out.writeCard32(backingStore.getValue());
+                  out.writeCard32(backingStore);
                 }
                 if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_PLANES)) {
                   out.writeCard32(backingPlanes);
@@ -757,6 +766,18 @@ class JavaRequestSpec extends XmlSpec {
               }
             
               public static class CreateWindowRequestBuilder {
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder clazz(
+                    com.github.moaxcp.x11client.protocol.xproto.WindowClassEnum clazz) {
+                  this.clazz = (short) clazz.getValue();
+                  return this;
+                }
+            
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder clazz(
+                    short clazz) {
+                  this.clazz = clazz;
+                  return this;
+                }
+            
                 private com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder valueMask(
                     int valueMask) {
                   this.valueMask = valueMask;
@@ -831,22 +852,43 @@ class JavaRequestSpec extends XmlSpec {
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder bitGravity(
-                    com.github.moaxcp.x11client.protocol.xproto.GravityEnum bitGravity) {
+                    int bitGravity) {
                   this.bitGravity = bitGravity;
                   valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BIT_GRAVITY);
                   return this;
                 }
             
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder bitGravity(
+                    com.github.moaxcp.x11client.protocol.xproto.GravityEnum bitGravity) {
+                  this.bitGravity = (int) bitGravity.getValue();
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BIT_GRAVITY);
+                  return this;
+                }
+            
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder winGravity(
-                    com.github.moaxcp.x11client.protocol.xproto.GravityEnum winGravity) {
+                    int winGravity) {
                   this.winGravity = winGravity;
                   valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.WIN_GRAVITY);
                   return this;
                 }
             
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder winGravity(
+                    com.github.moaxcp.x11client.protocol.xproto.GravityEnum winGravity) {
+                  this.winGravity = (int) winGravity.getValue();
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.WIN_GRAVITY);
+                  return this;
+                }
+            
+                public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder backingStore(
+                    int backingStore) {
+                  this.backingStore = backingStore;
+                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_STORE);
+                  return this;
+                }
+            
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindowRequest.CreateWindowRequestBuilder backingStore(
                     com.github.moaxcp.x11client.protocol.xproto.BackingStoreEnum backingStore) {
-                  this.backingStore = backingStore;
+                  this.backingStore = (int) backingStore.getValue();
                   valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.CwEnum.BACKING_STORE);
                   return this;
                 }

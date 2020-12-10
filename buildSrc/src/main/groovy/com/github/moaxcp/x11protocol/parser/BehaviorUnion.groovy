@@ -6,7 +6,7 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
 import javax.lang.model.element.Modifier
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumClassName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
 
 class BehaviorUnion extends JavaUnion {
@@ -25,7 +25,7 @@ class BehaviorUnion extends JavaUnion {
 
     @Override
     MethodSpec getReadMethod() {
-        ClassName behaviorType = getEnumTypeName(javaPackage, 'BehaviorType')
+        ClassName behaviorType = getEnumClassName(javaPackage, 'BehaviorType')
         ClassName defaultBehavior = getStructTypeName(javaPackage, 'DefaultBehavior')
         ClassName radioGroupBehavior = getStructTypeName(javaPackage, 'RadioGroupBehavior')
         ClassName overlayBehavior = getStructTypeName(javaPackage, 'OverlayBehavior')

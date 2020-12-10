@@ -35,23 +35,31 @@ class JavaPrimativeProperty extends JavaProperty {
     TypeName getTypeName() {
         return memberTypeName
     }
+
+    TypeName getMemberTypeName() {
+        if(!x11Primatives.contains(x11Field.resolvedType.name)) {
+            throw new IllegalStateException("Could not find ${x11Field.resolvedType.name} in primative types $x11Primatives")
+        }
+        return x11PrimativeToStorageTypeName(x11Field.resolvedType.name)
+    }
     
     @Override
     boolean isNonNull() {
         return false
     }
 
-    TypeName getMemberTypeName() {
-        if(!x11Primatives.contains(x11Field.resolvedType.name)) {
-        throw new IllegalStateException("Could not find ${x11Field.resolvedType.name} in primative types $x11Primatives")
-    }
-        return x11PrimativeToStorageTypeName(x11Field.resolvedType.name)
+    ClassName getEnumClassName() {
+        if(x11Field.enumType) {
+            XType resolvedEnumType = x11Field.resolvedEnumType
+            return getEnumClassName(resolvedEnumType.javaPackage, resolvedEnumType.name)
+        }
+        return null
     }
 
     TypeName getMaskTypeName() {
         if(x11Field.maskType) {
             XType resolvedMaskType = x11Field.resolvedMaskType
-            return getEnumTypeName(resolvedMaskType.javaPackage, resolvedMaskType.name)
+            return getEnumClassName(resolvedMaskType.javaPackage, resolvedMaskType.name)
         }
         return null
     }
@@ -151,6 +159,38 @@ class JavaPrimativeProperty extends JavaProperty {
                     .addStatement('return this')
                     .build()
             ]
+        }
+        if(enumClassName) {
+
+            if(bitcaseInfo) {
+                methods += [
+                    MethodSpec.methodBuilder(name)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(enumClassName, name)
+                        .returns(javaType.builderClassName)
+                        .addStatement('this.$1L = ($2T) $1L.getValue()', name, memberTypeName)
+                        .addStatement('$LEnable($T.$L)', bitcaseInfo.maskField, bitcaseInfo.enumType, bitcaseInfo.enumItem)
+                        .addStatement('return this')
+                        .build()
+                ]
+            } else {
+                methods += [
+                    MethodSpec.methodBuilder(name)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(enumClassName, name)
+                        .returns(javaType.builderClassName)
+                        .addStatement('this.$1L = ($2T) $1L.getValue()', name, memberTypeName)
+                        .addStatement('return this')
+                        .build(),
+                    MethodSpec.methodBuilder(name)
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(typeName, name)
+                        .returns(javaType.builderClassName)
+                        .addStatement('this.$1L = $1L', name)
+                        .addStatement('return this')
+                        .build()
+                ]
+            }
         }
         return methods
     }

@@ -10,7 +10,7 @@ import com.squareup.javapoet.TypeSpec
 import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumJavaName
-import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumClassName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumValueName
 
 class JavaEnum implements JavaType {
@@ -87,7 +87,7 @@ class JavaEnum implements JavaType {
             basePackage: xEnum.basePackage,
             javaPackage: xEnum.javaPackage,
             simpleName: simpleName,
-            className: getEnumTypeName(xEnum.javaPackage, xEnum.name),
+            className: getEnumClassName(xEnum.javaPackage, xEnum.name),
             superInterface: ClassName.get(xEnum.basePackage, 'IntValue'),
             values: values
         )

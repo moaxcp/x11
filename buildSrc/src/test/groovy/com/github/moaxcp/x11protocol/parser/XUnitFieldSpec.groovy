@@ -1,7 +1,7 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.TypeName
 
 import static com.github.moaxcp.x11protocol.parser.XUnitField.xUnitField
 
@@ -197,6 +197,6 @@ class XUnitFieldSpec extends XmlSpec {
         field.name == 'mask'
         field.type == 'CARD8'
         field.resolvedEnumType.name == 'EventMask'
-        field.getJavaUnit(javaType).typeName == ClassName.get('com.github.moaxcp.x11client.protocol.xproto', 'EventMaskEnum')
+        field.getJavaUnit(javaType).typeName == TypeName.BYTE
     }
 }

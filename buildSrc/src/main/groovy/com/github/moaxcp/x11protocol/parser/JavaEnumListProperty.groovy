@@ -20,7 +20,7 @@ class JavaEnumListProperty extends JavaListProperty {
     
     @Override
     TypeName getBaseTypeName() {
-        return getEnumTypeName(x11Field.resolvedEnumType.javaPackage, x11Field.resolvedEnumType.name)
+        return getEnumClassName(x11Field.resolvedEnumType.javaPackage, x11Field.resolvedEnumType.name)
     }
 
     TypeName getMemberTypeName() {

@@ -1,29 +1,16 @@
 package com.github.moaxcp.x11client.protocol.bigreq;
 
 import com.github.moaxcp.x11client.protocol.*;
-import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
-import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionRequest;
-import lombok.Getter;
-
 import java.io.IOException;
-
-import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+import lombok.Getter;
+import lombok.Setter;
 
 public class BigreqPlugin implements XProtocolPlugin {
   @Getter
   private final String name = "BIG-REQUESTS";
   @Getter
+  @Setter
   private byte offset;
-
-  @Override
-  public void setupOffset(XProtocolService service) throws IOException {
-    QueryExtensionRequest bigRequests = QueryExtensionRequest.builder()
-      .nameLen((short) name.length())
-      .name(stringToByteList(name))
-      .build();
-    QueryExtensionReply bigRequestReply = service.send(bigRequests);
-    offset = bigRequestReply.getMajorOpcode();
-  }
 
   @Override
   public boolean supportedRequest(XRequest request) {

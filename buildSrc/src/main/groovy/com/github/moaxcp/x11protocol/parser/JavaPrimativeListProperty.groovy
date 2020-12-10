@@ -1,13 +1,11 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.parser.expression.EmptyExpression
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.ParameterizedTypeName
-import com.squareup.javapoet.TypeName
+import com.squareup.javapoet.*
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
-import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToBoxedType 
+import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumClassName
+import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToBoxedType
 
 class JavaPrimativeListProperty extends JavaListProperty {
 
@@ -27,6 +25,23 @@ class JavaPrimativeListProperty extends JavaListProperty {
 
     static JavaPrimativeListProperty javaPrimativeListProperty(JavaType javaType, XUnitListField field) {
         return new JavaPrimativeListProperty(javaType, field)
+    }
+
+    ClassName getEnumClassName() {
+        if(x11Field.enumType) {
+            XType resolvedEnumType = x11Field.resolvedEnumType
+            return getEnumClassName(resolvedEnumType.javaPackage, resolvedEnumType.name)
+        }
+        return null
+    }
+
+    @Override
+    List<MethodSpec> getBuilderMethods(ClassName outer) {
+        List<MethodSpec> methods = super.getBuilderMethods(outer)
+        if(enumClassName) {
+            //todo add method which converts enums to type
+        }
+        return methods
     }
 
     @Override

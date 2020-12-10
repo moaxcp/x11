@@ -5,7 +5,7 @@ import java.io.IOException;
 public interface XProtocolPlugin {
   String getName();
   byte getOffset();
-  void setupOffset(XProtocolService service) throws IOException;
+  void setOffset(byte offset);
   boolean supportedRequest(XRequest request);
   boolean supportedEvent(byte number);
   boolean supportedError(byte code);

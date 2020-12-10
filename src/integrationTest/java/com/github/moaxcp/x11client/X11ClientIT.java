@@ -5,34 +5,15 @@ import com.github.moaxcp.x11client.protocol.xproto.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11client.Utilities.stringToByteList;
 
 public class X11ClientIT {
-  private XephyrRunner runner;
-
-  @BeforeEach
-  void setup() throws IOException {
-    runner = XephyrRunner.builder()
-      .ac(true)
-      .br(true)
-      .noreset(true)
-      .arg(":1")
-      .build();
-    runner.start();
-  }
-
-  @AfterEach
-  void teardown() throws InterruptedException {
-    runner.stop();
-  }
 
   @Test
   void clientTest() throws IOException {
-    try(X11Client x11Client = X11Client.connect(new DisplayName(":1"))) {
+    try(X11Client x11Client = X11Client.connect()) {
       CreateWindowRequest window = CreateWindowRequest.builder()
         .depth(x11Client.getDepth(0))
         .wid(x11Client.nextResourceId())
@@ -46,8 +27,7 @@ public class X11ClientIT {
         .visual(x11Client.getVisualId(0))
         .backgroundPixel(x11Client.getWhitePixel(0))
         .borderPixel(x11Client.getBlackPixel(0))
-        .eventMaskEnable(EventMaskEnum.EXPOSURE)
-        .eventMaskEnable(EventMaskEnum.KEY_PRESS)
+        .eventMaskEnable(EventMaskEnum.EXPOSURE, EventMaskEnum.KEY_PRESS)
         .build();
       x11Client.send(window);
       x11Client.send(MapWindowRequest.builder()

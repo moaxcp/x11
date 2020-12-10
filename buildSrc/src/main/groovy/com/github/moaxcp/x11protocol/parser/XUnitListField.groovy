@@ -33,9 +33,6 @@ class XUnitListField extends XUnitField {
 
     @Override
     JavaListProperty getJavaUnit(JavaType javaType) {
-        if(enumType) {
-            return resolvedEnumType.getJavaProperty(javaType, this)
-        }
         return resolvedType.getJavaProperty(javaType, this)
     }
 }

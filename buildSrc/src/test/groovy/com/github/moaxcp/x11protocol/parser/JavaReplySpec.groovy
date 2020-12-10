@@ -262,8 +262,7 @@ class JavaReplySpec extends XmlSpec {
             @lombok.Value
             @lombok.Builder
             public class ListHostsReply implements com.github.moaxcp.x11client.protocol.XReply {
-              @lombok.NonNull
-              private com.github.moaxcp.x11client.protocol.xproto.AccessControlEnum mode;
+              private byte mode;
             
               private short sequenceNumber;
             
@@ -283,7 +282,7 @@ class JavaReplySpec extends XmlSpec {
                   hosts.add(com.github.moaxcp.x11client.protocol.xproto.HostStruct.readHostStruct(in));
                 }
                 com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.ListHostsReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.builder();
-                javaBuilder.mode(com.github.moaxcp.x11client.protocol.xproto.AccessControlEnum.getByCode(mode));
+                javaBuilder.mode(mode);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.hostsLen(hostsLen);
                 javaBuilder.hosts(hosts);
@@ -296,7 +295,7 @@ class JavaReplySpec extends XmlSpec {
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(getResponseCode());
-                out.writeByte((byte) mode.getValue());
+                out.writeByte(mode);
                 out.writeCard16(sequenceNumber);
                 out.writeCard32(getLength());
                 out.writeCard16(hostsLen);
@@ -313,6 +312,18 @@ class JavaReplySpec extends XmlSpec {
               }
             
               public static class ListHostsReplyBuilder {
+                public com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.ListHostsReplyBuilder mode(
+                    com.github.moaxcp.x11client.protocol.xproto.AccessControlEnum mode) {
+                  this.mode = (byte) mode.getValue();
+                  return this;
+                }
+            
+                public com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.ListHostsReplyBuilder mode(
+                    byte mode) {
+                  this.mode = mode;
+                  return this;
+                }
+            
                 public int getSize() {
                   return 32 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(hosts);
                 }

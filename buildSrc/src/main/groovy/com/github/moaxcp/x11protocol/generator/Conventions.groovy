@@ -209,7 +209,7 @@ class Conventions {
         return getJavaName(x11Name) + 'Enum'
     }
 
-    static ClassName getEnumTypeName(String javaPackage, String x11Name) {
+    static ClassName getEnumClassName(String javaPackage, String x11Name) {
         return ClassName.get(javaPackage, getEnumJavaName(x11Name))
     }
 

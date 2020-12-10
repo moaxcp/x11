@@ -4,17 +4,14 @@ import com.github.moaxcp.x11client.protocol.*;
 import lombok.Getter;
 
 import java.io.IOException;
+import lombok.Setter;
 
 public class XprotoPlugin implements XProtocolPlugin {
   @Getter
   private final String name = "xproto";
   @Getter
+  @Setter
   private byte offset;
-
-  @Override
-  public void setupOffset(XProtocolService service) {
-
-  }
 
   @Override
   public boolean supportedRequest(XRequest request) {
@@ -65,12 +62,12 @@ public class XprotoPlugin implements XProtocolPlugin {
   @Override
   public XEvent readEvent(byte number, boolean sentEvent, X11Input in) throws IOException {
     switch(number) {
+      case 2:
+        return KeyPressEvent.readKeyPressEvent(sentEvent, in);
       case 12:
         return ExposeEvent.readExposeEvent(sentEvent, in);
       case 26:
         return CirculateNotifyEvent.readCirculateNotifyEvent(sentEvent, in);
-      case 34:
-        return KeyPressEvent.readKeyPressEvent(sentEvent, in);
       default:
         throw new IllegalArgumentException("number " + number + " is not supported");
     }

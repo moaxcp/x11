@@ -3,12 +3,16 @@ package com.github.moaxcp.x11client.protocol;
 import com.github.moaxcp.x11client.X11ClientException;
 import com.github.moaxcp.x11client.X11ErrorException;
 import com.github.moaxcp.x11client.protocol.bigreq.EnableRequest;
+import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
+import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionRequest;
 import com.github.moaxcp.x11client.protocol.xproto.SetupStruct;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.ServiceLoader;
 import lombok.Getter;
+
+import static com.github.moaxcp.x11client.Utilities.stringToByteList;
 
 public final class XProtocolService {
   private final ServiceLoader<XProtocolPlugin> loader = ServiceLoader.load(XProtocolPlugin.class);
@@ -26,7 +30,14 @@ public final class XProtocolService {
     this.out = out;
     maximumRequestLength = setup.getMaximumRequestLength();
     for(XProtocolPlugin plugin : loader) {
-      plugin.setupOffset(this);
+      String name = plugin.getName();
+      QueryExtensionRequest request = QueryExtensionRequest.builder()
+        .nameLen((short) name.length())
+        .name(stringToByteList(name))
+        .build();
+      QueryExtensionReply reply = send(request);
+      byte offset = reply.getMajorOpcode();
+      plugin.setOffset(offset);
     }
     if(hasPlugin("BIG-REQUESTS")) {
       maximumRequestLength = send(EnableRequest.builder().build())

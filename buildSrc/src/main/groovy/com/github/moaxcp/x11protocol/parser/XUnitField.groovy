@@ -71,12 +71,6 @@ class XUnitField implements XUnit {
 
     @Override
     JavaProperty getJavaUnit(JavaType javaType) {
-        JavaProperty unit
-        if(enumType) {
-            unit = resolvedEnumType.getJavaProperty(javaType, this)
-        } else {
-            unit = resolvedType.getJavaProperty(javaType, this)
-        }
-        return unit
+        return resolvedType.getJavaProperty(javaType, this)
     }
 }
