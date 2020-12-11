@@ -1,10 +1,19 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.generator.Conventions
+import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.TypeSpec
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.Memoized
 import groovy.transform.ToString
 import groovy.util.slurpersupport.Node
+import javax.lang.model.element.Modifier
+import lombok.Getter
+import lombok.Setter
+
+import static com.github.moaxcp.x11protocol.generator.Conventions.getJavaName
 
 @ToString(includePackage = false, includes='header')
 @EqualsAndHashCode
@@ -34,6 +43,121 @@ class XResult {
 
     String getJavaPackage() {
         return "$basePackage.$header"
+    }
+
+    TypeSpec getXPlugin() {
+        TypeSpec.Builder builder = TypeSpec.classBuilder(getPluginClassName())
+            .addSuperinterface(ClassName.get(basePackage, 'XProtocolPlugin'))
+
+        builder.addField(
+            FieldSpec.builder(String.class, 'name', Modifier.PRIVATE, Modifier.FINAL)
+                .initializer('"$L"', extensionXName)
+                .addAnnotation(Getter.class)
+                .build())
+
+        builder.addField(
+            FieldSpec.builder(byte.class, 'majorOpcode', Modifier.PRIVATE)
+            .addAnnotation(Getter.class)
+            .addAnnotation(Setter.class)
+            .build())
+
+        builder.addField(
+            FieldSpec.builder(byte.class, 'firstEvent', Modifier.PRIVATE)
+                .addAnnotation(Getter.class)
+                .addAnnotation(Setter.class)
+                .build())
+
+        builder.addField(
+            FieldSpec.builder(byte.class, 'firstError', Modifier.PRIVATE)
+                .addAnnotation(Getter.class)
+                .addAnnotation(Setter.class)
+                .build())
+
+        MethodSpec.Builder supportedRequest = MethodSpec.methodBuilder('supportedRequest')
+            .addModifiers(Modifier.PUBLIC)
+            .addAnnotation(Override.class)
+            .returns(boolean.class)
+            .addParameter(ClassName.get(basePackage, 'XRequest'), 'request')
+
+        for(XTypeRequest request : requests.values()) {
+            supportedRequest.beginControlFlow('if(request instanceof $T)', request.javaType.className)
+            supportedRequest.addStatement('return true')
+            supportedRequest.endControlFlow()
+        }
+        supportedRequest.addStatement('return false')
+
+        builder.addMethod(supportedRequest.build())
+
+        MethodSpec.Builder supportedEvent = MethodSpec.methodBuilder('supportedEvent')
+            .addModifiers(Modifier.PUBLIC)
+            .addAnnotation(Override.class)
+            .returns(boolean.class)
+            .addParameter(byte.class, 'number')
+
+        for(XTypeEvent event : events.values()) {
+            supportedEvent.beginControlFlow('if(number + firstEvent == $L)', event.number)
+            supportedEvent.addStatement('return true')
+            supportedEvent.endControlFlow()
+        }
+        supportedEvent.addStatement('return false')
+
+        builder.addMethod(supportedEvent.build())
+
+        MethodSpec.Builder supportedError = MethodSpec.methodBuilder('supportedError')
+            .addModifiers(Modifier.PUBLIC)
+            .addAnnotation(Override.class)
+            .returns(boolean.class)
+            .addParameter(byte.class, 'code')
+
+        for(XTypeError error : errors.values()) {
+            supportedError.beginControlFlow('if(code + firstError == $L)', error.number)
+            supportedError.addStatement('return true')
+            supportedError.endControlFlow()
+        }
+        supportedError.addStatement('return false')
+
+        builder.addMethod(supportedError.build())
+
+        MethodSpec.Builder readEvent = MethodSpec.methodBuilder('readEvent')
+            .addModifiers(Modifier.PUBLIC)
+            .addAnnotation(Override.class)
+            .returns(ClassName.get(basePackage, 'XEvent'))
+            .addParameter(byte.class, 'number')
+            .addParameter(boolean.class, 'sentEvent')
+            .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
+            .addException(IOException.class)
+
+        for(XTypeEvent event : events.values()) {
+            readEvent.beginControlFlow('if(number + firstEvent == $L)', event.number)
+            readEvent.addStatement('return $T.read$L(sentEvent, in)', event.javaType.className, event.javaType.className.simpleName())
+            readEvent.endControlFlow()
+        }
+        readEvent.addStatement('throw new $T("number " + number + " is not supported")', IllegalArgumentException.class)
+
+        builder.addMethod(readEvent.build())
+
+        MethodSpec.Builder readError = MethodSpec.methodBuilder('readError')
+            .addModifiers(Modifier.PUBLIC)
+            .addAnnotation(Override.class)
+            .returns(ClassName.get(basePackage, 'XError'))
+            .addParameter(byte.class, 'code')
+            .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
+            .addException(IOException.class)
+
+        for(XTypeError error : errors.values()) {
+            readError.beginControlFlow('if(code + firstError == $L)', error.number)
+            readError.addStatement('return $T.read$L(in)', error.javaType.className, error.javaType.className.simpleName())
+            readError.endControlFlow()
+        }
+        readError.addStatement('throw new $T("code " + code + " is not supported")', IllegalArgumentException.class)
+
+        builder.addMethod(readError.build())
+
+        return builder.build()
+    }
+
+    public ClassName getPluginClassName() {
+        ClassName.get(basePackage, getJavaName(header.capitalize() + 'Plugin'))
     }
 
     void addNode(Node node) {

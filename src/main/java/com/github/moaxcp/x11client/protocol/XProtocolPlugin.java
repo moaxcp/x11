@@ -4,8 +4,12 @@ import java.io.IOException;
 
 public interface XProtocolPlugin {
   String getName();
-  byte getOffset();
-  void setOffset(byte offset);
+  byte getMajorOpcode();
+  void setMajorOpcode(byte majorOpcode);
+  byte getFirstEvent();
+  void setFirstEvent(byte firstEvent);
+  byte getFirstError();
+  void setFirstError(byte firstError);
   boolean supportedRequest(XRequest request);
   boolean supportedEvent(byte number);
   boolean supportedError(byte code);

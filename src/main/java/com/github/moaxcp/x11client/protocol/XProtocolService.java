@@ -37,7 +37,9 @@ public final class XProtocolService {
         .build();
       QueryExtensionReply reply = send(request);
       if(reply.isPresent()) {
-        plugin.setOffset(reply.getMajorOpcode());
+        plugin.setMajorOpcode(reply.getMajorOpcode());
+        plugin.setFirstEvent(reply.getFirstEvent());
+        plugin.setFirstError(reply.getFirstError());
       }
     }
     if(hasPlugin("BIG-REQUESTS")) {
@@ -70,7 +72,7 @@ public final class XProtocolService {
     for(XProtocolPlugin plugin : loader) {
       if(plugin.supportedRequest(request)) {
         try {
-          request.write(plugin.getOffset(), out);
+          request.write(plugin.getMajorOpcode(), out);
         } catch(IOException e) {
           throw new X11ClientException("exception when writing with plugin \"" + plugin.getName() + "\"", e);
         }
