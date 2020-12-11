@@ -8,6 +8,7 @@ import com.squareup.javapoet.JavaFile
 class ProtocolGenerator {
     File inputXml
     File outputSrc
+    File outputResources
     String basePackage
 
     void generate() {
@@ -46,7 +47,7 @@ class ProtocolGenerator {
         pluginFile.writeTo(outputSrc)
 
         String pluginClass = result.pluginClassName.canonicalName()
-        File services = new File(outputSrc, "META-INF/services/${basePackage}.XProtocolPlugin")
+        File services = new File(outputResources, "META-INF/services/${basePackage}.XProtocolPlugin")
         services.parentFile.mkdirs()
 
         services.append("$pluginClass\n")

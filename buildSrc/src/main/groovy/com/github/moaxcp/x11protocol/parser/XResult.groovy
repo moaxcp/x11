@@ -47,6 +47,7 @@ class XResult {
 
     TypeSpec getXPlugin() {
         TypeSpec.Builder builder = TypeSpec.classBuilder(getPluginClassName())
+            .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(ClassName.get(basePackage, 'XProtocolPlugin'))
 
         builder.addField(

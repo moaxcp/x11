@@ -38,6 +38,7 @@ integrationTest {
 }
 
 x11Protocol {
-    outputSrc = file('build/generated/xproto')
+    outputSrc = file('build/generated/xproto/src/main/java/')
+    outputResources = file('build/generated/xproto/src/main/resources')
     xcbXmls = file('src/main/xcbXmls')
 }

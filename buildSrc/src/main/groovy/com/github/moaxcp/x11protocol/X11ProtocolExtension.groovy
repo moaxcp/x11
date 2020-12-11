@@ -8,10 +8,12 @@ import javax.inject.Inject
 class X11ProtocolExtension {
     final DirectoryProperty xcbXmls
     final DirectoryProperty outputSrc
+    final DirectoryProperty outputResources
 
     @Inject
     X11ProtocolExtension(ObjectFactory objects) {
         xcbXmls = objects.directoryProperty()
         outputSrc = objects.directoryProperty()
+        outputResources = objects.directoryProperty()
     }
 }

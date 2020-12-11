@@ -13,12 +13,14 @@ class X11ProtocolPlugin implements Plugin<Project> {
         def task = project.task(type: GenerateX11ProtocolTask, 'generateX11Protocol')
         task.xcbXmls = project.x11Protocol.xcbXmls
         task.outputSrc = project.x11Protocol.outputSrc
+        task.outputResources = project.x11Protocol.outputResources
 
         project.getPlugins().withType(JavaPlugin.class, new Action<JavaPlugin>() {
             @Override
             void execute(final JavaPlugin plugin) {
                 SourceSetContainer sourceSets = (SourceSetContainer) project.getProperties().get("sourceSets")
                 sourceSets.getByName("main").getJava().srcDir(task.outputSrc)
+                sourceSets.getByName("main").getResources().srcDir(task.outputResources)
                 def compileTask = project.tasks.getByName(JavaPlugin.COMPILE_JAVA_TASK_NAME)
                 compileTask.dependsOn(task);
             }
