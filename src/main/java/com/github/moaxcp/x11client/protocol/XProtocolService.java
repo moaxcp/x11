@@ -3,13 +3,11 @@ package com.github.moaxcp.x11client.protocol;
 import com.github.moaxcp.x11client.X11ClientException;
 import com.github.moaxcp.x11client.X11ErrorException;
 import com.github.moaxcp.x11client.protocol.bigreq.Enable;
-import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtension;
+import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
 import com.github.moaxcp.x11client.protocol.xproto.Setup;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.ServiceLoader;
+import java.util.*;
 import lombok.Getter;
 
 import static com.github.moaxcp.x11client.Utilities.stringToByteList;
@@ -24,12 +22,17 @@ public final class XProtocolService {
   private long maximumRequestLength;
   private final Queue<OneWayRequest> requests = new LinkedList<>();
   private final Queue<XEvent> events = new LinkedList<>();
+  private final List<XProtocolPlugin> activatedPlugins = new ArrayList<>();
 
   public XProtocolService(Setup setup, X11Input in, X11Output out) throws IOException {
     this.in = in;
     this.out = out;
     maximumRequestLength = setup.getMaximumRequestLength();
     for(XProtocolPlugin plugin : loader) {
+      if(plugin instanceof XprotoPlugin) {
+        activatedPlugins.add(plugin);
+        continue;
+      }
       String name = plugin.getName();
       QueryExtension request = QueryExtension.builder()
         .nameLen((short) name.length())
@@ -40,15 +43,25 @@ public final class XProtocolService {
         plugin.setMajorOpcode(reply.getMajorOpcode());
         plugin.setFirstEvent(reply.getFirstEvent());
         plugin.setFirstError(reply.getFirstError());
+        activatedPlugins.add(plugin);
       }
     }
-    if(hasPlugin("BIG-REQUESTS")) {
+    if(loadedPlugin("BIG-REQUESTS")) {
       maximumRequestLength = Integer.toUnsignedLong(send(Enable.builder().build())
         .getMaximumRequestLength());
     }
   }
 
-  public boolean hasPlugin(String name) {
+  public boolean loadedPlugin(String name) {
+    for(XProtocolPlugin plugin : loader) {
+      if(plugin.getName().equals(name)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean activatedPlugin(String name) {
     for(XProtocolPlugin plugin : loader) {
       if(plugin.getName().equals(name)) {
         return true;
@@ -69,7 +82,7 @@ public final class XProtocolService {
 
   private void actuallySend(XRequest request) {
     boolean sent = false;
-    for(XProtocolPlugin plugin : loader) {
+    for(XProtocolPlugin plugin : activatedPlugins) {
       if(plugin.supportedRequest(request)) {
         try {
           request.write(plugin.getMajorOpcode(), out);
@@ -107,7 +120,7 @@ public final class XProtocolService {
 
   private XError readError() throws IOException {
     byte code = in.readCard8();
-    for(XProtocolPlugin reader : loader) {
+    for(XProtocolPlugin reader : activatedPlugins) {
       if(reader.supportedError(code)) {
         return reader.readError(code, in);
       }
@@ -121,7 +134,7 @@ public final class XProtocolService {
     if(sentEvent) {
       number = (byte) (responseCode ^ (byte) 0b10000000);
     }
-    for(XProtocolPlugin reader : loader) {
+    for(XProtocolPlugin reader : activatedPlugins) {
       if(reader.supportedEvent(number)) {
         return reader.readEvent(number, sentEvent, in);
       }

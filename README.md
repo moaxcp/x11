@@ -36,7 +36,7 @@ Requests are built by the user and passed to the
 client.
 
 ```
-CreateWindowRequest window = CreateWindowRequest.builder()
+CreateWindow window = CreateWindow.builder()
         .depth(x11Client.getDepth(0))
         .wid(x11Client.nextResourceId())
         .parent(x11Client.getRoot(0))
@@ -45,12 +45,11 @@ CreateWindowRequest window = CreateWindowRequest.builder()
         .width((short) 600)
         .height((short) 480)
         .borderWidth((short) 5)
-        .clazz(WindowClassEnum.COPY_FROM_PARENT)
+        .clazz(COPY_FROM_PARENT)
         .visual(x11Client.getVisualId(0))
         .backgroundPixel(x11Client.getWhitePixel(0))
         .borderPixel(x11Client.getBlackPixel(0))
-        .eventMaskEnable(EventMaskEnum.EXPOSURE)
-        .eventMaskEnable(EventMaskEnum.KEY_PRESS)
+        .eventMaskEnable(EXPOSURE, KEY_PRESS)
         .build();
 ```
 
@@ -62,8 +61,7 @@ shown above where the event masks are enabled.
 
 ```
 ...
-.eventMaskEnable(EventMaskEnum.EXPOSURE)
-.eventMaskEnable(EventMaskEnum.KEY_PRESS)
+        .eventMaskEnable(EXPOSURE, KEY_PRESS)
 ...
 ```
 
@@ -117,24 +115,25 @@ try {
 
 All supported x11 extensions are automatically 
 loaded by the client on startup. Users can check if 
-an extension is loaded by calling 
+an extension is loaded or activated by calling 
 
 ```
-
+client.loadedPlugin("BIG-REQUESTS");
+client.activePlugin("BIG-REQUESTS");
 ```
 
 If an extension is supported, then XRequests for 
 that extension can be sent to the client.
 
 ```
-
+client.send(Enable.builder().build());
 ```
 
 Otherwise, sending an unsupported request will 
 result in an exception.
 
 ```
-
+could not find plugin for request "%s"
 ```
 
 # Examples
@@ -143,6 +142,64 @@ These examples are conversions of an Xlib example
 written in C.
 
 ## Hello World
+
+```
+try(X11Client x11Client = X11Client.connect()) {
+  CreateWindow window = CreateWindow.builder()
+    .depth(x11Client.getDepth(0))
+    .wid(x11Client.nextResourceId())
+    .parent(x11Client.getRoot(0))
+    .x((short) 10)
+    .y((short) 10)
+    .width((short) 600)
+    .height((short) 480)
+    .borderWidth((short) 5)
+    .clazz(WindowClass.COPY_FROM_PARENT)
+    .visual(x11Client.getVisualId(0))
+    .backgroundPixel(x11Client.getWhitePixel(0))
+    .borderPixel(x11Client.getBlackPixel(0))
+    .eventMaskEnable(EventMask.EXPOSURE, EventMask.KEY_PRESS)
+    .build();
+  x11Client.send(window);
+  x11Client.send(MapWindow.builder()
+    .window(window.getWid())
+    .build());
+  CreateGC gc = CreateGC.builder()
+    .cid(x11Client.nextResourceId())
+    .drawable(window.getWid())
+    .background(x11Client.getWhitePixel(0))
+    .foreground(x11Client.getBlackPixel(0))
+    .build();
+  x11Client.send(gc);
+  while(true) {
+    XEvent event = x11Client.getNextEvent();
+    if(event instanceof ExposeEvent) {
+      List<Rectangle> rectangles = new ArrayList<>();
+      rectangles.add(Rectangle.builder()
+        .x((short) 20)
+        .y((short) 20)
+        .width((short) 10)
+        .height((short) 10)
+        .build());
+      x11Client.send(PolyFillRectangle.builder()
+        .drawable(window.getWid())
+        .gc(gc.getCid())
+        .rectangles(rectangles)
+        .build());
+      x11Client.send(ImageText8.builder()
+        .drawable(window.getWid())
+        .gc(gc.getCid())
+        .stringLen((byte) "Hello World!".length())
+        .string(stringToByteList("Hello World!"))
+        .x((short) 10)
+        .y((short) 50)
+        .build());
+    } else if(event instanceof KeyPressEvent) {
+      break;
+    }
+  }
+}
+```
 
 # Design
 
@@ -157,64 +214,82 @@ There are 3 ways in which the client will be flushed.
 2. sending a TwoWayRequest
 3. When the event queue is empty and getNextEvent() is called
 
-TwoWayRequests are requests where the client expects a response from the server. These requests cause the client to flush the OneWayRequest queue and send the TwoWayRequest. Next the client reads input from the server and attempts to find the corresponding XReply and return it. The protocol object read from the server can be a XEvent or XError rather than an XReply. The client needs to handle these before it can find and return the XReply.
+TwoWayRequests are requests where the client expects a response from the server. These requests cause the 
+client to flush the OneWayRequest queue and send the TwoWayRequest. Next the client reads input from the 
+server and attempts to find the corresponding XReply and return it. The protocol object read from the 
+server can be a XEvent or XError rather than an XReply. The client needs to handle these before it can 
+find and return the XReply.
 When a XEvent is read it is stored in the event queue.
-When an XError is read it may be for the current request or any of the previous OneWayRequests. Any time an XError is found an exception will be thrown but the client will deffer the exception until the input has caught up with the current request. The exception can be thrown in three different error scenarios.
 
-1. There is an XError only for the current TwoWayRequest
-2. There are XErrors for previous OneWayRequests and the current TwoWayRequest
-3. There are XErrors for previous OneWayRequests and an XReply for the current TwoWayRequest
-
-In all cases an exception will be thrown containing the XErrors and possibly an XReply.
+When an XError is read it may be for the current request or any of the previous OneWayRequests. Any time 
+an XError is found an exception will be thrown.
 
 ## Error Handling
 
-NOTE: error handling is not currently implemented because I do not have a good use case where an error can be recovered from.
-
-An error handler can be set on the client to recover from errors.
-
-The purpose of the ErrorHandler is to insert requests that can recover from the error. These requests will be sent right away. The ErrorHandler should return true if the error is handled.
-
-If the error is handled, the client will not throw an exception for that Error.
-
-Care should be taken as this can cause an infinite loop of errors.
-
-An error handler is the preferred method of recovering from errors. Handling an error in a try/catch may be difficult because the one-way-request queue may have requests that depend on the success the failed request.
-
+NOTE: error handling is not currently implemented. This could be in the form of providing an error 
+handler when sending requests.
 
 ## Event Prossesing
 
-Events are sent by the server any time the client registers to listen for them. Events are processed by calling client.getNextEvent(). Events can be sent by the server at any time, so they are stored in an event queue when processing TwoWayRequests from the server.
+Events are sent by the server any time the client registers to listen for them. Events are processed by 
+calling client.getNextEvent(). Events can be sent by the server at any time, so they are stored in an 
+event queue when processing TwoWayRequests from the server.
 
-The event queue is an internal queue containing events which are deferred while processing a TwoWayRequest. client.getNextEvent() will empty this queue before reading events from the server. When the queue is empty getNextEvent() will flush the OneWayRequest queue and attempt to find and return a XEvent from the server.
+The event queue is an internal queue containing events which are deferred while processing a 
+TwoWayRequest. client.getNextEvent() will empty this queue before reading events from the server. When 
+the queue is empty getNextEvent() will flush the OneWayRequest queue and attempt to find and return a 
+XEvent from the server.
 
-When reading events from the server an error can be read. These errors can only be a result of OneWayRequests that are sent after the user calls flush.
+When reading events from the server an error can be read. These errors can only be a result of 
+OneWayRequests that are sent after the user calls flush.
 
-Note: Receiving an XReply while processing events should not be expected since sending TwoWayRequests clears the stream of replies.
+Note: Receiving an XReply while processing events should not be expected since sending TwoWayRequests 
+clears the stream of replies.
 
 ## Concurrency
 
-The client is not thread safe and invocations from one thread must be isolated from invocations from another thread. The connection socket, one-way request queue and event queue are shared mutable data. All invocations must be synchronized in some way. Protocol objects are immutable and may be shared without synchronization.
+The client is not thread safe and invocations from one thread must be isolated from invocations from 
+another thread. The connection socket, one-way request queue and event queue are shared mutable data. 
+All invocations must be synchronized in some way. Protocol objects are immutable and may be shared 
+without synchronization.
 
 # Contributors
 
-I am not an x11 programmer but I find the protocol to be an interesting challenge and learning experience. The only other x11 client implementation for java that I have found is escher. Escher is very hand written and has many issues. The goal of this client is to automate the generation of the protocol and make a clear distinction between the client and any framework that may provide things like resource management and event dispatch.
+I am not an x11 programmer but I find the protocol to be an interesting challenge and learning 
+experience. The only other x11 client implementation for java that I have found is escher. Escher is very 
+hand written and has many issues. The goal of this client is to automate the generation of the protocol 
+and make a clear distinction between the client and any framework that may provide things like resource 
+management and event dispatch.
 
-This project uses the xcb xmls to generate protocol classes for the core protocol and extensions. It uses a custom gradle plugin to generate the classes. Be sure to check the javadoc to view supported protocol objects.
+This project uses the xcb xmls to generate protocol classes for the core protocol and extensions. It uses 
+a custom gradle plugin to generate the classes. Be sure to check the javadoc to view supported protocol 
+objects.
 
-All protocol objects support read and write methods regardless of type. This means that these objects can also be used to build an x11 server and are not tied specifically to the client.
+All protocol objects support read and write methods regardless of type. This means that these objects 
+can also be used to build an x11 server and are not tied specifically to the client.
 
-Xlib and XCB provides convenient methods rather than directly using the protocol. I have avoided adding convenience methods to the client but may do so in the future. Methods such as createSimpleWindow can be added. If you have any suggestions on methods that can be added feel free to submit an issue or PR.
+Xlib and XCB provides convenient methods rather than directly using the protocol. I have avoided adding 
+convenience methods to the client but may do so in the future. Methods such as createSimpleWindow can be 
+added. If you have any suggestions on methods that can be added feel free to submit an issue or PR.
 
-The core protocol and every supported extension implements a plugin which enables the client to figure out which class to use when reading errors and events from the server. These plugins are generated durring the build process. Plugins are discovered and loaded using the ServiceLoader pattern.
+The core protocol and every supported extension implements a plugin which enables the client to figure 
+out which class to use when reading errors and events from the server. These plugins are generated 
+durring the build process. Plugins are discovered and loaded using the ServiceLoader pattern.
 
-Support is needed for a few things in the protocol before all extensions can be supported. Contributions are welcome!
+Support is needed for a few things in the protocol before all extensions can be supported. Contributions 
+are welcome!
 
-fd – file descriptors. I believe these should work like an int field. If this is true this should be easy to implement.
+fd – file descriptors. I believe these should work like an int field. If this is true this should be 
+easy to implement.
 
-sumOf expressions – creates a sum value which is used to determine list sizes. The list is the size of a sumOf function called on another list.
+sumOf expressions – creates a sum value which is used to determine list sizes. The list is the size of a 
+sumOf function called on another list.
 
-Polymorphism – some objects use a case switch which seems to describe a polymorphic object. There is usually a type field which describes the type and each switch case provides additional fields for that type. The generation code needs to support generating multiple objects when it runs into an object with these switch constructs. Reading and writing will be tricky since the type field can be deep within the protocol. These switches may also be nested.
+Polymorphism – some objects use a case switch which seems to describe a polymorphic object. There is 
+usually a type field which describes the type and each switch case provides additional fields for that 
+type. The generation code needs to support generating multiple objects when it runs into an object with 
+these switch constructs. Reading and writing will be tricky since the type field can be deep within the 
+protocol. These switches may also be nested.
 
 # Frameworks
 

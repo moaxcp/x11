@@ -28,6 +28,14 @@ public class X11Client implements AutoCloseable {
     service = new XProtocolService(connection.getSetup(), connection.getX11Input(), connection.getX11Output());
   }
 
+  public boolean loadedPlugin(String name) {
+    return service.loadedPlugin(name);
+  }
+
+  public boolean activatedPlugin(String name) {
+    return service.activatedPlugin(name);
+  }
+
   public Setup getSetup() {
     return connection.getSetup();
   }

@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'io.freefair.lombok' version '5.0.1'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
+    id 'org.ajoberstar.reckon' version '0.13.0'
     id 'com.github.moaxcp.x11protocol'
     id 'java-test-fixtures'
 }
@@ -9,6 +10,11 @@ plugins {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+reckon {
+    scopeFromProp()
+    snapshotFromProp()
 }
 
 repositories {
@@ -38,7 +44,7 @@ integrationTest {
 }
 
 x11Protocol {
-    outputSrc = file('build/generated/xproto/src/main/java/')
-    outputResources = file('build/generated/xproto/src/main/resources')
+    outputSrc = file('build/generated/xproto/java/')
+    outputResources = file('build/generated/xproto/resources')
     xcbXmls = file('src/main/xcbXmls')
 }
