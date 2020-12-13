@@ -11,7 +11,7 @@ public class ClientMessageData32 implements ClientMessageDataUnion {
   List<Integer> data32;
 
   public ClientMessageData32(List<Integer> data32) {
-    if(data32.size() != 20) {
+    if(data32.size() != 5) {
       throw new IllegalArgumentException("data32 must have length of 20. Got: \"" + data32.size() + "\"");
     }
     this.data32 = data32;

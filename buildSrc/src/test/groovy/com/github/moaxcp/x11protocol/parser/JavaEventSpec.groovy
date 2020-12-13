@@ -51,11 +51,9 @@ class JavaEventSpec extends XmlSpec {
             
               private boolean sentEvent;
             
-              private byte eventDetail;
+              private byte detail;
             
               private short sequenceNumber;
-            
-              private byte detail;
             
               private int time;
             
@@ -85,9 +83,8 @@ class JavaEventSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent readKeyPressEvent(
                   boolean sentEvent, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
-                byte eventDetail = in.readCard8();
-                short sequenceNumber = in.readCard16();
                 byte detail = in.readCard8();
+                short sequenceNumber = in.readCard16();
                 int time = in.readCard32();
                 int root = in.readCard32();
                 int event = in.readCard32();
@@ -100,9 +97,8 @@ class JavaEventSpec extends XmlSpec {
                 boolean sameScreen = in.readBool();
                 in.readPad(1);
                 com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.builder();
-                javaBuilder.eventDetail(eventDetail);
-                javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.detail(detail);
+                javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.time(time);
                 javaBuilder.root(root);
                 javaBuilder.event(event);
@@ -121,9 +117,8 @@ class JavaEventSpec extends XmlSpec {
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(sentEvent ? 0b10000000 & NUMBER : NUMBER);
-                out.writeCard8(eventDetail);
-                out.writeCard16(sequenceNumber);
                 out.writeCard8(detail);
+                out.writeCard16(sequenceNumber);
                 out.writeCard32(time);
                 out.writeCard32(root);
                 out.writeCard32(event);
@@ -156,7 +151,7 @@ class JavaEventSpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 33;
+                return 32;
               }
             
               public static class KeyPressEventBuilder {
@@ -200,7 +195,7 @@ class JavaEventSpec extends XmlSpec {
                 }
             
                 public int getSize() {
-                  return 33;
+                  return 32;
                 }
               }
             }
@@ -232,8 +227,6 @@ class JavaEventSpec extends XmlSpec {
             
               private boolean sentEvent;
             
-              private byte eventDetail;
-            
               private short sequenceNumber;
             
               private int parent;
@@ -248,14 +241,12 @@ class JavaEventSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent readMapRequestEvent(
                   boolean sentEvent, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
-                byte eventDetail = in.readCard8();
-                short sequenceNumber = in.readCard16();
                 in.readPad(1);
+                short sequenceNumber = in.readCard16();
                 int parent = in.readCard32();
                 int window = in.readCard32();
-                in.readPad(19);
+                in.readPad(20);
                 com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.MapRequestEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.builder();
-                javaBuilder.eventDetail(eventDetail);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.parent(parent);
                 javaBuilder.window(window);
@@ -267,12 +258,11 @@ class JavaEventSpec extends XmlSpec {
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(sentEvent ? 0b10000000 & NUMBER : NUMBER);
-                out.writeCard8(eventDetail);
-                out.writeCard16(sequenceNumber);
                 out.writePad(1);
+                out.writeCard16(sequenceNumber);
                 out.writeCard32(parent);
                 out.writeCard32(window);
-                out.writePad(19);
+                out.writePad(20);
               }
             
               @java.lang.Override

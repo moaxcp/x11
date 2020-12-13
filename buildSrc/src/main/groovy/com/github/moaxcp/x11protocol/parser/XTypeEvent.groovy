@@ -10,15 +10,14 @@ class XTypeEvent extends XTypeObject {
     XTypeEvent(Map map) {
         super(map)
         number = map.number ?: 0
-        protocol.add(0, new XUnitField(result:this.result, name: 'NUMBER', type: 'CARD8', constantValue: number))
-        protocol.add(1, new XUnitField(result: this.result, name:'event_detail', type: 'CARD8'))
-        protocol.add(2, new XUnitField(result: this.result, name:'sequence_number', type: 'CARD16'))
     }
 
     static XTypeEvent xTypeEvent(XResult result, Node node) {
         int number = Integer.valueOf((String) node.attributes().get('number'))
         XTypeEvent event = new XTypeEvent(result: result, number: number, name: node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
         event.addUnits(result, node)
+        event.protocol.add(0, new XUnitField(result: result, name: 'NUMBER', type: 'CARD8', constantValue: number))
+        event.protocol.add(2, new XUnitField(result: result, name:'sequence_number', type: 'CARD16'))
 
         return event
     }
