@@ -1,24 +1,46 @@
 package com.github.moaxcp.x11client.display;
 
-import com.github.moaxcp.x11client.protocol.xproto.CreateGC;
-import com.github.moaxcp.x11client.protocol.xproto.FreeGC;
+import com.github.moaxcp.x11client.protocol.xproto.*;
+import java.util.Collections;
+import lombok.Getter;
 
+import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+
+@Getter
 public class GraphicsContext extends Resource {
-  GraphicsContext(Display display, int drawable, int background, int foreground) {
+  private final int drawable;
+  private int background;
+  private int foreground;
+
+  public GraphicsContext(Display display, Drawable drawable) {
     super(display);
+    this.drawable = drawable.getId();
+    this.background = display.getWhitePixel(drawable.getScreen());
+    this.foreground = display.getBlackPixel(drawable.getScreen());
     display.send(CreateGC.builder()
       .cid(getId())
-      .drawable(drawable)
+      .drawable(this.drawable)
       .background(background)
       .foreground(foreground)
       .build());
   }
 
-  public GraphicsContext(Display display, int drawable) {
-    super(display);
-    display.send(CreateGC.builder()
-      .cid(getId())
+  public void polyFillRectangle(Rectangle rectangle) {
+    display.send(PolyFillRectangle.builder()
       .drawable(drawable)
+      .gc(getId())
+      .rectangles(Collections.singletonList(rectangle))
+      .build());
+  }
+
+  public void imageText8(short x, short y, String text) {
+    display.send(ImageText8.builder()
+      .drawable(drawable)
+      .gc(getId())
+      .x(x)
+      .y(y)
+      .stringLen((byte) text.length())
+      .string(stringToByteList(text))
       .build());
   }
 

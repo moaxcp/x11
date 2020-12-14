@@ -18,13 +18,9 @@ public class Display implements AutoCloseable {
     this.client = client;
   }
 
-  public GraphicsContext createRootGC(int screen) {
-    return new GraphicsContext(this, client.getRoot(screen), client.getWhitePixel(screen), client.getBlackPixel(screen));
-  }
-
-  public Window createSimpleWindow(int screen, int x, int y, int width, int height, int borderWidth) {
+  public Window createSimpleWindow(int screen, int x, int y, int width, int height) {
     //todo make sure values are valid range for protocol
-    Window window = new Window(this, screen, (short) x, (short) y, (short) width, (short) height, (short) borderWidth);
+    Window window = new Window(this, screen, (short) x, (short) y, (short) width, (short) height);
     windows.put(window.getId(), window);
     return window;
   }
@@ -39,6 +35,9 @@ public class Display implements AutoCloseable {
   
   @Override
   public void close() throws IOException {
+    for(Window window : windows.values()) {
+      window.close();
+    }
     client.close();
   }
 
@@ -77,7 +76,7 @@ public class Display implements AutoCloseable {
       }
       if(event instanceof KeyPressEvent) {
         KeyPressEvent keyPress = (KeyPressEvent) event;
-        Window window = windows.get(keyPress.getRoot());
+        Window window = windows.get(keyPress.getEvent());
         window.keyPressEvent(keyPress);
       }
     }

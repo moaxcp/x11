@@ -4,26 +4,42 @@ import com.github.moaxcp.x11client.protocol.xproto.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import lombok.Getter;
 
-public class Window extends Resource {
-  private List<BiConsumer<Display, ExposeEvent>> exposeEventConsumers = new ArrayList<>();
-  private List<BiConsumer<Display, KeyPressEvent>> keyPressEventConsumers = new ArrayList<>();
+@Getter
+public class Window extends Drawable {
+  private byte depth;
+  private int parent;
+  private short borderWidth;
+  private WindowClass clazz;
+  private int visual;
+  private int backgroundPixel;
+  private int borderPixel;
+  private List<BiConsumer<Window, ExposeEvent>> exposeEventConsumers = new ArrayList<>();
+  private List<BiConsumer<Window, KeyPressEvent>> keyPressEventConsumers = new ArrayList<>();
 
-  Window(Display display, int screen, short x, short y, short width, short height, short borderWidth) {
-    super(display);
+  Window(Display display, int screen, short x, short y, short width, short height) {
+    super(display, screen, x, y, width, height);
+    depth = display.getDepth(screen);
+    parent = display.getRoot(screen);
+    this.borderWidth = 0;
+    clazz = WindowClass.COPY_FROM_PARENT;
+    visual = display.getVisualId(screen);
+    backgroundPixel = display.getWhitePixel(screen);
+    borderPixel = display.getBlackPixel(screen);
     display.send(CreateWindow.builder()
-        .depth(display.getDepth(screen))
-        .wid(display.nextResourceId())
-        .parent(display.getRoot(screen))
+        .depth(depth)
+        .wid(getId())
+        .parent(parent)
         .x(x)
         .y(y)
         .width(width)
         .height(height)
         .borderWidth(borderWidth)
-        .clazz(WindowClass.COPY_FROM_PARENT)
-        .visual(display.getVisualId(screen))
-        .backgroundPixel(display.getWhitePixel(screen))
-        .borderPixel(display.getBlackPixel(screen))
+        .clazz(clazz)
+        .visual(visual)
+        .backgroundPixel(backgroundPixel)
+        .borderPixel(borderPixel)
         .eventMaskEnable(EventMask.EXPOSURE)
         .eventMaskEnable(EventMask.KEY_PRESS)
         .build());
@@ -35,34 +51,33 @@ public class Window extends Resource {
       .build());
   }
 
-  public GraphicsContext createGC() {
-    return new GraphicsContext(display, getId());
-  }
-
   @Override
   public void close() {
+    super.close();
     display.send(DestroyWindow.builder()
       .window(getId())
       .build());
+    keyPressEventConsumers.clear();
+    exposeEventConsumers.clear();
   }
 
   void exposeEvent(ExposeEvent event) {
-    for(BiConsumer<Display, ExposeEvent> consumer : exposeEventConsumers) {
-      consumer.accept(display, event);
+    for(BiConsumer<Window, ExposeEvent> consumer : exposeEventConsumers) {
+      consumer.accept(this, event);
     }
   }
 
   void keyPressEvent(KeyPressEvent event) {
-    for(BiConsumer<Display, KeyPressEvent> consumer : keyPressEventConsumers) {
-      consumer.accept(display, event);
+    for(BiConsumer<Window, KeyPressEvent> consumer : keyPressEventConsumers) {
+      consumer.accept(this, event);
     }
   }
 
-  public void exposeEvent(BiConsumer<Display, ExposeEvent> consumer) {
+  public void exposeEvent(BiConsumer<Window, ExposeEvent> consumer) {
     exposeEventConsumers.add(consumer);
   }
 
-  public void keyPressEvent(BiConsumer<Display, KeyPressEvent> consumer) {
+  public void keyPressEvent(BiConsumer<Window, KeyPressEvent> consumer) {
     keyPressEventConsumers.add(consumer);
   }
 }

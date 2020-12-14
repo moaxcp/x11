@@ -32,6 +32,18 @@ public class X11ClientIT {
         .eventMaskEnable(EventMask.EXPOSURE, EventMask.KEY_PRESS)
         .build();
       client.send(window);
+
+      //XStoreName sets window title
+      client.send(ChangeProperty.builder()
+        .window(window.getWid())
+        .property(Atom.WM_NAME.getValue())
+        .type(Atom.STRING.getValue())
+        .format((byte) 8)
+        .data(stringToByteList("Hello World!"))
+        .dataLen("Hello World!".length())
+        .build());
+
+      //XSetWMProtocols for adding delete atom
       InternAtomReply wmProtocols = client.send(InternAtom.builder().name(stringToByteList("WM_PROTOCOLS")).nameLen((short) "WM_PROTOCOLS".length()).build());
       InternAtomReply deleteAtom = client.send(InternAtom.builder().name(stringToByteList("WM_DELETE_WINDOW")).nameLen((short) "WM_DELETE_WINDOW".length()).build());
       client.send(ChangeProperty.builder()
@@ -43,6 +55,7 @@ public class X11ClientIT {
         .data(byteArrayToList(ByteBuffer.allocate(4).putInt(deleteAtom.getAtom()).array()))
         .dataLen(1)
         .build());
+
       client.send(MapWindow.builder()
         .window(window.getWid())
         .build());
