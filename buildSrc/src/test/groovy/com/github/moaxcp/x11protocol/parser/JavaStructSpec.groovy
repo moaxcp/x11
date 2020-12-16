@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.google.common.truth.Truth
 import com.squareup.javapoet.TypeSpec
 
 import static com.github.moaxcp.x11protocol.parser.JavaStruct.javaStruct
@@ -95,7 +94,7 @@ class JavaStructSpec extends XmlSpec {
         JavaStruct javaStruct = javaStruct(struct)
 
         then:
-        Truth.assertThat(javaStruct.typeSpec.toString()).isEqualTo '''\
+        javaStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class Screen implements com.github.moaxcp.x11client.protocol.XStruct {
@@ -130,20 +129,13 @@ class JavaStructSpec extends XmlSpec {
               }
             
               public boolean isCurrentInputMasksEnabled(
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                   @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                boolean enabled = maskEnum.isEnabled(currentInputMasks);
-                if(!enabled) {
-                  return false;
-                }
                 for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                  java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
-                  enabled &= m.isEnabled(currentInputMasks);
-                  if(!enabled) {
+                  if(!m.isEnabled(currentInputMasks)) {
                     return false;
                   }
                 }
-                return enabled;
+                return true;
               }
             
               @java.lang.Override
@@ -153,39 +145,26 @@ class JavaStructSpec extends XmlSpec {
             
               public static class ScreenBuilder {
                 public boolean isCurrentInputMasksEnabled(
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                     @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                  boolean enabled = maskEnum.isEnabled(currentInputMasks);
-                  if(!enabled) {
-                    return false;
-                  }
                   for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
-                    enabled &= m.isEnabled(currentInputMasks);
-                    if(!enabled) {
+                    if(!m.isEnabled(currentInputMasks)) {
                       return false;
                     }
                   }
-                  return enabled;
+                  return true;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.Screen.ScreenBuilder currentInputMasksEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                     com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                  currentInputMasks((int) maskEnum.enableFor(currentInputMasks));
                   for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     currentInputMasks((int) m.enableFor(currentInputMasks));
                   }
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.Screen.ScreenBuilder currentInputMasksDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                     com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                  currentInputMasks((int) maskEnum.disableFor(currentInputMasks));
                   for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     currentInputMasks((int) m.disableFor(currentInputMasks));
                   }
                   return this;

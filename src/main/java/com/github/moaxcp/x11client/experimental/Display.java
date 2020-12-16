@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11client.display;
+package com.github.moaxcp.x11client.experimental;
 
 import com.github.moaxcp.x11client.X11Client;
 import com.github.moaxcp.x11client.protocol.OneWayRequest;
@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Object oriented implementation which tracks resources and dispatches events.
+ */
 public class Display implements AutoCloseable {
   private final X11Client client;
   private volatile boolean running;

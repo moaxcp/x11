@@ -2,8 +2,6 @@ package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
 
-import static org.assertj.core.api.Assertions.assertThat
-
 class JavaEventSpec extends XmlSpec {
     def keyPres() {
         given:
@@ -43,7 +41,7 @@ class JavaEventSpec extends XmlSpec {
         JavaEvent javaEvent = event.javaType
 
         then:
-        assertThat(javaEvent.typeSpec.toString()).isEqualTo '''\
+        javaEvent.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class KeyPressEvent implements com.github.moaxcp.x11client.protocol.XEvent {
@@ -133,20 +131,13 @@ class JavaEventSpec extends XmlSpec {
               }
             
               public boolean isStateEnabled(
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMask maskEnum,
                   @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMask... maskEnums) {
-                boolean enabled = maskEnum.isEnabled(state);
-                if(!enabled) {
-                  return false;
-                }
                 for(com.github.moaxcp.x11client.protocol.xproto.KeyButMask m : maskEnums) {
-                  java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
-                  enabled &= m.isEnabled(state);
-                  if(!enabled) {
+                  if(!m.isEnabled(state)) {
                     return false;
                   }
                 }
-                return enabled;
+                return true;
               }
             
               @java.lang.Override
@@ -156,39 +147,26 @@ class JavaEventSpec extends XmlSpec {
             
               public static class KeyPressEventBuilder {
                 public boolean isStateEnabled(
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMask maskEnum,
                     @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.KeyButMask... maskEnums) {
-                  boolean enabled = maskEnum.isEnabled(state);
-                  if(!enabled) {
-                    return false;
-                  }
                   for(com.github.moaxcp.x11client.protocol.xproto.KeyButMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
-                    enabled &= m.isEnabled(state);
-                    if(!enabled) {
+                    if(!m.isEnabled(state)) {
                       return false;
                     }
                   }
-                  return enabled;
+                  return true;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder stateEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.KeyButMask maskEnum,
                     com.github.moaxcp.x11client.protocol.xproto.KeyButMask... maskEnums) {
-                  state((short) maskEnum.enableFor(state));
                   for(com.github.moaxcp.x11client.protocol.xproto.KeyButMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     state((short) m.enableFor(state));
                   }
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder stateDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.KeyButMask maskEnum,
                     com.github.moaxcp.x11client.protocol.xproto.KeyButMask... maskEnums) {
-                  state((short) maskEnum.disableFor(state));
                   for(com.github.moaxcp.x11client.protocol.xproto.KeyButMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     state((short) m.disableFor(state));
                   }
                   return this;

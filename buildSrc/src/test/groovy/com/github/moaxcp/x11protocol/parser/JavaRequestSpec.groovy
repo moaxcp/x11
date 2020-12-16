@@ -710,54 +710,33 @@ class JavaRequestSpec extends XmlSpec {
               }
             
               public boolean isValueMaskEnabled(
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.Cw maskEnum,
                   @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.Cw... maskEnums) {
-                boolean enabled = maskEnum.isEnabled(valueMask);
-                if(!enabled) {
-                  return false;
-                }
                 for(com.github.moaxcp.x11client.protocol.xproto.Cw m : maskEnums) {
-                  java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
-                  enabled &= m.isEnabled(valueMask);
-                  if(!enabled) {
+                  if(!m.isEnabled(valueMask)) {
                     return false;
                   }
                 }
-                return enabled;
+                return true;
               }
             
               public boolean isEventMaskEnabled(
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                   @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                boolean enabled = maskEnum.isEnabled(eventMask);
-                if(!enabled) {
-                  return false;
-                }
                 for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                  java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
-                  enabled &= m.isEnabled(eventMask);
-                  if(!enabled) {
+                  if(!m.isEnabled(eventMask)) {
                     return false;
                   }
                 }
-                return enabled;
+                return true;
               }
             
               public boolean isDoNotPropogateMaskEnabled(
-                  @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                   @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                boolean enabled = maskEnum.isEnabled(doNotPropogateMask);
-                if(!enabled) {
-                  return false;
-                }
                 for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                  java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
-                  enabled &= m.isEnabled(doNotPropogateMask);
-                  if(!enabled) {
+                  if(!m.isEnabled(doNotPropogateMask)) {
                     return false;
                   }
                 }
-                return enabled;
+                return true;
               }
             
               @java.lang.Override
@@ -785,39 +764,26 @@ class JavaRequestSpec extends XmlSpec {
                 }
             
                 public boolean isValueMaskEnabled(
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.Cw maskEnum,
                     @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.Cw... maskEnums) {
-                  boolean enabled = maskEnum.isEnabled(valueMask);
-                  if(!enabled) {
-                    return false;
-                  }
                   for(com.github.moaxcp.x11client.protocol.xproto.Cw m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
-                    enabled &= m.isEnabled(valueMask);
-                    if(!enabled) {
+                    if(!m.isEnabled(valueMask)) {
                       return false;
                     }
                   }
-                  return enabled;
+                  return true;
                 }
             
                 private com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder valueMaskEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.Cw maskEnum,
                     com.github.moaxcp.x11client.protocol.xproto.Cw... maskEnums) {
-                  valueMask((int) maskEnum.enableFor(valueMask));
                   for(com.github.moaxcp.x11client.protocol.xproto.Cw m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     valueMask((int) m.enableFor(valueMask));
                   }
                   return this;
                 }
             
                 private com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder valueMaskDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.Cw maskEnum,
                     com.github.moaxcp.x11client.protocol.xproto.Cw... maskEnums) {
-                  valueMask((int) maskEnum.disableFor(valueMask));
                   for(com.github.moaxcp.x11client.protocol.xproto.Cw m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     valueMask((int) m.disableFor(valueMask));
                   }
                   return this;
@@ -929,39 +895,26 @@ class JavaRequestSpec extends XmlSpec {
                 }
             
                 public boolean isEventMaskEnabled(
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                     @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                  boolean enabled = maskEnum.isEnabled(eventMask);
-                  if(!enabled) {
-                    return false;
-                  }
                   for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
-                    enabled &= m.isEnabled(eventMask);
-                    if(!enabled) {
+                    if(!m.isEnabled(eventMask)) {
                       return false;
                     }
                   }
-                  return enabled;
+                  return true;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder eventMaskEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                     com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                  eventMask((int) maskEnum.enableFor(eventMask));
                   for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     eventMask((int) m.enableFor(eventMask));
                   }
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder eventMaskDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                     com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                  eventMask((int) maskEnum.disableFor(eventMask));
                   for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     eventMask((int) m.disableFor(eventMask));
                   }
                   return this;
@@ -975,39 +928,26 @@ class JavaRequestSpec extends XmlSpec {
                 }
             
                 public boolean isDoNotPropogateMaskEnabled(
-                    @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                     @lombok.NonNull com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                  boolean enabled = maskEnum.isEnabled(doNotPropogateMask);
-                  if(!enabled) {
-                    return false;
-                  }
                   for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
-                    enabled &= m.isEnabled(doNotPropogateMask);
-                    if(!enabled) {
+                    if(!m.isEnabled(doNotPropogateMask)) {
                       return false;
                     }
                   }
-                  return enabled;
+                  return true;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder doNotPropogateMaskEnable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                     com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                  doNotPropogateMask((int) maskEnum.enableFor(doNotPropogateMask));
                   for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     doNotPropogateMask((int) m.enableFor(doNotPropogateMask));
                   }
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder doNotPropogateMaskDisable(
-                    com.github.moaxcp.x11client.protocol.xproto.EventMask maskEnum,
                     com.github.moaxcp.x11client.protocol.xproto.EventMask... maskEnums) {
-                  doNotPropogateMask((int) maskEnum.disableFor(doNotPropogateMask));
                   for(com.github.moaxcp.x11client.protocol.xproto.EventMask m : maskEnums) {
-                    java.util.Objects.requireNonNull(m, "maskEnums must not contain null");
                     doNotPropogateMask((int) m.disableFor(doNotPropogateMask));
                   }
                   return this;

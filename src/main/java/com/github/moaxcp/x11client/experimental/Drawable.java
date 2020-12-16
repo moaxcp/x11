@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11client.display;
+package com.github.moaxcp.x11client.experimental;
 
 import lombok.Getter;
 

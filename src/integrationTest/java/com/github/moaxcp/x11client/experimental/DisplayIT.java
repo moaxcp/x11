@@ -1,7 +1,6 @@
-package com.github.moaxcp.x11client;
+package com.github.moaxcp.x11client.experimental;
 
-import com.github.moaxcp.x11client.display.Display;
-import com.github.moaxcp.x11client.display.Window;
+import com.github.moaxcp.x11client.X11Client;
 import com.github.moaxcp.x11client.protocol.xproto.Rectangle;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
