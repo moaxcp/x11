@@ -18,13 +18,18 @@ maven or gradle.
 ## Maven
 
 ```
-not yet published
+<dependency>
+ <groupId>com.github.moaxcp.x11</groupId>
+ <artifactId>x11-client</artifactId>
+ <version>0.1.0</version>
+ <type>module</type>
+</dependency>
 ```
 
 ## Gradle
 
 ```
-not yet published
+implementation 'com.github.moaxcp.x11:x11-client:0.1.0'
 ```
 
 The library has one dependency for using unix 

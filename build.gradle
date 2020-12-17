@@ -7,6 +7,8 @@ plugins {
     id 'com.github.moaxcp.x11protocol'
     id 'java-test-fixtures'
     id 'maven-publish'
+    id 'de.marcphilipp.nexus-publish' version '0.4.0'
+    id 'signing'
 }
 
 java {
@@ -16,7 +18,8 @@ java {
     withJavadocJar()
 }
 
-group 'com.github.moaxcp.x11'
+group = 'com.github.moaxcp.x11'
+description = 'An x11 client implemented in java'
 
 reckon {
     scopeFromProp()
@@ -100,7 +103,7 @@ publishing {
                     url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
                     credentials {
                         username = project.findProperty('nexus.username')
-                        password = project.findProperty('nwexus.password')
+                        password = project.findProperty('nexus.password')
                     }
                 }
                 maven {
@@ -114,4 +117,17 @@ publishing {
             }
         }
     }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            username = project.findProperty('nexus.username')
+            password = project.findProperty('nexus.password')
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
