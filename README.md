@@ -10,6 +10,8 @@ designed with Xlib in mind and follows the same
 pattern of queuing one-way requests before sending 
 them to the server.
 
+[![javadoc](https://javadoc.io/badge2/com.github.moaxcp.x11/x11-client/javadoc.svg)](https://javadoc.io/doc/com.github.moaxcp.x11/x11-client)
+
 # Users
 
 This library can be added to your project using 
