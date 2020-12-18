@@ -43,7 +43,7 @@ class ProtocolGenerator {
             }
         }
 
-        JavaFile pluginFile = JavaFile.builder(result.basePackage, result.getXPlugin()).build()
+        JavaFile pluginFile = JavaFile.builder(result.javaPackage, result.getXPlugin()).build()
         pluginFile.writeTo(outputSrc)
 
         String pluginClass = result.pluginClassName.canonicalName()

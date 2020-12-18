@@ -9,6 +9,7 @@ plugins {
     id 'maven-publish'
     id 'de.marcphilipp.nexus-publish' version '0.4.0'
     id 'signing'
+    id 'jacoco'
 }
 
 java {
@@ -50,6 +51,12 @@ test {
 
 integrationTest {
     useJUnitPlatform()
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
 
 x11Protocol {

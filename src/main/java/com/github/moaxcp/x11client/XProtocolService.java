@@ -1,11 +1,11 @@
-package com.github.moaxcp.x11client.protocol;
+package com.github.moaxcp.x11client;
 
-import com.github.moaxcp.x11client.X11ClientException;
-import com.github.moaxcp.x11client.X11ErrorException;
+import com.github.moaxcp.x11client.protocol.*;
 import com.github.moaxcp.x11client.protocol.bigreq.Enable;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtension;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
 import com.github.moaxcp.x11client.protocol.xproto.Setup;
+import com.github.moaxcp.x11client.protocol.xproto.XprotoPlugin;
 import java.io.IOException;
 import java.util.*;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public final class XProtocolService {
   private final Queue<XEvent> events = new LinkedList<>();
   private final List<XProtocolPlugin> activatedPlugins = new ArrayList<>();
 
-  public XProtocolService(Setup setup, X11Input in, X11Output out) throws IOException {
+  public XProtocolService(Setup setup, X11Input in, X11Output out) {
     this.in = in;
     this.out = out;
     maximumRequestLength = setup.getMaximumRequestLength();
