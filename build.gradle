@@ -138,3 +138,13 @@ nexusPublishing {
 signing {
     sign publishing.publications.mavenJava
 }
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.organization', 'moaxcp'
+        if(System.getenv('sonar_login')) {
+            property 'sonar.login', System.getenv('sonar_login')
+        }
+    }
+}
