@@ -48,13 +48,10 @@ public interface X11Output {
   }
 
   default void writePadAlign(int forLength) throws IOException {
-    writePadAlign(4, forLength);
+    writePad(XObject.getSizeForPadAlign(forLength));
   }
 
   default void writePadAlign(int pad, int forLength) throws IOException {
-    int n = forLength % pad;
-    if (n > 0)
-      n = pad - n;
-    writePad(n);
+    writePad(XObject.getSizeForPadAlign(pad, forLength));
   }
 }

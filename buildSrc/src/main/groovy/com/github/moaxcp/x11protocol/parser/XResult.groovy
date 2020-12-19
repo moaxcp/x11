@@ -158,7 +158,7 @@ class XResult {
     }
 
     public ClassName getPluginClassName() {
-        ClassName.get(basePackage, getJavaName(header.capitalize() + 'Plugin'))
+        ClassName.get(javaPackage, getJavaName(header.capitalize() + 'Plugin'))
     }
 
     void addNode(Node node) {

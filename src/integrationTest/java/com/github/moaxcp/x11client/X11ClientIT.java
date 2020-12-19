@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.x11client.Utilities.byteArrayToList;
-import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
+import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
 public class X11ClientIT {
 

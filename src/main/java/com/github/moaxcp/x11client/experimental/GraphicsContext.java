@@ -4,7 +4,7 @@ import com.github.moaxcp.x11client.protocol.xproto.*;
 import java.util.Collections;
 import lombok.Getter;
 
-import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
 @Getter
 public class GraphicsContext extends Resource {

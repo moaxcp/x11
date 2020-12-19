@@ -1,5 +1,6 @@
-package com.github.moaxcp.x11client;
+package com.github.moaxcp.x11client.protocol;
 
+import com.github.moaxcp.x11client.protocol.X11InputStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

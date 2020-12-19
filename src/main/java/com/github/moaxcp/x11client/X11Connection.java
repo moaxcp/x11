@@ -1,7 +1,9 @@
 package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.X11Input;
+import com.github.moaxcp.x11client.protocol.X11InputStream;
 import com.github.moaxcp.x11client.protocol.X11Output;
+import com.github.moaxcp.x11client.protocol.X11OutputStream;
 import com.github.moaxcp.x11client.protocol.xproto.SetupAuthenticate;
 import com.github.moaxcp.x11client.protocol.xproto.SetupFailed;
 import com.github.moaxcp.x11client.protocol.xproto.SetupRequest;
@@ -20,7 +22,7 @@ import org.newsclub.net.unix.AFUNIXSocketAddress;
 
 import static com.github.moaxcp.x11client.XAuthority.*;
 
-public class X11Connection implements AutoCloseable {
+class X11Connection implements AutoCloseable {
   @Getter
   private final DisplayName displayName;
   @Getter
@@ -37,7 +39,9 @@ public class X11Connection implements AutoCloseable {
    * information in the displayName.
    * @param displayName of x11 server
    * @param socket for x11 server represented by displayName
+   * @throws ConnectionFailureException if server returns failure
    * @throws NullPointerException if any parameter is null
+   * @throws UnsupportedOperationException if the connection code is authenticate or any other result
    */
   X11Connection(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority, @NonNull Socket socket) throws IOException {
     this.displayName = displayName;

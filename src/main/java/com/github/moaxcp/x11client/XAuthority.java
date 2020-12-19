@@ -12,15 +12,15 @@ import lombok.ToString;
 import lombok.Value;
 
 import static com.github.moaxcp.x11client.ParametersCheck.requireNonEmpty;
-import static com.github.moaxcp.x11client.Utilities.byteArrayToList;
-import static com.github.moaxcp.x11client.Utilities.byteListToString;
+import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
+import static com.github.moaxcp.x11client.protocol.Utilities.byteListToString;
 
 /**
  * An X11 Authority defines a secret key used when authenticating with the x11 server. family, address and displayNumber
  * are used to find the correct authority. protocolName and protocolDate is used to authenticate with x11.
  */
 @Value
-public class XAuthority {
+class XAuthority {
   @NonNull Family family;
   @NonNull List<Byte> address;
   int displayNumber;

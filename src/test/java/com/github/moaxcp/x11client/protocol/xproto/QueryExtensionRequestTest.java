@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static com.github.moaxcp.x11client.Utilities.byteArrayToList;
+import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 

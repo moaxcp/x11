@@ -312,4 +312,104 @@ class JavaStructSpec extends XmlSpec {
         '''.stripIndent()
 
     }
+
+    def 'SetupRequest size with pad align'() {
+        given:
+        xmlBuilder.xcb(header:'xproto') {
+            struct(name: 'SetupRequest') {
+                field(type:'CARD8', name:'byte_order')
+                pad(bytes:'1')
+                field(type:'CARD16', name:'protocol_major_version')
+                field(type:'CARD16', name:'protocol_minor_version')
+                field(type:'CARD16', name:'authorization_protocol_name_len')
+                field(type:'CARD16', name:'authorization_protocol_data_len')
+                pad(bytes:'2')
+                list(type:'char', name:'authorization_protocol_name') {
+                    fieldref('authorization_protocol_name_len')
+                }
+                pad(align:'4')
+                list(type:'char', name:'authorization_protocol_data') {
+                    fieldref('authorization_protocol_data_len')
+                }
+                pad(align:'4')
+            }
+        }
+        addChildNodes()
+
+        when:
+        TypeSpec typeSpec = result.resolveXType('SetupRequest').javaType.typeSpec
+
+        then:
+        typeSpec.toString() == '''\
+            @lombok.Value
+            @lombok.Builder
+            public class SetupRequest implements com.github.moaxcp.x11client.protocol.XStruct {
+              private byte byteOrder;
+            
+              private short protocolMajorVersion;
+            
+              private short protocolMinorVersion;
+            
+              private short authorizationProtocolNameLen;
+            
+              private short authorizationProtocolDataLen;
+            
+              @lombok.NonNull
+              private java.util.List<java.lang.Byte> authorizationProtocolName;
+            
+              @lombok.NonNull
+              private java.util.List<java.lang.Byte> authorizationProtocolData;
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.SetupRequest readSetupRequest(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                byte byteOrder = in.readCard8();
+                in.readPad(1);
+                short protocolMajorVersion = in.readCard16();
+                short protocolMinorVersion = in.readCard16();
+                short authorizationProtocolNameLen = in.readCard16();
+                short authorizationProtocolDataLen = in.readCard16();
+                in.readPad(2);
+                java.util.List<java.lang.Byte> authorizationProtocolName = in.readChar(Short.toUnsignedInt(authorizationProtocolNameLen));
+                in.readPadAlign(Short.toUnsignedInt(authorizationProtocolNameLen));
+                java.util.List<java.lang.Byte> authorizationProtocolData = in.readChar(Short.toUnsignedInt(authorizationProtocolDataLen));
+                in.readPadAlign(Short.toUnsignedInt(authorizationProtocolDataLen));
+                com.github.moaxcp.x11client.protocol.xproto.SetupRequest.SetupRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetupRequest.builder();
+                javaBuilder.byteOrder(byteOrder);
+                javaBuilder.protocolMajorVersion(protocolMajorVersion);
+                javaBuilder.protocolMinorVersion(protocolMinorVersion);
+                javaBuilder.authorizationProtocolNameLen(authorizationProtocolNameLen);
+                javaBuilder.authorizationProtocolDataLen(authorizationProtocolDataLen);
+                javaBuilder.authorizationProtocolName(authorizationProtocolName);
+                javaBuilder.authorizationProtocolData(authorizationProtocolData);
+                return javaBuilder.build();
+              }
+            
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8(byteOrder);
+                out.writePad(1);
+                out.writeCard16(protocolMajorVersion);
+                out.writeCard16(protocolMinorVersion);
+                out.writeCard16(authorizationProtocolNameLen);
+                out.writeCard16(authorizationProtocolDataLen);
+                out.writePad(2);
+                out.writeChar(authorizationProtocolName);
+                out.writePadAlign(Short.toUnsignedInt(authorizationProtocolNameLen));
+                out.writeChar(authorizationProtocolData);
+                out.writePadAlign(Short.toUnsignedInt(authorizationProtocolDataLen));
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 12 + 1 * authorizationProtocolName.size() + com.github.moaxcp.x11client.protocol.XObject.getSizeForPadAlign(4, 1 * authorizationProtocolName.size()) + 1 * authorizationProtocolData.size() + com.github.moaxcp.x11client.protocol.XObject.getSizeForPadAlign(4, 1 * authorizationProtocolData.size());
+              }
+            
+              public static class SetupRequestBuilder {
+                public int getSize() {
+                  return 12 + 1 * authorizationProtocolName.size() + com.github.moaxcp.x11client.protocol.XObject.getSizeForPadAlign(4, 1 * authorizationProtocolName.size()) + 1 * authorizationProtocolData.size() + com.github.moaxcp.x11client.protocol.XObject.getSizeForPadAlign(4, 1 * authorizationProtocolData.size());
+                }
+              }
+            }
+        '''.stripIndent()
+    }
 }

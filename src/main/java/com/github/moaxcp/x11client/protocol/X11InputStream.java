@@ -1,6 +1,4 @@
-package com.github.moaxcp.x11client;
-
-import com.github.moaxcp.x11client.protocol.X11Input;
+package com.github.moaxcp.x11client.protocol;
 
 import java.io.DataInputStream;
 import java.io.IOException;

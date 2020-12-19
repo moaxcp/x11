@@ -9,7 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
 public class X11ConnectionIT {
   private XephyrRunner runner;

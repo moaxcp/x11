@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11client.ParametersCheck.requireNonBlank;
 import static com.github.moaxcp.x11client.ParametersCheck.requireNonEmpty;
-import static com.github.moaxcp.x11client.Utilities.byteArrayToList;
+import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

@@ -315,6 +315,27 @@ event dispatch. A framework is not the primary goal
 of the client project and will likely move into a 
 new project.
 
+# versions
+
+## 0.2.0
+
+Fixed issue where the size of a padalign is returned as 0 rather than calculated.
+
+Updating javadoc and adding tests. Refactoring classes for better package encapsulation.
+
+* Each plugin is now in its extension package
+* XProtocolService is in the client package and package private
+* Utilities, X11InputStream, and X11OutputStream is in the protocol package
+* Made ParametersCheck package private
+* ConnectionFailureException, X11ClientException, and X11ErrorException constructors are package private
+* X11ClientException is now used for IOExceptions thrown while connecting to the x11 server
+* X11Connection is now private
+
+## 0.1.0
+
+Initial release of x11-client. The client generates classes for bigreq, composite, damage, dpms, dri2, ge, record, res, 
+screensaver, shape, xc_misc, xevie, xf86dri, xf86vidmode, xfixes, xinerama, xproto, xselinux, and xtest.
+
 # License
 
 Copyright 2020 John Mercier

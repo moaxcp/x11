@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class ParametersCheck {
+class ParametersCheck {
   /**
    * Checks that a variable is not blank and returns its value.
    * @param name of variable to check

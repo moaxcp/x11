@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11client;
+package com.github.moaxcp.x11client.protocol;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;

@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.squareup.javapoet.ArrayTypeName
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
@@ -55,7 +56,7 @@ class JavaPadAlign implements JavaUnit {
 
     @Override
     CodeBlock getSizeExpression() {
-        return CodeBlock.of('$L', 0)
+        return CodeBlock.of('$T.getSizeForPadAlign($L, $L)', ClassName.get(javaType.basePackage, 'XObject'), align, list.getSizeExpression())
     }
 
     @Override

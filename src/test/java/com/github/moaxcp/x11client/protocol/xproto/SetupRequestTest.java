@@ -1,14 +1,14 @@
 package com.github.moaxcp.x11client.protocol.xproto;
 
-import com.github.moaxcp.x11client.X11InputStream;
-import com.github.moaxcp.x11client.X11OutputStream;
+import com.github.moaxcp.x11client.protocol.X11InputStream;
 import com.github.moaxcp.x11client.protocol.X11Output;
+import com.github.moaxcp.x11client.protocol.X11OutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.x11client.Utilities.byteArrayToList;
+import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SetupRequestTest {
@@ -32,5 +32,6 @@ public class SetupRequestTest {
     ByteArrayInputStream inBytes = new ByteArrayInputStream(outBytes.toByteArray());
     SetupRequest result = SetupRequest.readSetupRequest(new X11InputStream(inBytes));
     assertThat(result).isEqualTo(expected);
+    assertThat(result.getSize()).isEqualTo(outBytes.size());
   }
 }

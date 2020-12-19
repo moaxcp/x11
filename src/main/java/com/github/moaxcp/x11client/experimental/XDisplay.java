@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 
-import static com.github.moaxcp.x11client.Utilities.byteArrayToList;
-import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
+import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
 /**
  * Implementation of the xlib methods

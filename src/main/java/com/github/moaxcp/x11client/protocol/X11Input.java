@@ -45,10 +45,10 @@ public interface X11Input {
   }
 
   default void readPadAlign(int forLength) throws IOException {
-    readPadAlign(4, forLength);
+    readPad(XObject.getSizeForPadAlign(forLength));
   }
 
-  default void readPadAlign(int pad, int forLength) throws IOException {
-    readByte((pad - forLength % pad) % pad);
+  default void readPadAlign(int align, int forLength) throws IOException {
+    readPad(XObject.getSizeForPadAlign(align, forLength));
   }
 }

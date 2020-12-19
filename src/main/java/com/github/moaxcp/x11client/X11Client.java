@@ -6,24 +6,46 @@ import com.github.moaxcp.x11client.protocol.xproto.Setup;
 import java.io.IOException;
 import lombok.NonNull;
 
+/**
+ * An x11 client.
+ */
 public class X11Client implements AutoCloseable {
   private final X11Connection connection;
   private final XProtocolService service;
   private int nextResourceId;
 
-  public static X11Client connect(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority) throws IOException {
-    return new X11Client(X11Connection.connect(displayName, xAuthority));
+  /**
+   * Creates a client for the given displayName and authority.
+   * @param displayName to connect to. non-null
+   * @param xAuthority to use. non-null
+   * @return
+   * @throws X11ClientException
+   */
+  public static X11Client connect(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority) {
+    try {
+      return new X11Client(X11Connection.connect(displayName, xAuthority));
+    } catch (IOException e) {
+      throw new X11ClientException("Could not connect with " + displayName, e);
+    }
   }
 
-  public static X11Client connect() throws IOException {
-    return new X11Client(X11Connection.connect());
+  public static X11Client connect() {
+    try {
+      return new X11Client(X11Connection.connect());
+    } catch (IOException e) {
+      throw new X11ClientException("Could not connect", e);
+    }
   }
 
-  public static X11Client connect(@NonNull DisplayName name) throws IOException {
-    return new X11Client(X11Connection.connect(name));
+  public static X11Client connect(@NonNull DisplayName name) {
+    try {
+      return new X11Client(X11Connection.connect(name));
+    } catch (IOException e) {
+      throw new X11ClientException("Could not connect with " + name, e);
+    }
   }
 
-  private X11Client(X11Connection connection) throws IOException {
+  private X11Client(X11Connection connection) {
     this.connection = connection;
     service = new XProtocolService(connection.getSetup(), connection.getX11Input(), connection.getX11Output());
   }
@@ -95,6 +117,10 @@ public class X11Client implements AutoCloseable {
     return resourceId | getSetup().getResourceIdBase();
   }
 
+  /**
+   * Closes the connection.
+   * @throws IOException
+   */
   @Override
   public void close() throws IOException {
     connection.close();

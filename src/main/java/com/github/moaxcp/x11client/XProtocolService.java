@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.*;
 import lombok.Getter;
 
-import static com.github.moaxcp.x11client.Utilities.stringToByteList;
+import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
-public final class XProtocolService {
+final class XProtocolService {
   private final ServiceLoader<XProtocolPlugin> loader = ServiceLoader.load(XProtocolPlugin.class);
   private final X11Input in;
   private final X11Output out;
@@ -24,7 +24,7 @@ public final class XProtocolService {
   private final Queue<XEvent> events = new LinkedList<>();
   private final List<XProtocolPlugin> activatedPlugins = new ArrayList<>();
 
-  public XProtocolService(Setup setup, X11Input in, X11Output out) {
+  XProtocolService(Setup setup, X11Input in, X11Output out) {
     this.in = in;
     this.out = out;
     maximumRequestLength = setup.getMaximumRequestLength();
