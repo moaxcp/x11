@@ -10,7 +10,9 @@ designed with Xlib in mind and follows the same
 pattern of queuing one-way requests before sending 
 them to the server.
 
+[![maven central](https://img.shields.io/maven-central/v/com.github.moaxcp.x11/x11-client)](https://search.maven.org/artifact/com.github.moaxcp.x11/x11-client)
 [![javadoc](https://javadoc.io/badge2/com.github.moaxcp.x11/x11-client/javadoc.svg)](https://javadoc.io/doc/com.github.moaxcp.x11/x11-client)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.moaxcp.x11%3Ax11-client&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.github.moaxcp.x11%3Ax11-client)
 
 # Users
 
