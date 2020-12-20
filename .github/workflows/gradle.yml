@@ -28,5 +28,6 @@ jobs:
       run: ./gradlew build
     - name: Sonar scan
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         sonar_login: ${{ secrets.sonar_login }}
       run: ./gradlew sonarqube
