@@ -14,7 +14,7 @@ import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 public class X11ClientIT {
 
   @Test
-  void clientTest() throws IOException {
+  void simpleHelloWorld() throws IOException {
     try(X11Client client = X11Client.connect()) {
       CreateWindow window = CreateWindow.builder()
         .depth(client.getDepth(0))
@@ -89,8 +89,24 @@ public class X11ClientIT {
             .x((short) 10)
             .y((short) 50)
             .build());
+          GetGeometryReply geometry = client.send(GetGeometry.builder()
+            .drawable(window.getWid())
+            .build());
+          String attributeText = String.format("Size: %dx%d", geometry.getWidth(), geometry.getHeight());
+          client.send(ImageText8.builder()
+            .drawable(window.getWid())
+            .gc(gc.getCid())
+            .stringLen((byte) attributeText.length())
+            .string(stringToByteList(attributeText))
+            .x((short) 10)
+            .y((short) 80)
+            .build());
         } else if(event instanceof KeyPressEvent) {
-          break;
+          KeyPressEvent keyPress = (KeyPressEvent) event;
+          int keysym = client.keyCodeToKeySym(keyPress.getDetail(), keyPress.getState());
+          if(keysym == KeySym.XK_Escape.getValue()) {
+            break;
+          }
         } else if(event instanceof ClientMessageEvent) {
           ClientMessageEvent clientMessage = (ClientMessageEvent) event;
           if(clientMessage.getFormat() == 32) {

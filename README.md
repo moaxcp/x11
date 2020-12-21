@@ -322,6 +322,8 @@ new project.
 
 Adding github actions build. The workflow will build the library and run a sonar scan.
 
+Adding keysymdef.h support for some of the keys.
+
 ## 0.2.0
 
 Fixed issue where the size of a padalign is returned as 0 rather than calculated.

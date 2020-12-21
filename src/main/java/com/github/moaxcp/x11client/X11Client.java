@@ -117,6 +117,10 @@ public class X11Client implements AutoCloseable {
     return resourceId | getSetup().getResourceIdBase();
   }
 
+  public int keyCodeToKeySym(int keyCode, int state) {
+    return service.keyCodeToKeySym(keyCode, state);
+  }
+
   /**
    * Closes the connection.
    * @throws IOException

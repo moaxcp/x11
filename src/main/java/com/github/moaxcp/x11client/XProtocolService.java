@@ -2,10 +2,7 @@ package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.*;
 import com.github.moaxcp.x11client.protocol.bigreq.Enable;
-import com.github.moaxcp.x11client.protocol.xproto.QueryExtension;
-import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
-import com.github.moaxcp.x11client.protocol.xproto.Setup;
-import com.github.moaxcp.x11client.protocol.xproto.XprotoPlugin;
+import com.github.moaxcp.x11client.protocol.xproto.*;
 import java.io.IOException;
 import java.util.*;
 import lombok.Getter;
@@ -17,6 +14,10 @@ final class XProtocolService {
   private final X11Input in;
   private final X11Output out;
   @Getter
+  private final GetKeyboardMappingReply keyboard;
+  @Getter
+  private final Setup setup;
+  @Getter
   private int nextSequenceNumber = 1;
   @Getter
   private long maximumRequestLength;
@@ -27,6 +28,7 @@ final class XProtocolService {
   XProtocolService(Setup setup, X11Input in, X11Output out) {
     this.in = in;
     this.out = out;
+    this.setup = setup;
     maximumRequestLength = setup.getMaximumRequestLength();
     for(XProtocolPlugin plugin : loader) {
       if(plugin instanceof XprotoPlugin) {
@@ -46,10 +48,16 @@ final class XProtocolService {
         activatedPlugins.add(plugin);
       }
     }
+
     if(loadedPlugin("BIG-REQUESTS")) {
       maximumRequestLength = Integer.toUnsignedLong(send(Enable.builder().build())
         .getMaximumRequestLength());
     }
+
+    keyboard = send(GetKeyboardMapping.builder()
+      .firstKeycode(setup.getMinKeycode())
+      .count((byte) (setup.getMaxKeycode() - setup.getMinKeycode() + 1))
+      .build());
   }
 
   public boolean loadedPlugin(String name) {
@@ -166,5 +174,28 @@ final class XProtocolService {
       XRequest request = requests.poll();
       actuallySend(request);
     }
+  }
+
+  /**
+   * See https://tronche.com/gui/x/xlib/input/keyboard-encoding.html
+   * @param keyCode
+   * @param state
+   * @return
+   */
+  public int keyCodeToKeySym(int keyCode, int state) {
+    if(keyCode > Byte.toUnsignedInt(setup.getMaxKeycode())) {
+      throw new IllegalArgumentException("keyCode \"" + keyCode + "\" is greater than maxKeycode \"" + setup.getMaxKeycode() + "\"");
+    }
+
+    int modifier = 0;
+
+    if((state & KeyButMask.SHIFT.getValue()) != 0) {
+      modifier =1;
+    } else if((state & KeyButMask.MOD5.getValue()) != 0) {
+      modifier = 2;
+    }
+
+    int code = keyboard.getKeysyms().get((keyCode - Byte.toUnsignedInt(setup.getMinKeycode())) * Byte.toUnsignedInt(keyboard.getKeysymsPerKeycode()) + modifier);
+    return code;
   }
 }
