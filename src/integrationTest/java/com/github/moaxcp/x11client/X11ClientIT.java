@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11client;
 
+import com.github.moaxcp.x11client.protocol.KeySym;
 import com.github.moaxcp.x11client.protocol.XEvent;
 import com.github.moaxcp.x11client.protocol.xproto.*;
 import java.io.IOException;

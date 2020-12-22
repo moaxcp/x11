@@ -1,5 +1,7 @@
 package com.github.moaxcp.x11client;
 
+import com.github.moaxcp.x11client.protocol.DisplayName;
+import com.github.moaxcp.x11client.protocol.XAuthority;
 import java.net.Socket;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
 import static com.github.moaxcp.x11client.X11Connection.connect;
-import static com.github.moaxcp.x11client.XAuthority.Family.LOCAL;
+import static com.github.moaxcp.x11client.protocol.XAuthority.Family.LOCAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

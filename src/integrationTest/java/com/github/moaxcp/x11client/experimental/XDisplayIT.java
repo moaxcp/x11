@@ -10,8 +10,8 @@ public class XDisplayIT {
 
   @Test
   void clientTestXFunctions() throws IOException {
-    try(XDisplay client = new XDisplay(X11Client.connect())) {
-      int wid = client.createSimpleWindow(0, (short) 10, (short) 10, (short) 600, (short) 480, EventMask.EXPOSURE, EventMask.KEY_PRESS);
+    try(X11Client client = X11Client.connect()) {
+      int wid = client.createSimpleWindow((short) 10, (short) 10, (short) 600, (short) 480, EventMask.EXPOSURE, EventMask.KEY_PRESS);
       client.storeName(wid, "Hello World!");
       int deleteAtom = client.internAtom("WM_DELETE_WINDOW");
       client.setWMProtocols(wid, deleteAtom);

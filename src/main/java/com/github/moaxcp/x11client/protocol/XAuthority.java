@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11client;
+package com.github.moaxcp.x11client.protocol;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -11,7 +11,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
 
-import static com.github.moaxcp.x11client.ParametersCheck.requireNonEmpty;
+import static com.github.moaxcp.x11client.protocol.ParametersCheck.requireNonEmpty;
 import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
 import static com.github.moaxcp.x11client.protocol.Utilities.byteListToString;
 
@@ -20,7 +20,7 @@ import static com.github.moaxcp.x11client.protocol.Utilities.byteListToString;
  * are used to find the correct authority. protocolName and protocolDate is used to authenticate with x11.
  */
 @Value
-class XAuthority {
+public class XAuthority {
   @NonNull Family family;
   @NonNull List<Byte> address;
   int displayNumber;
@@ -78,7 +78,7 @@ class XAuthority {
    * @throws NullPointerException if any parameter is null.
    * @throws IllegalArgumentException if displayNumber is < 0 or protocolName is empty.
    */
-  XAuthority(@NonNull Family family, @NonNull List<Byte> address, int displayNumber, @NonNull List<Byte> protocolName, @NonNull List<Byte> protocolData) {
+  public XAuthority(@NonNull Family family, @NonNull List<Byte> address, int displayNumber, @NonNull List<Byte> protocolName, @NonNull List<Byte> protocolData) {
     this.family = family;
     this.address = requireNonEmpty("address", address);
     if(displayNumber < 0) {

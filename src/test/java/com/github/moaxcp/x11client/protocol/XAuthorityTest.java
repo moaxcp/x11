@@ -1,12 +1,13 @@
-package com.github.moaxcp.x11client;
+package com.github.moaxcp.x11client.protocol;
 
+import com.github.moaxcp.x11client.protocol.XAuthority;
 import java.io.DataInput;
 import java.io.IOException;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
-import static com.github.moaxcp.x11client.XAuthority.Family.LOCAL;
+import static com.github.moaxcp.x11client.protocol.XAuthority.Family.LOCAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;

@@ -1,10 +1,11 @@
-package com.github.moaxcp.x11client;
+package com.github.moaxcp.x11client.protocol;
 
-import com.github.moaxcp.x11client.protocol.IntValue;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import static com.github.moaxcp.x11client.KeySystem.*;
+import static com.github.moaxcp.x11client.protocol.KeySystem.NONE;
+import static com.github.moaxcp.x11client.protocol.KeySystem.XK_MISCELLANY;
 
 /**
  * Taken from https://github.com/freedesktop/xorg-x11proto/blob/master/keysymdef.h
@@ -74,45 +75,48 @@ import static com.github.moaxcp.x11client.KeySystem.*;
  *
  */
 public enum KeySym implements IntValue {
+  XK_NoSymbol(NONE, "NoSymbol", 0),
   /**
    * Void symbol
    */
-  XK_VoidSymbol(NONE, 0xffffff),
+  XK_VoidSymbol(NONE, "VoidSymbol", 0xffffff),
 
   /**
    *  Back space, back char
    */
-  XK_BackSpace(XK_MISCELLANY, 0xff08),
-  XK_Tab(XK_MISCELLANY, 0xff09),
+  XK_BackSpace(XK_MISCELLANY, "BackSpace", 0xff08),
+  XK_Tab(XK_MISCELLANY, "Tab", 0xff09),
   /**
    * Linefeed, LF
    */
-  XK_Linefeed(XK_MISCELLANY, 0xff0a),
-  XK_Clear(XK_MISCELLANY, 0xff0b),
+  XK_Linefeed(XK_MISCELLANY, "Linefeed", 0xff0a),
+  XK_Clear(XK_MISCELLANY, "Clear", 0xff0b),
   /**
    * Return, enter
    */
-  XK_Return(XK_MISCELLANY, 0xff0d),
+  XK_Return(XK_MISCELLANY, "Return", 0xff0d),
   /**
    * Pause, hold
    */
-  XK_Pause(XK_MISCELLANY, 0xff13),
-  XK_Scroll_Lock(XK_MISCELLANY, 0xff14),
-  XK_Sys_Req(XK_MISCELLANY, 0xff15),
-  XK_Escape(XK_MISCELLANY, 0xff1b),
+  XK_Pause(XK_MISCELLANY, "Pause", 0xff13),
+  XK_Scroll_Lock(XK_MISCELLANY, "Scroll_Lock", 0xff14),
+  XK_Sys_Req(XK_MISCELLANY, "Sys_Req", 0xff15),
+  XK_Escape(XK_MISCELLANY, "Escape", 0xff1b),
   /**
    * Delete, rubout
    */
-  XK_Delete(XK_MISCELLANY, 0xfff),
+  XK_Delete(XK_MISCELLANY, "Delete", 0xfff),
 
   /**
    * Multi-key character compose
    */
-  XK_Multi_key(XK_MISCELLANY, 0xff20),
-  XK_Codeinput(XK_MISCELLANY, 0xff37),
-  XK_SingleCandidate(XK_MISCELLANY, 0xff3c),
-  XK_MultipleCandidate(XK_MISCELLANY, 0xff3d),
-  XK_PreviousCandidate(XK_MISCELLANY, 0xff3e);
+  XK_Multi_key(XK_MISCELLANY, "Multi_key", 0xff20),
+  XK_Codeinput(XK_MISCELLANY, "Codeinput", 0xff37),
+  XK_SingleCandidate(XK_MISCELLANY, "SingleCandidate", 0xff3c),
+  XK_MultipleCandidate(XK_MISCELLANY, "MultipleCandidate", 0xff3d),
+  XK_PreviousCandidate(XK_MISCELLANY, "PreviousCandidate", 0xff3e),
+
+  XK_F1(XK_MISCELLANY, "F1", 0xffbe);
 
   static final Map<Integer, KeySym> byCode = new HashMap<>();
 
@@ -122,11 +126,21 @@ public enum KeySym implements IntValue {
     }
   }
 
+  static final Map<String, KeySym> byName = new HashMap<>();
+
+  static {
+    for(KeySym e : values()) {
+      byName.put(e.name, e);
+    }
+  }
+
   private KeySystem system;
+  private String name;
   private int value;
 
-  KeySym(KeySystem system, int value) {
+  KeySym(KeySystem system, String name, int value) {
     this.system = system;
+    this.name = name;
     this.value = value;
   }
 
@@ -135,10 +149,11 @@ public enum KeySym implements IntValue {
     return value;
   }
 
-  public static KeySym getByCode(int code) {
-    if(!byCode.containsKey(code)) {
-      throw new IllegalArgumentException(("KeySymbol code not supported \"" + code + "\". Code can be added from https://github.com/freedesktop/xorg-x11proto/blob/master/keysymdef.h"));
-    }
-    return byCode.get(code);
+  public static Optional<KeySym> getByCode(int code) {
+    return Optional.ofNullable(byCode.get(code));
+  }
+
+  public static Optional<KeySym> getByName(String name) {
+    return Optional.ofNullable(byName.get(name));
   }
 }

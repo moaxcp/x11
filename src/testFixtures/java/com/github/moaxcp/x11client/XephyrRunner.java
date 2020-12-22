@@ -12,17 +12,21 @@ public class XephyrRunner {
   private final boolean noreset;
   private final Boolean iglx;
   private final boolean glamor;
+  private final boolean softCursor;
+  private final String screen;
   private final List<String> enableExtensions;
   private final List<String> args;
   private Process process;
 
   @Builder
-  public XephyrRunner(boolean br, boolean ac, boolean noreset, Boolean iglx, boolean glamor, @Singular List<String> enableExtensions, @Singular List<String> args) {
+  public XephyrRunner(boolean br, boolean ac, boolean noreset, Boolean iglx, boolean glamor, boolean softCursor, String screen, @Singular List<String> enableExtensions, @Singular List<String> args) {
     this.br = br;
     this.ac = ac;
     this.noreset = noreset;
     this.iglx = iglx;
     this.glamor = glamor;
+    this.softCursor = softCursor;
+    this.screen = screen;
     this.enableExtensions = enableExtensions;
     this.args = args;
   }
@@ -48,6 +52,13 @@ public class XephyrRunner {
     }
     if(glamor) {
       command.add("-glamor");
+    }
+    if(softCursor) {
+      command.add("-softCursor");
+    }
+    if(screen != null) {
+      command.add("-screen");
+      command.add(screen);
     }
     for(String extension : enableExtensions) {
       command.add("+extension");

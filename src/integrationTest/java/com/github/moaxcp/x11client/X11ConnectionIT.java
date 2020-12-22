@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11client;
 
+import com.github.moaxcp.x11client.protocol.DisplayName;
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtension;

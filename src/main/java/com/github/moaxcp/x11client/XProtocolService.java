@@ -198,4 +198,13 @@ final class XProtocolService {
     int code = keyboard.getKeysyms().get((keyCode - Byte.toUnsignedInt(setup.getMinKeycode())) * Byte.toUnsignedInt(keyboard.getKeysymsPerKeycode()) + modifier);
     return code;
   }
+
+  public int keySymToKeyCode(int keySym) {
+    for(int i = 0; i < keyboard.getKeysyms().size(); i++) {
+      if(keyboard.getKeysyms().get(i) == keySym) {
+        return i + setup.getMinKeycode();
+      }
+    }
+    throw new IllegalArgumentException("Invalid keySym \"" + keySym + "\"");
+  }
 }

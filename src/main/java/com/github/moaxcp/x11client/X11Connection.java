@@ -1,9 +1,6 @@
 package com.github.moaxcp.x11client;
 
-import com.github.moaxcp.x11client.protocol.X11Input;
-import com.github.moaxcp.x11client.protocol.X11InputStream;
-import com.github.moaxcp.x11client.protocol.X11Output;
-import com.github.moaxcp.x11client.protocol.X11OutputStream;
+import com.github.moaxcp.x11client.protocol.*;
 import com.github.moaxcp.x11client.protocol.xproto.SetupAuthenticate;
 import com.github.moaxcp.x11client.protocol.xproto.SetupFailed;
 import com.github.moaxcp.x11client.protocol.xproto.SetupRequest;
@@ -20,7 +17,7 @@ import lombok.NonNull;
 import org.newsclub.net.unix.AFUNIXSocket;
 import org.newsclub.net.unix.AFUNIXSocketAddress;
 
-import static com.github.moaxcp.x11client.XAuthority.*;
+import static com.github.moaxcp.x11client.protocol.XAuthority.*;
 
 class X11Connection implements AutoCloseable {
   @Getter

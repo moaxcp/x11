@@ -1,6 +1,6 @@
-package com.github.moaxcp.x11client;
+package com.github.moaxcp.x11client.protocol;
 
-import com.github.moaxcp.x11client.XAuthority.Family;
+import com.github.moaxcp.x11client.protocol.XAuthority.Family;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 
