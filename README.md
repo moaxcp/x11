@@ -328,6 +328,8 @@ Moving XDisplay methods to main client. Removing XDisplay.
 
 Moved DisplayName, KeySym, KeySystem, ParametersCheck, and XAuthority to protocol package.
 
+Adding ResourceIdService.
+
 ## 0.2.1
 
 Adding github actions build. The workflow will build the library and run a sonar scan.

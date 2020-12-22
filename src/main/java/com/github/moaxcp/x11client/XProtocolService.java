@@ -9,7 +9,7 @@ import lombok.Getter;
 
 import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
-final class XProtocolService {
+class XProtocolService {
   private final ServiceLoader<XProtocolPlugin> loader = ServiceLoader.load(XProtocolPlugin.class);
   private final X11Input in;
   private final X11Output out;
