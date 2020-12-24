@@ -328,7 +328,7 @@ Moving XDisplay methods to main client. Removing XDisplay.
 
 Moved DisplayName, KeySym, KeySystem, ParametersCheck, and XAuthority to protocol package.
 
-Adding ResourceIdService.
+Adding ResourceIdService which will switch to XC_MISC extension once ids run out.
 
 ## 0.2.1
 

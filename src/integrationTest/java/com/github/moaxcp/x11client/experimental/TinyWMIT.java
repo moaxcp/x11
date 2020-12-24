@@ -38,24 +38,8 @@ public class TinyWMIT {
   @Test
   void wm() throws IOException {
     try(X11Client client = X11Client.connect(new DisplayName(":1"))) {
-      int wid = client.nextResourceId();
-      client.send(CreateWindow.builder()
-        .depth(client.getDepth(0))
-        .wid(wid)
-        .parent(client.getRoot(0))
-        .x((short) 0)
-        .y((short) 0)
-        .width((short) 30)
-        .height((short) 30)
-        .borderWidth((short) 0)
-        .clazz(WindowClass.COPY_FROM_PARENT)
-        .visual(client.getVisualId(0))
-        .backgroundPixel(client.getWhitePixel(0))
-        .borderPixel(client.getBlackPixel(0))
-        .build());
-      client.send(MapWindow.builder()
-        .window(wid)
-        .build());
+      int wid = client.createSimpleWindow(10, 10, 200, 200);
+      client.mapWindow(wid);
       client.send(GrabKey.builder()
         .key((byte) client.keySymToKeyCode(KeySym.getByName("F1").get().getValue()))
         .modifiersEnable(ModMask.ONE)
@@ -92,11 +76,7 @@ public class TinyWMIT {
           KeyPressEvent keyPress = (KeyPressEvent) event;
           int child = keyPress.getChild();
           if(child != Window.NONE.getValue()) {
-            //XRaiseWindow https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/RaiseWin.c
-            client.send(ConfigureWindow.builder()
-              .window(child)
-              .stackMode(StackMode.ABOVE)
-              .build());
+            client.raiseWindow(child);
           }
         } else if(event instanceof ButtonPressEvent) {
           ButtonPressEvent buttonPress = (ButtonPressEvent) event;

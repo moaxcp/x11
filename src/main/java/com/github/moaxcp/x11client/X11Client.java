@@ -15,8 +15,8 @@ import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
  */
 public class X11Client implements AutoCloseable {
   private final X11Connection connection;
-  private final XProtocolService service;
-  private int nextResourceId;
+  private final XProtocolService protocolService;
+  private final ResourceIdService resourceIdService;
 
   /**
    * Creates a client for the given displayName and authority.
@@ -51,15 +51,16 @@ public class X11Client implements AutoCloseable {
 
   private X11Client(X11Connection connection) {
     this.connection = connection;
-    service = new XProtocolService(connection.getSetup(), connection.getX11Input(), connection.getX11Output());
+    protocolService = new XProtocolService(connection.getSetup(), connection.getX11Input(), connection.getX11Output());
+    resourceIdService = new ResourceIdService(protocolService, connection.getSetup().getResourceIdMask(), connection.getSetup().getResourceIdBase());
   }
 
   public boolean loadedPlugin(String name) {
-    return service.loadedPlugin(name);
+    return protocolService.loadedPlugin(name);
   }
 
   public boolean activatedPlugin(String name) {
-    return service.activatedPlugin(name);
+    return protocolService.activatedPlugin(name);
   }
 
   public Setup getSetup() {
@@ -95,34 +96,19 @@ public class X11Client implements AutoCloseable {
   }
 
   public void send(OneWayRequest request) {
-    service.send(request);
+    protocolService.send(request);
   }
 
   public <T extends XReply> T send(TwoWayRequest<T> request) {
-    return service.send(request);
+    return protocolService.send(request);
   }
 
   public XEvent getNextEvent() {
-    return service.getNextEvent();
+    return protocolService.getNextEvent();
   }
 
   public void flush() {
-    service.flush();
-  }
-
-  public int nextResourceId() {
-    if (hasValidNextResourceFor(nextResourceId)) {
-      return maskNextResourceId(nextResourceId++);
-    }
-    throw new UnsupportedOperationException("must use xc_misc to get resource id");
-  }
-
-  private boolean hasValidNextResourceFor(int resourceId) {
-    return (resourceId + 1 & ~getSetup().getResourceIdMask()) == 0;
-  }
-
-  private int maskNextResourceId(int resourceId) {
-    return resourceId | getSetup().getResourceIdBase();
+    protocolService.flush();
   }
 
   /**
@@ -135,11 +121,11 @@ public class X11Client implements AutoCloseable {
   }
 
   public int keyCodeToKeySym(int keyCode, int state) {
-    return service.keyCodeToKeySym(keyCode, state);
+    return protocolService.keyCodeToKeySym(keyCode, state);
   }
 
   public int keySymToKeyCode(int keyCode) {
-    return service.keySymToKeyCode(keyCode);
+    return protocolService.keySymToKeyCode(keyCode);
   }
 
   /**
@@ -151,16 +137,16 @@ public class X11Client implements AutoCloseable {
    * @param events
    * @return
    */
-  public int createSimpleWindow(short x, short y, short width, short height, EventMask... events) {
+  public int createSimpleWindow(int x, int y, int width, int height, EventMask... events) {
     int wid = nextResourceId();
     send(CreateWindow.builder()
       .depth(getDepth(getDefaultScreen()))
       .wid(wid)
       .parent(getRoot(getDefaultScreen()))
-      .x(x)
-      .y(y)
-      .width(width)
-      .height(height)
+      .x((short) x)
+      .y((short) y)
+      .width((short) width)
+      .height((short) height)
       .borderWidth((short) 0)
       .clazz(WindowClass.COPY_FROM_PARENT)
       .visual(getVisualId(getDefaultScreen()))
@@ -171,8 +157,20 @@ public class X11Client implements AutoCloseable {
     return wid;
   }
 
+  public int nextResourceId() {
+    return resourceIdService.nextResourceId();
+  }
+
   public int internAtom(String name) {
     return send(InternAtom.builder().name(stringToByteList(name)).nameLen((short) name.length()).build()).getAtom();
+  }
+
+  //XRaiseWindow https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/RaiseWin.c
+  public void raiseWindow(int wid) {
+    send(ConfigureWindow.builder()
+        .window(wid)
+        .stackMode(StackMode.ABOVE)
+        .build());
   }
 
   public void storeName(int wid, String name) {

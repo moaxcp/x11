@@ -9,14 +9,13 @@ import static org.mockito.Mockito.mock;
 public class ResourceIdServiceConstructor {
   @Test
   void constructor_nullService() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> new ResourceIdService(null));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> new ResourceIdService(null, 0b011, 0b100));
     assertThat(exception).hasMessage("protocolService is marked non-null but is null");
   }
 
   @Test
   void constructor() {
-    XProtocolService protocol = mock(XProtocolService.class);
-    ResourceIdService resourceIdService = new ResourceIdService(protocol);
-    assertThat(resourceIdService.getProtocolService()).isEqualTo(protocol);
+    ResourceIdService service = new ResourceIdService(mock(XProtocolService.class), 0b011, 0b100);
+    assertThat(service.getNextResourceId()).isEqualTo(1);
   }
 }
