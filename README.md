@@ -22,7 +22,7 @@ This library can be added to your project using maven or gradle.
 <dependency>
  <groupId>com.github.moaxcp.x11</groupId>
  <artifactId>x11-client</artifactId>
- <version>0.1.0</version>
+ <version>0.3.0</version>
  <type>module</type>
 </dependency>
 ```
@@ -30,7 +30,7 @@ This library can be added to your project using maven or gradle.
 ## Gradle
 
 ```
-implementation 'com.github.moaxcp.x11:x11-client:0.1.0'
+implementation 'com.github.moaxcp.x11:x11-client:0.3.0'
 ```
 
 The library has one dependency for using unix sockets.
@@ -313,6 +313,8 @@ and event dispatch. A framework is not the primary goal of the client project
 and will likely move into a new project.
 
 # versions
+
+## 0.4.0
 
 ## 0.3.0
 
