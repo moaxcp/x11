@@ -76,7 +76,7 @@ public class XAuthority {
    * @param protocolName
    * @param protocolData
    * @throws NullPointerException if any parameter is null.
-   * @throws IllegalArgumentException if displayNumber is < 0 or protocolName is empty.
+   * @throws IllegalArgumentException if displayNumber is less than 0 or protocolName is empty.
    */
   public XAuthority(@NonNull Family family, @NonNull List<Byte> address, int displayNumber, @NonNull List<Byte> protocolName, @NonNull List<Byte> protocolData) {
     this.family = family;

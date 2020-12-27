@@ -17,6 +17,7 @@ public class X11Client implements AutoCloseable {
   private final X11Connection connection;
   private final XProtocolService protocolService;
   private final ResourceIdService resourceIdService;
+  private final AtomService atomService;
 
   /**
    * Creates a client for the given displayName and authority.
@@ -53,6 +54,7 @@ public class X11Client implements AutoCloseable {
     this.connection = connection;
     protocolService = new XProtocolService(connection.getSetup(), connection.getX11Input(), connection.getX11Output());
     resourceIdService = new ResourceIdService(protocolService, connection.getSetup().getResourceIdMask(), connection.getSetup().getResourceIdBase());
+    atomService = new AtomService(protocolService);
   }
 
   public boolean loadedPlugin(String name) {
@@ -161,8 +163,13 @@ public class X11Client implements AutoCloseable {
     return resourceIdService.nextResourceId();
   }
 
-  public int internAtom(String name) {
-    return send(InternAtom.builder().name(stringToByteList(name)).nameLen((short) name.length()).build()).getAtom();
+  /**
+   * Returns the id of the named Atom. If the atom does not exist on the x11 server an InternAtom request is made.
+   * @param name
+   * @return
+   */
+  public int getAtom(String name) {
+    return atomService.getAtom(name).getId();
   }
 
   //XRaiseWindow https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/RaiseWin.c
@@ -185,7 +192,7 @@ public class X11Client implements AutoCloseable {
   }
 
   public void setWMProtocols(int wid, int atom) {
-    int wmProtocols = internAtom("WM_PROTOCOLS");
+    int wmProtocols = getAtom("WM_PROTOCOLS");
     send(ChangeProperty.builder()
       .window(wid)
       .property(wmProtocols)
