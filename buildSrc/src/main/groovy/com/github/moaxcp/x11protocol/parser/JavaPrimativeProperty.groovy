@@ -189,9 +189,9 @@ class JavaPrimativeProperty extends JavaProperty {
     void addWriteCode(CodeBlock.Builder code) {
         if(lengthOfField) {
             if(memberTypeName != TypeName.INT) {
-                code.addStatement('$1T $2L = ($1T) $3L.length()', memberTypeName, name, lengthOfField)
+                code.addStatement('$1T $2L = ($1T) $3L.size()', memberTypeName, name, lengthOfField)
             } else {
-                code.addStatement('$1T $2L = $3L.length()', memberTypeName, name, lengthOfField)
+                code.addStatement('$1T $2L = $3L.size()', memberTypeName, name, lengthOfField)
             }
         }
         code.addStatement('out.write$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), getValueWriteExpressionCodeBlock())

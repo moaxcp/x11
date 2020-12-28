@@ -8,27 +8,30 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
+import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SetupRequestTest {
+public class ChangePropertyTest {
   ByteArrayOutputStream outBytes = new ByteArrayOutputStream();
   X11Output out = new X11OutputStream(outBytes);
 
   @Test
   void writeAndRead() throws IOException {
-    SetupRequest expected = SetupRequest.builder()
-      .byteOrder((byte) 'B')
-      .protocolMajorVersion((short) 11)
-      .protocolMinorVersion((short) 0)
-      .authorizationProtocolName(byteArrayToList("MIT-MAGIC-COOKIE-1".getBytes()))
-      .authorizationProtocolData(byteArrayToList("secret key 123457".getBytes()))
+    ChangeProperty expected = ChangeProperty.builder()
+      .window(12)
+      .property(Atom.WM_NAME.getValue())
+      .type(Atom.STRING.getValue())
+      .format((byte) 8)
+      .data(stringToByteList("Hello World!"))
+      .dataLen("Hello World!".length())
       .build();
 
-    expected.write(out);
+    expected.write((byte) 0, out);
 
-    ByteArrayInputStream inBytes = new ByteArrayInputStream(outBytes.toByteArray());
-    SetupRequest result = SetupRequest.readSetupRequest(new X11InputStream(inBytes));
+    X11InputStream in = new X11InputStream(new ByteArrayInputStream(outBytes.toByteArray()));
+    byte opCode = in.readCard8();
+    assertThat(opCode).isEqualTo(ChangeProperty.OPCODE);
+    ChangeProperty result = ChangeProperty.readChangeProperty(in);
     assertThat(result).isEqualTo(expected);
     assertThat(result.getSize()).isEqualTo(outBytes.size());
   }

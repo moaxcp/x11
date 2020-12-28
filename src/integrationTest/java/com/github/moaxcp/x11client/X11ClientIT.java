@@ -40,13 +40,13 @@ public class X11ClientIT {
         .property(Atom.WM_NAME.getValue())
         .type(Atom.STRING.getValue())
         .format((byte) 8)
-        .data(stringToByteList("Hello World!"))
         .dataLen("Hello World!".length())
+        .data(stringToByteList("Hello World!"))
         .build());
 
       //XSetWMProtocols for adding delete atom
-      InternAtomReply wmProtocols = client.send(InternAtom.builder().name(stringToByteList("WM_PROTOCOLS")).nameLen((short) "WM_PROTOCOLS".length()).build());
-      InternAtomReply deleteAtom = client.send(InternAtom.builder().name(stringToByteList("WM_DELETE_WINDOW")).nameLen((short) "WM_DELETE_WINDOW".length()).build());
+      InternAtomReply wmProtocols = client.send(InternAtom.builder().name(stringToByteList("WM_PROTOCOLS")).build());
+      InternAtomReply deleteAtom = client.send(InternAtom.builder().name(stringToByteList("WM_DELETE_WINDOW")).build());
       client.send(ChangeProperty.builder()
         .window(window.getWid())
         .property(wmProtocols.getAtom())
@@ -85,7 +85,6 @@ public class X11ClientIT {
           client.send(ImageText8.builder()
             .drawable(window.getWid())
             .gc(gc.getCid())
-            .stringLen((byte) "Hello World!".length())
             .string(stringToByteList("Hello World!"))
             .x((short) 10)
             .y((short) 50)
@@ -97,7 +96,6 @@ public class X11ClientIT {
           client.send(ImageText8.builder()
             .drawable(window.getWid())
             .gc(gc.getCid())
-            .stringLen((byte) attributeText.length())
             .string(stringToByteList(attributeText))
             .x((short) 10)
             .y((short) 80)

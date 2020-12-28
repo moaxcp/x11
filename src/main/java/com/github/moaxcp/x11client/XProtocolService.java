@@ -37,7 +37,6 @@ class XProtocolService {
       }
       String name = plugin.getName();
       QueryExtension request = QueryExtension.builder()
-        .nameLen((short) name.length())
         .name(stringToByteList(name))
         .build();
       QueryExtensionReply reply = send(request);

@@ -316,6 +316,10 @@ and will likely move into a new project.
 
 ## 0.4.0
 
+Removing length properties from protocol objects where it is simply the list
+size. The length still needs to be set for properties involving complex
+expressions.
+
 ## 0.3.0
 
 Adding TinyWM example.

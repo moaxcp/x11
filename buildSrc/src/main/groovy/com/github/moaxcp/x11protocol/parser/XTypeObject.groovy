@@ -117,14 +117,10 @@ abstract class XTypeObject extends XType implements XTypeUnit {
         }
 
         java.each { JavaUnit property ->
-            if(property instanceof JavaPrimativeStringListProperty) {
+            if(property instanceof JavaPrimativeListProperty) {
                 List<FieldRefExpression> fieldRefs = property.lengthExpression.fieldRefs
                 String lengthField = null
-                if(fieldRefs.size() > 1) {
-                    lengthField = fieldRefs.find {
-                        it.fieldName.endsWith('Len')
-                    }?.fieldName
-                } else if(fieldRefs.size() == 1) {
+                if(fieldRefs.size() == 1) {
                     lengthField = fieldRefs.get(0).fieldName
                 }
                 if(lengthField) {
@@ -132,6 +128,7 @@ abstract class XTypeObject extends XType implements XTypeUnit {
                     JavaPrimativeProperty lengthProperty = java.find { it instanceof JavaPrimativeProperty && it.name == lengthField }
                     lengthProperty.localOnly = true
                     lengthProperty.lengthOfField = property.name
+
                 }
             }
         }

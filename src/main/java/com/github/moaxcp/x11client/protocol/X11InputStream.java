@@ -113,6 +113,9 @@ public class X11InputStream implements X11Input {
 
   @Override
   public List<Byte> readByte(int length) throws IOException {
+    if(length == 0) {
+      return new ArrayList<>();
+    }
     byte[] bytes = new byte[length];
     int read = in.read(bytes);
     if(read != bytes.length) {

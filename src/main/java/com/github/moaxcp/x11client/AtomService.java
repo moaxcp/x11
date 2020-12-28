@@ -37,7 +37,7 @@ public class AtomService {
     if(atomNames.containsKey(name)) {
       return atomNames.get(name);
     }
-    int id = protocolService.send(InternAtom.builder().name(stringToByteList(name)).nameLen((short) name.length()).build()).getAtom();
+    int id = protocolService.send(InternAtom.builder().name(stringToByteList(name)).build()).getAtom();
     AtomValue result = new AtomValue(id, name);
     add(result);
     return result;

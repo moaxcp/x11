@@ -187,7 +187,6 @@ public class X11Client implements AutoCloseable {
       .type(Atom.STRING.getValue())
       .format((byte) 8)
       .data(stringToByteList(name))
-      .dataLen(name.length())
       .build());
   }
 
@@ -200,7 +199,6 @@ public class X11Client implements AutoCloseable {
       .format((byte) 32)
       .mode(PropMode.REPLACE)
       .data(byteArrayToList(ByteBuffer.allocate(4).putInt(atom).array()))
-      .dataLen(1)
       .build());
   }
 
@@ -235,7 +233,6 @@ public class X11Client implements AutoCloseable {
       .gc(gc)
       .x(x)
       .y(y)
-      .stringLen((byte) string.length())
       .string(stringToByteList(string))
       .build());
   }

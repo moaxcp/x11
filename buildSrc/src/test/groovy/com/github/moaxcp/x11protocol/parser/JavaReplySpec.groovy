@@ -89,8 +89,6 @@ class JavaReplySpec extends XmlSpec {
             
               private int parent;
             
-              private short childrenLen;
-            
               @lombok.NonNull
               private java.util.List<java.lang.Integer> children;
             
@@ -107,7 +105,6 @@ class JavaReplySpec extends XmlSpec {
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.root(root);
                 javaBuilder.parent(parent);
-                javaBuilder.childrenLen(childrenLen);
                 javaBuilder.children(children);
                 if(javaBuilder.getSize() < 32) {
                   in.readPad(32 - javaBuilder.getSize());
@@ -123,6 +120,7 @@ class JavaReplySpec extends XmlSpec {
                 out.writeCard32(getLength());
                 out.writeCard32(root);
                 out.writeCard32(parent);
+                short childrenLen = (short) children.size();
                 out.writeCard16(childrenLen);
                 out.writePad(14);
                 out.writeCard32(children);
@@ -133,7 +131,7 @@ class JavaReplySpec extends XmlSpec {
               public int getSize() {
                 return 32 + 4 * children.size();
               }
-              
+            
               public static class QueryTreeReplyBuilder {
                 public int getSize() {
                   return 32 + 4 * children.size();

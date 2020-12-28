@@ -39,7 +39,6 @@ public class GraphicsContext extends Resource {
       .gc(getId())
       .x(x)
       .y(y)
-      .stringLen((byte) text.length())
       .string(stringToByteList(text))
       .build());
   }

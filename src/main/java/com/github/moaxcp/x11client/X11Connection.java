@@ -79,8 +79,6 @@ class X11Connection implements AutoCloseable {
       .byteOrder((byte) 'B')
       .protocolMajorVersion((short) 11)
       .protocolMinorVersion((short) 0)
-      .authorizationProtocolNameLen((short) xAuthority.getProtocolName().size())
-      .authorizationProtocolDataLen((short) xAuthority.getProtocolData().size())
       .authorizationProtocolName(xAuthority.getProtocolName())
       .authorizationProtocolData(xAuthority.getProtocolData())
       .build();

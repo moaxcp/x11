@@ -350,10 +350,6 @@ class JavaStructSpec extends XmlSpec {
             
               private short protocolMinorVersion;
             
-              private short authorizationProtocolNameLen;
-            
-              private short authorizationProtocolDataLen;
-            
               @lombok.NonNull
               private java.util.List<java.lang.Byte> authorizationProtocolName;
             
@@ -377,8 +373,6 @@ class JavaStructSpec extends XmlSpec {
                 javaBuilder.byteOrder(byteOrder);
                 javaBuilder.protocolMajorVersion(protocolMajorVersion);
                 javaBuilder.protocolMinorVersion(protocolMinorVersion);
-                javaBuilder.authorizationProtocolNameLen(authorizationProtocolNameLen);
-                javaBuilder.authorizationProtocolDataLen(authorizationProtocolDataLen);
                 javaBuilder.authorizationProtocolName(authorizationProtocolName);
                 javaBuilder.authorizationProtocolData(authorizationProtocolData);
                 return javaBuilder.build();
@@ -390,7 +384,9 @@ class JavaStructSpec extends XmlSpec {
                 out.writePad(1);
                 out.writeCard16(protocolMajorVersion);
                 out.writeCard16(protocolMinorVersion);
+                short authorizationProtocolNameLen = (short) authorizationProtocolName.size();
                 out.writeCard16(authorizationProtocolNameLen);
+                short authorizationProtocolDataLen = (short) authorizationProtocolData.size();
                 out.writeCard16(authorizationProtocolDataLen);
                 out.writePad(2);
                 out.writeChar(authorizationProtocolName);
