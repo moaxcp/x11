@@ -18,6 +18,13 @@ public class X11OutputStream implements X11Output {
   }
 
   @Override
+  public void writeBool(List<Boolean> bool) throws IOException {
+    for(boolean b : bool) {
+      writeBool(b);
+    }
+  }
+
+  @Override
   public void writeByte(byte b) throws IOException {
     out.write(b);
   }
@@ -110,6 +117,11 @@ public class X11OutputStream implements X11Output {
   @Override
   public void writeVoid(List<Byte> bytes) throws IOException {
     writeByte(bytes);
+  }
+
+  @Override
+  public void writeFloat(float f) throws IOException {
+    out.writeFloat(f);
   }
 
   public void writeString8(byte[] string8) throws IOException {

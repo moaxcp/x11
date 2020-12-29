@@ -9,6 +9,8 @@ import static java.util.stream.Collectors.toList;
 public interface X11Output {
   void writeBool(boolean bool) throws IOException;
 
+  void writeBool(List<Boolean> bool) throws IOException;
+
   void writeByte(byte b) throws IOException;
 
   void writeInt8(byte int8) throws IOException;
@@ -54,4 +56,6 @@ public interface X11Output {
   default void writePadAlign(int pad, int forLength) throws IOException {
     writePad(XObject.getSizeForPadAlign(pad, forLength));
   }
+
+  void writeFloat(float f) throws IOException;
 }

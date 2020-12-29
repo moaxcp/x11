@@ -5,6 +5,7 @@ import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getUnionJavaName
 import static com.github.moaxcp.x11protocol.parser.JavaClientMessageDataUnionProperty.javaClientMessageDataUnionProperty
+import static com.github.moaxcp.x11protocol.parser.JavaNotifyDataUnionProperty.javaNotifyDataUnionProperty
 import static com.github.moaxcp.x11protocol.parser.JavaTypeProperty.javaTypeProperty
 import static com.github.moaxcp.x11protocol.parser.JavaUnion.javaUnion
 import static com.github.moaxcp.x11protocol.parser.XUnitField.xUnitField
@@ -55,6 +56,8 @@ class XTypeUnion extends XTypeObject {
     JavaTypeProperty getJavaProperty(JavaType javaType, XUnitField field) {
         if(name == 'ClientMessageData') {
             return javaClientMessageDataUnionProperty(javaType, field)
+        } else if(name == 'NotifyData') {
+            return javaNotifyDataUnionProperty(javaType, field)
         }
         return javaTypeProperty(javaType, field)
     }

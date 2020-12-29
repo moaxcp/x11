@@ -34,7 +34,7 @@ class JavaUnion extends JavaObjectType {
     }
 
     static JavaUnion notifyDataUnionJavaUnion(Map args) {
-        return new JavaUnion(args)
+        return new NotifyDataUnion(args)
     }
 
     @Override

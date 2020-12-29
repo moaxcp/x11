@@ -6,6 +6,8 @@ import java.util.List;
 public interface X11Input {
   boolean readBool() throws IOException;
 
+  List<Boolean> readBool(int length) throws IOException;
+
   byte readByte() throws IOException;
 
   byte readInt8() throws IOException;
@@ -31,6 +33,8 @@ public interface X11Input {
   List<Integer> readCard32(int length) throws IOException;
 
   long readCard64() throws IOException;
+
+  float readFloat() throws IOException;
 
   List<Byte> readChar(int length) throws IOException;
 

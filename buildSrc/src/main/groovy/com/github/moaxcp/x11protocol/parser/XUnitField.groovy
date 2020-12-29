@@ -55,6 +55,10 @@ class XUnitField implements XUnit {
         return new XUnitField(result, node, bitcaseInfo)
     }
 
+    static XUnitField xUnitFieldFd(XResult result, Node node) {
+        return new XUnitField(result: result, name: node.attributes().get('name'), type: 'INT32')
+    }
+
     XType getResolvedType() {
         return result.resolveXType(type)
     }

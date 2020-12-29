@@ -9,6 +9,7 @@ import static com.github.moaxcp.x11protocol.parser.JavaTypeListProperty.javaType
 import static com.github.moaxcp.x11protocol.parser.JavaTypeProperty.javaTypeProperty
 import static com.github.moaxcp.x11protocol.parser.XUnitExprField.xUnitExprField
 import static com.github.moaxcp.x11protocol.parser.XUnitField.xUnitField
+import static com.github.moaxcp.x11protocol.parser.XUnitField.xUnitFieldFd
 import static com.github.moaxcp.x11protocol.parser.XUnitListField.xUnitListField
 import static com.github.moaxcp.x11protocol.parser.XUnitPadFactory.xUnitPad
 import static com.github.moaxcp.x11protocol.parser.XUnitRequiredStartAlign.xUnitRequiredStartAlign
@@ -48,6 +49,8 @@ abstract class XTypeObject extends XType implements XTypeUnit {
                 return [xUnitRequiredStartAlign(result, node)]
             case 'field':
                 return [xUnitField(result, node)]
+            case 'fd':
+                return [xUnitFieldFd(result, node)]
             case 'list':
                 return [xUnitListField(result, node)]
             case 'pad':

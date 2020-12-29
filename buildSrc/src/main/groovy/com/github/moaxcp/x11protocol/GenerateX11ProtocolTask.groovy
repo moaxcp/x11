@@ -36,6 +36,7 @@ class GenerateX11ProtocolTask extends DefaultTask {
                     gen.generate()
                 } catch(Exception e) {
                     logger.error("error with file $it.name", e)
+                    throw e
                 }
             }
     }

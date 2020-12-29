@@ -20,18 +20,23 @@ public class X11InputStream implements X11Input {
   }
 
   @Override
+  public List<Boolean> readBool(int length) throws IOException {
+    return readList(length, this::readBool);
+  }
+
+  @Override
   public byte readByte() throws IOException {
     return (byte) in.readUnsignedByte();
   }
 
   @Override
   public byte readInt8() throws IOException {
-    return (byte) in.readByte();
+    return in.readByte();
   }
 
   @Override
   public short readInt16() throws IOException {
-    return (short) in.readShort();
+    return in.readShort();
   }
 
   @Override
@@ -93,7 +98,12 @@ public class X11InputStream implements X11Input {
 
   @Override
   public long readCard64() throws IOException {
-    return 0;
+    return in.readLong();
+  }
+
+  @Override
+  public float readFloat() throws IOException {
+    return in.readFloat();
   }
 
   @Override

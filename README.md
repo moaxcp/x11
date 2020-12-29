@@ -327,6 +327,8 @@ Adding exclude to x11protocol plugin.
 Fixing issues with objects missing padding for the first field. This enables
 the sync extension to work.
 
+Added extensions shm, sync xrandr, xv, and xvmc
+
 ## 0.3.0
 
 Adding TinyWM example.

@@ -23,22 +23,22 @@ class JavaRequiredStartAlign implements JavaUnit {
 
     @Override
     CodeBlock getReadCode() {
-        return CodeBlock.of('//todo align')
+        return CodeBlock.of('//todo align\n')
     }
 
     @Override
     void addBuilderCode(CodeBlock.Builder code) {
-        throw new IllegalStateException('JavaRequredStartAlign cannot be used with builder')
+
     }
 
     @Override
     CodeBlock getDeclareAndReadCode() {
-        return CodeBlock.of('//todo align')
+        return CodeBlock.of('//todo align\n')
     }
 
     @Override
     void addWriteCode(CodeBlock.Builder code) {
-        code.add('//todo align')
+        code.add('//todo align\n')
     }
 
     @Override
@@ -53,6 +53,6 @@ class JavaRequiredStartAlign implements JavaUnit {
 
     @Override
     Optional<Integer> getFixedSize() {
-        throw new UnsupportedOperationException('not supported')
+        return Optional.empty()
     }
 }
