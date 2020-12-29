@@ -3,9 +3,11 @@
 x11-client enables java and other jvm languages to talk directly to a x11 
 server without binding to a C library. The client is similar to X11lib for C
 but uses objects to represent the protocol resulting in a simplified client. It 
-supports the core protocol as well as several extensions. The client is
-similar to X11lib and follows the same pattern of queuing one-way requests 
-before sending them to the server.
+supports the core protocol and the following extensions: bigreq, composite, 
+damage, dpms, dri2, ge, record, render, res, screensaver, shape, sync, xc_misc, 
+xevie, xf86dri, xf86vidmode, xfixes, xinerama, xprint, xselinux, xtest. The 
+client is similar to X11lib and follows the same pattern of queuing one-way
+requests before sending them to the server.
 
 ![Java CI with Gradle](https://github.com/moaxcp/x11-client/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=master)
 [![maven central](https://img.shields.io/maven-central/v/com.github.moaxcp.x11/x11-client)](https://search.maven.org/artifact/com.github.moaxcp.x11/x11-client)
@@ -319,6 +321,11 @@ and will likely move into a new project.
 Removing length properties from protocol objects where it is simply the list
 size. The length still needs to be set for properties involving complex
 expressions.
+
+Adding exclude to x11protocol plugin.
+
+Fixing issues with objects missing padding for the first field. This enables
+the sync extension to work.
 
 ## 0.3.0
 

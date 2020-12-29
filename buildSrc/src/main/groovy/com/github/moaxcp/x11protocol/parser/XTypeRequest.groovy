@@ -21,6 +21,12 @@ class XTypeRequest extends XTypeObject {
             request.protocol.add(new XUnitPad(bytes: 1))
             request.protocol.add(new XUnitField(result: result, name: 'length', type: 'CARD16', localOnly: true))
         } else {
+            XUnit firstField = request.protocol[1]
+            if(firstField instanceof XUnitPad && firstField.bytes != 1) {
+                request.protocol.add(1, new XUnitPad(bytes: 1))
+            } else if(firstField instanceof XUnitField && !['BOOL', 'BYTE', 'INT8', 'CARD8', 'char', 'void'].contains(firstField.resolvedType.name)) {
+                request.protocol.add(1, new XUnitPad(bytes: 1))
+            }
             request.protocol.add(2, new XUnitField(result: result, name: 'length', type: 'CARD16', localOnly: true))
         }
 

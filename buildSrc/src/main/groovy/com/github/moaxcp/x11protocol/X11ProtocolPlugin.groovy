@@ -12,6 +12,7 @@ class X11ProtocolPlugin implements Plugin<Project> {
         project.extensions.create('x11Protocol', X11ProtocolExtension)
         def task = project.task(type: GenerateX11ProtocolTask, 'generateX11Protocol')
         task.xcbXmls = project.x11Protocol.xcbXmls
+        task.exclude = project.x11Protocol.exclude
         task.outputSrc = project.x11Protocol.outputSrc
         task.outputResources = project.x11Protocol.outputResources
 

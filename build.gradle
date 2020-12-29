@@ -63,6 +63,7 @@ x11Protocol {
     outputSrc = file('build/generated/xproto/java/')
     outputResources = file('build/generated/xproto/resources')
     xcbXmls = file('src/main/xcbXmls')
+    exclude = ['present', 'shm', 'xinput', 'xkb', 'xvmc', 'dri3', 'glx', 'randr', 'xv']
 }
 
 publishing {

@@ -974,4 +974,87 @@ class JavaRequestSpec extends XmlSpec {
             }
         '''.stripIndent()
     }
+
+    def await() {
+        given:
+        xmlBuilder.xcb() {
+            struct(name:'TRIGGER') {
+                field(type:'COUNTER', name:'counter')
+                field(type:'CARD32', name:'wait_type', enum:'VALUETYPE')
+                field(type:'sync:INT64', name:'wait_value')
+                field(type:'CARD32', name:'test_type', enum:'TESTTYPE')
+            }
+            struct(name:'WAITCONDITION') {
+                field(type:'TRIGGER', name:'trigger')
+                field(type:'sync:INT64', name:'even_threshold')
+            }
+            request(name:'Await', opcode:'7') {
+                list(type:'WAITCONDITION', name:'wait_list')
+            }
+        }
+
+        when:
+        addChildNodes()
+        XTypeRequest request = result.resolveXType('Await')
+        JavaRequest javaRequest = request.javaType
+
+        then:
+        javaRequest.typeSpec.toString() == '''\
+            @lombok.Value
+            @lombok.Builder
+            public class Await implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+              public static final byte OPCODE = 7;
+            
+              @lombok.NonNull
+              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Waitcondition> waitList;
+            
+              public byte getOpCode() {
+                return OPCODE;
+              }
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.Await readAwait(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                int javaStart = 1;
+                in.readPad(1);
+                javaStart += 1;
+                short length = in.readCard16();
+                javaStart += 2;
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Waitcondition> waitList = new java.util.ArrayList<>(length - javaStart);
+                while(javaStart < Short.toUnsignedInt(length) * 4) {
+                  com.github.moaxcp.x11client.protocol.xproto.Waitcondition baseObject = com.github.moaxcp.x11client.protocol.xproto.Waitcondition.readWaitcondition(in);
+                  waitList.add(baseObject);
+                  javaStart += baseObject.getSize();
+                }
+                com.github.moaxcp.x11client.protocol.xproto.Await.AwaitBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Await.builder();
+                javaBuilder.waitList(waitList);
+                in.readPadAlign(javaBuilder.getSize());
+                return javaBuilder.build();
+              }
+            
+              @java.lang.Override
+              public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
+                  java.io.IOException {
+                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
+                out.writePad(1);
+                out.writeCard16((short) getLength());
+                for(com.github.moaxcp.x11client.protocol.xproto.Waitcondition t : waitList) {
+                  t.write(out);
+                }
+                out.writePadAlign(getSize());
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 4 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(waitList);
+              }
+            
+              public static class AwaitBuilder {
+                public int getSize() {
+                  return 4 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(waitList);
+                }
+              }
+            }
+        '''.stripIndent()
+
+    }
 }
