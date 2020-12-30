@@ -4,12 +4,12 @@ x11-client enables java and other jvm languages to talk directly to a x11
 server without binding to a C library. The client is similar to X11lib for C
 but uses objects to represent the protocol resulting in a simplified client. It 
 supports the core protocol and the following extensions: bigreq, composite, 
-damage, dpms, dri2, ge, record, render, res, screensaver, shape, sync, xc_misc, 
-xevie, xf86dri, xf86vidmode, xfixes, xinerama, xprint, xselinux, xtest. The 
-client is similar to X11lib and follows the same pattern of queuing one-way
-requests before sending them to the server.
+damage, dpms, dri2, ge, randr, record, render, res, screensaver, shape, shm, 
+sync, xc_misc, xevie, xf86dri, xf86vidmode, xfixes, xinerama, xprint, xselinux, 
+xtest, xv, xvmc. The client is similar to X11lib and follows the same pattern 
+of queuing one-way requests before sending them to the server.
 
-![Java CI with Gradle](https://github.com/moaxcp/x11-client/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=master)
+[![Java CI with Gradle](https://github.com/moaxcp/x11-client/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=master)](https://github.com/moaxcp/x11-client/actions?query=workflow%3A%22Java+CI+with+Gradle%22)
 [![maven central](https://img.shields.io/maven-central/v/com.github.moaxcp.x11/x11-client)](https://search.maven.org/artifact/com.github.moaxcp.x11/x11-client)
 [![javadoc](https://javadoc.io/badge2/com.github.moaxcp.x11/x11-client/javadoc.svg)](https://javadoc.io/doc/com.github.moaxcp.x11/x11-client)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.moaxcp.x11%3Ax11-client&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.github.moaxcp.x11%3Ax11-client)
@@ -145,6 +145,9 @@ These examples are conversions of a X11lib example written in C.
 
 ## Hello World
 
+This is an example of a simple window. In this example none of the helper 
+methods are used. Raw requests are built and sent directly to the server.
+
 ```
 try(X11Client x11Client = X11Client.connect()) {
   CreateWindow window = CreateWindow.builder()
@@ -191,7 +194,6 @@ try(X11Client x11Client = X11Client.connect()) {
       x11Client.send(ImageText8.builder()
         .drawable(window.getWid())
         .gc(gc.getCid())
-        .stringLen((byte) "Hello World!".length())
         .string(stringToByteList("Hello World!"))
         .x((short) 10)
         .y((short) 50)
@@ -202,6 +204,116 @@ try(X11Client x11Client = X11Client.connect()) {
   }
 }
 ```
+
+The next example is the same window but uses helper methods in the client.
+
+```
+try(X11Client client = X11Client.connect()) {
+  int wid = client.createSimpleWindow((short) 10, (short) 10, (short) 600, (short) 480, EventMask.EXPOSURE, EventMask.KEY_PRESS);
+  client.storeName(wid, "Hello World!");
+  int deleteAtom = client.getAtom("WM_DELETE_WINDOW");
+  client.setWMProtocols(wid, deleteAtom);
+  client.mapWindow(wid);
+  int gc = client.createGC(0, wid);
+  while(true) {
+    XEvent event = client.getNextEvent();
+    if(event instanceof ExposeEvent) {
+      client.fillRectangle(wid, gc, (short) 20, (short) 20, (short) 10, (short) 10);
+      client.drawString(wid, gc, (short) 10, (short) 50, "Hello World!");
+    } else if(event instanceof KeyPressEvent) {
+      break;
+    } else if(event instanceof ClientMessageEvent) {
+      ClientMessageEvent clientMessage = (ClientMessageEvent) event;
+      if(clientMessage.getFormat() == 32) {
+        ClientMessageData32 data = (ClientMessageData32) clientMessage.getData();
+        if(data.getData32().get(0) == deleteAtom) {
+          break;
+        }
+      }
+    }
+  }
+}
+```
+
+## TinyWM
+
+[TinyWM](http://incise.org/tinywm.html) is a famous small window manager 
+written in around 50 lines of code. This example is the implementation in java.
+
+```
+try(X11Client client = X11Client.connect(new DisplayName(":1"))) {
+  int wid = client.createSimpleWindow(10, 10, 200, 200);
+  client.mapWindow(wid);
+  client.send(GrabKey.builder()
+    .key((byte) client.keySymToKeyCode(KeySym.getByName("F1").get().getValue()))
+    .modifiersEnable(ModMask.ONE)
+    .grabWindow(client.getRoot(0))
+    .ownerEvents(true)
+    .keyboardMode(GrabMode.ASYNC)
+    .pointerMode(GrabMode.ASYNC)
+    .build());
+  client.send(GrabButton.builder()
+    .button(ButtonIndex.ONE)
+    .modifiersEnable(ModMask.ONE)
+    .grabWindow(client.getRoot(0))
+    .ownerEvents(true)
+    .eventMaskEnable(BUTTON_PRESS, BUTTON_RELEASE, POINTER_MOTION)
+    .keyboardMode(GrabMode.ASYNC)
+    .pointerMode(GrabMode.ASYNC)
+    .build());
+  client.send(GrabButton.builder()
+    .button(ButtonIndex.THREE)
+    .modifiersEnable(ModMask.ONE)
+    .grabWindow(client.getRoot(0))
+    .ownerEvents(true)
+    .eventMaskEnable(BUTTON_PRESS, BUTTON_RELEASE, POINTER_MOTION)
+    .keyboardMode(GrabMode.ASYNC)
+    .pointerMode(GrabMode.ASYNC)
+    .build());
+
+  GetGeometryReply geometry = null;
+  ButtonPressEvent start = null;
+
+  while(true) {
+    XEvent event = client.getNextEvent();
+    if(event instanceof KeyPressEvent) {
+      KeyPressEvent keyPress = (KeyPressEvent) event;
+      int child = keyPress.getChild();
+      if(child != Window.NONE.getValue()) {
+        client.raiseWindow(child);
+      }
+    } else if(event instanceof ButtonPressEvent) {
+      ButtonPressEvent buttonPress = (ButtonPressEvent) event;
+      int child = buttonPress.getChild();
+      if(child != Window.NONE.getValue()) {
+        geometry = client.send(GetGeometry.builder()
+          .drawable(child)
+          .build());
+        start = buttonPress;
+      }
+    } else if(event instanceof MotionNotifyEvent) {
+      MotionNotifyEvent motionNotify = (MotionNotifyEvent) event;
+      int child = motionNotify.getChild();
+      if(child != Window.NONE.getValue()) {
+        int xdiff = motionNotify.getRootX() - start.getRootX();
+        int ydiff = motionNotify.getRootY() - start.getRootY();
+        client.send(ConfigureWindow.builder()
+          .window(child)
+          .x(geometry.getX() + (start.getDetail() == ButtonIndex.ONE.getValue() ? xdiff : 0))
+          .y(geometry.getY() + (start.getDetail() == ButtonIndex.ONE.getValue() ? ydiff : 0))
+          .width(Math.max(1, geometry.getWidth() + (start.getDetail() == ButtonIndex.THREE.getValue() ? xdiff : 0)))
+          .height(Math.max(1, geometry.getHeight() + (start.getDetail() == ButtonIndex.THREE.getValue() ? ydiff : 0)))
+          .build());
+      }
+    } else if(event instanceof ButtonReleaseEvent) {
+      start = null;
+    }
+  }
+}
+```
+
+The java version is a bit longer due to the builder pattern being a little more
+verbose.
 
 # Design
 
@@ -320,14 +432,29 @@ and will likely move into a new project.
 
 Removing length properties from protocol objects where it is simply the list
 size. The length still needs to be set for properties involving complex
-expressions.
+expressions. This results in not having to set the length of lists on most 
+objects. For example drawing a string no longer requires the size.
+
+```
+client.send(ImageText8.builder()
+  .drawable(window.getWid())
+  .gc(gc.getCid())
+  .string(stringToByteList("Hello World!"))
+  .x((short) 10)
+  .y((short) 50)
+  .build());
+```
 
 Adding exclude to x11protocol plugin.
 
 Fixing issues with objects missing padding for the first field. This enables
 the sync extension to work.
 
+Added support for file descriptors. They are simply treated as an `int`.
+
 Added extensions shm, sync xrandr, xv, and xvmc
+
+Added defaultGC cache for root windows and method to automatically create them.
 
 ## 0.3.0
 

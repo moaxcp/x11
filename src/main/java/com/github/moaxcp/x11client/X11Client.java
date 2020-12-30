@@ -5,6 +5,8 @@ import com.github.moaxcp.x11client.protocol.xproto.*;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.NonNull;
 
 import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
@@ -18,6 +20,7 @@ public class X11Client implements AutoCloseable {
   private final XProtocolService protocolService;
   private final ResourceIdService resourceIdService;
   private final AtomService atomService;
+  private final Map<Integer, Integer> defaultGCs = new HashMap<>();
 
   /**
    * Creates a client for the given displayName and authority.
@@ -119,6 +122,7 @@ public class X11Client implements AutoCloseable {
    */
   @Override
   public void close() throws IOException {
+    defaultGCs.values().stream().forEach(i -> send(FreeGC.builder().gc(i).build()));
     connection.close();
   }
 
@@ -186,6 +190,7 @@ public class X11Client implements AutoCloseable {
       .property(Atom.WM_NAME.getValue())
       .type(Atom.STRING.getValue())
       .format((byte) 8)
+      .dataLen(name.length())
       .data(stringToByteList(name))
       .build());
   }
@@ -198,6 +203,7 @@ public class X11Client implements AutoCloseable {
       .type(Atom.ATOM.getValue())
       .format((byte) 32)
       .mode(PropMode.REPLACE)
+      .dataLen(1)
       .data(byteArrayToList(ByteBuffer.allocate(4).putInt(atom).array()))
       .build());
   }
@@ -216,6 +222,16 @@ public class X11Client implements AutoCloseable {
       .background(getWhitePixel(screen))
       .foreground(getBlackPixel(screen))
       .build());
+    return gc;
+  }
+
+  public int defaultGC(int screen) {
+    int root = getRoot(screen);
+    if(defaultGCs.containsKey(root)) {
+      return defaultGCs.get(root);
+    }
+    int gc = createGC(screen, root);
+    defaultGCs.put(root, gc);
     return gc;
   }
 
