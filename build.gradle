@@ -2,14 +2,13 @@ plugins {
     id 'java-library'
     id 'io.freefair.lombok' version '5.0.1'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
-    id 'org.ajoberstar.reckon' version '0.13.0'
     id 'org.sonarqube' version '3.0'
     id 'com.github.moaxcp.x11protocol'
     id 'java-test-fixtures'
     id 'maven-publish'
-    id 'de.marcphilipp.nexus-publish' version '0.4.0'
     id 'signing'
     id 'jacoco'
+    id 'org.ajoberstar.reckon' version '0.13.0'
 }
 
 java {
@@ -123,15 +122,6 @@ publishing {
                     }
                 }
             }
-        }
-    }
-}
-
-nexusPublishing {
-    repositories {
-        sonatype {
-            username = project.findProperty('nexus.username')
-            password = project.findProperty('nexus.password')
         }
     }
 }

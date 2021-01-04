@@ -74,6 +74,14 @@ class X11Connection implements AutoCloseable {
     return out;
   }
 
+  public String getHostName() {
+    return socket.getInetAddress().getHostName();
+  }
+
+  public int getPort() {
+    return socket.getPort();
+  }
+
   private void sendConnectionSetup() throws IOException {
     SetupRequest setup = SetupRequest.builder()
       .byteOrder((byte) 'B')

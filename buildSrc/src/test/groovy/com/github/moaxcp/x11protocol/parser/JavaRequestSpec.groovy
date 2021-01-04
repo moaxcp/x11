@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.parser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.google.common.truth.Truth
 
 class JavaRequestSpec extends XmlSpec {
     def destroyWindow() {
@@ -508,7 +507,7 @@ class JavaRequestSpec extends XmlSpec {
         JavaRequest javaRequest = request.javaType
 
         then:
-        Truth.assertThat(javaRequest.typeSpec.toString()).isEqualTo '''\
+        javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class CreateWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest {

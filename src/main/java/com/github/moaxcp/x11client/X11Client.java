@@ -72,32 +72,56 @@ public class X11Client implements AutoCloseable {
     return connection.getSetup();
   }
 
-  public int getDefaultScreen() {
-    return 0;
+  public int getDefaultScreenNumber() {
+    return connection.getDisplayName().getScreenNumber();
   }
 
   public Screen getScreen(int screen) {
     return getSetup().getRoots().get(screen);
   }
 
+  public Screen getDefaultScreen() {
+    return getScreen(getDefaultScreenNumber());
+  }
+
   public int getRoot(int screen) {
     return getScreen(screen).getRoot();
+  }
+
+  public int getDefaultRoot() {
+    return getRoot(getDefaultScreenNumber());
   }
 
   public int getWhitePixel(int screen) {
     return getScreen(screen).getWhitePixel();
   }
 
+  public int getDefaultWhitePixel() {
+    return getWhitePixel(getDefaultScreenNumber());
+  }
+
   public int getBlackPixel(int screen) {
     return getScreen(screen).getBlackPixel();
+  }
+
+  public int getDefaultBlackPixel() {
+    return getBlackPixel(getDefaultScreenNumber());
   }
 
   public byte getDepth(int screen) {
     return getScreen(screen).getRootDepth();
   }
 
+  public byte getDefaultDepth() {
+    return getDepth(getDefaultScreenNumber());
+  }
+
   public int getVisualId(int screen) {
     return getScreen(screen).getRootVisual();
+  }
+
+  public int getDefaultVisualId() {
+    return getVisualId(getDefaultScreenNumber());
   }
 
   public void send(OneWayRequest request) {
@@ -146,18 +170,18 @@ public class X11Client implements AutoCloseable {
   public int createSimpleWindow(int x, int y, int width, int height, EventMask... events) {
     int wid = nextResourceId();
     send(CreateWindow.builder()
-      .depth(getDepth(getDefaultScreen()))
+      .depth(getDefaultDepth())
       .wid(wid)
-      .parent(getRoot(getDefaultScreen()))
+      .parent(getDefaultRoot())
       .x((short) x)
       .y((short) y)
       .width((short) width)
       .height((short) height)
       .borderWidth((short) 0)
       .clazz(WindowClass.COPY_FROM_PARENT)
-      .visual(getVisualId(getDefaultScreen()))
-      .backgroundPixel(getWhitePixel(getDefaultScreen()))
-      .borderPixel(getBlackPixel(getDefaultScreen()))
+      .visual(getDefaultVisualId())
+      .backgroundPixel(getDefaultWhitePixel())
+      .borderPixel(getDefaultBlackPixel())
       .eventMaskEnable(events)
       .build());
     return wid;
@@ -233,6 +257,10 @@ public class X11Client implements AutoCloseable {
     int gc = createGC(screen, root);
     defaultGCs.put(root, gc);
     return gc;
+  }
+
+  public int defaultGC() {
+    return defaultGC(getDefaultScreenNumber());
   }
 
   /**
