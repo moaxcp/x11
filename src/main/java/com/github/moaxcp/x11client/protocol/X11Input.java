@@ -55,4 +55,6 @@ public interface X11Input {
   default void readPadAlign(int align, int forLength) throws IOException {
     readPad(XObject.getSizeForPadAlign(align, forLength));
   }
+
+  int available() throws IOException;
 }

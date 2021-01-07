@@ -143,6 +143,11 @@ public class X11InputStream implements X11Input {
     return readByte(length);
   }
 
+  @Override
+  public int available() throws IOException {
+    return in.available();
+  }
+
   public void close() throws IOException {
     in.close();
   }

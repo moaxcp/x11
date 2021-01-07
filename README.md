@@ -428,6 +428,14 @@ and will likely move into a new project.
 
 # versions
 
+## 0.5.0
+
+Adding `hasResponse()` method which checks for an available XEvent or XError on
+the socket.
+
+Since DisplayName can set the default screen methods have been added to return
+default settings from the connection setup response.
+
 ## 0.4.0
 
 Removing length properties from protocol objects where it is simply the list

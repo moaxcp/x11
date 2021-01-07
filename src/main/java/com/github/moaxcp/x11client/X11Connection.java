@@ -70,6 +70,14 @@ class X11Connection implements AutoCloseable {
     return in;
   }
 
+  public int inputAvailable() {
+    try {
+      return in.available();
+    } catch (IOException e) {
+      throw new X11ClientException(e.getMessage(), e);
+    }
+  }
+
   public X11Output getX11Output() {
     return out;
   }

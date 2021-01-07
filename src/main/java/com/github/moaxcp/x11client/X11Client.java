@@ -136,6 +136,10 @@ public class X11Client implements AutoCloseable {
     return protocolService.getNextEvent();
   }
 
+  public boolean hasResponse() {
+    return connection.inputAvailable() >= 32; //events and errors are always 32 bytes
+  }
+
   public void flush() {
     protocolService.flush();
   }
