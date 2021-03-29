@@ -428,6 +428,11 @@ and will likely move into a new project.
 
 # versions
 
+## 0.6.0-SNAPSHOT
+
+Implementing `sync()` method based on XSync but without a discard parameter.
+Adding `discard()` method to clear the event queue.
+
 ## 0.5.0
 
 Adding `hasResponse()` method which checks for an available XEvent or XError on

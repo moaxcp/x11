@@ -206,4 +206,8 @@ class XProtocolService {
     }
     throw new IllegalArgumentException("Invalid keySym \"" + keySym + "\"");
   }
+
+  public void discard() {
+    events.clear();
+  }
 }

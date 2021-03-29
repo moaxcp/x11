@@ -145,6 +145,20 @@ public class X11Client implements AutoCloseable {
   }
 
   /**
+   * https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/Sync.c
+   */
+  public void sync() {
+    GetInputFocusReply reply = send(GetInputFocus.builder().build());
+  }
+
+  /**
+   * discards all events in the event queue.
+   */
+  public void discard() {
+    protocolService.discard();
+  }
+
+  /**
    * Closes the connection.
    * @throws IOException
    */
