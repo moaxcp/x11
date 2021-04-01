@@ -116,7 +116,8 @@ public enum KeySym implements IntValue {
   XK_MultipleCandidate(XK_MISCELLANY, "MultipleCandidate", 0xff3d),
   XK_PreviousCandidate(XK_MISCELLANY, "PreviousCandidate", 0xff3e),
 
-  XK_F1(XK_MISCELLANY, "F1", 0xffbe);
+  XK_F1(XK_MISCELLANY, "F1", 0xffbe),
+  XK_F4(XK_MISCELLANY, "F4", 0xffc1);
 
   static final Map<Integer, KeySym> byCode = new HashMap<>();
 

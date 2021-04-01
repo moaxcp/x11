@@ -15,11 +15,13 @@ public class XephyrRunner {
   private final boolean softCursor;
   private final String screen;
   private final List<String> enableExtensions;
-  private final List<String> args;
-  private Process process;
+  private final String display;
+
+  private final int withXTerm;
+  private List<Process> processes = new ArrayList<>();
 
   @Builder
-  public XephyrRunner(boolean br, boolean ac, boolean noreset, Boolean iglx, boolean glamor, boolean softCursor, String screen, @Singular List<String> enableExtensions, @Singular List<String> args) {
+  public XephyrRunner(boolean br, boolean ac, boolean noreset, Boolean iglx, boolean glamor, boolean softCursor, String screen, @Singular List<String> enableExtensions, String display, int withXTerm) {
     this.br = br;
     this.ac = ac;
     this.noreset = noreset;
@@ -28,7 +30,8 @@ public class XephyrRunner {
     this.softCursor = softCursor;
     this.screen = screen;
     this.enableExtensions = enableExtensions;
-    this.args = args;
+    this.display = display;
+    this.withXTerm = withXTerm;
   }
 
   public void start() throws IOException {
@@ -65,16 +68,25 @@ public class XephyrRunner {
       command.add(extension);
     }
 
-    command.addAll(args);
+    command.add(display);
 
-    process = new ProcessBuilder(command.toArray(new String[command.size()]))
-      .start();
+    processes.add(new ProcessBuilder(command.toArray(new String[0])).start());
+
+    startXTerms();
+  }
+
+  private void startXTerms() throws IOException {
+    for(int i = 0; i < withXTerm; i++) {
+      processes.add(new ProcessBuilder("xterm", "-display", display).start());
+    }
   }
 
   public void stop() throws InterruptedException {
-    process.destroy();
-    process.waitFor(10000, TimeUnit.SECONDS);
-    process.destroyForcibly();
-    process.waitFor();
+    for(Process process : processes) {
+      process.destroy();
+      process.waitFor(10000, TimeUnit.SECONDS);
+      process.destroyForcibly();
+      process.waitFor();
+    }
   }
 }

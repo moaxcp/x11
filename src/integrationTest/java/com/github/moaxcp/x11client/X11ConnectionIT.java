@@ -21,7 +21,7 @@ public class X11ConnectionIT {
       .ac(true)
       .br(true)
       .noreset(true)
-      .arg(":1")
+      .display(":1")
       .build();
     runner.start();
   }

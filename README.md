@@ -430,8 +430,12 @@ and will likely move into a new project.
 
 ## 0.6.0-SNAPSHOT
 
-Implementing `sync()` method based on XSync but without a discard parameter.
-Adding `discard()` method to clear the event queue.
+* Implementing `sync()` method based on XSync but without a discard parameter.
+* Adding `discard()` method to clear the event queue.
+* `getAtom(int)` now returns an `AtomValue` which contains the id and name.
+* Added `getWMProtocols(int)` to returns the supported protocols for a window.
+* Added `killClient(int)` and `inputFocus(int)`.
+* Added XK_F1 and XK_F4 to KeySym.
 
 ## 0.5.0
 

@@ -6,6 +6,8 @@ import lombok.NonNull;
 
 /**
  * An exception thrown when the x11 server returns an {@link XError} which has not been recovered from.
+ *
+ * Could use xlib code to get error message https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/ErrDes.c
  */
 @Getter
 public class X11ErrorException extends RuntimeException {

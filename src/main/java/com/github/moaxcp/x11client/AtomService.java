@@ -2,11 +2,14 @@ package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.AtomValue;
 import com.github.moaxcp.x11client.protocol.xproto.Atom;
+import com.github.moaxcp.x11client.protocol.xproto.GetAtomName;
+import com.github.moaxcp.x11client.protocol.xproto.GetAtomNameReply;
 import com.github.moaxcp.x11client.protocol.xproto.InternAtom;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
+import static com.github.moaxcp.x11client.protocol.Utilities.byteListToString;
 import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
 public class AtomService {
@@ -29,15 +32,23 @@ public class AtomService {
     return atomIds.get(atom.getValue());
   }
 
-  public Optional<AtomValue> getAtom(int id) {
-    return Optional.ofNullable(atomIds.get(id));
+  public AtomValue getAtom(int id) {
+    if(atomIds.containsKey(id)) {
+      return atomIds.get(id);
+    }
+    GetAtomNameReply name = protocolService.send(GetAtomName.builder().atom(id).build());
+    AtomValue result = new AtomValue(id, byteListToString(name.getName(), StandardCharsets.ISO_8859_1));
+    add(result);
+    return result;
   }
 
   public AtomValue getAtom(String name) {
     if(atomNames.containsKey(name)) {
       return atomNames.get(name);
     }
-    int id = protocolService.send(InternAtom.builder().name(stringToByteList(name)).build()).getAtom();
+    int id = protocolService.send(InternAtom.builder()
+      .name(stringToByteList(name, StandardCharsets.ISO_8859_1))
+      .build()).getAtom();
     AtomValue result = new AtomValue(id, name);
     add(result);
     return result;

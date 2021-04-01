@@ -3,8 +3,8 @@ package com.github.moaxcp.x11client;
 import lombok.NonNull;
 
 /**
- * Thrown when there is an IOException and not an XError returned by the Server. These exceptions could be caused by
- * a closed connection to the server.
+ * Thrown when there is a client exception. This could mean an IOException or unexpected results from the server. It is
+ * not for XErrors returned by the Server. These exceptions could be caused by a closed connection to the server.
  */
 public class X11ClientException extends RuntimeException {
   /**

@@ -1,45 +1,22 @@
-package com.github.moaxcp.x11client.experimental;
+package com.github.moaxcp.x11client.tinywm;
 
+import com.github.moaxcp.x11client.X11Client;
 import com.github.moaxcp.x11client.protocol.DisplayName;
 import com.github.moaxcp.x11client.protocol.KeySym;
-import com.github.moaxcp.x11client.X11Client;
-import com.github.moaxcp.x11client.XephyrRunner;
 import com.github.moaxcp.x11client.protocol.XEvent;
 import com.github.moaxcp.x11client.protocol.xproto.*;
-import com.github.moaxcp.x11client.protocol.xproto.Window;
 import java.io.IOException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11client.protocol.xproto.EventMask.*;
 
-public class TinyWMIT {
-  private XephyrRunner runner;
-
-  @BeforeEach
-  void setup() throws IOException {
-    runner = XephyrRunner.builder()
-      .ac(true)
-      .br(true)
-      .noreset(true)
-      .screen("1200x1000")
-      .softCursor(true)
-      .arg(":1")
-      .build();
-    runner.start();
+public class TinyWindowManager {
+  private final String display;
+  public TinyWindowManager(String display) {
+    this.display = display;
   }
 
-  @AfterEach
-  void teardown() throws InterruptedException {
-    runner.stop();
-  }
-
-  @Test
-  void wm() throws IOException {
-    try(X11Client client = X11Client.connect(new DisplayName(":1"))) {
-      int wid = client.createSimpleWindow(10, 10, 200, 200);
-      client.mapWindow(wid);
+  public void start() throws IOException {
+    try(X11Client client = X11Client.connect(new DisplayName(display))) {
       client.send(GrabKey.builder()
         .key((byte) client.keySymToKeyCode(KeySym.getByName("F1").get().getValue()))
         .modifiersEnable(ModMask.ONE)
@@ -106,5 +83,10 @@ public class TinyWMIT {
         }
       }
     }
+  }
+
+  public static void main(String... args) throws IOException {
+    TinyWindowManager wm = new TinyWindowManager(args[0]);
+    wm.start();
   }
 }

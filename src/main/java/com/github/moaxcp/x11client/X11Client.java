@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.NonNull;
 
-import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
-import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
+import static com.github.moaxcp.x11client.protocol.Utilities.*;
 
 /**
  * An x11 client.
@@ -172,8 +172,8 @@ public class X11Client implements AutoCloseable {
     return protocolService.keyCodeToKeySym(keyCode, state);
   }
 
-  public int keySymToKeyCode(int keyCode) {
-    return protocolService.keySymToKeyCode(keyCode);
+  public int keySymToKeyCode(int keySym) {
+    return protocolService.keySymToKeyCode(keySym);
   }
 
   /**
@@ -210,12 +210,12 @@ public class X11Client implements AutoCloseable {
   }
 
   /**
-   * Returns the id of the named Atom. If the atom does not exist on the x11 server an InternAtom request is made.
+   * Returns the {@link AtomValue} of the named Atom. If the atom does not exist on the x11 server an InternAtom request is made.
    * @param name
    * @return
    */
-  public int getAtom(String name) {
-    return atomService.getAtom(name).getId();
+  public AtomValue getAtom(String name) {
+    return atomService.getAtom(name);
   }
 
   //XRaiseWindow https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/RaiseWin.c
@@ -237,11 +237,27 @@ public class X11Client implements AutoCloseable {
       .build());
   }
 
+  public List<Integer> getWMProtocols(int wid) {
+    GetPropertyReply property = send(GetProperty.builder()
+      .window(wid)
+      .property(getAtom("WM_PROTOCOLS").getId())
+      .longOffset(0)
+      .longLength(1000000)
+      .delete(false)
+      .build());
+    if(property.getFormat() != 32) {
+      throw new X11ClientException("expected format for property \"WM_PROTOCOLS\" to be 32 but was \"" + property.getFormat() + "\"");
+    }
+    if(property.getType() != Atom.ATOM.getValue()) {
+      throw new X11ClientException("expected type for property \"WM_PROTOCOLS\" to be \"" + Atom.ATOM.getValue() + "\" but was \"" + property.getType() + "\"");
+    }
+    return toIntegers(property.getValue());
+  }
+
   public void setWMProtocols(int wid, int atom) {
-    int wmProtocols = getAtom("WM_PROTOCOLS");
     send(ChangeProperty.builder()
       .window(wid)
-      .property(wmProtocols)
+      .property(getAtom("WM_PROTOCOLS").getId())
       .type(Atom.ATOM.getValue())
       .format((byte) 32)
       .mode(PropMode.REPLACE)
@@ -309,6 +325,19 @@ public class X11Client implements AutoCloseable {
         .width(width)
         .height(height)
         .build()))
+      .build());
+  }
+
+  public void killClient(int resource) {
+    send(KillClient.builder()
+      .resource(resource)
+      .build());
+  }
+
+  public void inputFocus(int wid) {
+    send(SetInputFocus.builder()
+      .focus(wid)
+      .revertTo(InputFocus.POINTER_ROOT)
       .build());
   }
 }

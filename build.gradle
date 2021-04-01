@@ -1,21 +1,14 @@
 plugins {
+    id 'org.ajoberstar.reckon' version '0.13.0'
     id 'java-library'
     id 'io.freefair.lombok' version '5.3.0'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
     id 'org.sonarqube' version '3.1.1'
     id 'com.github.moaxcp.x11protocol'
-    id 'java-test-fixtures'
+    //id 'java-test-fixtures'
     id 'maven-publish'
     id 'signing'
     id 'jacoco'
-    id 'org.ajoberstar.reckon' version '0.13.0'
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-    withSourcesJar()
-    withJavadocJar()
 }
 
 group = 'com.github.moaxcp.x11'
@@ -26,8 +19,17 @@ reckon {
     snapshotFromProp()
 }
 
+apply plugin: 'java-test-fixtures'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
+    withJavadocJar()
+}
+
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
