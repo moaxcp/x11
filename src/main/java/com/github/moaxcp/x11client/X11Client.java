@@ -20,6 +20,7 @@ public class X11Client implements AutoCloseable {
   private final XProtocolService protocolService;
   private final ResourceIdService resourceIdService;
   private final AtomService atomService;
+  private final KeyboardService keyboardService;
   private final Map<Integer, Integer> defaultGCs = new HashMap<>();
 
   /**
@@ -58,6 +59,7 @@ public class X11Client implements AutoCloseable {
     protocolService = new XProtocolService(connection.getSetup(), connection.getX11Input(), connection.getX11Output());
     resourceIdService = new ResourceIdService(protocolService, connection.getSetup().getResourceIdMask(), connection.getSetup().getResourceIdBase());
     atomService = new AtomService(protocolService);
+    keyboardService = new KeyboardService(protocolService);
   }
 
   public boolean loadedPlugin(String name) {
@@ -168,12 +170,12 @@ public class X11Client implements AutoCloseable {
     connection.close();
   }
 
-  public int keyCodeToKeySym(int keyCode, int state) {
-    return protocolService.keyCodeToKeySym(keyCode, state);
+  public int keyCodeToKeySym(byte keyCode, short state) {
+    return keyboardService.keyCodeToKeySym(keyCode, state);
   }
 
-  public int keySymToKeyCode(int keySym) {
-    return protocolService.keySymToKeyCode(keySym);
+  public List<Byte> keySymToKeyCode(int keySym) {
+    return keyboardService.keySymToKeyCode(keySym);
   }
 
   /**

@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11protocol
 
-import com.github.moaxcp.x11protocol.parser.XResult
+import com.github.moaxcp.x11protocol.xcbparser.XResult
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.Node
 import groovy.xml.MarkupBuilder

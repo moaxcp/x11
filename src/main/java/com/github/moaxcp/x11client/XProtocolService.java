@@ -14,8 +14,6 @@ class XProtocolService {
   private final X11Input in;
   private final X11Output out;
   @Getter
-  private final GetKeyboardMappingReply keyboard;
-  @Getter
   private final Setup setup;
   @Getter
   private int nextSequenceNumber = 1;
@@ -52,11 +50,6 @@ class XProtocolService {
       maximumRequestLength = Integer.toUnsignedLong(send(Enable.builder().build())
         .getMaximumRequestLength());
     }
-
-    keyboard = send(GetKeyboardMapping.builder()
-      .firstKeycode(setup.getMinKeycode())
-      .count((byte) (setup.getMaxKeycode() - setup.getMinKeycode() + 1))
-      .build());
   }
 
   public boolean loadedPlugin(String name) {
@@ -173,38 +166,6 @@ class XProtocolService {
       XRequest request = requests.poll();
       actuallySend(request);
     }
-  }
-
-  /**
-   * See https://tronche.com/gui/x/xlib/input/keyboard-encoding.html
-   * @param keyCode
-   * @param state
-   * @return
-   */
-  public int keyCodeToKeySym(int keyCode, int state) {
-    if(keyCode > Byte.toUnsignedInt(setup.getMaxKeycode())) {
-      throw new IllegalArgumentException("keyCode \"" + keyCode + "\" is greater than maxKeycode \"" + setup.getMaxKeycode() + "\"");
-    }
-
-    int modifier = 0;
-
-    if((state & KeyButMask.SHIFT.getValue()) != 0) {
-      modifier =1;
-    } else if((state & KeyButMask.MOD5.getValue()) != 0) {
-      modifier = 2;
-    }
-
-    int code = keyboard.getKeysyms().get((keyCode - Byte.toUnsignedInt(setup.getMinKeycode())) * Byte.toUnsignedInt(keyboard.getKeysymsPerKeycode()) + modifier);
-    return code;
-  }
-
-  public int keySymToKeyCode(int keySym) {
-    for(int i = 0; i < keyboard.getKeysyms().size(); i++) {
-      if(keyboard.getKeysyms().get(i) == keySym) {
-        return i + setup.getMinKeycode();
-      }
-    }
-    throw new IllegalArgumentException("Invalid keySym \"" + keySym + "\"");
   }
 
   public void discard() {

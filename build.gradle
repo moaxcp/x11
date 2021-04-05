@@ -65,6 +65,7 @@ x11Protocol {
     outputResources = file('build/generated/xproto/resources')
     xcbXmls = file('src/main/xcbXmls')
     exclude = ['present', 'xinput', 'xkb', 'dri3', 'glx']
+    keysymHeader = file('src/main/keysym/keysymdef.h')
 }
 
 publishing {

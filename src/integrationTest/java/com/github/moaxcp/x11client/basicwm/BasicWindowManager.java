@@ -144,7 +144,7 @@ public class BasicWindowManager {
   }
 
   private void onButtonPress(ButtonPressEvent event) {
-    int frame = windowToFrame.get(event.getRoot());
+    int frame = windowToFrame.get(event.getEvent());
     dragStartPointWindow = Point.builder()
       .x(event.getRootX())
       .y(event.getRootY())
@@ -164,7 +164,7 @@ public class BasicWindowManager {
   }
 
   private void onMotionNotify(MotionNotifyEvent event) {
-    int frame = windowToFrame.get(event.getRoot());
+    int frame = windowToFrame.get(event.getEvent());
     Point dragPosition = Point.builder()
       .x(event.getRootX())
       .y(event.getRootY())
@@ -191,7 +191,7 @@ public class BasicWindowManager {
         .height(dragStartPointFrame.getHeight() + sizeDelta.getY())
         .build());
       client.send(ConfigureWindow.builder()
-        .window(event.getRoot())
+        .window(event.getEvent())
         .width(dragStartPointFrame.getWidth() + sizeDelta.getX())
         .height(dragStartPointFrame.getHeight() + sizeDelta.getY())
         .build());
@@ -199,13 +199,13 @@ public class BasicWindowManager {
   }
 
   private void onKeyPress(KeyPressEvent event) {
-    if(event.isStateEnabled(KeyButMask.BUTTON1) && event.getDetail() == client.keySymToKeyCode(KeySym.XK_F4.getValue())) {
-      List<Integer> wmProtocols = client.getWMProtocols(event.getRoot());
+    if(event.isStateEnabled(KeyButMask.MOD1) && event.getDetail() == client.keySymToKeyCode(KeySym.XK_F4.getValue())) {
+      List<Integer> wmProtocols = client.getWMProtocols(event.getEvent());
       AtomValue delete = client.getAtom("WM_DELETE_WINDOW");
       if(wmProtocols.contains(delete.getId())) {
         ClientMessageEvent message = ClientMessageEvent.builder()
           .type(client.getAtom("WM_PROTOCOLS").getId())
-          .window(event.getRoot())
+          .window(event.getEvent())
           .format((byte) 32)
           .data(new ClientMessageData32(delete.getId()))
           .build();
@@ -213,14 +213,14 @@ public class BasicWindowManager {
           .event(toByteList(message))
           .build());
       } else {
-        client.killClient(event.getRoot());
+        client.killClient(event.getEvent());
       }
     } else if(event.isStateEnabled(KeyButMask.MOD1) && event.getDetail() == client.keySymToKeyCode(KeySym.XK_Tab.getValue())) {
       Iterator<Integer> iterator = windowToFrame.values().iterator();
       int nextWindow = windowToFrame.values().iterator().next();
       while(iterator.hasNext()) {
         int frame = iterator.next();
-        if(frame == event.getRoot()) {
+        if(frame == event.getEvent()) {
           if(iterator.hasNext()) {
             nextWindow = iterator.next();
           }
@@ -257,6 +257,7 @@ public class BasicWindowManager {
       .build());
     int frame = client.nextResourceId();
     client.send(CreateWindow.builder()
+      .parent(client.getDefaultRoot())
       .wid(frame)
       .x(geometry.getX())
       .y(geometry.getY())
@@ -265,10 +266,6 @@ public class BasicWindowManager {
       .borderWidth(BORDER_WIDTH)
       .borderPixel(BORDER_COLOR)
       .backgroundPixel(BG_COLOR)
-      .build());
-
-    client.send(ChangeWindowAttributes.builder()
-      .window(frame)
       .eventMaskEnable(SUBSTRUCTURE_REDIRECT, SUBSTRUCTURE_NOTIFY)
       .build());
 
@@ -307,7 +304,7 @@ public class BasicWindowManager {
       .build());
 
     client.send(GrabKey.builder()
-      .key((byte) client.keySymToKeyCode(KeySym.XK_F4.getValue()))
+      .key(client.keySymToKeyCode(KeySym.XK_F4.getValue()))
       .modifiersEnable(ModMask.ONE)
       .grabWindow(window)
       .pointerMode(GrabMode.ASYNC)
@@ -315,7 +312,7 @@ public class BasicWindowManager {
       .build());
 
     client.send(GrabKey.builder()
-      .key((byte) client.keySymToKeyCode(KeySym.XK_Tab.getValue()))
+      .key(client.keySymToKeyCode(KeySym.XK_Tab.getValue()))
       .modifiersEnable(ModMask.ONE)
       .grabWindow(window)
       .pointerMode(GrabMode.ASYNC)

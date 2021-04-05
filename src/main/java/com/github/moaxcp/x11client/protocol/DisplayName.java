@@ -20,6 +20,9 @@ public class DisplayName {
   public static DisplayName standard() {
     return new DisplayName(System.getenv("DISPLAY"));
   }
+  public static DisplayName displayName(String displayName) {
+    return new DisplayName(displayName);
+  }
 
   /**
    * Creates a new display name. A network display name includes a hostName ("host:0.0"). A unix display name does not

@@ -4,6 +4,7 @@ public enum KeySystem {
   NONE,
   XK_MISCELLANY,
   XK_XKB_KEYS,
+  XK_3270,
   XK_LATIN1,
   XK_LATIN2,
   XK_LATIN3,

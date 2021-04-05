@@ -436,6 +436,7 @@ and will likely move into a new project.
 * Added `getWMProtocols(int)` to returns the supported protocols for a window.
 * Added `killClient(int)` and `inputFocus(int)`.
 * Added XK_F1 and XK_F4 to KeySym.
+* Added BasicWindowManager to example tests.
 
 ## 0.5.0
 

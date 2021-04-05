@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.github.moaxcp.x11client.protocol.KeySystem.NONE;
-import static com.github.moaxcp.x11client.protocol.KeySystem.XK_MISCELLANY;
+import static com.github.moaxcp.x11client.protocol.KeySystem.*;
 
 /**
  * Taken from https://github.com/freedesktop/xorg-x11proto/blob/master/keysymdef.h
@@ -117,7 +116,23 @@ public enum KeySym implements IntValue {
   XK_PreviousCandidate(XK_MISCELLANY, "PreviousCandidate", 0xff3e),
 
   XK_F1(XK_MISCELLANY, "F1", 0xffbe),
-  XK_F4(XK_MISCELLANY, "F4", 0xffc1);
+  XK_F4(XK_MISCELLANY, "F4", 0xffc1),
+
+  //XK_XKB_KEYS
+  XK_ISO_Lock(XK_XKB_KEYS, "Lock", 0xfe01),
+
+  //XK_3270
+  XK_3270_Duplicate(XK_3270, "Duplicate", 0xfd01),
+  XK_A(XK_LATIN1, "A", 0x0041),
+  XK_Z(XK_LATIN1, "Z", 0x005a),
+  XK_a(XK_LATIN1, "a", 0x0061),
+  XK_z(XK_LATIN1, "z", 0x007a),
+  XK_Agrave(XK_LATIN1, "Agrave", 0x00c0),
+  XK_Odiaeresis(XK_LATIN1, "Odiaeresis", 0x00d6),
+  XK_agrave(XK_LATIN1, "agrave", 0x00e0),
+  XK_odiaeresis(XK_LATIN1, "odiaeresis", 0x00f6),
+
+  ;
 
   static final Map<Integer, KeySym> byCode = new HashMap<>();
 

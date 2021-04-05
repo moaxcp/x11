@@ -15,6 +15,7 @@ class X11ProtocolPlugin implements Plugin<Project> {
         task.exclude = project.x11Protocol.exclude
         task.outputSrc = project.x11Protocol.outputSrc
         task.outputResources = project.x11Protocol.outputResources
+        task.keysymHeader = project.x11Protocol.keysymHeader
 
         project.getPlugins().withType(JavaPlugin.class, new Action<JavaPlugin>() {
             @Override

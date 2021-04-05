@@ -1,8 +1,8 @@
 package com.github.moaxcp.x11protocol.generator
 
-import com.github.moaxcp.x11protocol.parser.XParser
-import com.github.moaxcp.x11protocol.parser.XResult
-import com.github.moaxcp.x11protocol.parser.XTypeReply
+import com.github.moaxcp.x11protocol.xcbparser.XParser
+import com.github.moaxcp.x11protocol.xcbparser.XResult
+import com.github.moaxcp.x11protocol.xcbparser.XTypeReply
 import com.squareup.javapoet.JavaFile
 
 class ProtocolGenerator {
