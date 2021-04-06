@@ -10,7 +10,7 @@ class KeySymGenerator {
 
     void generate() {
         header.withReader {
-            KeySymParser parser = new KeySymParser(input: it)
+            KeySymParser parser = new KeySymParser(basePackage: basePackage, input: it)
             JavaFile javaFile = JavaFile.builder(basePackage, parser.typeSpec).build()
             javaFile.writeTo(outputSrc)
         }
