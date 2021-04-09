@@ -2,13 +2,14 @@ package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.*;
 import com.github.moaxcp.x11client.protocol.xproto.*;
+import lombok.NonNull;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.NonNull;
 
 import static com.github.moaxcp.x11client.protocol.Utilities.*;
 
@@ -174,8 +175,12 @@ public class X11Client implements AutoCloseable {
     return keyboardService.keyCodeToKeySym(keyCode, state);
   }
 
-  public List<Byte> keySymToKeyCode(int keySym) {
-    return keyboardService.keySymToKeyCode(keySym);
+  public List<Byte> keySymToKeyCodes(int keySym) {
+    return keyboardService.keySymToKeyCodes(keySym);
+  }
+
+  public int getKeySym(byte keyCode, int col) {
+    return keyboardService.getKeySym(keyCode, col);
   }
 
   /**

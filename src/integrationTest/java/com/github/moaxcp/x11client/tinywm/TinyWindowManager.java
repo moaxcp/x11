@@ -18,7 +18,7 @@ public class TinyWindowManager {
   public void start() throws IOException {
     try(X11Client client = X11Client.connect(new DisplayName(display))) {
       client.send(GrabKey.builder()
-        .key(client.keySymToKeyCode(KeySym.getByName("F1").get().getValue()))
+        .key(client.keySymToKeyCodes(KeySym.XK_F1.getValue()).get(0))
         .modifiersEnable(ModMask.ONE)
         .grabWindow(client.getRoot(0))
         .ownerEvents(true)

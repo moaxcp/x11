@@ -1,10 +1,11 @@
 package com.github.moaxcp.x11client.basicwm;
 
 import com.github.moaxcp.x11client.XephyrRunner;
-import java.io.IOException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 public class BasicWMIT {
   private XephyrRunner runner;
@@ -17,7 +18,6 @@ public class BasicWMIT {
       .noreset(true)
       .screen("1200x1000")
       .softCursor(true)
-      .display(":1")
       .withXTerm(2)
       .build();
     runner.start();
@@ -30,6 +30,6 @@ public class BasicWMIT {
 
   @Test
   void wm() throws IOException {
-    BasicWindowManager.main(":1");
+    BasicWindowManager.main(runner.getDisplay());
   }
 }

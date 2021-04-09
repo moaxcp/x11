@@ -1,10 +1,11 @@
 package com.github.moaxcp.x11client.tinywm;
 
 import com.github.moaxcp.x11client.XephyrRunner;
-import java.io.IOException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 public class TinyWMIT {
   private XephyrRunner runner;
@@ -17,7 +18,6 @@ public class TinyWMIT {
       .noreset(true)
       .screen("1200x1000")
       .softCursor(true)
-      .display(":1")
       .withXTerm(2)
       .build();
     runner.start();
@@ -30,6 +30,6 @@ public class TinyWMIT {
 
   @Test
   void wm() throws IOException {
-    new TinyWindowManager(":1").start();
+    new TinyWindowManager(runner.getDisplay()).start();
   }
 }

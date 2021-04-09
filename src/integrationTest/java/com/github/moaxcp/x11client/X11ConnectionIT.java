@@ -5,10 +5,11 @@ import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtension;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
-import java.io.IOException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
@@ -21,7 +22,6 @@ public class X11ConnectionIT {
       .ac(true)
       .br(true)
       .noreset(true)
-      .display(":1")
       .build();
     runner.start();
   }
@@ -33,7 +33,7 @@ public class X11ConnectionIT {
 
   @Test
   void test() throws IOException {
-    try(X11Connection connection = X11Connection.connect(new DisplayName(":1"))) {
+    try(X11Connection connection = X11Connection.connect(new DisplayName(runner.getDisplay()))) {
       X11Output out = connection.getX11Output();
       X11Input in = connection.getX11Input();
       QueryExtension extension = QueryExtension.builder()

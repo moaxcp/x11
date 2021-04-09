@@ -6,7 +6,9 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+@Builder
 public class XephyrRunner {
+  private static TreeSet<Integer> usedDisplays = new TreeSet<>();
   private final boolean br;
   private final boolean ac;
   private final boolean noreset;
@@ -14,25 +16,28 @@ public class XephyrRunner {
   private final boolean glamor;
   private final boolean softCursor;
   private final String screen;
-  private final List<String> enableExtensions;
-  private final String display;
+  @NonNull
+  @Singular
+  private final List<String> enableExtensions = new ArrayList<>();
+  @Getter
+  @Builder.Default
+  private final String display = getOpenDisplay();
+
+  private static String getOpenDisplay() {
+    if(usedDisplays.isEmpty()) {
+      usedDisplays.add(1);
+      return ":1";
+    }
+
+    int last = usedDisplays.last() + 1;
+    usedDisplays.add(last);
+    return ":" + last;
+  }
 
   private final int withXTerm;
+  @NonNull
+  @Builder.Default
   private List<Process> processes = new ArrayList<>();
-
-  @Builder
-  public XephyrRunner(boolean br, boolean ac, boolean noreset, Boolean iglx, boolean glamor, boolean softCursor, String screen, @Singular List<String> enableExtensions, String display, int withXTerm) {
-    this.br = br;
-    this.ac = ac;
-    this.noreset = noreset;
-    this.iglx = iglx;
-    this.glamor = glamor;
-    this.softCursor = softCursor;
-    this.screen = screen;
-    this.enableExtensions = enableExtensions;
-    this.display = display;
-    this.withXTerm = withXTerm;
-  }
 
   public void start() throws IOException {
     List<String> command = new ArrayList<>();
