@@ -2,10 +2,14 @@ package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.*;
 import com.github.moaxcp.x11client.protocol.bigreq.Enable;
-import com.github.moaxcp.x11client.protocol.xproto.*;
+import com.github.moaxcp.x11client.protocol.xproto.QueryExtension;
+import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
+import com.github.moaxcp.x11client.protocol.xproto.Setup;
+import com.github.moaxcp.x11client.protocol.xproto.XprotoPlugin;
+import lombok.Getter;
+
 import java.io.IOException;
 import java.util.*;
-import lombok.Getter;
 
 import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
@@ -53,15 +57,6 @@ class XProtocolService {
   }
 
   public boolean loadedPlugin(String name) {
-    for(XProtocolPlugin plugin : loader) {
-      if(plugin.getName().equals(name)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public boolean activatedPlugin(String name) {
     for(XProtocolPlugin plugin : loader) {
       if(plugin.getName().equals(name)) {
         return true;

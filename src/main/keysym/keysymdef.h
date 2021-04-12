@@ -111,6 +111,8 @@ SOFTWARE.
  *     in the repo git://anongit.freedesktop.org/xorg/proto/x11proto.git
  *
  */
+ /* added by moaxcp */
+ #define NoSymbol 0x000000
 
 #define XK_VoidSymbol                  0xffffff  /* Void symbol */
 

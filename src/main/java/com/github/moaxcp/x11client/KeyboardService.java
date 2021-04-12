@@ -1,6 +1,8 @@
 package com.github.moaxcp.x11client;
 
+import com.github.moaxcp.x11client.protocol.KeySym;
 import com.github.moaxcp.x11client.protocol.xproto.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class KeyboardService {
    * @param state
    * @return
    */
-  public int keyCodeToKeySym(byte keyCode, short state) {
+  public KeySym keyCodeToKeySym(byte keyCode, short state) {
     if(Byte.toUnsignedInt(keyCode) > Byte.toUnsignedInt(setup.getMaxKeycode())) {
       throw new IllegalArgumentException("keyCode \"" + keyCode + "\" is greater than maxKeycode \"" + setup.getMaxKeycode() + "\"");
     }
@@ -46,7 +48,15 @@ public class KeyboardService {
 
     int index = (Byte.toUnsignedInt(keyCode) - Byte.toUnsignedInt(setup.getMinKeycode())) * Byte.toUnsignedInt(keyboard.getKeysymsPerKeycode()) + modifier;
     int code = keyboard.getKeysyms().get(index);
-    return code;
+    return KeySym.getByCode(code);
+  }
+
+  public KeySym keyCodeToKeySym(KeyPressEvent event) {
+    return keyCodeToKeySym(event.getDetail(), event.getState());
+  }
+
+  public KeySym keyCodeToKeySym(KeyReleaseEvent event) {
+    return keyCodeToKeySym(event.getDetail(), event.getState());
   }
 
   /**
@@ -54,13 +64,13 @@ public class KeyboardService {
    * @param keySym
    * @return
    */
-  public List<Byte> keySymToKeyCodes(int keySym) {
+  public List<Byte> keySymToKeyCodes(KeySym keySym) {
     int min = Byte.toUnsignedInt(setup.getMinKeycode());
     int max = Byte.toUnsignedInt(setup.getMaxKeycode());
     List<Byte> result = new ArrayList<>();
     for(int i = min; i < max; i++) {
       for(int j = 0; j < keyboard.getKeysymsPerKeycode(); j++) {
-        int test = getKeySym(i, j);
+        KeySym test = getKeySym(i, j);
         if(test == keySym) {
           result.add((byte) i);
           break;
@@ -70,11 +80,11 @@ public class KeyboardService {
     return result;
   }
 
-  public int getKeySym(KeyPressEvent event, int col) {
+  public KeySym getKeySym(KeyPressEvent event, int col) {
     return getKeySym(event.getDetail(), col);
   }
 
-  public int getKeySym(KeyReleaseEvent event, int col) {
+  public KeySym getKeySym(KeyReleaseEvent event, int col) {
     return getKeySym(event.getDetail(), col);
   }
 
@@ -90,16 +100,15 @@ public class KeyboardService {
    * @param col
    * @return
    */
-  public int getKeySym(int keyCode, int col) {
-    int XCB_NO_SYMBOL = 0;
+  public KeySym getKeySym(int keyCode, int col) {
     int min = Byte.toUnsignedInt(setup.getMinKeycode());
     int max = Byte.toUnsignedInt(setup.getMaxKeycode());
     if(keyCode < min || keyCode > max) {
-      return XCB_NO_SYMBOL;
+      return KeySym.NoSymbol;
     }
     int per = Byte.toUnsignedInt(keyboard.getKeysymsPerKeycode());
     if(col < 0 || (col >= per && col > 3)) {
-      return XCB_NO_SYMBOL;
+      return KeySym.NoSymbol;
     }
 
     List<Integer> keysyms = keyboard.getKeysyms();
@@ -108,25 +117,25 @@ public class KeyboardService {
 
     if(col < 4) {
       if(col > 1) {
-        while(per > 2 && keysyms.get(keysymsStart + per - 1) == XCB_NO_SYMBOL) {
+        while(per > 2 && keysyms.get(keysymsStart + per - 1) == KeySym.NoSymbol.getValue()) {
           per--;
         }
         if(per < 3) {
           col -= 2;
         }
       }
-      if(per <= (col | 1) || keysyms.get(keysymsStart + col | 1) == XCB_NO_SYMBOL) {
+      if(per <= (col | 1) || keysyms.get(keysymsStart + col | 1) == KeySym.NoSymbol.getValue()) {
         int[] caseSym = convertCase(keysyms.get(keysymsStart + col &~ 1));
         if((col & 1) == 0) {
-          return caseSym[0];
+          return KeySym.getByCode(caseSym[0]);
         } else if(caseSym[0] == caseSym[1]) {
-          return XCB_NO_SYMBOL;
+          return KeySym.NoSymbol;
         } else {
-          return caseSym[1];
+          return KeySym.getByCode(caseSym[1]);
         }
       }
     }
-    return keysyms.get(keysymsStart + col);
+    return KeySym.getByCode(keysyms.get(keysymsStart + col));
   }
 
   /**

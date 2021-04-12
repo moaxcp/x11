@@ -3,11 +3,12 @@ package com.github.moaxcp.x11client;
 import com.github.moaxcp.x11client.protocol.KeySym;
 import com.github.moaxcp.x11client.protocol.XEvent;
 import com.github.moaxcp.x11client.protocol.xproto.*;
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
 import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
@@ -102,8 +103,8 @@ public class X11ClientIT {
             .build());
         } else if(event instanceof KeyPressEvent) {
           KeyPressEvent keyPress = (KeyPressEvent) event;
-          int keysym = client.keyCodeToKeySym(keyPress.getDetail(), keyPress.getState());
-          if(keysym == KeySym.XK_Escape.getValue()) {
+          KeySym keysym = client.keyCodeToKeySym(keyPress.getDetail(), keyPress.getState());
+          if(keysym == KeySym.XK_Escape) {
             break;
           }
         } else if(event instanceof ClientMessageEvent) {
@@ -192,7 +193,7 @@ public class X11ClientIT {
         XEvent event = client.getNextEvent();
         if(event instanceof ExposeEvent) {
           client.fillRectangle(wid, gc, (short) 20, (short) 20, (short) 10, (short) 10);
-          client.drawString(wid, gc, (short) 10, (short) 50, "Hello World!");
+          client.imageText8(wid, gc, (short) 10, (short) 50, "Hello World!");
         } else if(event instanceof KeyPressEvent) {
           break;
         } else if(event instanceof ClientMessageEvent) {

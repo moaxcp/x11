@@ -199,7 +199,7 @@ public class BasicWindowManager {
   }
 
   private void onKeyPress(KeyPressEvent event) {
-    if(event.isStateEnabled(KeyButMask.MOD1) && client.keyCodeToKeySym(event.getDetail(), event.getState()) == KeySym.XK_F4.getValue()) {
+    if(event.isStateEnabled(KeyButMask.MOD1) && client.keyCodeToKeySym(event.getDetail(), event.getState()) == KeySym.XK_F4) {
       List<Integer> wmProtocols = client.getWMProtocols(event.getEvent());
       AtomValue delete = client.getAtom("WM_DELETE_WINDOW");
       if(wmProtocols.contains(delete.getId())) {
@@ -215,7 +215,7 @@ public class BasicWindowManager {
       } else {
         client.killClient(event.getEvent());
       }
-    } else if(event.isStateEnabled(KeyButMask.MOD1) && client.keyCodeToKeySym(event.getDetail(), event.getState()) == KeySym.XK_Tab.getValue()) {
+    } else if(event.isStateEnabled(KeyButMask.MOD1) && client.keyCodeToKeySym(event.getDetail(), event.getState()) == KeySym.XK_Tab) {
       Iterator<Integer> iterator = windowToFrame.values().iterator();
       int nextWindow = windowToFrame.values().iterator().next();
       while(iterator.hasNext()) {
@@ -304,7 +304,7 @@ public class BasicWindowManager {
       .build());
 
     client.send(GrabKey.builder()
-      .key(client.keySymToKeyCodes(KeySym.XK_F4.getValue()).get(0))
+      .key(client.keySymToKeyCodes(KeySym.XK_F4).get(0))
       .modifiersEnable(ModMask.ONE)
       .grabWindow(window)
       .pointerMode(GrabMode.ASYNC)
@@ -312,7 +312,7 @@ public class BasicWindowManager {
       .build());
 
     client.send(GrabKey.builder()
-      .key(client.keySymToKeyCodes(KeySym.XK_Tab.getValue()).get(0))
+      .key(client.keySymToKeyCodes(KeySym.XK_Tab).get(0))
       .modifiersEnable(ModMask.ONE)
       .grabWindow(window)
       .pointerMode(GrabMode.ASYNC)

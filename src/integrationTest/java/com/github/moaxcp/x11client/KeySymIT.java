@@ -13,11 +13,11 @@ public class KeySymIT {
   @Test
   void keyCode() throws IOException {
     try(X11Client client = X11Client.connect()) {
-      List<Byte> keyCodes = client.keySymToKeyCodes(KeySym.XK_Escape.getValue());
+      List<Byte> keyCodes = client.keySymToKeyCodes(KeySym.XK_Escape);
       assertThat(keyCodes).isNotEmpty();
       for(byte keyCode : keyCodes) {
-        int keySym = client.keyCodeToKeySym(keyCode, (short) 0);
-        assertThat(keySym).isEqualTo(KeySym.XK_Escape.getValue());
+        KeySym keySym = client.keyCodeToKeySym(keyCode, (short) 0);
+        assertThat(keySym).isEqualTo(KeySym.XK_Escape);
       }
     }
   }

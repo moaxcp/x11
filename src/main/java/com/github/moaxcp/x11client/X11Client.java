@@ -14,7 +14,22 @@ import java.util.Map;
 import static com.github.moaxcp.x11client.protocol.Utilities.*;
 
 /**
- * An x11 client.
+ * An x11 client. The client handles two types of requests: {@link OneWayRequest} and {@link TwoWayRequest}.
+ * <p>
+ *   {@link OneWayRequest}s are never sent directly to the server. Instead, they are added to a request queue. Requests
+ *   in this queue are sent to the server when any "flushing" method is called. These are {@link #flush()},
+ *   {@link #sync()}, {@link #getNextEvent()}, or {@link #send(TwoWayRequest)}.
+ * </p>
+ * <p>
+ *   {@link TwoWayRequest}s are sent to the server immediately. Input from the server is read until the reply is found
+ *   and returned. While searching for the reply {@link XEvent} objects may be found. These events are added to to the
+ *   event queue. {@link XError}s may also be found while searching for a reply. These objects cause an
+ *   {@link X11ErrorException} to be thrown.
+ * </p>
+ * <p>
+ *   The event queue holds {@link XEvent}s that were read from the server but not yet sent to the user. Methods such as
+ *   {@link #getNextEvent()} read from this queue until it is empty before reading events from the server.
+ * </p>
  */
 public class X11Client implements AutoCloseable {
   private final X11Connection connection;
@@ -25,10 +40,10 @@ public class X11Client implements AutoCloseable {
   private final Map<Integer, Integer> defaultGCs = new HashMap<>();
 
   /**
-   * Creates a client for the given displayName and authority.
+   * Creates a client for the given {@link DisplayName} and {@link XAuthority}.
    * @param displayName to connect to. non-null
    * @param xAuthority to use. non-null
-   * @return
+   * @return The connected client
    * @throws X11ClientException
    */
   public static X11Client connect(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority) {
@@ -39,6 +54,12 @@ public class X11Client implements AutoCloseable {
     }
   }
 
+  /**
+   * Connects to the standard {@link DisplayName}.
+   * @return The connected client
+   * @see DisplayName#standard() for the standard display name.
+   * @throws X11ClientException
+   */
   public static X11Client connect() {
     try {
       return new X11Client(X11Connection.connect());
@@ -47,6 +68,11 @@ public class X11Client implements AutoCloseable {
     }
   }
 
+  /**
+   * Connects to the provided {@link DisplayName}
+   * @param name
+   * @return
+   */
   public static X11Client connect(@NonNull DisplayName name) {
     try {
       return new X11Client(X11Connection.connect(name));
@@ -63,78 +89,159 @@ public class X11Client implements AutoCloseable {
     keyboardService = new KeyboardService(protocolService);
   }
 
+  /**
+   * Checks if a plugin is loaded. Plugins generated from xcb use the extension-xname attribute. For example
+   * "BIG-REQUEST".
+   * @param name of plugin
+   * @return true if plugin is loaded.
+   */
   public boolean loadedPlugin(String name) {
     return protocolService.loadedPlugin(name);
   }
 
-  public boolean activatedPlugin(String name) {
-    return protocolService.activatedPlugin(name);
-  }
-
+  /**
+   * Returns the connection setup.
+   * @return
+   */
   public Setup getSetup() {
     return connection.getSetup();
   }
 
+  /**
+   * Returns the default screen number.
+   * @return
+   */
   public int getDefaultScreenNumber() {
     return connection.getDisplayName().getScreenNumber();
   }
 
+  /**
+   * Returns the sceen for the number provided.
+   * @param screen
+   * @return
+   */
   public Screen getScreen(int screen) {
     return getSetup().getRoots().get(screen);
   }
 
+  /**
+   * Returns the default {@link Screen} object.
+   * @return
+   */
   public Screen getDefaultScreen() {
     return getScreen(getDefaultScreenNumber());
   }
 
+  /**
+   * Returns the root for the provided screen.
+   * @param screen
+   * @return
+   */
   public int getRoot(int screen) {
     return getScreen(screen).getRoot();
   }
 
+  /**
+   * Returns the default root.
+   * @return
+   */
   public int getDefaultRoot() {
     return getRoot(getDefaultScreenNumber());
   }
 
+  /**
+   * Returns the white pixel for the provided screen.
+   * @param screen
+   * @return
+   */
   public int getWhitePixel(int screen) {
     return getScreen(screen).getWhitePixel();
   }
 
+  /**
+   * Returns the default white pixel.
+   * @return
+   */
   public int getDefaultWhitePixel() {
     return getWhitePixel(getDefaultScreenNumber());
   }
 
+  /**
+   * Returns the black pixel for the provided screen.
+   * @param screen
+   * @return
+   */
   public int getBlackPixel(int screen) {
     return getScreen(screen).getBlackPixel();
   }
 
+  /**
+   * Returns the default black pixel.
+   * @return
+   */
   public int getDefaultBlackPixel() {
     return getBlackPixel(getDefaultScreenNumber());
   }
 
+  /**
+   * Returns the depth for the provided screen.
+   * @param screen
+   * @return
+   */
   public byte getDepth(int screen) {
     return getScreen(screen).getRootDepth();
   }
 
+  /**
+   * Returns the default depth.
+   * @return
+   */
   public byte getDefaultDepth() {
     return getDepth(getDefaultScreenNumber());
   }
 
+  /**
+   * Returns the visualId for the provided screen.
+   * @param screen
+   * @return
+   */
   public int getVisualId(int screen) {
     return getScreen(screen).getRootVisual();
   }
 
+  /**
+   * Returns the default visualId.
+   * @return
+   */
   public int getDefaultVisualId() {
     return getVisualId(getDefaultScreenNumber());
   }
 
+  /**
+   * Adds a {@link OneWayRequest} request to the request queue.
+   * @param request for server to execute
+   */
   public void send(OneWayRequest request) {
     protocolService.send(request);
   }
 
+  /**
+   * Calls {@link #flush()} then sends the {@link TwoWayRequest} to the server returning the reply to the request. If
+   * any events are found while reading the reply from the server they are saved in the event queue.
+   * @param request for the server to execute
+   * @param <T> expected type of reply
+   * @return the reply for the request
+   * @throws X11ErrorException if the server had an error with any of the requests sent.
+   * @throws X11ClientException for any {@link IOException} encountered while processing the requests.
+   */
   public <T extends XReply> T send(TwoWayRequest<T> request) {
     return protocolService.send(request);
   }
 
+  /**
+   * Reads the next event from the server and returns it.
+   * @return
+   */
   public XEvent getNextEvent() {
     return protocolService.getNextEvent();
   }
@@ -143,6 +250,9 @@ public class X11Client implements AutoCloseable {
     return connection.inputAvailable() >= 32; //events and errors are always 32 bytes
   }
 
+  /**
+   * Sends all {@link OneWayRequest}s from the request queue to the server.
+   */
   public void flush() {
     protocolService.flush();
   }
@@ -171,15 +281,23 @@ public class X11Client implements AutoCloseable {
     connection.close();
   }
 
-  public int keyCodeToKeySym(byte keyCode, short state) {
+  public KeySym keyCodeToKeySym(byte keyCode, short state) {
     return keyboardService.keyCodeToKeySym(keyCode, state);
   }
 
-  public List<Byte> keySymToKeyCodes(int keySym) {
+  public KeySym keyCodeToKeySym(KeyPressEvent event) {
+    return keyboardService.keyCodeToKeySym(event);
+  }
+
+  public KeySym keyCodeToKeySym(KeyReleaseEvent event) {
+    return keyboardService.keyCodeToKeySym(event);
+  }
+
+  public List<Byte> keySymToKeyCodes(KeySym keySym) {
     return keyboardService.keySymToKeyCodes(keySym);
   }
 
-  public int getKeySym(byte keyCode, int col) {
+  public KeySym getKeySym(byte keyCode, int col) {
     return keyboardService.getKeySym(keyCode, col);
   }
 
@@ -312,7 +430,7 @@ public class X11Client implements AutoCloseable {
    * @param y
    * @param string
    */
-  public void drawString(int drawable, int gc, short x, short y, String string) {
+  public void imageText8(int drawable, int gc, short x, short y, String string) {
     send(ImageText8.builder()
       .drawable(drawable)
       .gc(gc)
