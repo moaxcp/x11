@@ -1,10 +1,9 @@
 package com.github.moaxcp.x11client.experimental;
 
+import com.github.moaxcp.x11client.protocol.Utilities;
 import com.github.moaxcp.x11client.protocol.xproto.*;
 import java.util.Collections;
 import lombok.Getter;
-
-import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
 @Getter
 public class GraphicsContext extends Resource {
@@ -39,7 +38,7 @@ public class GraphicsContext extends Resource {
       .gc(getId())
       .x(x)
       .y(y)
-      .string(stringToByteList(text))
+      .string(Utilities.toByteList(text))
       .build());
   }
 

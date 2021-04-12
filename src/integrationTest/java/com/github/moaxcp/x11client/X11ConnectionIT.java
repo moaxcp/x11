@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.DisplayName;
+import com.github.moaxcp.x11client.protocol.Utilities;
 import com.github.moaxcp.x11client.protocol.X11Input;
 import com.github.moaxcp.x11client.protocol.X11Output;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtension;
@@ -10,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-
-import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 
 public class X11ConnectionIT {
   private XephyrRunner runner;
@@ -37,7 +36,7 @@ public class X11ConnectionIT {
       X11Output out = connection.getX11Output();
       X11Input in = connection.getX11Input();
       QueryExtension extension = QueryExtension.builder()
-        .name(stringToByteList("XC-MISC"))
+        .name(Utilities.toByteList("XC-MISC"))
         .build();
       extension.write((byte) 0, out);
       byte status = in.readByte();

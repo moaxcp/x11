@@ -1,8 +1,9 @@
 package com.github.moaxcp.x11client.protocol;
 
-import java.util.Objects;
 import lombok.NonNull;
 import lombok.Value;
+
+import java.util.Objects;
 
 import static com.github.moaxcp.x11client.protocol.ParametersCheck.requireNonBlank;
 
@@ -17,9 +18,19 @@ public class DisplayName {
   int displayNumber;
   int screenNumber;
 
+  /**
+   * Returns the standard {@link DisplayName} based on the environment variable "DISPLAY".
+   * @return
+   */
   public static DisplayName standard() {
     return new DisplayName(System.getenv("DISPLAY"));
   }
+
+  /**
+   * Returns the {@link DisplayName} represented by the provided string.
+   * @param displayName
+   * @return
+   */
   public static DisplayName displayName(String displayName) {
     return new DisplayName(displayName);
   }

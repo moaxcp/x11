@@ -15,6 +15,10 @@ class ClientMessageDataUnion extends JavaUnion {
                 .addParameter(ParameterSpec.builder(ClassName.get(basePackage, 'X11Output'), 'in').build())
                 .addException(IOException)
                 .build())
+            .addMethod(MethodSpec.methodBuilder('getFormat')
+                .returns(TypeName.BYTE)
+                .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                .build())
             .build()
     }
 

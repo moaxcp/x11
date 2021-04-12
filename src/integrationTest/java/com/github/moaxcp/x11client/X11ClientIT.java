@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.KeySym;
+import com.github.moaxcp.x11client.protocol.Utilities;
 import com.github.moaxcp.x11client.protocol.XEvent;
 import com.github.moaxcp.x11client.protocol.xproto.*;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
-import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
+import static com.github.moaxcp.x11client.protocol.Utilities.toList;
 
 public class X11ClientIT {
 
@@ -42,19 +42,19 @@ public class X11ClientIT {
         .type(Atom.STRING.getValue())
         .format((byte) 8)
         .dataLen("Hello World!".length())
-        .data(stringToByteList("Hello World!"))
+        .data(Utilities.toByteList("Hello World!"))
         .build());
 
       //XSetWMProtocols for adding delete atom
-      InternAtomReply wmProtocols = client.send(InternAtom.builder().name(stringToByteList("WM_PROTOCOLS")).build());
-      InternAtomReply deleteAtom = client.send(InternAtom.builder().name(stringToByteList("WM_DELETE_WINDOW")).build());
+      InternAtomReply wmProtocols = client.send(InternAtom.builder().name(Utilities.toByteList("WM_PROTOCOLS")).build());
+      InternAtomReply deleteAtom = client.send(InternAtom.builder().name(Utilities.toByteList("WM_DELETE_WINDOW")).build());
       client.send(ChangeProperty.builder()
         .window(window.getWid())
         .property(wmProtocols.getAtom())
         .type(Atom.ATOM.getValue())
         .format((byte) 32)
         .mode(PropMode.REPLACE)
-        .data(byteArrayToList(ByteBuffer.allocate(4).putInt(deleteAtom.getAtom()).array()))
+        .data(toList(ByteBuffer.allocate(4).putInt(deleteAtom.getAtom()).array()))
         .dataLen(1)
         .build());
 
@@ -86,7 +86,7 @@ public class X11ClientIT {
           client.send(ImageText8.builder()
             .drawable(window.getWid())
             .gc(gc.getCid())
-            .string(stringToByteList("Hello World!"))
+            .string(Utilities.toByteList("Hello World!"))
             .x((short) 10)
             .y((short) 50)
             .build());
@@ -97,7 +97,7 @@ public class X11ClientIT {
           client.send(ImageText8.builder()
             .drawable(window.getWid())
             .gc(gc.getCid())
-            .string(stringToByteList(attributeText))
+            .string(Utilities.toByteList(attributeText))
             .x((short) 10)
             .y((short) 80)
             .build());
@@ -169,7 +169,7 @@ public class X11ClientIT {
           x11Client.send(ImageText8.builder()
             .drawable(window.getWid())
             .gc(gc.getCid())
-            .string(stringToByteList("Hello World!"))
+            .string(Utilities.toByteList("Hello World!"))
             .x((short) 10)
             .y((short) 50)
             .build());

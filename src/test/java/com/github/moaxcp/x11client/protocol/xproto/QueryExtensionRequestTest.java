@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
+import static com.github.moaxcp.x11client.protocol.Utilities.toList;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
@@ -14,7 +14,7 @@ public class QueryExtensionRequestTest {
   void writeQueryExtensionXCMISC() throws IOException {
     X11Output out = mock(X11Output.class);
     QueryExtension request = QueryExtension.builder()
-      .name(byteArrayToList("XC-MISC".getBytes()))
+      .name(toList("XC-MISC".getBytes()))
       .build();
 
     request.write((byte) 0, out);
@@ -24,14 +24,14 @@ public class QueryExtensionRequestTest {
     then(out).should().writeCard16((short) 4);
     then(out).should().writeCard16((short) 7);
     then(out).should().writePad(2);
-    then(out).should().writeChar(byteArrayToList("XC-MISC".getBytes()));
+    then(out).should().writeChar(toList("XC-MISC".getBytes()));
     then(out).should().writePadAlign(15);
   }
   @Test
   void writeQueryExtensionBIGREQUESTS() throws IOException {
     X11Output out = mock(X11Output.class);
     QueryExtension request = QueryExtension.builder()
-      .name(byteArrayToList("BIG-REQUESTS".getBytes()))
+      .name(toList("BIG-REQUESTS".getBytes()))
       .build();
 
     request.write((byte) 0, out);
@@ -41,7 +41,7 @@ public class QueryExtensionRequestTest {
     then(out).should().writeCard16((short) 5);
     then(out).should().writeCard16((short) 12);
     then(out).should().writePad(2);
-    then(out).should().writeChar(byteArrayToList("BIG-REQUESTS".getBytes()));
+    then(out).should().writeChar(toList("BIG-REQUESTS".getBytes()));
     then(out).should().writePadAlign(20);
   }
 }

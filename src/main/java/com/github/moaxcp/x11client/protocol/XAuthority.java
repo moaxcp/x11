@@ -12,8 +12,7 @@ import lombok.ToString;
 import lombok.Value;
 
 import static com.github.moaxcp.x11client.protocol.ParametersCheck.requireNonEmpty;
-import static com.github.moaxcp.x11client.protocol.Utilities.byteArrayToList;
-import static com.github.moaxcp.x11client.protocol.Utilities.byteListToString;
+import static com.github.moaxcp.x11client.protocol.Utilities.toList;
 
 /**
  * An X11 Authority defines a secret key used when authenticating with the x11 server. family, address and displayNumber
@@ -108,7 +107,7 @@ public class XAuthority {
   private static List<Byte> readBytes(DataInput in, int length) throws IOException {
     byte[] bytes = new byte[length];
     in.readFully(bytes);
-    return byteArrayToList(bytes);
+    return toList(bytes);
   }
 
   public static Optional<XAuthority> getAuthority(List<XAuthority> authorities, DisplayName displayName) throws UnknownHostException {
@@ -125,7 +124,7 @@ public class XAuthority {
             hostNameAddress = InetAddress.getByName(displayName.getHostName());
           }
           try {
-            InetAddress authAddress = InetAddress.getByName(byteListToString(auth.getAddress(), StandardCharsets.UTF_8));
+            InetAddress authAddress = InetAddress.getByName(Utilities.toString(auth.getAddress(), StandardCharsets.UTF_8));
             if(authAddress.equals(hostNameAddress)) {
               return Optional.of(auth);
             }

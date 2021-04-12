@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11client.protocol.xproto;
 
+import com.github.moaxcp.x11client.protocol.Utilities;
 import com.github.moaxcp.x11client.protocol.X11InputStream;
 import com.github.moaxcp.x11client.protocol.X11Output;
 import com.github.moaxcp.x11client.protocol.X11OutputStream;
@@ -8,7 +9,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangePropertyTest {
@@ -22,7 +22,7 @@ public class ChangePropertyTest {
       .property(Atom.WM_NAME.getValue())
       .type(Atom.STRING.getValue())
       .format((byte) 8)
-      .data(stringToByteList("Hello World!"))
+      .data(Utilities.toByteList("Hello World!"))
       .dataLen("Hello World!".length())
       .build();
 

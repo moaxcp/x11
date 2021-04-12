@@ -1,14 +1,28 @@
 package com.github.moaxcp.x11client.protocol;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.github.moaxcp.x11client.protocol.Utilities.toList;
 import static com.github.moaxcp.x11client.protocol.Utilities.toIntegers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class UtilitesTest {
+  @Test
+  void toList_byte_fails_on_null() {
+    assertThatThrownBy(() -> toList(null))
+        .isInstanceOf(NullPointerException.class)
+        .hasMessage("bytes is marked non-null but is null");
+  }
+
+  @Test
+  void toList_byte() {
+    assertThat(toList(new byte[]{0, 1, 2, 3})).containsExactly((byte) 0, (byte) 1, (byte) 2, (byte) 3);
+  }
+
   @Test
   void toInteger_fails_on_null() {
     assertThatThrownBy(() -> toIntegers(null))

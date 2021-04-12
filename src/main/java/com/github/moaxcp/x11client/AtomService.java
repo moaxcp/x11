@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11client;
 
 import com.github.moaxcp.x11client.protocol.AtomValue;
+import com.github.moaxcp.x11client.protocol.Utilities;
 import com.github.moaxcp.x11client.protocol.xproto.Atom;
 import com.github.moaxcp.x11client.protocol.xproto.GetAtomName;
 import com.github.moaxcp.x11client.protocol.xproto.GetAtomNameReply;
@@ -9,8 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.moaxcp.x11client.protocol.Utilities.byteListToString;
-import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
+import static com.github.moaxcp.x11client.protocol.Utilities.toByteList;
 
 public class AtomService {
   private final XProtocolService protocolService;
@@ -37,7 +37,7 @@ public class AtomService {
       return atomIds.get(id);
     }
     GetAtomNameReply name = protocolService.send(GetAtomName.builder().atom(id).build());
-    AtomValue result = new AtomValue(id, byteListToString(name.getName(), StandardCharsets.ISO_8859_1));
+    AtomValue result = new AtomValue(id, Utilities.toString(name.getName(), StandardCharsets.ISO_8859_1));
     add(result);
     return result;
   }
@@ -47,7 +47,7 @@ public class AtomService {
       return atomNames.get(name);
     }
     int id = protocolService.send(InternAtom.builder()
-      .name(stringToByteList(name, StandardCharsets.ISO_8859_1))
+      .name(toByteList(name, StandardCharsets.ISO_8859_1))
       .build()).getAtom();
     AtomValue result = new AtomValue(id, name);
     add(result);

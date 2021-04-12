@@ -11,8 +11,6 @@ import lombok.Getter;
 import java.io.IOException;
 import java.util.*;
 
-import static com.github.moaxcp.x11client.protocol.Utilities.stringToByteList;
-
 class XProtocolService {
   private final ServiceLoader<XProtocolPlugin> loader = ServiceLoader.load(XProtocolPlugin.class);
   private final X11Input in;
@@ -39,7 +37,7 @@ class XProtocolService {
       }
       String name = plugin.getName();
       QueryExtension request = QueryExtension.builder()
-        .name(stringToByteList(name))
+        .name(Utilities.toByteList(name))
         .build();
       QueryExtensionReply reply = send(request);
       if(reply.isPresent()) {
