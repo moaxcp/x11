@@ -65,6 +65,15 @@ class XProtocolService {
     return false;
   }
 
+  public boolean activatedPlugin(String name) {
+    for(XProtocolPlugin plugin : activatedPlugins) {
+      if(plugin.getName().equals(name)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public <T extends XReply> T send(TwoWayRequest<T> request) {
     flush();
     actuallySend(request);
