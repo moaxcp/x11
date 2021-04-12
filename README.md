@@ -24,7 +24,7 @@ This library can be added to your project using maven or gradle.
 <dependency>
  <groupId>com.github.moaxcp.x11</groupId>
  <artifactId>x11-client</artifactId>
- <version>0.3.0</version>
+ <version>0.5.0</version>
  <type>module</type>
 </dependency>
 ```
@@ -32,7 +32,7 @@ This library can be added to your project using maven or gradle.
 ## Gradle
 
 ```
-implementation 'com.github.moaxcp.x11:x11-client:0.3.0'
+implementation 'com.github.moaxcp.x11:x11-client:0.5.0'
 ```
 
 The library has one dependency for using unix sockets.
@@ -428,10 +428,13 @@ and will likely move into a new project.
 
 # versions
 
-## 0.6.0-SNAPSHOT
+## 0.6.0
 
 * Implementing `sync()` method based on XSync but without a discard parameter.
-* Adding `discard()` method to clear the event queue.
+* Adding `discard()` method to clear the event queue. 
+* Added `keyCodeToKeySym()` methods.
+* Added `keySymToKeyCodes()` method.
+* Added `getKeySym()` method.
 * `getAtom(int)` now returns an `AtomValue` which contains the id and name.
 * Added `getWMProtocols(int)` to returns the supported protocols for a window.
 * Added `killClient(int)` and `inputFocus(int)`.
