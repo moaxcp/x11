@@ -239,13 +239,22 @@ public class X11Client implements AutoCloseable {
   }
 
   /**
-   * Reads the next event from the server and returns it.
+   * Returns the next event. First, events from the event queue are returned. Then the request queue is flushed to the
+   * server. Then the server is polled for the next event. If an error response is returned from the server an
+   * {@link X11ErrorException} is thrown. If a {@link XReply} response is returned or an {@link IOException} is thrown
+   * an {@link X11ClientException} is thrown.
    * @return
+   * @throws X11ErrorException if the server returns an {@link XError}
+   * @throws X11ClientException if the server returns an {@link XReply} or an {@link IOException} is thrown
    */
   public XEvent getNextEvent() {
     return protocolService.getNextEvent();
   }
 
+  /**
+   * Returns true if the connection has a response available.
+   * @return
+   */
   public boolean hasResponse() {
     return connection.inputAvailable() >= 32; //events and errors are always 32 bytes
   }
@@ -258,7 +267,9 @@ public class X11Client implements AutoCloseable {
   }
 
   /**
-   * https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/Sync.c
+   * Sends a {@link GetInputFocus} to the server. This is a {@link TwoWayRequest} which causes a {@link #flush()} and
+   * all events to be read from the server and added to the event queue.
+   * @implNote  https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/Sync.c
    */
   public void sync() {
     GetInputFocusReply reply = send(GetInputFocus.builder().build());
@@ -272,7 +283,7 @@ public class X11Client implements AutoCloseable {
   }
 
   /**
-   * Closes the connection.
+   * Closes the client.
    * @throws IOException
    */
   @Override
@@ -281,24 +292,59 @@ public class X11Client implements AutoCloseable {
     connection.close();
   }
 
+  /**
+   * Returns the {@link KeySym} assiciated with the keyCode and state.
+   * @param keyCode
+   * @param state
+   * @return
+   */
   public KeySym keyCodeToKeySym(byte keyCode, short state) {
     return keyboardService.keyCodeToKeySym(keyCode, state);
   }
 
+  /**
+   * Returns the {@link KeySym} for the {@link KeyPressEvent}.
+   * @param event
+   * @return
+   */
   public KeySym keyCodeToKeySym(KeyPressEvent event) {
     return keyboardService.keyCodeToKeySym(event);
   }
 
+  /**
+   * Returns the {@link KeySym} for the {@link KeyReleaseEvent}.
+   * @param event
+   * @return
+   */
   public KeySym keyCodeToKeySym(KeyReleaseEvent event) {
     return keyboardService.keyCodeToKeySym(event);
   }
 
+  /**
+   * Returns all keyCodes for the given {@link KeySym}.
+   * @param keySym
+   * @return
+   */
   public List<Byte> keySymToKeyCodes(KeySym keySym) {
     return keyboardService.keySymToKeyCodes(keySym);
   }
 
+  /**
+   * Returns the {@link KeySym} for the keyCode and col.
+   * @param keyCode
+   * @param col
+   * @return
+   */
   public KeySym getKeySym(byte keyCode, int col) {
     return keyboardService.getKeySym(keyCode, col);
+  }
+
+  /**
+   * Returns the next resource id. The client will use the Xcmisc extension to get the id range if the plugin is loaded.
+   * @return
+   */
+  public int nextResourceId() {
+    return resourceIdService.nextResourceId();
   }
 
   /**
@@ -328,10 +374,6 @@ public class X11Client implements AutoCloseable {
       .eventMaskEnable(events)
       .build());
     return wid;
-  }
-
-  public int nextResourceId() {
-    return resourceIdService.nextResourceId();
   }
 
   /**

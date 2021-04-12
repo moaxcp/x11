@@ -45,7 +45,7 @@ public class X11EventsWindow {
   public void start() throws IOException {
     try (X11Client client = X11Client.connect(displayName(display))) {
       this.client = client;
-      windowId = client.createSimpleWindow((short) 10, (short) 10, (short) 600, (short) 480, EventMask.EXPOSURE, EventMask.KEY_PRESS, EventMask.KEY_RELEASE, EventMask.BUTTON_PRESS, EventMask.BUTTON_RELEASE);
+      windowId = client.createSimpleWindow((short) 10, (short) 10, (short) 1000, (short) 1000, EventMask.EXPOSURE, EventMask.KEY_PRESS, EventMask.KEY_RELEASE, EventMask.BUTTON_PRESS, EventMask.BUTTON_RELEASE);
       client.storeName(windowId, "Hello World!");
       int deleteAtom = client.getAtom("WM_DELETE_WINDOW").getId();
       client.setWMProtocols(windowId, deleteAtom);
@@ -125,12 +125,12 @@ public class X11EventsWindow {
     y += increment;
     if (keyPress != null) {
       KeySym keySym = client.keyCodeToKeySym(keyPress);
-      client.imageText8(windowId, gc, (short) 10, (short) y, "Key Press: keycode=" + keyPress.getDetail() + ", keysym=[" + keySym + ", " + keySym.getValue() + "]");
+      client.imageText8(windowId, gc, (short) 10, (short) y, "Key Press: keycode=" + keyPress.getDetail() + " keysym=[" + keySym + ", " + keySym.getValue() + "], " + keyPress);
     }
     y += increment;
     if (keyRelease != null) {
       KeySym keySym = client.keyCodeToKeySym(keyRelease);
-      client.imageText8(windowId, gc, (short) 10, (short) y, "Key Release: keycode=" + keyPress.getDetail() + ", keysym=[" + keySym + ", " + keySym.getValue() + "]");
+      client.imageText8(windowId, gc, (short) 10, (short) y, "Key Release: keycode=" + keyPress.getDetail() + ", keysym=[" + keySym + ", " + keySym.getValue() + "], " + keyRelease);
     }
     y += increment;
     if(button1) {
