@@ -5,8 +5,8 @@ import javax.lang.model.element.Modifier
 
 class ClientMessageDataUnion extends JavaUnion {
     @Override
-    TypeSpec getTypeSpec() {
-        return TypeSpec.interfaceBuilder(className)
+    List<TypeSpec> getTypeSpecs() {
+        TypeSpec typeSpec = TypeSpec.interfaceBuilder(className)
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(ClassName.get(basePackage, 'XObject'))
             .addMethod(readMethod)
@@ -20,6 +20,7 @@ class ClientMessageDataUnion extends JavaUnion {
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .build())
             .build()
+        return [typeSpec]
     }
 
     @Override

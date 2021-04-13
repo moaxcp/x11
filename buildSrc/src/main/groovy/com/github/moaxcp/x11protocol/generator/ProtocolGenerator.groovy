@@ -3,7 +3,9 @@ package com.github.moaxcp.x11protocol.generator
 import com.github.moaxcp.x11protocol.xcbparser.XParser
 import com.github.moaxcp.x11protocol.xcbparser.XResult
 import com.github.moaxcp.x11protocol.xcbparser.XTypeReply
+import com.github.moaxcp.x11protocol.xcbparser.XTypeUnit
 import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.TypeSpec
 
 class ProtocolGenerator {
     File inputXml
@@ -13,33 +15,17 @@ class ProtocolGenerator {
 
     void generate() {
         XResult result = XParser.parse(basePackage, inputXml)
-        result.enums.values().each {
-            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
-            javaFile.writeTo(outputSrc)
-        }
-        result.structs.values().each {
-            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
-            javaFile.writeTo(outputSrc)
-        }
-        result.unions.values().each {
-            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
-            javaFile.writeTo(outputSrc)
-        }
-        result.events.values().each {
-            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
-            javaFile.writeTo(outputSrc)
-        }
-        result.errors.values().each {
-            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
-            javaFile.writeTo(outputSrc)
-        }
+        writeToFile(result.javaPackage, result.enums.values())
+        writeToFile(result.javaPackage, result.structs.values())
+        writeToFile(result.javaPackage, result.unions.values())
+        writeToFile(result.javaPackage, result.events.values())
+        writeToFile(result.javaPackage, result.errors.values())
+
         result.requests.values().each {
-            JavaFile javaFile = JavaFile.builder(result.javaPackage, it.javaType.typeSpec).build()
-            javaFile.writeTo(outputSrc)
+            writeToFile(result.javaPackage, it.javaType.typeSpecs)
             XTypeReply reply = it.reply
             if(reply) {
-                JavaFile replyFile = JavaFile.builder(result.javaPackage, reply.javaType.typeSpec).build()
-                replyFile.writeTo(outputSrc)
+                writeToFile(result.javaPackage, reply.javaType.typeSpecs)
             }
         }
 
@@ -51,5 +37,22 @@ class ProtocolGenerator {
         services.parentFile.mkdirs()
 
         services.append("$pluginClass\n")
+    }
+
+    private void writeToFile(String javaPackage, Collection<XTypeUnit> units) {
+        units.each {
+            writeToFile(javaPackage, it.javaType.typeSpecs)
+        }
+    }
+
+    private void writeToFile(String javaPackage, List<TypeSpec> typeSpecs) {
+        typeSpecs.each {
+            writeToFile(javaPackage, it)
+        }
+    }
+
+    private void writeToFile(String javaPackage, TypeSpec typeSpec) {
+        JavaFile javaFile = JavaFile.builder(javaPackage, typeSpec).build()
+        javaFile.writeTo(outputSrc)
     }
 }

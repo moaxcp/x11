@@ -19,7 +19,7 @@ class JavaStructSpec extends XmlSpec {
         addChildNodes()
 
         when:
-        TypeSpec typeSpec = result.resolveXType('Format').javaType.typeSpec
+        TypeSpec typeSpec = result.resolveXType('Format').javaType.typeSpecs[0]
 
         then:
         typeSpec.toString() == '''\
@@ -94,7 +94,7 @@ class JavaStructSpec extends XmlSpec {
         JavaStruct javaStruct = javaStruct(struct)
 
         then:
-        javaStruct.typeSpec.toString() == '''\
+        javaStruct.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class Screen implements com.github.moaxcp.x11client.protocol.XStruct {
@@ -208,7 +208,7 @@ class JavaStructSpec extends XmlSpec {
         JavaStruct javaStruct = javaStruct(struct)
 
         then:
-        javaStruct.typeSpec.toString() == '''\
+        javaStruct.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class DeviceTimeCoord implements com.github.moaxcp.x11client.protocol.XStruct {
@@ -268,7 +268,7 @@ class JavaStructSpec extends XmlSpec {
         JavaStruct javaStruct = javaStruct(struct)
 
         then:
-        javaStruct.typeSpec.toString() == '''\
+        javaStruct.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class SetKeyType implements com.github.moaxcp.x11client.protocol.XStruct {
@@ -337,7 +337,7 @@ class JavaStructSpec extends XmlSpec {
         addChildNodes()
 
         when:
-        TypeSpec typeSpec = result.resolveXType('SetupRequest').javaType.typeSpec
+        TypeSpec typeSpec = result.resolveXType('SetupRequest').javaType.typeSpecs[0]
 
         then:
         typeSpec.toString() == '''\

@@ -11,12 +11,12 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeN
 
 class BehaviorUnion extends JavaUnion {
     @Override
-    TypeSpec getTypeSpec() {
-        return TypeSpec.interfaceBuilder(className)
+    List<TypeSpec> getTypeSpecs() {
+        return [TypeSpec.interfaceBuilder(className)
             .addModifiers(Modifier.PUBLIC)
             .addMethod(readMethod)
             .addMethod(writeMethod)
-            .build()
+            .build()]
     }
 
     CodeBlock makeTypeCase(ClassName type, String item) {

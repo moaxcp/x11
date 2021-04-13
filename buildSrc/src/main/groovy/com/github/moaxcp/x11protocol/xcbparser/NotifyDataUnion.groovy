@@ -5,8 +5,8 @@ import javax.lang.model.element.Modifier
 
 class NotifyDataUnion extends JavaUnion {
     @Override
-    TypeSpec getTypeSpec() {
-        return TypeSpec.interfaceBuilder(className)
+    List<TypeSpec> getTypeSpecs() {
+        TypeSpec typeSpec = TypeSpec.interfaceBuilder(className)
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(ClassName.get(basePackage, 'XObject'))
             .addMethod(readMethod)
@@ -16,6 +16,8 @@ class NotifyDataUnion extends JavaUnion {
                 .addException(IOException)
                 .build())
             .build()
+
+        return [typeSpec]
     }
 
     @Override

@@ -38,8 +38,8 @@ class JavaEnum implements JavaType {
     }
 
     @Override
-    TypeSpec getTypeSpec() {
-        return TypeSpec.enumBuilder(className)
+    List<TypeSpec> getTypeSpecs() {
+        TypeSpec typeSpec = TypeSpec.enumBuilder(className)
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(superInterface)
             .addField(FieldSpec.builder(TypeName.INT, 'value', Modifier.PRIVATE).build())
@@ -76,6 +76,7 @@ class JavaEnum implements JavaType {
                 .addStatement('return $L.get($L)', 'byCode', 'code')
                 .build())
             .build()
+        return [typeSpec]
     }
 
     static JavaEnum javaEnum(XTypeEnum xEnum) {

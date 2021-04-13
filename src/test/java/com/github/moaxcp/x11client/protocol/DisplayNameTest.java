@@ -55,6 +55,14 @@ public class DisplayNameTest {
   }
 
   @Test
+  void displayName() {
+    DisplayName name = DisplayName.displayName("hostName:12.2");
+    assertThat(name.getHostName()).isEqualTo("hostName");
+    assertThat(name.getDisplayNumber()).isEqualTo(12);
+    assertThat(name.getScreenNumber()).isEqualTo(2);
+  }
+
+  @Test
   void isForNetworkSocket_true() {
     DisplayName name = new DisplayName("hostName:0");
     assertThat(name.isForNetworkSocket()).isTrue();

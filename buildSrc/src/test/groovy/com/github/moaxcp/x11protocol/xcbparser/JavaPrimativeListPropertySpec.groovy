@@ -17,7 +17,7 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
         addChildNodes()
 
         when:
-        TypeSpec typeSpec = result.resolveXType('Window').javaType.typeSpec
+        TypeSpec typeSpec = result.resolveXType('Window').javaType.typeSpecs[0]
 
         then:
         typeSpec.toString() == '''\

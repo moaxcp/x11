@@ -8,6 +8,6 @@ interface JavaType {
     String getSimpleName()
     ClassName getClassName()
     ClassName getBuilderClassName()
-    TypeSpec getTypeSpec()
+    List<TypeSpec> getTypeSpecs()
     JavaProperty getJavaProperty(String name)
 }

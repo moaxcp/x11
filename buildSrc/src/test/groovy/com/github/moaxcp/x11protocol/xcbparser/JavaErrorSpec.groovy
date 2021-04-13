@@ -20,7 +20,7 @@ class JavaErrorSpec extends XmlSpec {
         JavaError javaError = error.javaType
 
         then:
-        javaError.typeSpec.toString() == '''\
+        javaError.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class RequestError implements com.github.moaxcp.x11client.protocol.XError {

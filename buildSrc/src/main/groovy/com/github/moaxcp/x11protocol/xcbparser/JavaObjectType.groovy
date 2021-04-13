@@ -54,7 +54,7 @@ abstract class JavaObjectType implements JavaType {
     }
 
     @Override
-    TypeSpec getTypeSpec() {
+    List<TypeSpec> getTypeSpecs() {
         TypeSpec.Builder typeSpec = TypeSpec.classBuilder(className)
         typeSpec.addModifiers(Modifier.PUBLIC)
         addFields(typeSpec)
@@ -68,7 +68,7 @@ abstract class JavaObjectType implements JavaType {
             addBuilder(typeSpec)
         }
 
-        typeSpec.build()
+        [typeSpec.build()]
     }
 
     void addBuilder(TypeSpec.Builder parent) {

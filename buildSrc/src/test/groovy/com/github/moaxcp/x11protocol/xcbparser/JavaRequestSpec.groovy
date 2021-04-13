@@ -19,7 +19,7 @@ class JavaRequestSpec extends XmlSpec {
         JavaRequest javaRequest = request.javaType
 
         then:
-        javaRequest.typeSpec.toString() == '''\
+        javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class DestroyWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest {
@@ -95,7 +95,7 @@ class JavaRequestSpec extends XmlSpec {
         JavaRequest javaRequest = request.javaType
 
         then:
-        javaRequest.typeSpec.toString() == '''\
+        javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class PolyPoint implements com.github.moaxcp.x11client.protocol.OneWayRequest {
@@ -211,7 +211,7 @@ class JavaRequestSpec extends XmlSpec {
         JavaRequest javaRequest = request.javaType
 
         then:
-        javaRequest.typeSpec.toString() == '''\
+        javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class QueryTextExtends implements com.github.moaxcp.x11client.protocol.OneWayRequest {
@@ -296,7 +296,7 @@ class JavaRequestSpec extends XmlSpec {
         JavaRequest javaRequest = request.javaType
 
         then:
-        javaRequest.typeSpec.toString() == '''\
+        javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class Enable implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.EnableReply> {
@@ -507,7 +507,7 @@ class JavaRequestSpec extends XmlSpec {
         JavaRequest javaRequest = request.javaType
 
         then:
-        javaRequest.typeSpec.toString() == '''\
+        javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class CreateWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest {
@@ -998,7 +998,7 @@ class JavaRequestSpec extends XmlSpec {
         JavaRequest javaRequest = request.javaType
 
         then:
-        javaRequest.typeSpec.toString() == '''\
+        javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class Await implements com.github.moaxcp.x11client.protocol.OneWayRequest {

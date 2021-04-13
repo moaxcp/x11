@@ -82,7 +82,7 @@ class JavaUnionSpec extends XmlSpec {
         union.basePackage == result.basePackage
         union.simpleName == 'BehaviorUnion'
         union.className == ClassName.get(result.javaPackage, 'BehaviorUnion')
-        union.typeSpec.toString() == '''\
+        union.typeSpecs[0].toString() == '''\
             public interface BehaviorUnion {
               static com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion readBehaviorUnion(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {

@@ -37,6 +37,17 @@ public class Utilities {
     return toList(string.getBytes(charset));
   }
 
+  public static List<Byte> toByteList(XEvent event) {
+    ByteArrayOutputStream saved = new ByteArrayOutputStream();
+    X11Output out = new X11OutputStream(saved);
+    try {
+      event.write(out);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+    return toList(saved.toByteArray());
+  }
+
   public static List<Integer> toIntegers(@NonNull List<Byte> bytes) {
     if(bytes.size() % 4 != 0) {
       throw new IllegalArgumentException("bytes must have size divisible by 4 to be converted to integers got: " + bytes.size());
@@ -52,16 +63,5 @@ public class Utilities {
     }
 
     return result;
-  }
-
-  public static List<Byte> toByteList(XEvent event) {
-    ByteArrayOutputStream saved = new ByteArrayOutputStream();
-    X11Output out = new X11OutputStream(saved);
-    try {
-      event.write(out);
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
-    return toList(saved.toByteArray());
   }
 }

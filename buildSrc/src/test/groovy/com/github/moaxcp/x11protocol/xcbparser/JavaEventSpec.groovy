@@ -41,7 +41,7 @@ class JavaEventSpec extends XmlSpec {
         JavaEvent javaEvent = event.javaType
 
         then:
-        javaEvent.typeSpec.toString() == '''\
+        javaEvent.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class KeyPressEvent implements com.github.moaxcp.x11client.protocol.XEvent {
@@ -197,7 +197,7 @@ class JavaEventSpec extends XmlSpec {
         JavaEvent javaEvent = event.javaType
 
         then:
-        javaEvent.typeSpec.toString() == '''\
+        javaEvent.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class MapRequestEvent implements com.github.moaxcp.x11client.protocol.XEvent {

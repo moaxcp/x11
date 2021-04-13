@@ -30,7 +30,7 @@ class JavaReplySpec extends XmlSpec {
         JavaReply javaReply = request.reply.javaType
 
         then:
-        javaRequest.typeSpec.toString() == '''\
+        javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class QueryTree implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply> {
@@ -79,7 +79,7 @@ class JavaReplySpec extends XmlSpec {
             }
         '''.stripIndent()
 
-        javaReply.typeSpec.toString() == '''\
+        javaReply.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class QueryTreeReply implements com.github.moaxcp.x11client.protocol.XReply {
@@ -167,7 +167,7 @@ class JavaReplySpec extends XmlSpec {
         JavaReply javaReply = request.reply.javaType
 
         then:
-        javaReply.typeSpec.toString() == '''\
+        javaReply.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class TranslateCoordinatesReply implements com.github.moaxcp.x11client.protocol.XReply {
@@ -256,7 +256,7 @@ class JavaReplySpec extends XmlSpec {
         JavaReply javaReply = request.reply.javaType
 
         then:
-        javaReply.typeSpec.toString() == '''\
+        javaReply.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class ListHostsReply implements com.github.moaxcp.x11client.protocol.XReply {
@@ -357,7 +357,7 @@ class JavaReplySpec extends XmlSpec {
         JavaReply javaReply = request.reply.javaType
 
         then:
-        javaReply.typeSpec.toString() == '''\
+        javaReply.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class QueryExtensionReply implements com.github.moaxcp.x11client.protocol.XReply {

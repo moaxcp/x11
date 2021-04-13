@@ -2,6 +2,7 @@ package com.github.moaxcp.x11client.protocol;
 
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,32 @@ public class UtilitesTest {
   @Test
   void toList_byte() {
     assertThat(toList(new byte[]{0, 1, 2, 3})).containsExactly((byte) 0, (byte) 1, (byte) 2, (byte) 3);
+  }
+
+  @Test
+  void toString_fails_on_null_byteList() {
+    assertThatThrownBy(() -> Utilities.toString(null, Charset.defaultCharset()))
+    .isInstanceOf(NullPointerException.class)
+    .hasMessage("byteList is marked non-null but is null");
+  }
+
+  @Test
+  void toString_fails_on_null_charSet() {
+    assertThatThrownBy(() -> Utilities.toString(new ArrayList<>(), null))
+        .isInstanceOf(NullPointerException.class)
+        .hasMessage("charset is marked non-null but is null");
+  }
+
+  @Test
+  void toString_test() {
+    List<Byte> bytes = new ArrayList<>();
+    bytes.add((byte) 'h');
+    bytes.add((byte) 'e');
+    bytes.add((byte) 'l');
+    bytes.add((byte) 'l');
+    bytes.add((byte) 'o');
+    String result = Utilities.toString(bytes, Charset.defaultCharset());
+    assertThat(result).isEqualTo("hello");
   }
 
   @Test
