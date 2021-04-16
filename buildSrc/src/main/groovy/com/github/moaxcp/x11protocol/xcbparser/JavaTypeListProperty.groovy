@@ -40,9 +40,14 @@ class JavaTypeListProperty extends JavaListProperty {
     @Override
     CodeBlock getDeclareAndReadCode() {
         if(lengthExpression instanceof EmptyExpression) {
+            JavaProperty lengthProperty = javaType.getJavaProperty('length')
+            CodeBlock lengthExpression = CodeBlock.of('$L', lengthProperty.name)
+            if(lengthProperty.typeName == TypeName.SHORT) {
+                lengthExpression = CodeBlock.of('Short.toUnsignedInt($L)', lengthProperty.name)
+            }
             return CodeBlock.builder()
                 .addStatement('$1T $2L = new $3T<>(length - javaStart)', typeName, name, ArrayList.class)
-                .beginControlFlow('while(javaStart < Short.toUnsignedInt(length) * 4)')
+                .beginControlFlow('while(javaStart < $L * 4)', lengthExpression)
                 .addStatement('$1T baseObject = $1T.read$2L(in)', baseTypeName, baseTypeName.simpleName())
                 .addStatement('$L.add(baseObject)', name)
                 .addStatement('javaStart += baseObject.getSize()')

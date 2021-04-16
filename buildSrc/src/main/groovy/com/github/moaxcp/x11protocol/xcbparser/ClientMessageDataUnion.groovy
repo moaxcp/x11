@@ -59,4 +59,9 @@ class ClientMessageDataUnion extends JavaUnion {
     MethodSpec getWriteMethod() {
         return null
     }
+
+    @Override
+    Optional<Integer> getFixedSize() {
+        return Optional.of(20)
+    }
 }

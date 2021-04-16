@@ -5,14 +5,14 @@ import com.github.moaxcp.x11client.protocol.bigreq.Enable;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtension;
 import com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply;
 import com.github.moaxcp.x11client.protocol.xproto.Setup;
-import com.github.moaxcp.x11client.protocol.xproto.XprotoPlugin;
 import lombok.Getter;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Optional;
+import java.util.Queue;
 
 class XProtocolService {
-  private final ServiceLoader<XProtocolPlugin> loader = ServiceLoader.load(XProtocolPlugin.class);
   private final X11Input in;
   private final X11Output out;
   @Getter
@@ -23,53 +23,41 @@ class XProtocolService {
   private long maximumRequestLength;
   private final Queue<OneWayRequest> requests = new LinkedList<>();
   private final Queue<XEvent> events = new LinkedList<>();
-  private final List<XProtocolPlugin> activatedPlugins = new ArrayList<>();
+  private final ProtocolPluginService pluginService;
 
   XProtocolService(Setup setup, X11Input in, X11Output out) {
     this.in = in;
     this.out = out;
     this.setup = setup;
     maximumRequestLength = setup.getMaximumRequestLength();
-    for(XProtocolPlugin plugin : loader) {
-      if(plugin instanceof XprotoPlugin) {
-        activatedPlugins.add(plugin);
-        continue;
-      }
-      String name = plugin.getName();
-      QueryExtension request = QueryExtension.builder()
-        .name(Utilities.toByteList(name))
-        .build();
-      QueryExtensionReply reply = send(request);
-      if(reply.isPresent()) {
-        plugin.setMajorOpcode(reply.getMajorOpcode());
-        plugin.setFirstEvent(reply.getFirstEvent());
-        plugin.setFirstError(reply.getFirstError());
-        activatedPlugins.add(plugin);
-      }
+    pluginService = new ProtocolPluginService();
+    for(String name : pluginService.listLoadedPlugins()) {
+      activatePlugin(name);
     }
 
-    if(loadedPlugin("BIG-REQUESTS")) {
+    if(pluginService.activatedPlugin("BIG-REQUESTS")) {
       maximumRequestLength = Integer.toUnsignedLong(send(Enable.builder().build())
         .getMaximumRequestLength());
     }
   }
 
-  public boolean loadedPlugin(String name) {
-    for(XProtocolPlugin plugin : loader) {
-      if(plugin.getName().equals(name)) {
-        return true;
-      }
+  public boolean activatePlugin(String name) {
+    QueryExtension request = QueryExtension.builder()
+      .name(Utilities.toByteList(name))
+      .build();
+    QueryExtensionReply reply = send(request);
+    if(reply.isPresent()) {
+      return pluginService.activatePlugin(name, reply.getMajorOpcode(), reply.getFirstEvent(), reply.getFirstError());
     }
     return false;
   }
 
+  public boolean loadedPlugin(String name) {
+    return pluginService.listLoadedPlugins().contains(name);
+  }
+
   public boolean activatedPlugin(String name) {
-    for(XProtocolPlugin plugin : activatedPlugins) {
-      if(plugin.getName().equals(name)) {
-        return true;
-      }
-    }
-    return false;
+    return pluginService.listActivatedPlugins().contains(name);
   }
 
   public <T extends XReply> T send(TwoWayRequest<T> request) {
@@ -83,20 +71,10 @@ class XProtocolService {
   }
 
   private void actuallySend(XRequest request) {
-    boolean sent = false;
-    for(XProtocolPlugin plugin : activatedPlugins) {
-      if(plugin.supportedRequest(request)) {
-        try {
-          request.write(plugin.getMajorOpcode(), out);
-        } catch(IOException e) {
-          throw new X11ClientException("exception when writing with plugin \"" + plugin.getName() + "\"", e);
-        }
-        sent = true;
-        break;
-      }
-    }
-    if(!sent) {
-      throw new UnsupportedOperationException(String.format("could not find plugin for request \"%s\"", request));
+    try {
+      request.write(pluginService.majorVersionForRequest(request), out);
+    } catch(IOException e) {
+      throw new X11ClientException("exception writing request \"" + request + "\"", e);
     }
     nextSequenceNumber++;
   }
@@ -122,26 +100,28 @@ class XProtocolService {
 
   private XError readError() throws IOException {
     byte code = in.readCard8();
-    for(XProtocolPlugin reader : activatedPlugins) {
-      if(reader.supportedError(code)) {
-        return reader.readError(code, in);
-      }
-    }
-    throw new IllegalStateException(XProtocolPlugin.class.getSimpleName() + " not found for error code " + code);
+    XProtocolPlugin plugin = pluginService.activePluginForError(code).orElseThrow(() -> new IllegalStateException(XProtocolPlugin.class.getSimpleName() + " not found for error code " + code));
+    return plugin.readError(code, in);
   }
 
   private XEvent readEvent(byte responseCode) throws IOException {
     boolean sentEvent = responseCode < 0;
-    byte number = responseCode;
-    if(sentEvent) {
-      number = (byte) (responseCode ^ (byte) 0b10000000);
-    }
-    for(XProtocolPlugin reader : activatedPlugins) {
-      if(reader.supportedEvent(number)) {
-        return reader.readEvent(number, sentEvent, in);
+    byte number = !sentEvent ? responseCode : (byte) (responseCode ^ (byte) 0b10000000);
+    if(pluginService.genericEventNumber(number)) {
+      byte extension = in.readCard8();
+      Optional<XProtocolPlugin> pluginExtension = pluginService.activePluginForMajorOpcode(extension);
+      if(!pluginExtension.isPresent()) {
+        throw new IllegalStateException("Could not find plugin for generic event with major-opcode of " + extension);
       }
+      XProtocolPlugin plugin = pluginExtension.get();
+
+      short sequenceNumber = in.readCard16();
+      int length = in.readCard32();
+      short eventType = in.readCard16();
+      return plugin.readGenericEvent(sentEvent, extension, sequenceNumber, length, eventType, in);
     }
-    throw new IllegalStateException(XProtocolPlugin.class.getSimpleName() + " not found for number " + number);
+    XProtocolPlugin plugin = pluginService.activePluginForEvent(number).orElseThrow(() -> new IllegalStateException(XProtocolPlugin.class.getSimpleName() + " not found for number " + number));
+    return plugin.readEvent(number, sentEvent, in);
   }
 
   public XEvent getNextEvent() {

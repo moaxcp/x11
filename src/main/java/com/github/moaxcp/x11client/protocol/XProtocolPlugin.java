@@ -4,8 +4,8 @@ import java.io.IOException;
 
 public interface XProtocolPlugin {
   String getName();
-  byte getMajorOpcode();
-  void setMajorOpcode(byte majorOpcode);
+  byte getMajorVersion();
+  byte getMinorVersion();
   byte getFirstEvent();
   void setFirstEvent(byte firstEvent);
   byte getFirstError();
@@ -15,4 +15,5 @@ public interface XProtocolPlugin {
   boolean supportedError(byte code);
   XEvent readEvent(byte number, boolean sentEvent, X11Input in) throws IOException;
   XError readError(byte code, X11Input in) throws IOException;
+  XGenericEvent readGenericEvent(boolean sentEvent, byte extension, short sequenceNumber, int length, short eventType, X11Input in) throws IOException;
 }

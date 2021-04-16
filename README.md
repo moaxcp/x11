@@ -428,6 +428,11 @@ and will likely move into a new project.
 
 # versions
 
+## 0.7.0-SNAPSHOT
+
+* Adding support for generic events
+* Added ProtocolPluginService to handle plugins for the XProtocolService
+
 ## 0.6.0
 
 * Implementing `sync()` method based on XSync but without a discard parameter.

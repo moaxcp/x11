@@ -6,18 +6,32 @@ import static com.github.moaxcp.x11protocol.xcbparser.JavaEvent.javaEvent
 
 class XTypeEvent extends XTypeObject {
     int number
+    boolean genericEvent
+    int genericEventNumber
 
     XTypeEvent(Map map) {
         super(map)
         number = map.number ?: 0
+        genericEvent = map.genericEvent ?: false
     }
 
     static XTypeEvent xTypeEvent(XResult result, Node node) {
         int number = Integer.valueOf((String) node.attributes().get('number'))
-        XTypeEvent event = new XTypeEvent(result: result, number: number, name: node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
+        XTypeEvent event = new XTypeEvent(result: result, number: number, name: node.attributes().get('name'), genericEvent: node.attributes().get('xge'), basePackage: result.basePackage, javaPackage: result.javaPackage)
         event.addUnits(result, node)
-        event.protocol.add(0, new XUnitField(result: result, name: 'NUMBER', type: 'CARD8', constantValue: number))
-        event.protocol.add(2, new XUnitField(result: result, name:'sequence_number', type: 'CARD16'))
+        if(event.genericEvent) {
+            event.number = 35
+            event.genericEventNumber = number
+            event.protocol.add(0, new XUnitField(result: result, name: 'NUMBER', type: 'CARD8', constantValue: 35))
+            event.protocol.add(1, new XUnitField(result: result, name: 'extension', type: 'CARD8'))
+            event.protocol.add(2, new XUnitField(result: result, name: 'sequence_number', type: 'CARD16'))
+            event.protocol.add(3, new XUnitField(result: result, name: 'length', type: 'CARD32', localOnly: true))
+            event.protocol.add(4, new XUnitField(result: result, name: 'event_type', type: 'CARD16', constantValue: number))
+
+        } else {
+            event.protocol.add(0, new XUnitField(result: result, name: 'NUMBER', type: 'CARD8', constantValue: number))
+            event.protocol.add(2, new XUnitField(result: result, name: 'sequence_number', type: 'CARD16'))
+        }
 
         return event
     }

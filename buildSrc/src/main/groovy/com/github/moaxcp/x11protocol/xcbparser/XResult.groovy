@@ -57,10 +57,16 @@ class XResult {
                 .build())
 
         builder.addField(
-            FieldSpec.builder(byte.class, 'majorOpcode', Modifier.PRIVATE)
+            FieldSpec.builder(byte.class, 'majorVersion', Modifier.PRIVATE)
             .addAnnotation(Getter.class)
-            .addAnnotation(Setter.class)
+            .initializer('$L', majorVersion)
             .build())
+
+        builder.addField(
+                FieldSpec.builder(byte.class, 'minorVersion', Modifier.PRIVATE)
+                        .addAnnotation(Getter.class)
+                        .initializer('$L', minorVersion)
+                        .build())
 
         builder.addField(
             FieldSpec.builder(byte.class, 'firstEvent', Modifier.PRIVATE)
@@ -96,9 +102,11 @@ class XResult {
             .addParameter(byte.class, 'number')
 
         for(XTypeEvent event : events.values()) {
-            supportedEvent.beginControlFlow('if(number + firstEvent == $L)', event.number)
-            supportedEvent.addStatement('return true')
-            supportedEvent.endControlFlow()
+            if(event.number != 35) {
+                supportedEvent.beginControlFlow('if(number + firstEvent == $L)', event.number)
+                supportedEvent.addStatement('return true')
+                supportedEvent.endControlFlow()
+            }
         }
         supportedEvent.addStatement('return false')
 
@@ -129,9 +137,11 @@ class XResult {
             .addException(IOException.class)
 
         for(XTypeEvent event : events.values()) {
-            readEvent.beginControlFlow('if(number + firstEvent == $L)', event.number)
-            readEvent.addStatement('return $T.read$L(sentEvent, in)', event.javaType.className, event.javaType.className.simpleName())
-            readEvent.endControlFlow()
+            if(event.number != 35) {
+                readEvent.beginControlFlow('if(number + firstEvent == $L)', event.number)
+                readEvent.addStatement('return $T.read$L(sentEvent, in)', event.javaType.className, event.javaType.className.simpleName())
+                readEvent.endControlFlow()
+            }
         }
         readEvent.addStatement('throw new $T("number " + number + " is not supported")', IllegalArgumentException.class)
 
@@ -154,10 +164,33 @@ class XResult {
 
         builder.addMethod(readError.build())
 
+        MethodSpec.Builder readGenericEvent = MethodSpec.methodBuilder('readGenericEvent')
+            .addModifiers(Modifier.PUBLIC)
+            .addAnnotation(Override.class)
+            .returns(ClassName.get(basePackage, 'XGenericEvent'))
+                .addParameter(boolean.class, 'sentEvent')
+            .addParameter(byte.class, 'extension')
+            .addParameter(short.class, 'sequenceNumber')
+            .addParameter(int.class, 'length')
+            .addParameter(short.class, 'eventType')
+            .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
+            .addException(IOException.class)
+
+        for(XTypeEvent event : events.values()) {
+            if(event.number == 35) {
+                readGenericEvent.beginControlFlow('if(eventType == $L)', event.genericEventNumber)
+                readError.addStatement('return $T.read$L(sentEvent, extension, sequenceNumber, length, eventType, in)', event.javaType.className, event.javaType.className.simpleName())
+                readGenericEvent.endControlFlow()
+            }
+        }
+        readGenericEvent.addStatement('throw new $T("eventType " + eventType + " is not supported")', IllegalArgumentException.class)
+
+        builder.addMethod(readGenericEvent.build())
+
         return builder.build()
     }
 
-    public ClassName getPluginClassName() {
+    ClassName getPluginClassName() {
         ClassName.get(javaPackage, getJavaName(header.capitalize() + 'Plugin'))
     }
 
