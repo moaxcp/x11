@@ -428,9 +428,10 @@ and will likely move into a new project.
 
 # versions
 
-## 0.7.0-SNAPSHOT
+## 0.7.0
 
 * Adding support for generic events
+* Adding support for the Present extension
 * Added ProtocolPluginService to handle plugins for the XProtocolService
 
 ## 0.6.0
