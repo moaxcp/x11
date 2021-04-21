@@ -34,7 +34,15 @@ public interface X11Input {
 
   long readCard64() throws IOException;
 
+  List<Long> readCard64(int length) throws IOException;
+
   float readFloat() throws IOException;
+
+  List<Float> readFloat(int length) throws IOException;
+
+  double readDouble() throws IOException;
+
+  List<Double> readDouble(int length) throws IOException;
 
   List<Byte> readChar(int length) throws IOException;
 
@@ -43,6 +51,10 @@ public interface X11Input {
   List<Byte> readByte(int length) throws IOException;
 
   List<Byte> readVoid(int length) throws IOException;
+
+  int readFd() throws IOException;
+
+  List<Integer> readFd(int length) throws IOException;
 
   default void readPad(int length) throws IOException {
     readByte(length);

@@ -67,7 +67,7 @@ x11Protocol {
     outputSrc = file('build/generated/xproto/java/')
     outputResources = file('build/generated/xproto/resources')
     xcbXmls = file('src/main/xcbXmls')
-    exclude = ['xinput', 'xkb', 'dri3', 'glx']
+    exclude = ['xinput', 'xkb']
     keysymHeader = file('src/main/keysym/keysymdef.h')
 }
 

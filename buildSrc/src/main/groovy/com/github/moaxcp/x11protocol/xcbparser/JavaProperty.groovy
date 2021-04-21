@@ -104,7 +104,7 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
             if(!x11Field.constantValue) {
                 throw new IllegalStateException("$name missing constantValue in x11Field")
             }
-            return FieldSpec.builder(typeName, name, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).initializer(x11Field.constantValue).build()
+            return FieldSpec.builder(typeName, name, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).initializer(constantValue).build()
         }
         FieldSpec.Builder builder = FieldSpec.builder(typeName, name)
             .addModifiers(Modifier.PRIVATE)
@@ -112,6 +112,13 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
             builder.addAnnotation(NonNull)
         }
         return builder.build()
+    }
+
+    CodeBlock getConstantValue() {
+        if(!constantField) {
+            throw new IllegalStateException("not a constant value")
+        }
+        return CodeBlock.of(x11Field.constantValue)
     }
 
     @Override

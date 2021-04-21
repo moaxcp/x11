@@ -69,6 +69,17 @@ class JavaPrimativeProperty extends JavaProperty {
     }
 
     @Override
+    CodeBlock getConstantValue() {
+        if(!constantField) {
+            throw new IllegalStateException("not a constant value")
+        }
+        if(typeName == TypeName.BYTE && Integer.valueOf(x11Field.constantValue) > 127) {
+            return CodeBlock.of('(byte) $L', x11Field.constantValue)
+        }
+        return CodeBlock.of(x11Field.constantValue)
+    }
+
+    @Override
     List<MethodSpec> getMethods() {
         List<MethodSpec> methods = super.getMethods()
         if(maskTypeName) {

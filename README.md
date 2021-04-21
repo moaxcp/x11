@@ -3,11 +3,9 @@
 x11-client enables java and other jvm languages to talk directly to a x11 
 server without binding to a C library. The client is similar to X11lib for C
 but uses objects to represent the protocol resulting in a simplified client. It 
-supports the core protocol and the following extensions: bigreq, composite, 
-damage, dpms, dri2, ge, randr, record, render, res, screensaver, shape, shm, 
-sync, xc_misc, xevie, xf86dri, xf86vidmode, xfixes, xinerama, xprint, xselinux, 
-xtest, xv, xvmc. The client is similar to X11lib and follows the same pattern 
-of queuing one-way requests before sending them to the server.
+supports the core protocol and all extensions except for xinput and xkb. The 
+client is similar to X11lib and follows the same pattern of queuing one-way 
+requests before sending them to the server.
 
 [![Java CI with Gradle](https://github.com/moaxcp/x11-client/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=master)](https://github.com/moaxcp/x11-client/actions?query=workflow%3A%22Java+CI+with+Gradle%22)
 [![maven central](https://img.shields.io/maven-central/v/com.github.moaxcp.x11/x11-client)](https://search.maven.org/artifact/com.github.moaxcp.x11/x11-client)
@@ -24,7 +22,7 @@ This library can be added to your project using maven or gradle.
 <dependency>
  <groupId>com.github.moaxcp.x11</groupId>
  <artifactId>x11-client</artifactId>
- <version>0.5.0</version>
+ <version>0.8.0</version>
  <type>module</type>
 </dependency>
 ```
@@ -32,7 +30,7 @@ This library can be added to your project using maven or gradle.
 ## Gradle
 
 ```
-implementation 'com.github.moaxcp.x11:x11-client:0.5.0'
+implementation 'com.github.moaxcp.x11:x11-client:0.8.0'
 ```
 
 The library has one dependency for using unix sockets.
@@ -426,7 +424,37 @@ possibly a Toolkit. Currently there is a Display class which manages Resources
 and event dispatch. A framework is not the primary goal of the client project 
 and will likely move into a new project.
 
+# Other X11 Clients
+
+https://github.com/psychon/x11rb
+
+https://github.com/sidorares/node-x11
+
+https://github.com/BurntSushi/xgb
+
+# Learning x11
+
+https://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h
+
+https://tronche.com/gui/x/xlib/input/keyboard-encoding.html
+
+https://jichu4n.com/posts/how-x-window-managers-work-and-how-to-write-one-part-i/
+
+https://www.geeks3d.com/20120102/programming-tutorial-simple-x11-x-window-code-sample-for-linux-and-mac-os-x/
+
+https://wiki.tcl-lang.org/page/Disable+autorepeat+under+X11
+
+https://p.janouch.name/article-xgb.html
+
+https://jamey.thesharps.us/2021/03/25/xcb-protocol-specifications-data/
+
+
+
 # versions
+
+## 0.8.0
+
+Adding support for glx and dri3 extensions
 
 ## 0.7.0
 

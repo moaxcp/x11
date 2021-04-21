@@ -98,6 +98,13 @@ public class X11OutputStream implements X11Output {
   }
 
   @Override
+  public void writeCard64(List<Long> card64) throws IOException {
+    for(long l : card64) {
+      writeCard64(l);
+    }
+  }
+
+  @Override
   public void writeChar(List<Byte> string) throws IOException {
     writeByte(string);
   }
@@ -120,8 +127,37 @@ public class X11OutputStream implements X11Output {
   }
 
   @Override
+  public void writeFd(int fd) throws IOException {
+    writeInt32(fd);
+  }
+
+  @Override
+  public void writeFd(List<Integer> fd) throws IOException {
+    writeInt32(fd);
+  }
+
+  @Override
   public void writeFloat(float f) throws IOException {
     out.writeFloat(f);
+  }
+
+  @Override
+  public void writeFloat(List<Float> f) throws IOException {
+    for(float fl : f) {
+      writeFloat(f);
+    }
+  }
+
+  @Override
+  public void writeDouble(double d) throws IOException {
+    out.writeDouble(d);
+  }
+
+  @Override
+  public void writeDouble(List<Double> d) throws IOException {
+    for(double db : d) {
+      writeDouble(db);
+    }
   }
 
   public void writeString8(byte[] string8) throws IOException {

@@ -37,6 +37,16 @@ public interface X11Output {
 
   void writeCard64(long card64) throws IOException;
 
+  void writeCard64(List<Long> card64) throws IOException;
+
+  void writeFloat(float f) throws IOException;
+
+  void writeFloat(List<Float> f) throws IOException;
+
+  void writeDouble(double d) throws IOException;
+
+  void writeDouble(List<Double> d) throws IOException;
+
   void writeChar(List<Byte> string) throws IOException;
 
   void writeString8(String string) throws IOException;
@@ -44,6 +54,10 @@ public interface X11Output {
   void writeByte(List<Byte> bytes) throws IOException;
 
   void writeVoid(List<Byte> bytes) throws IOException;
+
+  void writeFd(int fd) throws IOException;
+
+  void writeFd(List<Integer> fd) throws IOException;
 
   default void writePad(int length) throws IOException {
     writeByte(IntStream.range(0, length).mapToObj(i -> (byte) 0).collect(toList()));
@@ -56,6 +70,4 @@ public interface X11Output {
   default void writePadAlign(int pad, int forLength) throws IOException {
     writePad(XObject.getSizeForPadAlign(pad, forLength));
   }
-
-  void writeFloat(float f) throws IOException;
 }

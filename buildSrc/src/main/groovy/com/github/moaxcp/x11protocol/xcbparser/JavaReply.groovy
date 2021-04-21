@@ -24,7 +24,7 @@ class JavaReply extends JavaObjectType {
         JavaProperty l = javaReply.getJavaProperty('length')
         l.writeValueExpression = CodeBlock.of('getLength()')
         if(!(javaReply.protocol[1] instanceof JavaReadParameter)) {
-            throw new IllegalStateException("First field must be a JavaReadParameter")
+            throw new IllegalStateException("First field in ${javaReply.simpleName} must be a JavaReadParameter. got ${javaReply.protocol[1]}")
         }
         JavaReadParameter first = (JavaReadParameter) javaReply.protocol[1]
         first.readParam = true

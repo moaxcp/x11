@@ -12,7 +12,6 @@ import static com.github.moaxcp.x11protocol.xcbparser.XUnitField.xUnitField
 import static com.github.moaxcp.x11protocol.xcbparser.XUnitField.xUnitFieldFd
 import static com.github.moaxcp.x11protocol.xcbparser.XUnitListField.xUnitListField
 import static com.github.moaxcp.x11protocol.xcbparser.XUnitPadFactory.xUnitPad
-import static com.github.moaxcp.x11protocol.xcbparser.XUnitRequiredStartAlign.xUnitRequiredStartAlign
 
 abstract class XTypeObject extends XType implements XTypeUnit {
     Set<ClassName> superTypes = []
@@ -46,7 +45,7 @@ abstract class XTypeObject extends XType implements XTypeUnit {
     List<XUnit> parseXUnit(XResult result, Node node) {
         switch(node.name()) {
             case 'required_start_align':
-                return [xUnitRequiredStartAlign(result, node)]
+                return [] //[xUnitRequiredStartAlign(result, node)]
             case 'field':
                 return [xUnitField(result, node)]
             case 'fd':
@@ -115,7 +114,7 @@ abstract class XTypeObject extends XType implements XTypeUnit {
 
         java.eachWithIndex { JavaUnit entry, int i ->
             if(entry instanceof JavaPadAlign) {
-                entry.list = java[i - 1]
+                entry.list = (JavaListProperty) java[i - 1]
             }
         }
 
@@ -128,7 +127,7 @@ abstract class XTypeObject extends XType implements XTypeUnit {
                 }
                 if(lengthField) {
                     property.lengthField = convertX11VariableNameToJava(lengthField)
-                    JavaPrimativeProperty lengthProperty = java.find { it instanceof JavaPrimativeProperty && it.name == lengthField }
+                    JavaPrimativeProperty lengthProperty = (JavaPrimativeProperty) java.find { it instanceof JavaPrimativeProperty && it.name == lengthField }
                     lengthProperty.localOnly = true
                     lengthProperty.lengthOfField = property.name
 

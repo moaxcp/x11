@@ -102,8 +102,28 @@ public class X11InputStream implements X11Input {
   }
 
   @Override
+  public List<Long> readCard64(int length) throws IOException {
+    return readList(length, this::readCard64);
+  }
+
+  @Override
   public float readFloat() throws IOException {
     return in.readFloat();
+  }
+
+  @Override
+  public List<Float> readFloat(int length) throws IOException {
+    return readList(length, this::readFloat);
+  }
+
+  @Override
+  public double readDouble() throws IOException {
+    return in.readDouble();
+  }
+
+  @Override
+  public List<Double> readDouble(int length) throws IOException {
+    return readList(length, this::readDouble);
   }
 
   @Override
@@ -141,6 +161,16 @@ public class X11InputStream implements X11Input {
   @Override
   public List<Byte> readVoid(int length) throws IOException {
     return readByte(length);
+  }
+
+  @Override
+  public int readFd() throws IOException {
+    return readInt32();
+  }
+
+  @Override
+  public List<Integer> readFd(int length) throws IOException {
+    return readInt32(length);
   }
 
   @Override
