@@ -50,6 +50,7 @@ class KeySymParser {
         }
 
         return TypeSpec.enumBuilder(className)
+            .addAnnotation(AnnotationSpec.builder(SuppressWarnings).addMember('value', '"java:S115"').build())
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(ClassName.get(basePackage, 'IntValue'))
             .addField(FieldSpec.builder(TypeName.INT, 'value', Modifier.PRIVATE).build())

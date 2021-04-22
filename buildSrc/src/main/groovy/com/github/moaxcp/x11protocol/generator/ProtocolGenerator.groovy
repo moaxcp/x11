@@ -29,7 +29,7 @@ class ProtocolGenerator {
             }
         }
 
-        JavaFile pluginFile = JavaFile.builder(result.javaPackage, result.getXPlugin()).build()
+        JavaFile pluginFile = JavaFile.builder(result.javaPackage, result.getXPlugin()).skipJavaLangImports(true).build()
         pluginFile.writeTo(outputSrc)
 
         String pluginClass = result.pluginClassName.canonicalName()
@@ -52,7 +52,7 @@ class ProtocolGenerator {
     }
 
     private void writeToFile(String javaPackage, TypeSpec typeSpec) {
-        JavaFile javaFile = JavaFile.builder(javaPackage, typeSpec).build()
+        JavaFile javaFile = JavaFile.builder(javaPackage, typeSpec).skipJavaLangImports(true).build()
         javaFile.writeTo(outputSrc)
     }
 }
