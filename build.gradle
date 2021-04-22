@@ -141,5 +141,6 @@ sonarqube {
         property "sonar.projectKey", "com.github.moaxcp.x11:x11-client"
         property 'sonar.host.url', 'https://sonarcloud.io'
         property 'sonar.organization', 'moaxcp'
+        property 'sonar.scm.exclusions.disabled', 'true'
     }
 }
