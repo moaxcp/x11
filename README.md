@@ -452,6 +452,11 @@ https://jamey.thesharps.us/2021/03/25/xcb-protocol-specifications-data/
 
 # versions
 
+## 0.9.0-SNAPSHOT
+
+Added support for resolving enums directly. In xinput.xml there is an Event `Property` which has the same name as the 
+enum `Property` from xproto.xml. The current solution is to use `resolveXTypeEnum(String)` when resolving enums.
+
 ## 0.8.0
 
 Adding support for glx and dri3 extensions

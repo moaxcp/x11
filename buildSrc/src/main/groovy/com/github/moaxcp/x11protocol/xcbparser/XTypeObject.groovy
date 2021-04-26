@@ -57,8 +57,10 @@ abstract class XTypeObject extends XType implements XTypeUnit {
             case 'switch':
                 if(node.childNodes().find { Node it -> it.name() == 'bitcase'}) {
                     return parseValueList(result, node)
+                } else if(node.childNodes().find { Node it -> it.name() == 'case'}) {
+                    return parseCases(result, node)
                 } else {
-                    System.out.println('switch')
+                    System.out.println('unknown switch')
                     return []
                 }
             case 'exprfield':
@@ -105,6 +107,10 @@ abstract class XTypeObject extends XType implements XTypeUnit {
             }
         }
         return fields
+    }
+
+    List<XUnit> parseCases(XResult result, Node node) {
+        return []
     }
 
     List<JavaUnit> toJavaProtocol(JavaType javaType) {

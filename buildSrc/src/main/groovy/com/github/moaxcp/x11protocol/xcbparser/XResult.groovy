@@ -337,6 +337,30 @@ class XResult {
         return resolved
     }
 
+    @Memoized
+    XTypeEnum resolveXTypeEnum(String type) {
+        XTypeEnum resolved
+        if(type.contains(':')) {
+            String specificImport = type.substring(0, type.indexOf(':'))
+            String actualType = type.substring(type.indexOf(':') + 1)
+            if(header == specificImport) {
+                resolved = resolveLocalEnum(actualType)
+            } else {
+                resolved = imports.get(specificImport).resolveEnumRecursive(actualType)
+            }
+        }
+
+        if(resolved) {
+            return resolved
+        }
+
+        resolved = resolveEnumRecursive(type)
+        if(!resolved) {
+            throw new IllegalArgumentException("could not resolve $type")
+        }
+        return resolved
+    }
+
     XType resolveTypeRecursive(String type) {
         XType fromLocal = resolveLocal(type)
 
@@ -357,11 +381,27 @@ class XResult {
         return null
     }
 
-    XType resolveLocal(String type) {
-        String typeDef = resolveTypeDef(type)
-        if(typeDef) {
-            type = typeDef
+    XTypeEnum resolveEnumRecursive(String type) {
+        XTypeEnum fromLocal = resolveLocalEnum(type)
+        if(fromLocal) {
+            return fromLocal
         }
+
+        XTypeEnum fromImport = imports.values().collect {
+            it.resolveEnumRecursive(type)
+        }.find {
+            it
+        }
+
+        if(fromImport) {
+            return fromImport
+        }
+
+        return null
+    }
+
+    XType resolveLocal(String type) {
+        type = resolveTypeDef(type)
         if(xidTypes.contains(type) || xidUnions.contains(type)) {
             type = 'CARD32'
         }
@@ -374,12 +414,35 @@ class XResult {
         return null
     }
 
+    XTypeEnum resolveLocalEnum(String type) {
+        type = resolveTypeDef(type)
+        XTypeEnum xType = enums[type]
+        if(xType) {
+            return xType
+        }
+        return null
+    }
+
+    /**
+     * Resolves a typedef recursively. If no typedef is found then the original type is returned.
+     * @param type
+     * @return
+     */
     String resolveTypeDef(String type) {
+        return resolveTypeDefRecursive(type) ?: type
+    }
+
+    /**
+     * Resolved a typedef recursively. A null return is used to control when the typedef is found.
+     * @param type
+     * @return
+     */
+    String resolveTypeDefRecursive(String type) {
         String resultType = typedefs.find { it.key == type }?.value
         if(!resultType) {
             return null
         }
-        String nextType = resolveTypeDef(resultType)
+        String nextType = resolveTypeDefRecursive(resultType)
         if(!nextType) {
             return resultType
         }
