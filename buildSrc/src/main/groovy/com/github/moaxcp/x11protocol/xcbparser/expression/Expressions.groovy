@@ -51,6 +51,8 @@ class Expressions {
                 return getUnopExpression(javaType, node)
             case 'popcount':
                 return getPopcountExpression(javaType, node)
+            case 'sumof':
+                return getSumofExpression(javaType, node)
             default:
                 throw new IllegalArgumentException("cannot parse ${node.name()}")
         }
@@ -95,5 +97,11 @@ class Expressions {
         Node fieldNode = node.childNodes().next()
         FieldRefExpression field = new FieldRefExpression(javaType: javaType, fieldName: fieldNode.text())
         return new PopcountExpression(field: field)
+    }
+
+    static Expression getSumofExpression(JavaType javaType, Node node) {
+        String ref = node.attributes().get('ref')
+        Expression expression = getExpression(javaType, node.childNodes().next())
+        return new SumOfExpression(javaType: javaType, referenceList: ref, sumOf: expression)
     }
 }

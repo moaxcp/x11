@@ -64,7 +64,7 @@ class XUnitFieldSpec extends XmlSpec {
 
         then:
         IllegalArgumentException e = thrown()
-        e.getMessage() == 'could not resolve Missing'
+        e.getMessage() == 'could not resolve Missing in null'
     }
 
     def 'resolve primative type'() {

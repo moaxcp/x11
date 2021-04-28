@@ -34,6 +34,7 @@ class XResult {
     Map<String, XTypeEnum> enums = [:]
     Map<String, XTypeUnion> unions = [:]
     Map<String, XTypeEvent> events = [:]
+    List<String> eventStructs = []
     Map<String, XTypeError> errors = [:]
     Map<String, XTypeRequest> requests = [:]
 
@@ -288,7 +289,7 @@ class XResult {
     }
 
     void addEventStruct(Node node) {
-
+        eventStructs.add((String) node.attributes().get('name'))
     }
 
     void addUnion(Node node) {
@@ -331,7 +332,7 @@ class XResult {
         resolved = resolveTypeRecursive(type)
 
         if(!resolved) {
-            throw new IllegalArgumentException("could not resolve $type")
+            throw new IllegalArgumentException("could not resolve $type in $extensionName")
         }
 
         return resolved

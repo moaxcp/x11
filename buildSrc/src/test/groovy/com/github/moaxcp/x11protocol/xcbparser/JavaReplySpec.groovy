@@ -264,8 +264,6 @@ class JavaReplySpec extends XmlSpec {
             
               private short sequenceNumber;
             
-              private short hostsLen;
-            
               @lombok.NonNull
               private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Host> hosts;
             
@@ -282,7 +280,6 @@ class JavaReplySpec extends XmlSpec {
                 com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.ListHostsReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.builder();
                 javaBuilder.mode(mode);
                 javaBuilder.sequenceNumber(sequenceNumber);
-                javaBuilder.hostsLen(hostsLen);
                 javaBuilder.hosts(hosts);
                 if(javaBuilder.getSize() < 32) {
                   in.readPad(32 - javaBuilder.getSize());
@@ -296,6 +293,7 @@ class JavaReplySpec extends XmlSpec {
                 out.writeByte(mode);
                 out.writeCard16(sequenceNumber);
                 out.writeCard32(getLength());
+                short hostsLen = (short) hosts.size();
                 out.writeCard16(hostsLen);
                 out.writePad(22);
                 for(com.github.moaxcp.x11client.protocol.xproto.Host t : hosts) {

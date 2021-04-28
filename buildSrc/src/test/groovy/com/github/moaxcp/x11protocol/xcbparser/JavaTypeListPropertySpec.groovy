@@ -35,11 +35,9 @@ class JavaTypeListPropertySpec extends XmlSpec {
             @lombok.Value
             @lombok.Builder
             public class Setup implements com.github.moaxcp.x11client.protocol.XStruct {
-              private byte pixmapFormatsLen;
-             
               @lombok.NonNull
               private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Format> pixmapFormats;
-             
+            
               public static com.github.moaxcp.x11client.protocol.xproto.Setup readSetup(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 byte pixmapFormatsLen = in.readCard8();
@@ -48,24 +46,24 @@ class JavaTypeListPropertySpec extends XmlSpec {
                   pixmapFormats.add(com.github.moaxcp.x11client.protocol.xproto.Format.readFormat(in));
                 }
                 com.github.moaxcp.x11client.protocol.xproto.Setup.SetupBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Setup.builder();
-                javaBuilder.pixmapFormatsLen(pixmapFormatsLen);
                 javaBuilder.pixmapFormats(pixmapFormats);
                 return javaBuilder.build();
               }
-             
+            
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                byte pixmapFormatsLen = (byte) pixmapFormats.size();
                 out.writeCard8(pixmapFormatsLen);
                 for(com.github.moaxcp.x11client.protocol.xproto.Format t : pixmapFormats) {
                   t.write(out);
                 }
               }
-             
+            
               @java.lang.Override
               public int getSize() {
                 return 1 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(pixmapFormats);
               }
-             
+            
               public static class SetupBuilder {
                 public int getSize() {
                   return 1 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(pixmapFormats);

@@ -125,17 +125,19 @@ abstract class XTypeObject extends XType implements XTypeUnit {
         }
 
         java.each { JavaUnit property ->
-            if(property instanceof JavaPrimativeListProperty) {
+            if(property instanceof JavaListProperty) {
                 List<FieldRefExpression> fieldRefs = property.lengthExpression.fieldRefs
                 String lengthField = null
                 if(fieldRefs.size() == 1) {
                     lengthField = fieldRefs.get(0).fieldName
                 }
                 if(lengthField) {
-                    property.lengthField = convertX11VariableNameToJava(lengthField)
                     JavaPrimativeProperty lengthProperty = (JavaPrimativeProperty) java.find { it instanceof JavaPrimativeProperty && it.name == lengthField }
-                    lengthProperty.localOnly = true
-                    lengthProperty.lengthOfField = property.name
+                    if(lengthProperty) {
+                        property.lengthField = convertX11VariableNameToJava(lengthField)
+                        lengthProperty.localOnly = true
+                        lengthProperty.lengthOfField = property.name
+                    }
 
                 }
             }
