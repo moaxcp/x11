@@ -34,7 +34,7 @@ class XResult {
     Map<String, XTypeEnum> enums = [:]
     Map<String, XTypeUnion> unions = [:]
     Map<String, XTypeEvent> events = [:]
-    List<String> eventStructs = []
+    Map<String, XTypeEventStruct> eventStructs = [:]
     Map<String, XTypeError> errors = [:]
     Map<String, XTypeRequest> requests = [:]
 
@@ -289,7 +289,7 @@ class XResult {
     }
 
     void addEventStruct(Node node) {
-        eventStructs.add((String) node.attributes().get('name'))
+        eventStructs.put((String) node.attributes().get('name'), XTypeEventStruct.xTypeEventStruct(this, node))
     }
 
     void addUnion(Node node) {
@@ -406,7 +406,7 @@ class XResult {
         if(xidTypes.contains(type) || xidUnions.contains(type)) {
             type = 'CARD32'
         }
-        XType xType = primatives[type] ?: structs[type] ?: unions[type] ?: enums[type] ?: events[type] ?: errors[type] ?: requests[type]
+        XType xType = primatives[type] ?: structs[type] ?: unions[type] ?: enums[type] ?: events[type] ?: eventStructs[type] ?: errors[type] ?: requests[type]
 
         if(xType) {
             return xType

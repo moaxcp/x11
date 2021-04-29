@@ -6,6 +6,7 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 
+import static com.github.moaxcp.x11protocol.generator.Conventions.getEventStructTypeName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
 
 class JavaTypeListProperty extends JavaListProperty {
@@ -27,6 +28,8 @@ class JavaTypeListProperty extends JavaListProperty {
         XType type = x11Field.resolvedType
         if(type instanceof XTypeStruct) {
             return getStructTypeName(type.javaPackage, type.name)
+        } else if(type instanceof XTypeEventStruct) {
+            return getEventStructTypeName(type.javaPackage, type.name)
         } else { //else Request/Reply/Event
             throw new UnsupportedOperationException("not supported ${type.name}")
         }
