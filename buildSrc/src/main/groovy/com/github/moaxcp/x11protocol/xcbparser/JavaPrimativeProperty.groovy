@@ -64,10 +64,6 @@ class JavaPrimativeProperty extends JavaProperty {
         return null
     }
 
-    boolean isReadOnly() {
-        return getMaskTypeName()
-    }
-
     @Override
     CodeBlock getConstantValue() {
         if(!constantField) {

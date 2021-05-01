@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import groovy.xml.MarkupBuilder
 
 class JavaRequestSpec extends XmlSpec {
     def destroyWindow() {
@@ -976,6 +977,19 @@ class JavaRequestSpec extends XmlSpec {
 
     def await() {
         given:
+        StringWriter syncString = new StringWriter()
+        MarkupBuilder syncXml = new MarkupBuilder(syncString)
+        syncXml.xcb() {
+            struct(name: 'INT64') {
+                field(type: 'INT32', name: 'hi')
+                field(type: 'CARD32', name: 'lo')
+            }
+        }
+        XResult syncResult = new XResult(basePackage: 'com.github.moaxcp.x11client.protocol', header:'sync')
+        new XmlSlurper().parseText(syncString.toString()).nodeIterator().next().childNodes().each {
+            syncResult.addNode(it)
+        }
+        result.imports.put('sync', syncResult)
         xmlBuilder.xcb() {
             struct(name:'TRIGGER') {
                 field(type:'COUNTER', name:'counter')

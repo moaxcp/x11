@@ -39,11 +39,11 @@ class SumOfExpression implements Expression {
             JavaProperty typeProp = listProperty.x11Field.result.resolveXType(listProperty.x11Field.type).javaType.getJavaProperty(typeField)
             CodeBlock code
             if(typeProp.typeName == TypeName.BYTE) {
-                code = CodeBlock.of('Byte.toUnsignedInt(o.$L)', 'get' + typeField.capitalize())
+                code = CodeBlock.of('Byte.toUnsignedInt(o.$L())', 'get' + typeField.capitalize())
             } else if(typeProp.typName == TypeName.SHORT) {
-                code = CodeBlock.of('Short.toUnsignedInt(o.$L)', 'get' + typeField.capitalize())
+                code = CodeBlock.of('Short.toUnsignedInt(o.$L())', 'get' + typeField.capitalize())
             } else if(typeProp.typName == TypeName.INT) {
-                code = CodeBlock.of('Integer.toUnsignedInt(o.$L)', 'get' + typeField.capitalize())
+                code = CodeBlock.of('Integer.toUnsignedInt(o.$L())', 'get' + typeField.capitalize())
             } else {
                 throw new IllegalStateException("not sure how to handle $typeField")
             }
@@ -52,7 +52,7 @@ class SumOfExpression implements Expression {
             return builder.build()
         }
         CodeBlock.Builder builder = CodeBlock.builder()
-        builder.add('$L.stream().mapToInt().sum()', listProperty.name)
+        builder.add('$L.stream().mapToInt(mapToInt -> mapToInt).sum()', listProperty.name)
         return builder.build()
     }
 

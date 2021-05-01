@@ -42,6 +42,10 @@ class JavaTypeListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getDeclareAndReadCode() {
+        JavaObjectType propertyJavaType = x11Field.resolvedType.javaType
+        List<String> readParams = propertyJavaType.readParameters*.name
+        readParams.add('in')
+        CodeBlock readObjectBlock = CodeBlock.of('$T.read$L($L)', baseTypeName, baseTypeName.simpleName(), readParams.join(', '))
         if(lengthExpression instanceof EmptyExpression) {
             JavaProperty lengthProperty = javaType.getJavaProperty('length')
             CodeBlock lengthExpression = CodeBlock.of('$L', lengthProperty.name)
@@ -51,7 +55,7 @@ class JavaTypeListProperty extends JavaListProperty {
             return CodeBlock.builder()
                 .addStatement('$1T $2L = new $3T<>(length - javaStart)', typeName, name, ArrayList.class)
                 .beginControlFlow('while(javaStart < $L * 4)', lengthExpression)
-                .addStatement('$1T baseObject = $1T.read$2L(in)', baseTypeName, baseTypeName.simpleName())
+                .addStatement('$T baseObject = $L', baseTypeName, readObjectBlock)
                 .addStatement('$L.add(baseObject)', name)
                 .addStatement('javaStart += baseObject.getSize()')
                 .endControlFlow()
@@ -60,7 +64,7 @@ class JavaTypeListProperty extends JavaListProperty {
         return CodeBlock.builder()
             .addStatement('$1T $2L = new $3T<>($4L)', typeName, name, ArrayList.class, lengthExpression.getExpression(TypeName.INT))
             .beginControlFlow('for(int i = 0; i < $L; i++)', lengthExpression.expression)
-            .addStatement('$L.add($T.read$L(in))', name, baseTypeName, baseTypeName.simpleName())
+            .addStatement('$L.add($L)', name, readObjectBlock)
             .endControlFlow()
             .build()
     }

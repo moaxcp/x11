@@ -12,6 +12,14 @@ class JavaEventStruct extends JavaObjectType {
     int minOpcode
     int maxOpcode
 
+    JavaEventStruct(Map map) {
+        super(map)
+        allowedExtension = map.allowedExtension
+        allowGenericEvents = map.allowGenericEvents
+        minOpcode = map.minOpcode
+        maxOpcode = map.maxOpcode
+    }
+
     static JavaEventStruct javaEventStruct(XTypeEventStruct struct) {
         String simpleName = getEventStructJavaName(struct.name)
         ClassName superType = ClassName.get(struct.basePackage, 'XEvent')

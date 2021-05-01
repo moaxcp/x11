@@ -9,6 +9,11 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorTypeNa
 class JavaError extends JavaObjectType {
     int number
 
+    JavaError(Map map) {
+        super(map)
+        number = map.number
+    }
+
     static JavaError javaError(XTypeError error) {
         String simpleName = getErrorJavaName(error.name)
 

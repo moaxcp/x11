@@ -25,6 +25,13 @@ class JavaTypeProperty extends JavaProperty {
 
     @Override
     CodeBlock getReadCode() {
+        JavaObjectType propertyJavaType = x11Field.resolvedType.javaType
+        List<JavaReadParameter> readParams = propertyJavaType.readParameters
+        if(readParams) {
+            String joined = readParams*.name.join(', ')
+            return CodeBlock.of('$T.read$L($L, in)', typeName, typeName.simpleName(), joined)
+        }
+
         return CodeBlock.of('$T.read$L(in)', typeName, typeName.simpleName())
     }
 

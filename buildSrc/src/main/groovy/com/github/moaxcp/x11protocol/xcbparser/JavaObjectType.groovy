@@ -3,17 +3,42 @@ package com.github.moaxcp.x11protocol.xcbparser
 import com.github.moaxcp.x11protocol.xcbparser.expression.EmptyExpression
 import com.github.moaxcp.x11protocol.xcbparser.expression.ParamRefExpression
 import com.squareup.javapoet.*
-import javax.lang.model.element.Modifier
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToStorageTypeName
+import javax.lang.model.element.Modifier
 
 abstract class JavaObjectType implements JavaType {
     String basePackage
     String javaPackage
-    String simpleName
     Set<TypeName> superTypes = []
     ClassName className
+    List<JavaReadParameter> readParamInput
     List<JavaUnit> protocol
+
+    JavaObjectType(Map map) {
+        basePackage = map.basePackage
+        javaPackage = map.javaPackage
+        superTypes = map.superTypes
+        className = map.className
+        setProtocol(map.prtocol)
+    }
+
+    void setProtocol(List<JavaUnit> protocol) {
+        this.protocol = protocol
+        readParamInput = protocol.collect {JavaUnit property ->
+            if(property instanceof JavaListProperty) {
+                List<ParamRefExpression> paramRefs = property.lengthExpression?.paramRefs
+                return paramRefs.collect {
+                    XUnitField field = new XUnitField(result: property.x11Field.result, name: it.paramName, type: it.x11Type)
+                    return field.getJavaUnit(this)
+                }
+            }
+            return []
+        }.flatten()
+    }
+
+    String getSimpleName() {
+        return className.simpleName()
+    }
 
     ClassName getBuilderClassName() {
         ClassName.get(javaPackage, "${simpleName}.${simpleName}Builder")
@@ -28,7 +53,7 @@ abstract class JavaObjectType implements JavaType {
     }
 
     List<JavaReadParameter> getReadParameters() {
-        return protocol.findAll {
+        return readParamInput + protocol.findAll {
             it instanceof JavaReadParameter && it.readParam
         }.collect {
             (JavaReadParameter) it
@@ -134,14 +159,7 @@ abstract class JavaObjectType implements JavaType {
         List<ParameterSpec> readParams = readParameters.collect {
             return ParameterSpec.builder(it.readTypeName, it.name).build()
         }
-        List<ParameterSpec> params = properties.findAll {
-            it instanceof JavaListProperty
-        }.collect { JavaListProperty it ->
-            it.lengthExpression.paramRefs
-        }.flatten().collect { ParamRefExpression it ->
-            ParameterSpec.builder(x11PrimativeToStorageTypeName(it.x11Type), it.paramName).build()
-        }
-        methodBuilder.addParameters(readParams).addParameters(params)
+        methodBuilder.addParameters(readParams)
     }
 
     void addHeaderStatements(MethodSpec.Builder builder) {

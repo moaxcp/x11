@@ -10,6 +10,12 @@ class JavaRequest extends JavaObjectType {
     int opCode
     XTypeReply reply
 
+    JavaRequest(Map map) {
+        super(map)
+        opCode = map.opCode
+        reply = map.reply
+    }
+
     static JavaRequest javaRequest(XTypeRequest request) {
         String simpleName = getRequestJavaName(request.name)
         TypeName superType = request.reply ? ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.javaType.className) : ClassName.get(request.basePackage, 'OneWayRequest')

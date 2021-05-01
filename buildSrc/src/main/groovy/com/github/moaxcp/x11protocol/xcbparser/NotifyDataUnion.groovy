@@ -4,6 +4,10 @@ import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
 
 class NotifyDataUnion extends JavaUnion {
+    NotifyDataUnion(Map map) {
+        super(map)
+    }
+
     @Override
     List<TypeSpec> getTypeSpecs() {
         TypeSpec typeSpec = TypeSpec.interfaceBuilder(className)

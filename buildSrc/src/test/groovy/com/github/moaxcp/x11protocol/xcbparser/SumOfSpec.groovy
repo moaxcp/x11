@@ -8,7 +8,7 @@ class SumOfSpec extends XmlSpec {
         xmlBuilder.xcb() {
             typedef(oldname:'CARD32', newname:'ATOM')
             struct(name: 'STR') {
-                field(type: 'CHAR8', name: 'name_len')
+                field(type: 'CARD8', name: 'name_len')
                 list(type: 'char', name: 'name') {
                     fieldref('name_len')
                 }
@@ -83,8 +83,8 @@ class SumOfSpec extends XmlSpec {
                 for(int i = 0; i < Byte.toUnsignedInt(devicesLen); i++) {
                   devices.add(com.github.moaxcp.x11client.protocol.xproto.DeviceInfo.readDeviceInfo(in));
                 }
-                java.util.List<com.github.moaxcp.x11client.protocol.xproto.InputInfo> infos = new java.util.ArrayList<>(devices.stream().mapToInt(o -> Byte.toUnsignedInt(o.getNumClassInfo)).sum());
-                for(int i = 0; i < devices.stream().mapToInt(o -> Byte.toUnsignedInt(o.getNumClassInfo)).sum(); i++) {
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.InputInfo> infos = new java.util.ArrayList<>(devices.stream().mapToInt(o -> Byte.toUnsignedInt(o.getNumClassInfo())).sum());
+                for(int i = 0; i < devices.stream().mapToInt(o -> Byte.toUnsignedInt(o.getNumClassInfo())).sum(); i++) {
                   infos.add(com.github.moaxcp.x11client.protocol.xproto.InputInfo.readInputInfo(in));
                 }
                 java.util.List<com.github.moaxcp.x11client.protocol.xproto.Str> names = new java.util.ArrayList<>(Byte.toUnsignedInt(devicesLen));

@@ -7,6 +7,10 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeN
 
 class JavaStruct extends JavaObjectType {
 
+    JavaStruct(Map map) {
+        super(map)
+    }
+
     static JavaStruct javaStruct(XTypeStruct struct) {
         String simpleName = getStructJavaName(struct.name)
         JavaStruct javaType = new JavaStruct(

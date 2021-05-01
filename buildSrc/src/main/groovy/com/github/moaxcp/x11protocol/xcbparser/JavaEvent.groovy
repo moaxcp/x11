@@ -11,6 +11,13 @@ class JavaEvent extends JavaObjectType {
     boolean genericEvent
     int genericEventNumber
 
+    JavaEvent(Map map) {
+        super(map)
+        number = map.number
+        genericEvent = map.genericEvent
+        genericEventNumber = map.genericEventNumber ?: -1
+    }
+
     static JavaEvent javaEvent(XTypeEvent event) {
         String simpleName = getEventJavaName(event.name)
         ClassName superType = ClassName.get(event.basePackage, 'XEvent')

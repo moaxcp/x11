@@ -10,6 +10,10 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumClassNa
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
 
 class BehaviorUnion extends JavaUnion {
+    BehaviorUnion(Map map) {
+        super(map)
+    }
+
     @Override
     List<TypeSpec> getTypeSpecs() {
         return [TypeSpec.interfaceBuilder(className)

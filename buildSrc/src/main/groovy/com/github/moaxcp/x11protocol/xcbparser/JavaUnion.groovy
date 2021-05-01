@@ -9,6 +9,10 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
 class JavaUnion extends JavaObjectType {
 
+    JavaUnion(Map map) {
+        super(map)
+    }
+
     static JavaUnion javaUnion(XTypeUnion union) {
         String simpleName = getUnionJavaName(union.name)
         JavaUnion javaUnion = "${fromUpperCamelToLowerCamel(simpleName)}JavaUnion"(

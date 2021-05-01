@@ -6,6 +6,10 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getReplyJavaNa
 import static com.github.moaxcp.x11protocol.generator.Conventions.getReplyTypeName
 
 class JavaReply extends JavaObjectType {
+    JavaReply(Map map) {
+        super(map)
+    }
+
     static JavaReply javaReply(XTypeReply reply) {
         String simpleName= getReplyJavaName(reply.name)
 
