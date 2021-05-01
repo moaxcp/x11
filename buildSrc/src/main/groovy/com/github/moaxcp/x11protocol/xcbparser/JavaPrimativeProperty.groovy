@@ -148,14 +148,19 @@ class JavaPrimativeProperty extends JavaProperty {
             ]
         }
         if(enumClassName) {
-
+            CodeBlock conversion
+            if(memberTypeName == TypeName.BOOLEAN) {
+                conversion = CodeBlock.of('$L.getValue() > 0', name)
+            } else {
+                conversion = CodeBlock.of('($2T) $1L.getValue()', name, memberTypeName)
+            }
             if(bitcaseInfo) {
                 methods += [
                     MethodSpec.methodBuilder(name)
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(enumClassName, name)
                         .returns(javaType.builderClassName)
-                        .addStatement('this.$1L = ($2T) $1L.getValue()', name, memberTypeName)
+                        .addStatement('this.$L = $L', name, conversion)
                         .addStatement('$LEnable($T.$L)', bitcaseInfo.maskField, bitcaseInfo.enumType, bitcaseInfo.enumItem)
                         .addStatement('return this')
                         .build()
@@ -166,7 +171,7 @@ class JavaPrimativeProperty extends JavaProperty {
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(enumClassName, name)
                         .returns(javaType.builderClassName)
-                        .addStatement('this.$1L = ($2T) $1L.getValue()', name, memberTypeName)
+                        .addStatement('this.$L = $L', name, conversion)
                         .addStatement('return this')
                         .build(),
                     MethodSpec.methodBuilder(name)
