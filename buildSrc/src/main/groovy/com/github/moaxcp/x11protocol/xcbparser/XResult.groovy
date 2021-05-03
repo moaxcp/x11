@@ -52,9 +52,14 @@ class XResult {
             .addSuperinterface(ClassName.get(basePackage, 'XProtocolPlugin'))
 
         builder.addField(
-            FieldSpec.builder(String.class, 'name', Modifier.PRIVATE, Modifier.FINAL)
+            FieldSpec.builder(String.class, 'NAME', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .initializer('"$L"', extensionXName)
-                .addAnnotation(Getter.class)
+                .build())
+
+        builder.addMethod(MethodSpec.methodBuilder('getName')
+                .addModifiers(Modifier.PUBLIC)
+                .returns(String.class)
+                .addStatement('return NAME')
                 .build())
 
         builder.addField(
@@ -104,7 +109,7 @@ class XResult {
 
         for(XTypeEvent event : events.values()) {
             if(event.number != 35) {
-                supportedEvent.beginControlFlow('if(number + firstEvent == $L)', event.number)
+                supportedEvent.beginControlFlow('if(number - firstEvent == $L)', event.number)
                 supportedEvent.addStatement('return true')
                 supportedEvent.endControlFlow()
             }
@@ -120,7 +125,7 @@ class XResult {
             .addParameter(byte.class, 'code')
 
         for(XTypeError error : errors.values()) {
-            supportedError.beginControlFlow('if(code + firstError == $L)', error.number)
+            supportedError.beginControlFlow('if(code - firstError == $L)', error.number)
             supportedError.addStatement('return true')
             supportedError.endControlFlow()
         }
@@ -139,8 +144,8 @@ class XResult {
 
         for(XTypeEvent event : events.values()) {
             if(event.number != 35) {
-                readEvent.beginControlFlow('if(number + firstEvent == $L)', event.number)
-                readEvent.addStatement('return $T.read$L(sentEvent, in)', event.javaType.className, event.javaType.className.simpleName())
+                readEvent.beginControlFlow('if(number - firstEvent == $L)', event.number)
+                readEvent.addStatement('return $T.read$L(firstEvent, sentEvent, in)', event.javaType.className, event.javaType.className.simpleName())
                 readEvent.endControlFlow()
             }
         }
@@ -157,8 +162,8 @@ class XResult {
             .addException(IOException.class)
 
         for(XTypeError error : errors.values()) {
-            readError.beginControlFlow('if(code + firstError == $L)', error.number)
-            readError.addStatement('return $T.read$L(in)', error.javaType.className, error.javaType.className.simpleName())
+            readError.beginControlFlow('if(code - firstError == $L)', error.number)
+            readError.addStatement('return $T.read$L(firstError, in)', error.javaType.className, error.javaType.className.simpleName())
             readError.endControlFlow()
         }
         readError.addStatement('throw new $T("code " + code + " is not supported")', IllegalArgumentException.class)

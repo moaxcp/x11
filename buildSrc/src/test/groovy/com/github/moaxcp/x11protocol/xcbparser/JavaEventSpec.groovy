@@ -46,6 +46,8 @@ class JavaEventSpec extends XmlSpec {
             @lombok.Builder
             public class KeyPressEvent implements com.github.moaxcp.x11client.protocol.XEvent {
               public static final byte NUMBER = 2;
+              
+              private byte firstEventOffset;
             
               private boolean sentEvent;
             
@@ -75,11 +77,16 @@ class JavaEventSpec extends XmlSpec {
             
               @java.lang.Override
               public byte getResponseCode() {
+                return firstEventOffset + NUMBER;
+              }
+              
+              @java.lang.Override
+              public byte getNumber() {
                 return NUMBER;
               }
             
               public static com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent readKeyPressEvent(
-                  boolean sentEvent, com.github.moaxcp.x11client.protocol.X11Input in) throws
+                  byte firstEventOffset, boolean sentEvent, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
                 byte detail = in.readCard8();
                 short sequenceNumber = in.readCard16();
@@ -95,6 +102,7 @@ class JavaEventSpec extends XmlSpec {
                 boolean sameScreen = in.readBool();
                 in.readPad(1);
                 com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.builder();
+                javaBuilder.firstEventOffset(firstEventOffset);
                 javaBuilder.detail(detail);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.time(time);
@@ -114,7 +122,7 @@ class JavaEventSpec extends XmlSpec {
             
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
-                out.writeCard8(sentEvent ? 0b10000000 & NUMBER : NUMBER);
+                out.writeCard8(sentEvent ? 0b10000000 & getResponseCode() : getResponseCode());
                 out.writeCard8(detail);
                 out.writeCard16(sequenceNumber);
                 out.writeCard32(time);

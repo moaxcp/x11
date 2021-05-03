@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol
 
+import com.github.moaxcp.x11protocol.xcbparser.XParser
 import com.github.moaxcp.x11protocol.xcbparser.XResult
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.Node
@@ -13,6 +14,11 @@ abstract class XmlSpec extends Specification {
 
     GPathResult getGPathResult() {
         new XmlSlurper().parseText(writer.toString())
+    }
+
+    void parseXml() {
+        XParser parser = new XParser(xml: getGPathResult(), result: result)
+        parser.parseXml()
     }
 
     Node getFirstChild() {
