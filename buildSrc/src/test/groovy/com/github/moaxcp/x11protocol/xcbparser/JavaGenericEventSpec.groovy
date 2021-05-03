@@ -36,6 +36,8 @@ class JavaGenericEventSpec extends XmlSpec {
             public class ConfigureNotifyEvent implements com.github.moaxcp.x11client.protocol.XGenericEvent {
               public static final byte NUMBER = 35;
             
+              private byte firstEventOffset;
+            
               private boolean sentEvent;
             
               private byte extension;
@@ -68,12 +70,18 @@ class JavaGenericEventSpec extends XmlSpec {
             
               @java.lang.Override
               public byte getResponseCode() {
+                return (byte) (firstEventOffset + NUMBER);
+              }
+            
+              @java.lang.Override
+              public byte getNumber() {
                 return NUMBER;
               }
             
               public static com.github.moaxcp.x11client.protocol.xproto.ConfigureNotifyEvent readConfigureNotifyEvent(
-                  boolean sentEvent, byte extension, short sequenceNumber, int length, short eventType,
-                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                  byte firstEventOffset, boolean sentEvent, byte extension, short sequenceNumber, int length,
+                  short eventType, com.github.moaxcp.x11client.protocol.X11Input in) throws
+                  java.io.IOException {
                 in.readPad(2);
                 int event = in.readCard32();
                 int window = in.readCard32();
@@ -103,12 +111,13 @@ class JavaGenericEventSpec extends XmlSpec {
                 javaBuilder.pixmapFlags(pixmapFlags);
             
                 javaBuilder.sentEvent(sentEvent);
+                javaBuilder.firstEventOffset(firstEventOffset);
                 return javaBuilder.build();
               }
             
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
-                out.writeCard8(sentEvent ? 0b10000000 & NUMBER : NUMBER);
+                out.writeCard8(sentEvent ? (byte) (0b10000000 & getResponseCode()) : getResponseCode());
                 out.writeCard8(extension);
                 out.writeCard16(sequenceNumber);
                 out.writeCard32(getLength() - 32);

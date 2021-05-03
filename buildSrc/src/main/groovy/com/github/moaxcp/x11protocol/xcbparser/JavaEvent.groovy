@@ -35,7 +35,7 @@ class JavaEvent extends JavaObjectType {
         javaEvent.protocol = event.toJavaProtocol(javaEvent)
         JavaProperty p = javaEvent.getJavaProperty('NUMBER')
         p.constantField = true
-        p.writeValueExpression = CodeBlock.of('sentEvent ? 0b10000000 & NUMBER : NUMBER')
+        p.writeValueExpression = CodeBlock.of('sentEvent ? (byte) (0b10000000 & getResponseCode()) : getResponseCode()')
         if(javaEvent.fixedSize && javaEvent.fixedSize.get() < 32) {
             javaEvent.protocol.add(new JavaPad(bytes: 32 - javaEvent.fixedSize.get()))
         }
@@ -58,6 +58,8 @@ class JavaEvent extends JavaObjectType {
 
     @Override
     void addFields(TypeSpec.Builder typeBuilder) {
+        typeBuilder.addField(FieldSpec.builder(TypeName.BYTE, 'firstEventOffset', Modifier.PRIVATE)
+            .build())
         typeBuilder.addField(FieldSpec.builder(TypeName.BOOLEAN, 'sentEvent', Modifier.PRIVATE)
             .build())
         super.addFields(typeBuilder)
@@ -69,14 +71,22 @@ class JavaEvent extends JavaObjectType {
             .addAnnotation(Override)
             .returns(TypeName.BYTE)
             .addModifiers(Modifier.PUBLIC)
-            .addStatement('return NUMBER')
+            .addStatement('return (byte) (firstEventOffset + NUMBER)')
             .build())
+
+        typeBuilder.addMethod(MethodSpec.methodBuilder('getNumber')
+                .addAnnotation(Override)
+                .returns(TypeName.BYTE)
+                .addModifiers(Modifier.PUBLIC)
+                .addStatement('return NUMBER')
+                .build())
 
         super.addMethods(typeBuilder)
     }
 
     @Override
     void addReadParameters(MethodSpec.Builder methodBuilder) {
+        methodBuilder.addParameter(ParameterSpec.builder(TypeName.BYTE, 'firstEventOffset').build())
         methodBuilder.addParameter(ParameterSpec.builder(TypeName.BOOLEAN, 'sentEvent').build())
         super.addReadParameters(methodBuilder)
     }
@@ -109,7 +119,8 @@ class JavaEvent extends JavaObjectType {
 
     @Override
     void addBuilderStatement(MethodSpec.Builder methodBuilder, CodeBlock... fields) {
-        CodeBlock.Builder startBuilder = CodeBlock.builder().addStatement('javaBuilder.$L($L)', 'sentEvent', 'sentEvent')
+        CodeBlock.Builder startBuilder = CodeBlock.builder().addStatement('javaBuilder.$1L($1L)', 'sentEvent')
+            .addStatement('javaBuilder.$1L($1L)', 'firstEventOffset')
         super.addBuilderStatement(methodBuilder, startBuilder.build())
         if(!fixedSize) {
             methodBuilder.beginControlFlow('if(javaBuilder.getSize() < 32)')

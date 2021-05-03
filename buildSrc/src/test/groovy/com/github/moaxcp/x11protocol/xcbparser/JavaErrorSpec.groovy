@@ -25,6 +25,8 @@ class JavaErrorSpec extends XmlSpec {
             @lombok.Builder
             public class RequestError implements com.github.moaxcp.x11client.protocol.XError {
               public static final byte CODE = 1;
+              
+              private byte firstErrorOffset;
             
               private short sequenceNumber;
             
@@ -36,11 +38,12 @@ class JavaErrorSpec extends XmlSpec {
             
               @java.lang.Override
               public byte getCode() {
-                return CODE;
+                return (byte) (firstErrorOffset + CODE);
               }
             
               public static com.github.moaxcp.x11client.protocol.xproto.RequestError readRequestError(
-                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                  byte firstErrorOffset, com.github.moaxcp.x11client.protocol.X11Input in) throws
+                  java.io.IOException {
                 short sequenceNumber = in.readCard16();
                 int badValue = in.readCard32();
                 short minorOpcode = in.readCard16();
@@ -52,13 +55,15 @@ class JavaErrorSpec extends XmlSpec {
                 javaBuilder.badValue(badValue);
                 javaBuilder.minorOpcode(minorOpcode);
                 javaBuilder.majorOpcode(majorOpcode);
+                
+                javaBuilder.firstErrorOffset(firstErrorOffset);
                 return javaBuilder.build();
               }
             
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
                 out.writeCard8(getResponseCode());
-                out.writeCard8(CODE);
+                out.writeCard8(getCode());
                 out.writeCard16(sequenceNumber);
                 out.writeCard32(badValue);
                 out.writeCard16(minorOpcode);

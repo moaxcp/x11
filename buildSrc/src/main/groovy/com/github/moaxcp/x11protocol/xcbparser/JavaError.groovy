@@ -28,6 +28,7 @@ class JavaError extends JavaObjectType {
         javaError.protocol = error.toJavaProtocol(javaError)
         JavaProperty c = javaError.getJavaProperty('CODE')
         c.constantField = true
+        c.writeValueExpression = CodeBlock.of('getCode()')
         JavaProperty r = javaError.getJavaProperty('RESPONSECODE')
         r.constantField = true
         r.localOnly = true
@@ -39,15 +40,27 @@ class JavaError extends JavaObjectType {
     }
 
     @Override
+    void addFields(TypeSpec.Builder typeBuilder) {
+        typeBuilder.addField(FieldSpec.builder(TypeName.BYTE, 'firstErrorOffset', Modifier.PRIVATE)
+                .build())
+        super.addFields(typeBuilder)
+    }
+
+    @Override
     void addMethods(TypeSpec.Builder typeBuilder) {
         typeBuilder.addMethod(MethodSpec.methodBuilder('getCode')
             .addAnnotation(Override)
             .returns(TypeName.BYTE)
             .addModifiers(Modifier.PUBLIC)
-            .addStatement('return CODE')
+            .addStatement('return (byte) (firstErrorOffset + CODE)')
             .build())
 
         super.addMethods(typeBuilder)
+    }
+
+    @Override
+    void addReadParameters(MethodSpec.Builder methodBuilder) {
+        methodBuilder.addParameter(ParameterSpec.builder(TypeName.BYTE, 'firstErrorOffset').build())
     }
 
     @Override
@@ -63,7 +76,8 @@ class JavaError extends JavaObjectType {
 
     @Override
     void addBuilderStatement(MethodSpec.Builder methodBuilder, CodeBlock... fields) {
-        super.addBuilderStatement(methodBuilder)
+        CodeBlock.Builder startBuilder = CodeBlock.builder().addStatement('javaBuilder.$1L($1L)', 'firstErrorOffset')
+        super.addBuilderStatement(methodBuilder, startBuilder.build())
         if(fixedSize && fixedSize.get() >= 32) {
             return
         }
