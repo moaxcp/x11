@@ -25,6 +25,7 @@ class JavaEvent extends JavaObjectType {
             superType = ClassName.get(event.basePackage, 'XGenericEvent')
         }
         JavaEvent javaEvent = new JavaEvent(
+            result: event.result,
             superTypes: event.superTypes + superType,
             basePackage: event.basePackage,
             javaPackage: event.javaPackage,

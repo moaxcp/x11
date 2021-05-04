@@ -23,7 +23,7 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class DestroyWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+            public class DestroyWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               public static final byte OPCODE = 4;
             
               private int window;
@@ -99,7 +99,7 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class PolyPoint implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+            public class PolyPoint implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               public static final byte OPCODE = 64;
             
               private byte coordinateMode;
@@ -215,7 +215,7 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryTextExtends implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+            public class QueryTextExtends implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               public static final byte OPCODE = 48;
             
               private int font;
@@ -300,7 +300,7 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Enable implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.EnableReply> {
+            public class Enable implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.EnableReply>, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               public static final byte OPCODE = 0;
             
               public com.github.moaxcp.x11client.protocol.XReplyFunction<com.github.moaxcp.x11client.protocol.xproto.EnableReply> getReplyFunction(
@@ -511,7 +511,7 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class CreateWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+            public class CreateWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               public static final byte OPCODE = 1;
             
               private byte depth;
@@ -1015,7 +1015,7 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Await implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+            public class Await implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               public static final byte OPCODE = 7;
             
               @lombok.NonNull

@@ -24,6 +24,7 @@ class JavaEventStruct extends JavaObjectType {
         String simpleName = getEventStructJavaName(struct.name)
         ClassName superType = ClassName.get(struct.basePackage, 'XEvent')
         JavaEventStruct javaEventStruct = new JavaEventStruct(
+                result: struct.result,
                 superTypes: [superType],
                 basePackage: struct.basePackage,
                 javaPackage: struct.javaPackage,

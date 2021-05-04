@@ -25,7 +25,7 @@ class JavaStructSpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Format implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class Format implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private byte depth;
             
               private byte bitsPerPixel;
@@ -97,7 +97,7 @@ class JavaStructSpec extends XmlSpec {
         javaStruct.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Screen implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class Screen implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private int root;
             
               private int defaultColormap;
@@ -211,7 +211,7 @@ class JavaStructSpec extends XmlSpec {
         javaStruct.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class DeviceTimeCoord implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class DeviceTimeCoord implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private int time;
             
               @lombok.NonNull
@@ -271,7 +271,7 @@ class JavaStructSpec extends XmlSpec {
         javaStruct.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class SetKeyType implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class SetKeyType implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private boolean preserve;
             
               private byte nMapEntries;
@@ -343,7 +343,7 @@ class JavaStructSpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class SetupRequest implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class SetupRequest implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private byte byteOrder;
             
               private short protocolMajorVersion;

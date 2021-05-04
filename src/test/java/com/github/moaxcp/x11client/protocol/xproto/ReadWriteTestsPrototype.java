@@ -22,7 +22,7 @@ public class ReadWriteTestsPrototype {
     in = new X11InputStream(inBytes);
   }
 
-  private <T extends ClientMessageDataUnion> void assertWriteObjectEqualsReadObject(T message, ThrowingBiFunction<X11Input, Byte, T, IOException> readFunction) throws IOException {
+  private void assertWriteObjectEqualsReadObject(ClientMessageDataUnion message, ThrowingBiFunction<X11Input, Byte, ClientMessageDataUnion, IOException> readFunction) throws IOException {
     message.write(out);
     convertToInput();
     ClientMessageDataUnion result = readFunction.apply(in, message.getFormat());
@@ -38,14 +38,14 @@ public class ReadWriteTestsPrototype {
     assertThat(result.getSize()).isEqualTo(outBytes.size());
   }
 
-  private void assertWriteObjectEqualsReadObject(XError error, ThrowingFunction<X11Input, XError, IOException> readFunction) throws IOException {
+  private void assertWriteObjectEqualsReadObject(XError error, ThrowingBiFunction<Byte, X11Input, XError, IOException> readFunction) throws IOException {
     error.write(out);
     convertToInput();
     byte responseCode = in.readCard8();
     byte code = in.readCard8();
     assertThat(responseCode).isEqualTo(error.getResponseCode());
     assertThat(code).isEqualTo(error.getCode());
-    XError result = readFunction.apply(in);
+    XError result = readFunction.apply((byte) 0, in);
     assertThat(result).isEqualTo(error);
     assertThat(result.getSize()).isEqualTo(outBytes.size());
   }
@@ -56,6 +56,10 @@ public class ReadWriteTestsPrototype {
 
   private interface ThrowingBiFunction<T1, T2, R, E extends Exception> {
     R apply(T1 obj1, T2 obj2) throws E;
+  }
+
+  private interface ThrowingTriFunction<T1, T2, T3, R, E extends Exception> {
+    R apply(T1 obj1, T2 obj2, T3 obj3) throws E;
   }
 
   @Test

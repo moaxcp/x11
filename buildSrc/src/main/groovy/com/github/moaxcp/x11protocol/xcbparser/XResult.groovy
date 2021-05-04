@@ -46,6 +46,21 @@ class XResult {
         return "$basePackage.$header"
     }
 
+    String getPluginXObjectInterfaceName() {
+        return getJavaName(header.capitalize()) + 'Object'
+    }
+
+    TypeSpec getPluginXObjectInterface() {
+        TypeSpec.Builder builder = TypeSpec.interfaceBuilder(getPluginXObjectInterfaceName())
+            .addSuperinterface(ClassName.get(basePackage, 'XObject'))
+            .addMethod(MethodSpec.methodBuilder('getPluginName')
+                    .returns(String.class)
+                    .addModifiers(Modifier.DEFAULT, Modifier.PUBLIC)
+                    .addStatement('return $T.NAME', getPluginClassName())
+                    .build())
+        return builder.build()
+    }
+
     TypeSpec getXPlugin() {
         TypeSpec.Builder builder = TypeSpec.classBuilder(getPluginClassName())
             .addModifiers(Modifier.PUBLIC)

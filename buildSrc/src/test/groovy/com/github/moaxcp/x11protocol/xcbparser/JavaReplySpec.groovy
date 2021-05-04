@@ -33,7 +33,7 @@ class JavaReplySpec extends XmlSpec {
         javaRequest.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryTree implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply> {
+            public class QueryTree implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply>, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               public static final byte OPCODE = 15;
             
               private int window;
@@ -82,7 +82,7 @@ class JavaReplySpec extends XmlSpec {
         javaReply.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryTreeReply implements com.github.moaxcp.x11client.protocol.XReply {
+            public class QueryTreeReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private short sequenceNumber;
             
               private int root;
@@ -170,7 +170,7 @@ class JavaReplySpec extends XmlSpec {
         javaReply.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class TranslateCoordinatesReply implements com.github.moaxcp.x11client.protocol.XReply {
+            public class TranslateCoordinatesReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private boolean sameScreen;
             
               private short sequenceNumber;
@@ -259,7 +259,7 @@ class JavaReplySpec extends XmlSpec {
         javaReply.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class ListHostsReply implements com.github.moaxcp.x11client.protocol.XReply {
+            public class ListHostsReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private byte mode;
             
               private short sequenceNumber;
@@ -358,7 +358,7 @@ class JavaReplySpec extends XmlSpec {
         javaReply.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryExtensionReply implements com.github.moaxcp.x11client.protocol.XReply {
+            public class QueryExtensionReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private short sequenceNumber;
             
               private boolean present;

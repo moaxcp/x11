@@ -33,7 +33,7 @@ class JavaGenericEventSpec extends XmlSpec {
         javaEvent.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class ConfigureNotifyEvent implements com.github.moaxcp.x11client.protocol.XGenericEvent {
+            public class ConfigureNotifyEvent implements com.github.moaxcp.x11client.protocol.XGenericEvent, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               public static final byte NUMBER = 35;
             
               private byte firstEventOffset;

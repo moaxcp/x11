@@ -29,8 +29,8 @@ class ProtocolGenerator {
             }
         }
 
-        JavaFile pluginFile = JavaFile.builder(result.javaPackage, result.getXPlugin()).skipJavaLangImports(true).build()
-        pluginFile.writeTo(outputSrc)
+        writeToFile(result.javaPackage, result.getPluginXObjectInterface())
+        writeToFile(result.javaPackage, result.getXPlugin())
 
         String pluginClass = result.pluginClassName.canonicalName()
         File services = new File(outputResources, "META-INF/services/${basePackage}.XProtocolPlugin")

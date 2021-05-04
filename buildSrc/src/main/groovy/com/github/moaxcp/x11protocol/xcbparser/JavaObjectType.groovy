@@ -7,6 +7,7 @@ import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
 
 abstract class JavaObjectType implements JavaType {
+    XResult result
     String basePackage
     String javaPackage
     Set<TypeName> superTypes = []
@@ -15,9 +16,10 @@ abstract class JavaObjectType implements JavaType {
     List<JavaUnit> protocol
 
     JavaObjectType(Map map) {
+        result = map.result
         basePackage = map.basePackage
         javaPackage = map.javaPackage
-        superTypes = map.superTypes
+        superTypes = map.superTypes ? map.superTypes + ClassName.get(javaPackage, result.getPluginXObjectInterfaceName()) : [ClassName.get(javaPackage, result.getPluginXObjectInterfaceName())]
         className = map.className
         setProtocol(map.prtocol)
     }

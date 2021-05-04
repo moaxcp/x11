@@ -14,6 +14,7 @@ class JavaStruct extends JavaObjectType {
     static JavaStruct javaStruct(XTypeStruct struct) {
         String simpleName = getStructJavaName(struct.name)
         JavaStruct javaType = new JavaStruct(
+            result: struct.result,
             superTypes: struct.superTypes + ClassName.get(struct.basePackage, 'XStruct'),
             basePackage: struct.basePackage,
             javaPackage: struct.javaPackage,

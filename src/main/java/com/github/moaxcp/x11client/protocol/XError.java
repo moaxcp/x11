@@ -7,6 +7,7 @@ public interface XError extends XObject, XResponse {
     return 0;
   }
   byte getCode();
+  byte getFirstErrorOffset();
   short getMinorOpcode();
   byte getMajorOpcode();
   void write(X11Output out) throws IOException;

@@ -23,7 +23,7 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Window implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class Window implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               @lombok.NonNull
               private java.util.List<java.lang.Long> windowModifiers;
             

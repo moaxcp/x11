@@ -18,6 +18,7 @@ class JavaError extends JavaObjectType {
         String simpleName = getErrorJavaName(error.name)
 
         JavaError javaError = new JavaError(
+            result: error.result,
             superTypes: error.superTypes + ClassName.get(error.basePackage, 'XError'),
             basePackage: error.basePackage,
             javaPackage: error.javaPackage,

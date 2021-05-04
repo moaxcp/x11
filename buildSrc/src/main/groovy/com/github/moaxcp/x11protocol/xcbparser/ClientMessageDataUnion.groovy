@@ -12,7 +12,7 @@ class ClientMessageDataUnion extends JavaUnion {
     List<TypeSpec> getTypeSpecs() {
         TypeSpec typeSpec = TypeSpec.interfaceBuilder(className)
             .addModifiers(Modifier.PUBLIC)
-            .addSuperinterface(ClassName.get(basePackage, 'XObject'))
+            .addSuperinterfaces(superTypes)
             .addMethod(readMethod)
             .addMethod(MethodSpec.methodBuilder('write')
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)

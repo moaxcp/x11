@@ -59,7 +59,7 @@ class SumOfSpec extends XmlSpec {
         javaReply.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class ListInputDevicesReply implements com.github.moaxcp.x11client.protocol.XReply {
+            public class ListInputDevicesReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private byte xiReplyType;
             
               private short sequenceNumber;

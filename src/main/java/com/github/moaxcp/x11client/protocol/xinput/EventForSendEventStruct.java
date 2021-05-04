@@ -16,7 +16,7 @@ public class EventForSendEventStruct implements XStruct {
   XEvent event;
 
   public EventForSendEventStruct(XEvent event) {
-    if(!event.getPluginName().equals("Input") && !(event.getResponseCode() >= 0 && event.getResponseCode() <= 16)) {
+    if(!event.getPluginName().equals("Input") && !(event.getNumber() >= 0 && event.getNumber() <= 16)) {
       throw new IllegalArgumentException("Event does not match allowed. Plugin: Input, NUMBER >= 0 and <= 16.");
     }
     this.event = event;

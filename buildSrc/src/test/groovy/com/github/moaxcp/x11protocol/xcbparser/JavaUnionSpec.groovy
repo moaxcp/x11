@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.squareup.javapoet.ClassName
 
 class JavaUnionSpec extends XmlSpec {
     def 'create behavior union'() {
@@ -79,9 +78,6 @@ class JavaUnionSpec extends XmlSpec {
         JavaStruct defaultStruct = result.resolveXType('DefaultBehavior').javaType
 
         then:
-        union.basePackage == result.basePackage
-        union.simpleName == 'BehaviorUnion'
-        union.className == ClassName.get(result.javaPackage, 'BehaviorUnion')
         union.typeSpecs[0].toString() == '''\
             public interface BehaviorUnion {
               static com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion readBehaviorUnion(
@@ -107,7 +103,75 @@ class JavaUnionSpec extends XmlSpec {
             }
         '''.stripIndent()
 
-        common.superTypes == [union.className, ClassName.get(union.basePackage, 'XStruct')] as Set
-        defaultStruct.superTypes == [union.className, ClassName.get(union.basePackage, 'XStruct')] as Set
+        common.typeSpecs[0].toString() == '''\
+            @lombok.Value
+            @lombok.Builder
+            public class CommonBehavior implements com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion, com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+              private byte type;
+            
+              private byte data;
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.CommonBehavior readCommonBehavior(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                byte type = in.readCard8();
+                byte data = in.readCard8();
+                com.github.moaxcp.x11client.protocol.xproto.CommonBehavior.CommonBehaviorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.CommonBehavior.builder();
+                javaBuilder.type(type);
+                javaBuilder.data(data);
+                return javaBuilder.build();
+              }
+            
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8(type);
+                out.writeCard8(data);
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 2;
+              }
+            
+              public static class CommonBehaviorBuilder {
+                public int getSize() {
+                  return 2;
+                }
+              }
+            }
+        '''.stripIndent()
+
+        defaultStruct.typeSpecs[0].toString() == '''\
+            @lombok.Value
+            @lombok.Builder
+            public class DefaultBehavior implements com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion, com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+              private byte type;
+            
+              public static com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior readDefaultBehavior(
+                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                byte type = in.readCard8();
+                in.readPad(1);
+                com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior.DefaultBehaviorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior.builder();
+                javaBuilder.type(type);
+                return javaBuilder.build();
+              }
+            
+              @java.lang.Override
+              public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
+                out.writeCard8(type);
+                out.writePad(1);
+              }
+            
+              @java.lang.Override
+              public int getSize() {
+                return 2;
+              }
+            
+              public static class DefaultBehaviorBuilder {
+                public int getSize() {
+                  return 2;
+                }
+              }
+            }
+        '''.stripIndent()
     }
 }

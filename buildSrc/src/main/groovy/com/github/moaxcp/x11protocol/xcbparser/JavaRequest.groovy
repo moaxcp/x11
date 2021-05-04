@@ -20,6 +20,7 @@ class JavaRequest extends JavaObjectType {
         String simpleName = getRequestJavaName(request.name)
         TypeName superType = request.reply ? ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.javaType.className) : ClassName.get(request.basePackage, 'OneWayRequest')
         JavaRequest javaRequest = new JavaRequest(
+            result: request.result,
             superTypes: request.superTypes + superType,
             basePackage: request.basePackage,
             javaPackage: request.javaPackage,

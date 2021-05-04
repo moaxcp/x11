@@ -23,7 +23,7 @@ class JavaErrorSpec extends XmlSpec {
         javaError.typeSpecs[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class RequestError implements com.github.moaxcp.x11client.protocol.XError {
+            public class RequestError implements com.github.moaxcp.x11client.protocol.XError, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               public static final byte CODE = 1;
               
               private byte firstErrorOffset;

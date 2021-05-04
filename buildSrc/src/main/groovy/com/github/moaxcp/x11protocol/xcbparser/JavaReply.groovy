@@ -14,6 +14,7 @@ class JavaReply extends JavaObjectType {
         String simpleName= getReplyJavaName(reply.name)
 
         JavaReply javaReply = new JavaReply(
+            result: reply.result,
             superTypes: reply.superTypes + ClassName.get(reply.basePackage, 'XReply'),
             basePackage: reply.basePackage,
             javaPackage: reply.javaPackage,

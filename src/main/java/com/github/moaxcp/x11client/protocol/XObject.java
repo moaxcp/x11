@@ -23,5 +23,5 @@ public interface XObject {
    */
   int getSize();
 
-  //String getPluginName();
+  String getPluginName();
 }

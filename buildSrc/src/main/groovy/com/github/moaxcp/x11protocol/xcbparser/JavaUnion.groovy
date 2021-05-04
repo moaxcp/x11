@@ -16,6 +16,8 @@ class JavaUnion extends JavaObjectType {
     static JavaUnion javaUnion(XTypeUnion union) {
         String simpleName = getUnionJavaName(union.name)
         JavaUnion javaUnion = "${fromUpperCamelToLowerCamel(simpleName)}JavaUnion"(
+            result: union.result,
+            superTypes: union.superTypes + ClassName.get(union.basePackage, 'XObject'),
             basePackage: union.basePackage,
             javaPackage: union.javaPackage,
             simpleName: simpleName,

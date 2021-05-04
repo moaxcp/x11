@@ -31,7 +31,7 @@ class JavaEnumPropertySpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Struct implements com.github.moaxcp.x11client.protocol.XStruct {
+            public class Struct implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
               private byte mask;
             
               public static com.github.moaxcp.x11client.protocol.xproto.Struct readStruct(
