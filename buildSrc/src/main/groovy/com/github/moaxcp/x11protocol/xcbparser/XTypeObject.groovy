@@ -25,7 +25,7 @@ abstract class XTypeObject extends XType implements XTypeUnit {
 
     XUnitField getField(String name) {
         return protocol.find {
-            it.name == name
+            it.hasProperty('name') && it.name == name
         }
     }
 
@@ -74,12 +74,27 @@ abstract class XTypeObject extends XType implements XTypeUnit {
         }
     }
 
-    XUnit parseXUnit(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
+    static XUnit parseXUnit(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
         switch(node.name()) {
             case 'field':
                 return xUnitField(result, node, bitcaseInfo)
             case 'list':
                 return xUnitListField(result, node, bitcaseInfo)
+            default:
+                throw new IllegalArgumentException("cannot parse ${node.name()}")
+        }
+    }
+
+    static XUnit parseXUnit(XResult result, Node node, XCaseInfo caseInfo) {
+        switch(node.name()) {
+            case 'required_start_align':
+                return null
+            case 'pad':
+                return xUnitPad(result, node, caseInfo)
+            case 'field':
+                return xUnitField(result, node, caseInfo)
+            case 'list':
+                return xUnitListField(result, node, caseInfo)
             default:
                 throw new IllegalArgumentException("cannot parse ${node.name()}")
         }
@@ -110,7 +125,29 @@ abstract class XTypeObject extends XType implements XTypeUnit {
     }
 
     List<XUnit> parseCases(XResult result, Node node) {
-        return []
+        String fieldRef = node.childNodes().find{Node it -> it.name() == 'fieldref'}.text()
+        List<XUnit> fields = []
+        node.childNodes().each { Node switchNode ->
+            if(switchNode.name() == 'required_start_align') {
+
+            } else if(switchNode.name() == 'case') {
+                String caseName = switchNode.attributes().get('name')
+                String enumRef
+                String enumItem
+                switchNode.childNodes().each { Node caseNode ->
+                    if(caseNode.name() == 'enumref') {
+                        enumRef = caseNode.attributes().get('ref')
+                        enumItem = caseNode.text()
+                    } else {
+                        XUnit unit = parseXUnit(result, caseNode, new XCaseInfo(caseField: fieldRef, caseName: caseName, enumType: enumRef, enumItem: enumItem))
+                        if(unit) {
+                            fields.add(unit)
+                        }
+                    }
+                }
+            }
+        }
+        return fields
     }
 
     List<JavaUnit> toJavaProtocol(JavaType javaType) {

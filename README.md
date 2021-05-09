@@ -459,16 +459,16 @@ enum `Property` from xproto.xml. The current solution is to use `resolveXTypeEnu
 
 * Added support for `<eventstruct>` tags.
 
-[ ] plugin name constant is needed for checking the `<allowed>` tag within `<eventstruct>`
-[ ] offset is required to check if an event is supported by a specific `<eventstruct>`
+[x] plugin name constant is needed for checking the `<allowed>` tag within `<eventstruct>`
+[x] offset is required to check if an event is supported by a specific `<eventstruct>`
 
 * Added support for readParams which are not part of the protocol for the object but passed in from another object's 
 protocol. This is needed for xinput `DeviceTimeCoord`.
 
-[ ] Found bug with reading and writing events and errors for extensions. The offset must be subtracted from the number not 
+[x] Found bug with reading and writing events and errors for extensions. The offset must be subtracted from the number not 
 added.
 
-[ ] Writing events is not possible without passing in the extension offset. The server will treat extension events like 
+[x] Writing events is not possible without passing in the extension offset. The server will treat extension events like 
 xproto events.
 
 [ ] Added support for `<case>` tags within a `<switch>`. This creates an interface and implementing classes for each

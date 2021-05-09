@@ -13,4 +13,15 @@ class XUnitPadFactory {
             return new XUnitPadAlign(align:Integer.valueOf(align))
         }
     }
+
+    static XUnit xUnitPad(XResult result, Node node, XCaseInfo caseInfo) {
+        String bytes = node.attributes().get('bytes')
+        String align = node.attributes().get('align')
+        if(bytes) {
+            return new XUnitPad(result: result, caseInfo: caseInfo, bytes:Integer.valueOf(bytes))
+        }
+        if(align) {
+            return new XUnitPadAlign(result: result, caseInfo: caseInfo, align:Integer.valueOf(align))
+        }
+    }
 }

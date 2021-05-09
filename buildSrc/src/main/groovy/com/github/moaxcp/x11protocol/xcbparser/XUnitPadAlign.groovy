@@ -2,6 +2,8 @@ package com.github.moaxcp.x11protocol.xcbparser
 
 class XUnitPadAlign implements XUnit {
     int align
+    XResult result
+    XCaseInfo caseInfo
 
     @Override
     JavaPadAlign getJavaUnit(JavaType javaType) {
