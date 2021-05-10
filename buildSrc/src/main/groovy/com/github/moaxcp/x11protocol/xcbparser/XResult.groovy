@@ -216,6 +216,17 @@ class XResult {
     }
 
     void addNode(Node node) {
+        boolean hasCase = node.childNodes().any {
+            if(node.name() == 'switch') {
+                return node.childNodes().any {
+                    return node.name() == 'case'
+                }
+            }
+            return false
+        }
+        if(hasCase) {
+            addCaseType(node)
+        }
         switch(node.name()) {
             case 'xidtype':
                 addXidtype(node)
@@ -258,16 +269,26 @@ class XResult {
         }
     }
 
+    void addCaseType(Node node) {
+
+    }
+
     void addXidtype(Node node) {
-        xidTypes.add((String) node.attributes().get('name'))
+        String name = node.attributes().get('name')
+        checkName(name)
+        xidTypes.add(name)
     }
 
     void addXidunion(Node node) {
-        xidUnions.add((String) node.attributes().get('name'))
+        String name = node.attributes().get('name')
+        checkName(name)
+        xidUnions.add(name)
     }
 
     void addTypeDef(Node node) {
-        typedefs.put((String) node.attributes().get('newname'), (String) node.attributes().get('oldname'))
+        String name = node.attributes().get('newname')
+        checkName(name)
+        typedefs.put(name, (String) node.attributes().get('oldname'))
     }
 
     void addImport(XResult result) {
@@ -281,14 +302,35 @@ class XResult {
     }
 
     void checkName(String name) {
+        if(xidTypes.contains(name)) {
+            throw new IllegalStateException("xidType already exists with name $name")
+        }
+        if(xidUnions.contains(name)) {
+            throw new IllegalStateException("xidUnion already exists with name $name")
+        }
+        if(typedefs[name]) {
+            throw new IllegalStateException("typedef already exists with name $name")
+        }
         if(enums[name]) {
             throw new IllegalStateException("enum already exists with name $name")
+        }
+        if(events[name + 'Event']) {
+            throw new IllegalStateException("event already exists with name $name")
+        }
+        if(eventStructs[name]) {
+            throw new IllegalStateException("eventStruct already exists with name $name")
+        }
+        if(errors[name + 'Error']) {
+            throw new IllegalStateException("error already exists with name $name")
         }
         if(structs[name]) {
             throw new IllegalStateException("struct already exists with name $name")
         }
         if(requests[name]) {
             throw new IllegalStateException("request already exists with name $name")
+        }
+        if(unions[name]) {
+            throw new IllegalStateException("union already exists with name $name")
         }
     }
 
