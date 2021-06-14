@@ -10,10 +10,15 @@ abstract class JavaObjectType implements JavaType {
     XResult result
     String basePackage
     String javaPackage
-    Set<TypeName> superTypes = []
+    Set<ClassName> superTypes = []
+    Optional<ClassName> caseSuperName
     ClassName className
     List<JavaReadParameter> readParamInput
     List<JavaUnit> protocol
+
+    void setCaseSuperName(ClassName caseSuperName) {
+        this.caseSuperName = Optional.ofNullable(caseSuperName)
+    }
 
     JavaObjectType(Map map) {
         result = map.result
@@ -21,6 +26,7 @@ abstract class JavaObjectType implements JavaType {
         javaPackage = map.javaPackage
         superTypes = map.superTypes ? map.superTypes + ClassName.get(javaPackage, result.getPluginXObjectInterfaceName()) : [ClassName.get(javaPackage, result.getPluginXObjectInterfaceName())]
         className = map.className
+        setCaseSuperName(map.caseSuperName)
         setProtocol(map.prtocol)
     }
 
@@ -81,7 +87,7 @@ abstract class JavaObjectType implements JavaType {
     }
 
     @Override
-    List<TypeSpec> getTypeSpecs() {
+    TypeSpec getTypeSpec() {
         TypeSpec.Builder typeSpec = TypeSpec.classBuilder(className)
         typeSpec.addModifiers(Modifier.PUBLIC)
         addFields(typeSpec)
@@ -95,7 +101,7 @@ abstract class JavaObjectType implements JavaType {
             addBuilder(typeSpec)
         }
 
-        [typeSpec.build()]
+        typeSpec.build()
     }
 
     void addBuilder(TypeSpec.Builder parent) {

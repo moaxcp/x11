@@ -42,10 +42,10 @@ class ReplyWithReadParamSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('GetDeviceMotionEvents')
-        JavaReply javaReply = request.reply.javaType
+        JavaReply javaReply = request.reply.javaType[0]
 
         then:
-        javaReply.typeSpecs[0].toString() == '''\
+        javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class GetDeviceMotionEventsReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {

@@ -85,7 +85,7 @@ class XUnitField implements XUnit {
     }
 
     @Override
-    JavaProperty getJavaUnit(JavaType javaType) {
-        return resolvedType.getJavaProperty(javaType, this)
+    List<JavaProperty> getJavaUnit(JavaType javaType) {
+        return [resolvedType.getJavaProperty(javaType, this)]
     }
 }

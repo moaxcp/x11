@@ -1,9 +1,9 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.squareup.javapoet.*
+
 import javax.lang.model.element.Modifier
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorTypeName
 
 class JavaError extends JavaObjectType {
@@ -14,18 +14,34 @@ class JavaError extends JavaObjectType {
         number = map.number
     }
 
-    static JavaError javaError(XTypeError error) {
-        String simpleName = getErrorJavaName(error.name)
-
+    static List<JavaError> javaError(XTypeError error) {
+        List<ClassName> cases = error.getCaseClassNames()
+        if(cases) {
+            ClassName superType = getErrorTypeName(error.javaPackage, error.name)
+            return cases.collect {
+                JavaError javaType = new JavaError(
+                        result: error.result,
+                        superTypes: error.superTypes + superType,
+                        basePackage: error.basePackage,
+                        javaPackage: error.javaPackage,
+                        className: it,
+                        number: error.number
+                )
+                return setProtocol(error, javaType)
+            }
+        }
         JavaError javaError = new JavaError(
             result: error.result,
             superTypes: error.superTypes + ClassName.get(error.basePackage, 'XError'),
             basePackage: error.basePackage,
             javaPackage: error.javaPackage,
-            simpleName:simpleName,
             className:getErrorTypeName(error.javaPackage, error.name),
             number: error.number
         )
+        return [setProtocol(error, javaError)]
+    }
+
+    private static JavaError setProtocol(XTypeError error, JavaError javaError) {
         javaError.protocol = error.toJavaProtocol(javaError)
         JavaProperty c = javaError.getJavaProperty('CODE')
         c.constantField = true
@@ -34,7 +50,7 @@ class JavaError extends JavaObjectType {
         r.constantField = true
         r.localOnly = true
         r.writeValueExpression = CodeBlock.of('getResponseCode()')
-        if(javaError.fixedSize && javaError.fixedSize.get() < 32) {
+        if (javaError.fixedSize && javaError.fixedSize.get() < 32) {
             javaError.protocol.add(new JavaPad(bytes: 32 - javaError.fixedSize.get()))
         }
         return javaError

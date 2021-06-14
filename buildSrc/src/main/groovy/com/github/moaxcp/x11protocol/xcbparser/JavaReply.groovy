@@ -1,8 +1,11 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
-import com.squareup.javapoet.*
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.getReplyJavaName
+import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.TypeName
+
 import static com.github.moaxcp.x11protocol.generator.Conventions.getReplyTypeName
 
 class JavaReply extends JavaObjectType {
@@ -10,17 +13,32 @@ class JavaReply extends JavaObjectType {
         super(map)
     }
 
-    static JavaReply javaReply(XTypeReply reply) {
-        String simpleName= getReplyJavaName(reply.name)
-
+    static List<JavaReply> javaReply(XTypeReply reply) {
+        List<ClassName> cases = reply.getCaseClassNames()
+        if(cases) {
+            ClassName superType = getReplyTypeName(reply.javaPackage, reply.name)
+            return cases.collect {
+                JavaReply javaReply = new JavaReply(
+                        result: reply.result,
+                        superTypes: reply.superTypes + superType,
+                        basePackage: reply.basePackage,
+                        javaPackage: reply.javaPackage,
+                        className: getReplyTypeName(reply.javaPackage, reply.name)
+                )
+                return setProtocol(reply, javaReply)
+            }
+        }
         JavaReply javaReply = new JavaReply(
             result: reply.result,
             superTypes: reply.superTypes + ClassName.get(reply.basePackage, 'XReply'),
             basePackage: reply.basePackage,
             javaPackage: reply.javaPackage,
-            simpleName:simpleName,
             className: getReplyTypeName(reply.javaPackage, reply.name)
         )
+        return [setProtocol(reply, javaReply)]
+    }
+
+    private static JavaReply setProtocol(XTypeReply reply, JavaReply javaReply) {
         javaReply.protocol = reply.toJavaProtocol(javaReply)
         JavaProperty r = javaReply.getJavaProperty('RESPONSECODE')
         r.constantField = true
@@ -28,16 +46,16 @@ class JavaReply extends JavaObjectType {
         r.writeValueExpression = CodeBlock.of('getResponseCode()')
         JavaProperty l = javaReply.getJavaProperty('length')
         l.writeValueExpression = CodeBlock.of('getLength()')
-        if(!(javaReply.protocol[1] instanceof JavaReadParameter)) {
+        if (!(javaReply.protocol[1] instanceof JavaReadParameter)) {
             throw new IllegalStateException("First field in ${javaReply.simpleName} must be a JavaReadParameter. got ${javaReply.protocol[1]}")
         }
         JavaReadParameter first = (JavaReadParameter) javaReply.protocol[1]
         first.readParam = true
         first.readTypeName = TypeName.BYTE
-        if(!(javaReply.protocol[2] instanceof JavaReadParameter)) {
+        if (!(javaReply.protocol[2] instanceof JavaReadParameter)) {
             throw new IllegalStateException("Second field must be a JavaReadParameter")
         }
-        ((JavaReadParameter)javaReply.protocol[2]).readParam = true
+        ((JavaReadParameter) javaReply.protocol[2]).readParam = true
         return javaReply
     }
 

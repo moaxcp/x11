@@ -1,9 +1,9 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.squareup.javapoet.*
+
 import javax.lang.model.element.Modifier
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.getRequestJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getRequestTypeName
 
 class JavaRequest extends JavaObjectType {
@@ -16,19 +16,49 @@ class JavaRequest extends JavaObjectType {
         reply = map.reply
     }
 
-    static JavaRequest javaRequest(XTypeRequest request) {
-        String simpleName = getRequestJavaName(request.name)
-        TypeName superType = request.reply ? ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.javaType.className) : ClassName.get(request.basePackage, 'OneWayRequest')
+    static List<JavaRequest> javaRequest(XTypeRequest request) {
+        List<ClassName> cases = request.getCaseClassNames()
+        if(cases) {
+            ClassName superType = getRequestTypeName(request.javaPackage, request.name)
+            return cases.collect {
+                JavaRequest javaRequest = new JavaRequest(
+                        result: request.result,
+                        superTypes: request.superTypes + superType,
+                        basePackage: request.basePackage,
+                        javaPackage: request.javaPackage,
+                        className: it,
+                        opCode: request.opCode,
+                        reply: request.reply
+                )
+                return setProtocol(request, javaRequest)
+            }
+        }
+
+        Set<ClassName> superTypes = request.superTypes
+        if(request.reply) {
+            if(request.reply.caseSuperName.isPresent()) {
+                superTypes += ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.caseSuperName.get())
+            } else if(request.reply.javaType.size() == 1) {
+                superTypes += ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.javaType[0].className)
+            } else {
+                throw new IllegalStateException("reply cannot have multiple javaTypes without a caseSuperName")
+            }
+        } else {
+            superTypes += ClassName.get(request.basePackage, 'OneWayRequest')
+        }
         JavaRequest javaRequest = new JavaRequest(
             result: request.result,
-            superTypes: request.superTypes + superType,
+            superTypes: superTypes,
             basePackage: request.basePackage,
             javaPackage: request.javaPackage,
-            simpleName:simpleName,
             className: getRequestTypeName(request.javaPackage, request.name),
             opCode: request.opCode,
             reply: request.reply
         )
+        return [setProtocol(request, javaRequest)]
+    }
+
+    private static JavaRequest setProtocol(XTypeRequest request, JavaRequest javaRequest) {
         javaRequest.protocol = request.toJavaProtocol(javaRequest)
         JavaProperty c = javaRequest.getJavaProperty('OPCODE')
         c.constantField = true
@@ -41,11 +71,21 @@ class JavaRequest extends JavaObjectType {
     @Override
     void addMethods(TypeSpec.Builder typeBuilder) {
         if(reply) {
-            typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
-                .returns(ParameterizedTypeName.get(ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction'), reply.javaType.className))
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement('return (field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in)', reply.javaType.className, reply.javaType.simpleName)
-                .build())
+            if(reply.getCaseSuperName().isPresent()) {
+                typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
+                    .returns(ParameterizedTypeName.get(ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction'), reply.getCaseSuperName().get()))
+                    .addModifiers(Modifier.PUBLIC)
+                    .addStatement('return (field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in)', reply.getCaseSuperName().get(), reply.getCaseSuperName().get().simpleName())
+                    .build())
+            } else if(reply.javaType.size() == 1) {
+                typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
+                    .returns(ParameterizedTypeName.get(ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction'), reply.javaType[0].className))
+                    .addModifiers(Modifier.PUBLIC)
+                    .addStatement('return (field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in)', reply.javaType[0].className, reply.javaType[0].simpleName)
+                    .build())
+            } else {
+                throw new IllegalStateException("only one case allowed when there is no caseSuperName")
+            }
         }
         typeBuilder.addMethod(MethodSpec.methodBuilder('getOpCode')
             .returns(TypeName.BYTE)

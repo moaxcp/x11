@@ -38,10 +38,10 @@ class JavaEventSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeEvent event = result.resolveXType('KeyPress')
-        JavaEvent javaEvent = event.javaType
+        JavaEvent javaEvent = event.javaType[0]
 
         then:
-        javaEvent.typeSpecs[0].toString() == '''\
+        javaEvent.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class KeyPressEvent implements com.github.moaxcp.x11client.protocol.XEvent, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -202,10 +202,10 @@ class JavaEventSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeEvent event = result.resolveXType('MapRequest')
-        JavaEvent javaEvent = event.javaType
+        JavaEvent javaEvent = event.javaType[0]
 
         then:
-        javaEvent.typeSpecs[0].toString() == '''\
+        javaEvent.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class MapRequestEvent implements com.github.moaxcp.x11client.protocol.XEvent, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {

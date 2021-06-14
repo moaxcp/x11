@@ -42,7 +42,7 @@ class JavaTypeListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getDeclareAndReadCode() {
-        JavaObjectType propertyJavaType = x11Field.resolvedType.javaType
+        JavaObjectType propertyJavaType = x11Field.resolvedType.javaType[0]
         List<String> readParams = propertyJavaType.readParameters*.name
         readParams.add('in')
         CodeBlock readObjectBlock = CodeBlock.of('$T.read$L($L)', baseTypeName, baseTypeName.simpleName(), readParams.join(', '))

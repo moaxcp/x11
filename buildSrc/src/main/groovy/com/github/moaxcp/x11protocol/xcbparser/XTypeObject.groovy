@@ -2,6 +2,7 @@ package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression
 import com.squareup.javapoet.ClassName
+import groovy.transform.Memoized
 import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.convertX11VariableNameToJava
@@ -12,15 +13,37 @@ import static com.github.moaxcp.x11protocol.xcbparser.XUnitField.xUnitField
 import static com.github.moaxcp.x11protocol.xcbparser.XUnitField.xUnitFieldFd
 import static com.github.moaxcp.x11protocol.xcbparser.XUnitListField.xUnitListField
 import static com.github.moaxcp.x11protocol.xcbparser.XUnitPadFactory.xUnitPad
+import static com.github.moaxcp.x11protocol.xcbparser.XUnitSwitch.parseXUnitSwitch
 
 abstract class XTypeObject extends XType implements XTypeUnit {
     Set<ClassName> superTypes = []
     List<XUnit> protocol = []
+    Optional<ClassName> caseSuperName
+
+    void setCaseSuperName(ClassName caseSuperName) {
+        this.caseSuperName = Optional.ofNullable(caseSuperName)
+    }
 
     XTypeObject(Map map) {
         super(map)
         superTypes = map.superTypes ?: []
         protocol = map.protocol ?: []
+        setCaseSuperName(map.caseSuperName)
+    }
+
+    @Override
+    @Memoized
+    List<String> getCaseNames() {
+        protocol.inject([]) { names, unit ->
+            if(unit instanceof XUnitSwitchCase) {
+                unit.fields.each {field ->
+                    if(field instanceof XUnitField) {
+                        names.add(field.caseInfo.caseName)
+                    }
+                }
+            }
+            return names
+        }
     }
 
     XUnitField getField(String name) {
@@ -36,124 +59,49 @@ abstract class XTypeObject extends XType implements XTypeUnit {
     }
 
     void addUnits(XResult result, Node node) {
-        node.childNodes().each { Node it ->
-            List<XUnit> unit = parseXUnit(result, it)
-            protocol.addAll(unit)
+        protocol.addAll(parseAllXUnits(result, node))
+    }
+
+    static List<XUnit> parseAllXUnits(XResult result, Node node) {
+        return node.childNodes().collect { Node it ->
+            parseXUnit(result, it)
+        }.inject([]) { list, unit ->
+            if(unit) {
+                return list + unit
+            }
+            return list
         }
     }
 
-    List<XUnit> parseXUnit(XResult result, Node node) {
+    static XUnit parseXUnit(XResult result, Node node) {
         switch(node.name()) {
             case 'required_start_align':
-                return [] //[xUnitRequiredStartAlign(result, node)]
+                return null //[xUnitRequiredStartAlign(result, node)]
             case 'field':
-                return [xUnitField(result, node)]
+                return xUnitField(result, node)
             case 'fd':
-                return [xUnitFieldFd(result, node)]
+                return xUnitFieldFd(result, node)
             case 'list':
-                return [xUnitListField(result, node)]
+                return xUnitListField(result, node)
             case 'pad':
-                return [xUnitPad(node)]
+                return xUnitPad(node)
             case 'switch':
-                if(node.childNodes().find { Node it -> it.name() == 'bitcase'}) {
-                    return parseValueList(result, node)
-                } else if(node.childNodes().find { Node it -> it.name() == 'case'}) {
-                    return parseCases(result, node)
-                } else {
-                    System.out.println('unknown switch')
-                    return []
-                }
+                return parseXUnitSwitch(result, node)
             case 'exprfield':
-                return [xUnitExprField(result, node)]
+                return xUnitExprField(result, node)
             case 'doc':
-                return []
-            case 'reply':
-                return []
-            default:
-                throw new IllegalArgumentException("cannot parse ${node.name()}")
-        }
-    }
-
-    static XUnit parseXUnit(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
-        switch(node.name()) {
-            case 'field':
-                return xUnitField(result, node, bitcaseInfo)
-            case 'list':
-                return xUnitListField(result, node, bitcaseInfo)
-            default:
-                throw new IllegalArgumentException("cannot parse ${node.name()}")
-        }
-    }
-
-    static XUnit parseXUnit(XResult result, Node node, XCaseInfo caseInfo) {
-        switch(node.name()) {
-            case 'required_start_align':
                 return null
-            case 'pad':
-                return xUnitPad(result, node, caseInfo)
-            case 'field':
-                return xUnitField(result, node, caseInfo)
-            case 'list':
-                return xUnitListField(result, node, caseInfo)
+            case 'reply':
+                return null
             default:
                 throw new IllegalArgumentException("cannot parse ${node.name()}")
         }
-    }
-
-    List<XUnit> parseValueList(XResult result, Node node) {
-        String fieldRef = node.childNodes().find{Node it -> it.name() == 'fieldref'}.text()
-        List<XUnit> fields = []
-        node.childNodes().each { Node it ->
-            if(it.name() == 'fieldref') {
-                return
-            }
-            if(it.name() == 'bitcase') {
-                String enumRef
-                String enumItem
-                it.childNodes().each { Node bitcaseNode ->
-                    if(bitcaseNode.name() == 'enumref') {
-                        enumRef = bitcaseNode.attributes().get('ref')
-                        enumItem = bitcaseNode.text()
-                    } else {
-                        XUnit unit = parseXUnit(result, bitcaseNode, new XBitcaseInfo(maskField: fieldRef, enumType: enumRef, enumItem: enumItem))
-                        fields.add(unit)
-                    }
-                }
-            }
-        }
-        return fields
-    }
-
-    List<XUnit> parseCases(XResult result, Node node) {
-        String fieldRef = node.childNodes().find{Node it -> it.name() == 'fieldref'}.text()
-        List<XUnit> fields = []
-        node.childNodes().each { Node switchNode ->
-            if(switchNode.name() == 'required_start_align') {
-
-            } else if(switchNode.name() == 'case') {
-                String caseName = switchNode.attributes().get('name')
-                String enumRef
-                String enumItem
-                switchNode.childNodes().each { Node caseNode ->
-                    if(caseNode.name() == 'enumref') {
-                        enumRef = caseNode.attributes().get('ref')
-                        enumItem = caseNode.text()
-                    } else {
-                        XUnit unit = parseXUnit(result, caseNode, new XCaseInfo(caseField: fieldRef, caseName: caseName, enumType: enumRef, enumItem: enumItem))
-                        if(unit) {
-                            fields.add(unit)
-                        }
-                    }
-                }
-            }
-        }
-        return fields
     }
 
     List<JavaUnit> toJavaProtocol(JavaType javaType) {
         List<JavaUnit> java = protocol.collect {
             it.getJavaUnit(javaType)
-        }
+        }.flatten()
 
         java.eachWithIndex { JavaUnit entry, int i ->
             if(entry instanceof JavaPadAlign) {

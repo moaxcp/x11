@@ -17,10 +17,10 @@ class JavaRequestSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('DestroyWindow')
-        JavaRequest javaRequest = request.javaType
+        JavaRequest javaRequest = request.javaType[0]
 
         then:
-        javaRequest.typeSpecs[0].toString() == '''\
+        javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class DestroyWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -93,10 +93,10 @@ class JavaRequestSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('PolyPoint')
-        JavaRequest javaRequest = request.javaType
+        JavaRequest javaRequest = request.javaType[0]
 
         then:
-        javaRequest.typeSpecs[0].toString() == '''\
+        javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class PolyPoint implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -209,10 +209,10 @@ class JavaRequestSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('QueryTextExtends')
-        JavaRequest javaRequest = request.javaType
+        JavaRequest javaRequest = request.javaType[0]
 
         then:
-        javaRequest.typeSpecs[0].toString() == '''\
+        javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class QueryTextExtends implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -294,10 +294,10 @@ class JavaRequestSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('Enable')
-        JavaRequest javaRequest = request.javaType
+        JavaRequest javaRequest = request.javaType[0]
 
         then:
-        javaRequest.typeSpecs[0].toString() == '''\
+        javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class Enable implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.EnableReply>, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -508,7 +508,7 @@ class JavaRequestSpec extends XmlSpec {
         JavaRequest javaRequest = request.javaType
 
         then:
-        javaRequest.typeSpecs[0].toString() == '''\
+        javaRequest.typeSpec[0].toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class CreateWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -1009,10 +1009,10 @@ class JavaRequestSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('Await')
-        JavaRequest javaRequest = request.javaType
+        JavaRequest javaRequest = request.javaType[0]
 
         then:
-        javaRequest.typeSpecs[0].toString() == '''\
+        javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class Await implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {

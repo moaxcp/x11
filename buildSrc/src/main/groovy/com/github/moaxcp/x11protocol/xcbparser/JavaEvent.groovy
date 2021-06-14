@@ -1,9 +1,9 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.squareup.javapoet.*
+
 import javax.lang.model.element.Modifier
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.getEventJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventTypeName
 
 class JavaEvent extends JavaObjectType {
@@ -18,8 +18,22 @@ class JavaEvent extends JavaObjectType {
         genericEventNumber = map.genericEventNumber ?: -1
     }
 
-    static JavaEvent javaEvent(XTypeEvent event) {
-        String simpleName = getEventJavaName(event.name)
+    static List<JavaEvent> javaEvent(XTypeEvent event) {
+        List<ClassName> cases = event.getCaseClassNames()
+        if(cases) {
+            ClassName superType = getEventTypeName(event.javaPackage, event.name)
+            return cases.collect {
+                JavaEvent javaEvent = new JavaEvent(
+                        result: event.result,
+                        superTypes: event.superTypes + superType,
+                        basePackage: event.basePackage,
+                        javaPackage: event.javaPackage,
+                        className: getEventTypeName(event.javaPackage, event.name),
+                        number: event.number
+                )
+                return setProtocol(event, javaEvent)
+            }
+        }
         ClassName superType = ClassName.get(event.basePackage, 'XEvent')
         if(event.genericEvent) {
             superType = ClassName.get(event.basePackage, 'XGenericEvent')
@@ -29,24 +43,27 @@ class JavaEvent extends JavaObjectType {
             superTypes: event.superTypes + superType,
             basePackage: event.basePackage,
             javaPackage: event.javaPackage,
-            simpleName:simpleName,
             className:getEventTypeName(event.javaPackage, event.name),
             number: event.number
         )
+        return [setProtocol(event, javaEvent)]
+    }
+
+    private static JavaEvent setProtocol(XTypeEvent event, JavaEvent javaEvent) {
         javaEvent.protocol = event.toJavaProtocol(javaEvent)
         JavaProperty p = javaEvent.getJavaProperty('NUMBER')
         p.constantField = true
         p.writeValueExpression = CodeBlock.of('sentEvent ? (byte) (0b10000000 & getResponseCode()) : getResponseCode()')
-        if(javaEvent.fixedSize && javaEvent.fixedSize.get() < 32) {
+        if (javaEvent.fixedSize && javaEvent.fixedSize.get() < 32) {
             javaEvent.protocol.add(new JavaPad(bytes: 32 - javaEvent.fixedSize.get()))
         }
 
-        if(event.genericEvent) {
+        if (event.genericEvent) {
             javaEvent.genericEvent = true
             javaEvent.genericEventNumber = event.genericEventNumber
             JavaProperty l = javaEvent.getJavaProperty('length')
             l.writeValueExpression = CodeBlock.of('getLength() - 32')
-            if(!(javaEvent.protocol[1] instanceof JavaReadParameter)) {
+            if (!(javaEvent.protocol[1] instanceof JavaReadParameter)) {
                 throw new IllegalStateException("First field must be a JavaReadParameter")
             }
             javaEvent.getJavaProperty('extension').readParam = true

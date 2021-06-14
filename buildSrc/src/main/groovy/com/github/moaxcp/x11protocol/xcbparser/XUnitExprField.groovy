@@ -20,10 +20,10 @@ class XUnitExprField extends XUnitField {
     }
 
     @Override
-    JavaProperty getJavaUnit(JavaType javaType) {
+    List<JavaProperty> getJavaUnit(JavaType javaType) {
         if(resolvedType.name != 'BOOL') {
             throw new UnsupportedOperationException(resolvedType.name + ' not supported')
         }
-        return new JavaExprProperty(javaType, this)
+        return [new JavaExprProperty(javaType, this)]
     }
 }

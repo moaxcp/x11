@@ -9,7 +9,7 @@ class NotifyDataUnion extends JavaUnion {
     }
 
     @Override
-    List<TypeSpec> getTypeSpecs() {
+    TypeSpec getTypeSpec() {
         TypeSpec typeSpec = TypeSpec.interfaceBuilder(className)
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(ClassName.get(basePackage, 'XObject'))
@@ -21,7 +21,7 @@ class NotifyDataUnion extends JavaUnion {
                 .build())
             .build()
 
-        return [typeSpec]
+        return typeSpec
     }
 
     @Override

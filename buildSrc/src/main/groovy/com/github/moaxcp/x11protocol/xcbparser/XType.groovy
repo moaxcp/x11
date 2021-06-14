@@ -1,5 +1,7 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
+import com.squareup.javapoet.ClassName
+
 import static java.util.Objects.requireNonNull
 
 abstract class XType implements XTypeUnit {
@@ -14,4 +16,8 @@ abstract class XType implements XTypeUnit {
         javaPackage = map.javaPackage
         name = requireNonNull(map.name, 'name must not be null')
     }
+
+    abstract Optional<ClassName> getCaseSuperName()
+    abstract List<String> getCaseNames()
+    abstract List<String> getCaseClassNames()
 }

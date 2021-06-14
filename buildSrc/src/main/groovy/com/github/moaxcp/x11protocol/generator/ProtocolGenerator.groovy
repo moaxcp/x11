@@ -22,10 +22,10 @@ class ProtocolGenerator {
         writeToFile(result.javaPackage, result.errors.values())
 
         result.requests.values().each {
-            writeToFile(result.javaPackage, it.javaType.typeSpecs)
+            writeToFile(result.javaPackage, it.javaType.typeSpec)
             XTypeReply reply = it.reply
             if(reply) {
-                writeToFile(result.javaPackage, reply.javaType.typeSpecs)
+                writeToFile(result.javaPackage, reply.javaType.typeSpec)
             }
         }
 
@@ -41,7 +41,7 @@ class ProtocolGenerator {
 
     private void writeToFile(String javaPackage, Collection<XTypeUnit> units) {
         units.each {
-            writeToFile(javaPackage, it.javaType.typeSpecs)
+            writeToFile(javaPackage, it.javaType.typeSpec)
         }
     }
 

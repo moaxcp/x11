@@ -1,8 +1,10 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
+import com.squareup.javapoet.ClassName
 import groovy.transform.ToString
 import groovy.util.slurpersupport.Node
 
+import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
 import static com.github.moaxcp.x11protocol.xcbparser.JavaStruct.javaStruct
 
 @ToString(includeSuperProperties = true, includePackage = false, includes = ['name'])
@@ -20,7 +22,14 @@ class XTypeStruct extends XTypeObject {
     }
 
     @Override
-    JavaType getJavaType() {
+    List<ClassName> getCaseClassNames() {
+        return getCaseNames().collect {
+            getStructTypeName(javaPackage, name + it.capitalize())
+        }
+    }
+
+    @Override
+    List<JavaType> getJavaType() {
         return javaStruct(this)
     }
 }

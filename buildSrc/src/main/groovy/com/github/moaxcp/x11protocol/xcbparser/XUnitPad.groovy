@@ -6,7 +6,7 @@ class XUnitPad implements XUnit {
     XCaseInfo caseInfo
 
     @Override
-    JavaPad getJavaUnit(JavaType javaType) {
-        return new JavaPad(javaType: javaType, xUnit:this, bytes:bytes)
+    List<JavaPad> getJavaUnit(JavaType javaType) {
+        return [new JavaPad(javaType: javaType, xUnit:this, bytes:bytes)]
     }
 }

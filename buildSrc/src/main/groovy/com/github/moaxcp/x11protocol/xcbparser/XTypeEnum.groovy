@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.xcbparser.expression.Expressions
+import com.squareup.javapoet.ClassName
 import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.xcbparser.JavaEnum.javaEnum
@@ -13,7 +14,22 @@ class XTypeEnum extends XType implements XTypeUnit {
         super(map)
         items = map.items ?: []
     }
-    
+
+    @Override
+    Optional<ClassName> getCaseSuperName() {
+        return Optional.empty()
+    }
+
+    @Override
+    List<String> getCaseNames() {
+        return []
+    }
+
+    @Override
+    List<String> getCaseClassNames() {
+        return []
+    }
+
     static XTypeEnum xTypeEnum(XResult result, Node node) {
         XTypeEnum xEnum = new XTypeEnum(result: result, name:node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
         node.childNodes().each { Node it ->
@@ -32,7 +48,7 @@ class XTypeEnum extends XType implements XTypeUnit {
     }
 
     @Override
-    JavaType getJavaType() {
+    List<JavaType> getJavaType() {
         return javaEnum(this)
     }
 

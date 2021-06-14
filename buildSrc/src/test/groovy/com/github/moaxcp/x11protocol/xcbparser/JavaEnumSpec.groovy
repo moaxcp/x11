@@ -19,7 +19,7 @@ class JavaEnumSpec extends Specification {
         )
 
         when:
-        TypeSpec typeSpec = javaEnum.typeSpecs[0]
+        TypeSpec typeSpec = javaEnum.typeSpec
 
         then:
         typeSpec.toString() == '''\

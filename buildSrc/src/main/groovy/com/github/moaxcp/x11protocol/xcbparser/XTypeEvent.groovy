@@ -1,7 +1,9 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
+import com.squareup.javapoet.ClassName
 import groovy.util.slurpersupport.Node
 
+import static com.github.moaxcp.x11protocol.generator.Conventions.getEventTypeName
 import static com.github.moaxcp.x11protocol.xcbparser.JavaEvent.javaEvent
 
 class XTypeEvent extends XTypeObject {
@@ -36,6 +38,13 @@ class XTypeEvent extends XTypeObject {
 
         return event
     }
+
+    @Override
+    List<ClassName> getCaseClassNames() {
+        return getCaseNames().collect {
+            getEventTypeName(javaPackage, name + it.capitalize())
+        }
+    }
     
     static XTypeEvent xTypeEventCopy(XResult result, Node node) {
         int number = Integer.valueOf((String) node.attributes().get('number'))
@@ -55,7 +64,7 @@ class XTypeEvent extends XTypeObject {
     }
 
     @Override
-    JavaType getJavaType() {
+    List<JavaType> getJavaType() {
         return javaEvent(this)
     }
 }

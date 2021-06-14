@@ -6,7 +6,7 @@ class XUnitPadAlign implements XUnit {
     XCaseInfo caseInfo
 
     @Override
-    JavaPadAlign getJavaUnit(JavaType javaType) {
-        return new JavaPadAlign(javaType: javaType, xUnit: this, align: align)
+    List<JavaPadAlign> getJavaUnit(JavaType javaType) {
+        return [new JavaPadAlign(javaType: javaType, xUnit: this, align: align)]
     }
 }

@@ -1,8 +1,8 @@
 package com.github.moaxcp.x11protocol.xcbparser
 /**
- * A single unit within the x protocol. XUnit is converted to a JavaUnit which defines how to read/write in java and
- * add the unit to a class in the case of JavaPropertyUnit.
+ * A single unit within the x protocol. XUnit is converted to a JavaUnit which defines how to read/write in java.
  */
 interface XUnit {
-    JavaUnit getJavaUnit(JavaType javaType)
+    XCaseInfo getCaseInfo()
+    List<JavaUnit> getJavaUnit(JavaType javaType)
 }

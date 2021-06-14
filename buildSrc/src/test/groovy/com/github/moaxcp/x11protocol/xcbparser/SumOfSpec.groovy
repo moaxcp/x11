@@ -53,10 +53,10 @@ class SumOfSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('ListInputDevices')
-        JavaReply javaReply = request.reply.javaType
+        JavaReply javaReply = request.reply.javaType[0]
 
         then:
-        javaReply.typeSpecs[0].toString() == '''\
+        javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class ListInputDevicesReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {

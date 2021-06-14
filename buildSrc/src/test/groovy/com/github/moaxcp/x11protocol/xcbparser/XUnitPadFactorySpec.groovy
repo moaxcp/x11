@@ -36,7 +36,7 @@ class XUnitPadFactorySpec extends XmlSpec {
         JavaType javaType = Mock(JavaType)
 
         when:
-        JavaPad javaPad = pad.getJavaUnit(javaType)
+        JavaPad javaPad = pad.getJavaUnit(javaType)[0]
 
         then:
         javaPad.bytes == 4
@@ -49,7 +49,7 @@ class XUnitPadFactorySpec extends XmlSpec {
         JavaType javaType = Mock(JavaType)
 
         when:
-        JavaPadAlign javaPad = pad.getJavaUnit(javaType)
+        JavaPadAlign javaPad = pad.getJavaUnit(javaType)[0]
 
         then:
         javaPad.align == 4

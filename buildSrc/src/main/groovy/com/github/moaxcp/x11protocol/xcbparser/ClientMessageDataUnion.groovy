@@ -9,7 +9,7 @@ class ClientMessageDataUnion extends JavaUnion {
     }
 
     @Override
-    List<TypeSpec> getTypeSpecs() {
+    TypeSpec getTypeSpec() {
         TypeSpec typeSpec = TypeSpec.interfaceBuilder(className)
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterfaces(superTypes)
@@ -24,7 +24,7 @@ class ClientMessageDataUnion extends JavaUnion {
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .build())
             .build()
-        return [typeSpec]
+        return typeSpec
     }
 
     @Override

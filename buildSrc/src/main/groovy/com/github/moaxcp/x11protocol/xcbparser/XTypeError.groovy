@@ -1,7 +1,9 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
+import com.squareup.javapoet.ClassName
 import groovy.util.slurpersupport.Node
 
+import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorTypeName
 import static com.github.moaxcp.x11protocol.xcbparser.JavaError.javaError
 
 class XTypeError extends XTypeObject {
@@ -45,7 +47,14 @@ class XTypeError extends XTypeObject {
     }
 
     @Override
-    JavaType getJavaType() {
+    List<ClassName> getCaseClassNames() {
+        return getCaseNames().collect {
+            getErrorTypeName(javaPackage, name + it.capitalize())
+        }
+    }
+
+    @Override
+    List<JavaType> getJavaType() {
         return javaError(this)
     }
 }

@@ -4,6 +4,7 @@ import com.squareup.javapoet.ClassName
 import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getUnionJavaName
+import static com.github.moaxcp.x11protocol.generator.Conventions.getUnionTypeName
 import static com.github.moaxcp.x11protocol.xcbparser.JavaClientMessageDataUnionProperty.javaClientMessageDataUnionProperty
 import static com.github.moaxcp.x11protocol.xcbparser.JavaNotifyDataUnionProperty.javaNotifyDataUnionProperty
 import static com.github.moaxcp.x11protocol.xcbparser.JavaTypeProperty.javaTypeProperty
@@ -48,7 +49,14 @@ class XTypeUnion extends XTypeObject {
     }
 
     @Override
-    JavaType getJavaType() {
+    List<ClassName> getCaseClassNames() {
+        return getCaseNames().collect {
+            getUnionTypeName(javaPackage, name + it.capitalize())
+        }
+    }
+
+    @Override
+    List<JavaType> getJavaType() {
         return javaUnion(this)
     }
     

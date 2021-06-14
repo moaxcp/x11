@@ -27,10 +27,10 @@ class JavaGenericEventSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeEvent event = result.resolveXType('ConfigureNotify')
-        JavaEvent javaEvent = event.javaType
+        JavaEvent javaEvent = event.javaType[0]
 
         then:
-        javaEvent.typeSpecs[0].toString() == '''\
+        javaEvent.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class ConfigureNotifyEvent implements com.github.moaxcp.x11client.protocol.XGenericEvent, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {

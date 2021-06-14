@@ -41,7 +41,7 @@ class XUnitListField extends XUnitField {
     }
 
     @Override
-    JavaListProperty getJavaUnit(JavaType javaType) {
-        return resolvedType.getJavaProperty(javaType, this)
+    List<JavaListProperty> getJavaUnit(JavaType javaType) {
+        return [resolvedType.getJavaProperty(javaType, this)]
     }
 }

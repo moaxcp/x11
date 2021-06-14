@@ -44,11 +44,11 @@ class JavaUnion extends JavaObjectType {
     }
 
     @Override
-    List<TypeSpec> getTypeSpecs() {
-        return [TypeSpec.interfaceBuilder(className)
+    TypeSpec getTypeSpec() {
+        return TypeSpec.interfaceBuilder(className)
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(ClassName.get(basePackage, 'XObject'))
-            .build()]
+            .build()
     }
 
     @Override

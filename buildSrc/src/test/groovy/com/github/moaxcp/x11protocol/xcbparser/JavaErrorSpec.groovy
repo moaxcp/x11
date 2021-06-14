@@ -17,10 +17,10 @@ class JavaErrorSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeError error = result.resolveXType('Request')
-        JavaError javaError = error.javaType
+        JavaError javaError = error.javaType[0]
 
         then:
-        javaError.typeSpecs[0].toString() == '''\
+        javaError.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class RequestError implements com.github.moaxcp.x11client.protocol.XError, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {

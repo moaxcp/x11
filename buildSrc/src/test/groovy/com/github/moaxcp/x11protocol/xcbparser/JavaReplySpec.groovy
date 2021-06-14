@@ -26,11 +26,11 @@ class JavaReplySpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('QueryTree')
-        JavaRequest javaRequest = request.javaType
-        JavaReply javaReply = request.reply.javaType
+        JavaRequest javaRequest = request.javaType[0]
+        JavaReply javaReply = request.reply.javaType[0]
 
         then:
-        javaRequest.typeSpecs[0].toString() == '''\
+        javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class QueryTree implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply>, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -79,7 +79,7 @@ class JavaReplySpec extends XmlSpec {
             }
         '''.stripIndent()
 
-        javaReply.typeSpecs[0].toString() == '''\
+        javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class QueryTreeReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -163,11 +163,10 @@ class JavaReplySpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('TranslateCoordinates')
-        JavaRequest javaRequest = request.javaType
-        JavaReply javaReply = request.reply.javaType
+        JavaReply javaReply = request.reply.javaType[0]
 
         then:
-        javaReply.typeSpecs[0].toString() == '''\
+        javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class TranslateCoordinatesReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -252,11 +251,10 @@ class JavaReplySpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('ListHosts')
-        JavaRequest javaRequest = request.javaType
-        JavaReply javaReply = request.reply.javaType
+        JavaReply javaReply = request.reply.javaType[0]
 
         then:
-        javaReply.typeSpecs[0].toString() == '''\
+        javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class ListHostsReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -351,11 +349,10 @@ class JavaReplySpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('QueryExtension')
-        JavaRequest javaRequest = request.javaType
-        JavaReply javaReply = request.reply.javaType
+        JavaReply javaReply = request.reply.javaType[0]
 
         then:
-        javaReply.typeSpecs[0].toString() == '''\
+        javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class QueryExtensionReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {

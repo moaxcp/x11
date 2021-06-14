@@ -164,7 +164,7 @@ class XUnitFieldSpec extends XmlSpec {
         XUnitField field = xUnitField(result, getFirstNode())
 
         then:
-        field.getJavaUnit(javaType).name == 'redMask'
+        field.getJavaUnit(javaType)[0].name == 'redMask'
     }
 
     def 'convert to JavaUnit with enumType'() {
@@ -197,6 +197,6 @@ class XUnitFieldSpec extends XmlSpec {
         field.name == 'mask'
         field.type == 'CARD8'
         field.resolvedEnumType.name == 'EventMask'
-        field.getJavaUnit(javaType).typeName == TypeName.BYTE
+        field.getJavaUnit(javaType)[0].typeName == TypeName.BYTE
     }
 }

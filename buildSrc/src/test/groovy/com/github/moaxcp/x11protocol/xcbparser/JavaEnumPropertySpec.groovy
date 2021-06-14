@@ -25,7 +25,7 @@ class JavaEnumPropertySpec extends XmlSpec {
         addChildNodes()
 
         when:
-        TypeSpec typeSpec = result.resolveXType('Struct').javaType.typeSpecs[0]
+        TypeSpec typeSpec = result.resolveXType('Struct').javaType.typeSpec[0]
 
         then:
         typeSpec.toString() == '''\

@@ -160,7 +160,13 @@ class XResult {
         for(XTypeEvent event : events.values()) {
             if(event.number != 35) {
                 readEvent.beginControlFlow('if(number - firstEvent == $L)', event.number)
-                readEvent.addStatement('return $T.read$L(firstEvent, sentEvent, in)', event.javaType.className, event.javaType.className.simpleName())
+                if(event.caseSuperName.isPresent()) {
+                    readEvent.addStatement('return $T.read$L(firstEvent, sentEvent, in)', event.caseSuperName.get(), event.caseSuperName.get().simpleName())
+                } else if(event.javaType.size() == 1) {
+                    readEvent.addStatement('return $T.read$L(firstEvent, sentEvent, in)', event.javaType[0].className, event.javaType[0].className.simpleName())
+                } else {
+                    throw new IllegalStateException("event has caseSuperName and multiple java types")
+                }
                 readEvent.endControlFlow()
             }
         }
@@ -178,7 +184,13 @@ class XResult {
 
         for(XTypeError error : errors.values()) {
             readError.beginControlFlow('if(code - firstError == $L)', error.number)
-            readError.addStatement('return $T.read$L(firstError, in)', error.javaType.className, error.javaType.className.simpleName())
+            if(error.caseSuperName.isPresent()) {
+                readError.addStatement('return $T.read$L(firstError, in)', error.caseSuperName.get(), error.caseSuperName.get().simpleName())
+            } else if(error.javaType.size() == 1) {
+                readError.addStatement('return $T.read$L(firstError, in)', error.javaType[0].className, error.javaType[0].className.simpleName())
+            } else {
+                throw new IllegalStateException("event has caseSuperName and multiple java types")
+            }
             readError.endControlFlow()
         }
         readError.addStatement('throw new $T("code " + code + " is not supported")', IllegalArgumentException.class)
@@ -216,17 +228,6 @@ class XResult {
     }
 
     void addNode(Node node) {
-        boolean hasCase = node.childNodes().any {
-            if(node.name() == 'switch') {
-                return node.childNodes().any {
-                    return node.name() == 'case'
-                }
-            }
-            return false
-        }
-        if(hasCase) {
-            addCaseType(node)
-        }
         switch(node.name()) {
             case 'xidtype':
                 addXidtype(node)
@@ -267,10 +268,6 @@ class XResult {
             default:
                 throw new IllegalArgumentException("could not parse ${node.name()}")
         }
-    }
-
-    void addCaseType(Node node) {
-
     }
 
     void addXidtype(Node node) {

@@ -19,7 +19,7 @@ class JavaStructSpec extends XmlSpec {
         addChildNodes()
 
         when:
-        TypeSpec typeSpec = result.resolveXType('Format').javaType.typeSpecs[0]
+        TypeSpec typeSpec = result.resolveXType('Format').javaType.typeSpec[0]
 
         then:
         typeSpec.toString() == '''\
@@ -91,10 +91,10 @@ class JavaStructSpec extends XmlSpec {
 
         when:
         XTypeStruct struct = result.resolveXType('SCREEN')
-        JavaStruct javaStruct = javaStruct(struct)
+        JavaStruct javaStruct = javaStruct(struct)[0]
 
         then:
-        javaStruct.typeSpecs[0].toString() == '''\
+        javaStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class Screen implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -205,10 +205,10 @@ class JavaStructSpec extends XmlSpec {
 
         when:
         XTypeStruct struct = result.resolveXType('DeviceTimeCoord')
-        JavaStruct javaStruct = javaStruct(struct)
+        JavaStruct javaStruct = javaStruct(struct)[0]
 
         then:
-        javaStruct.typeSpecs[0].toString() == '''\
+        javaStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class DeviceTimeCoord implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -265,10 +265,10 @@ class JavaStructSpec extends XmlSpec {
 
         when:
         XTypeStruct struct = result.resolveXType('SetKeyType')
-        JavaStruct javaStruct = javaStruct(struct)
+        JavaStruct javaStruct = javaStruct(struct)[0]
 
         then:
-        javaStruct.typeSpecs[0].toString() == '''\
+        javaStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class SetKeyType implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -337,7 +337,7 @@ class JavaStructSpec extends XmlSpec {
         addChildNodes()
 
         when:
-        TypeSpec typeSpec = result.resolveXType('SetupRequest').javaType.typeSpecs[0]
+        TypeSpec typeSpec = result.resolveXType('SetupRequest').javaType.typeSpec[0]
 
         then:
         typeSpec.toString() == '''\

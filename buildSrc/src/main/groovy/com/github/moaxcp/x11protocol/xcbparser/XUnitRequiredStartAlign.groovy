@@ -5,12 +5,16 @@ import groovy.util.slurpersupport.Node
 class XUnitRequiredStartAlign implements XUnit {
     int align
 
+    XCaseInfo getCaseInfo() {
+        throw new UnsupportedOperationException("nested cases not supported")
+    }
+
     static XUnitRequiredStartAlign xUnitRequiredStartAlign(XResult result, Node node) {
         return new XUnitRequiredStartAlign(align: Integer.valueOf((String) node.attributes().get('align')))
     }
 
     @Override
-    JavaRequiredStartAlign getJavaUnit(JavaType javaType) {
-        return new JavaRequiredStartAlign(javaType: javaType, xUnit: this, align:align)
+    List<JavaRequiredStartAlign> getJavaUnit(JavaType javaType) {
+        return [new JavaRequiredStartAlign(javaType: javaType, xUnit: this, align:align)]
     }
 }
