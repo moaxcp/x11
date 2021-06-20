@@ -7,6 +7,12 @@ class CaseTypeSpec extends XmlSpec {
     def inputInfo() {
         given:
         xmlBuilder.xcb() {
+            typedef(oldname: 'CARD8', newname: 'KeyCode')
+            'enum'(name: 'InputClass') {
+                item(name: 'key') {
+                    value('0')
+                }
+            }
             struct(name: 'InputInfo') {
                 field(type: 'CARD8', name: 'class_id', enum: 'InputClass')
                 field(type: 'CARD8', name: 'len')
@@ -40,7 +46,7 @@ class CaseTypeSpec extends XmlSpec {
         addChildNodes()
 
         when:
-        TypeSpec typeSpec = result.resolveXType('InputInfoKey').javaType[0].typeSpec
+        TypeSpec typeSpec = result.resolveXType('InputInfo').getSubType('key').typeSpec
 
         then:
         typeSpec.toString() == '''\

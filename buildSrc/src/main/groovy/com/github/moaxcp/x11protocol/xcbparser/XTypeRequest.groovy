@@ -52,15 +52,12 @@ class XTypeRequest extends XTypeObject {
     }
 
     @Override
-    @Memoized
-    List<ClassName> getCaseClassNames() {
-        return getCaseNames().collect {
-            getRequestTypeName(javaPackage, name + it.capitalize())
-        }
+    JavaType getJavaType() {
+        return javaRequest(this)
     }
 
     @Override
-    List<JavaType> getJavaType() {
-        return javaRequest(this)
+    JavaType getSubType(String subType) {
+        return javaRequest(this, subType)
     }
 }

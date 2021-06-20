@@ -1,6 +1,5 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
-
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
@@ -13,21 +12,7 @@ class JavaReply extends JavaObjectType {
         super(map)
     }
 
-    static List<JavaReply> javaReply(XTypeReply reply) {
-        List<ClassName> cases = reply.getCaseClassNames()
-        if(cases) {
-            ClassName superType = getReplyTypeName(reply.javaPackage, reply.name)
-            return cases.collect {
-                JavaReply javaReply = new JavaReply(
-                        result: reply.result,
-                        superTypes: reply.superTypes + superType,
-                        basePackage: reply.basePackage,
-                        javaPackage: reply.javaPackage,
-                        className: getReplyTypeName(reply.javaPackage, reply.name)
-                )
-                return setProtocol(reply, javaReply)
-            }
-        }
+    static JavaReply javaReply(XTypeReply reply) {
         JavaReply javaReply = new JavaReply(
             result: reply.result,
             superTypes: reply.superTypes + ClassName.get(reply.basePackage, 'XReply'),
@@ -35,7 +20,21 @@ class JavaReply extends JavaObjectType {
             javaPackage: reply.javaPackage,
             className: getReplyTypeName(reply.javaPackage, reply.name)
         )
-        return [setProtocol(reply, javaReply)]
+        return setProtocol(reply, javaReply)
+    }
+
+    static JavaType javaReply(XTypeReply reply, String subType) {
+        ClassName replyClass = getReplyTypeName(reply.javaPackage, reply.name + subType.capitalize())
+        ClassName superType = getReplyTypeName(reply.javaPackage, reply.name)
+
+        JavaReply javaType = new JavaReply(
+            result: reply.result,
+            superTypes: reply.superTypes + superType,
+            basePackage: reply.basePackage,
+            javaPackage: reply.javaPackage,
+            className: replyClass,
+        )
+        return setProtocol(reply, javaType)
     }
 
     private static JavaReply setProtocol(XTypeReply reply, JavaReply javaReply) {

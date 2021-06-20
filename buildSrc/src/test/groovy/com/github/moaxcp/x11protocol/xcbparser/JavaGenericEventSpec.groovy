@@ -27,7 +27,7 @@ class JavaGenericEventSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeEvent event = result.resolveXType('ConfigureNotify')
-        JavaEvent javaEvent = event.javaType[0]
+        JavaEvent javaEvent = event.javaType
 
         then:
         javaEvent.typeSpec.toString() == '''\

@@ -44,13 +44,18 @@ class XTypeEventStruct extends XType implements XTypeUnit {
     }
 
     @Override
-    List<String> getCaseClassNames() {
-        return []
+    JavaType getJavaType() {
+        return javaEventStruct(this)
     }
 
     @Override
-    List<JavaType> getJavaType() {
-        return javaEventStruct(this)
+    JavaType getSubType(String subType) {
+        throw new UnsupportedOperationException("event struct does not support sub types")
+    }
+
+    @Override
+    List<JavaType> getSubTypes() {
+        throw new UnsupportedOperationException("event struct does not support subtypes")
     }
 
     @Override

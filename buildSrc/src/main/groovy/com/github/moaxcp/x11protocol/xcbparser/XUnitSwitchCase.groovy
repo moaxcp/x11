@@ -12,7 +12,7 @@ class XUnitSwitchCase extends XUnitSwitch {
 
     @Override
     List<JavaUnit> getJavaUnit(JavaType javaType) {
-        return fields.reduce([]) { List<JavaUnit> units, XUnit unit ->
+        return fields.inject([]) { List<JavaUnit> units, XUnit unit ->
             if(!unit.caseInfo) {
                 units.addAll(unit.getJavaUnit(javaType))
             }

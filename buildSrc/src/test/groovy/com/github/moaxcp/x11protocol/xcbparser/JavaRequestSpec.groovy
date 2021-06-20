@@ -17,7 +17,7 @@ class JavaRequestSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('DestroyWindow')
-        JavaRequest javaRequest = request.javaType[0]
+        JavaRequest javaRequest = request.javaType
 
         then:
         javaRequest.typeSpec.toString() == '''\
@@ -93,7 +93,7 @@ class JavaRequestSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('PolyPoint')
-        JavaRequest javaRequest = request.javaType[0]
+        JavaRequest javaRequest = request.javaType
 
         then:
         javaRequest.typeSpec.toString() == '''\
@@ -209,7 +209,7 @@ class JavaRequestSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('QueryTextExtends')
-        JavaRequest javaRequest = request.javaType[0]
+        JavaRequest javaRequest = request.javaType
 
         then:
         javaRequest.typeSpec.toString() == '''\
@@ -294,7 +294,7 @@ class JavaRequestSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('Enable')
-        JavaRequest javaRequest = request.javaType[0]
+        JavaRequest javaRequest = request.javaType
 
         then:
         javaRequest.typeSpec.toString() == '''\
@@ -508,7 +508,7 @@ class JavaRequestSpec extends XmlSpec {
         JavaRequest javaRequest = request.javaType
 
         then:
-        javaRequest.typeSpec[0].toString() == '''\
+        javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class CreateWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -1009,7 +1009,7 @@ class JavaRequestSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('Await')
-        JavaRequest javaRequest = request.javaType[0]
+        JavaRequest javaRequest = request.javaType
 
         then:
         javaRequest.typeSpec.toString() == '''\

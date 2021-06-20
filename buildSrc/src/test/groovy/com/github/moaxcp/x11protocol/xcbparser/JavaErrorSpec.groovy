@@ -17,7 +17,7 @@ class JavaErrorSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeError error = result.resolveXType('Request')
-        JavaError javaError = error.javaType[0]
+        JavaError javaError = error.javaType
 
         then:
         javaError.typeSpec.toString() == '''\

@@ -4,6 +4,7 @@ import com.squareup.javapoet.*
 
 import javax.lang.model.element.Modifier
 
+import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorTypeName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventTypeName
 
 class JavaEvent extends JavaObjectType {
@@ -18,22 +19,7 @@ class JavaEvent extends JavaObjectType {
         genericEventNumber = map.genericEventNumber ?: -1
     }
 
-    static List<JavaEvent> javaEvent(XTypeEvent event) {
-        List<ClassName> cases = event.getCaseClassNames()
-        if(cases) {
-            ClassName superType = getEventTypeName(event.javaPackage, event.name)
-            return cases.collect {
-                JavaEvent javaEvent = new JavaEvent(
-                        result: event.result,
-                        superTypes: event.superTypes + superType,
-                        basePackage: event.basePackage,
-                        javaPackage: event.javaPackage,
-                        className: getEventTypeName(event.javaPackage, event.name),
-                        number: event.number
-                )
-                return setProtocol(event, javaEvent)
-            }
-        }
+    static JavaEvent javaEvent(XTypeEvent event) {
         ClassName superType = ClassName.get(event.basePackage, 'XEvent')
         if(event.genericEvent) {
             superType = ClassName.get(event.basePackage, 'XGenericEvent')
@@ -46,7 +32,23 @@ class JavaEvent extends JavaObjectType {
             className:getEventTypeName(event.javaPackage, event.name),
             number: event.number
         )
-        return [setProtocol(event, javaEvent)]
+        return setProtocol(event, javaEvent)
+    }
+
+    static JavaEvent javaEvent(XTypeEvent event, String subType) {
+        ClassName eventClass = getErrorTypeName(event.javaPackage, event.name + subType.capitalize())
+        ClassName superType = getErrorTypeName(event.javaPackage, event.name)
+
+        JavaEvent javaType = new JavaEvent(
+            result: event.result,
+            superTypes: event.superTypes + superType,
+            basePackage: event.basePackage,
+            javaPackage: event.javaPackage,
+            className: eventClass,
+            number: event.number
+        )
+
+        return setProtocol(event, javaType)
     }
 
     private static JavaEvent setProtocol(XTypeEvent event, JavaEvent javaEvent) {

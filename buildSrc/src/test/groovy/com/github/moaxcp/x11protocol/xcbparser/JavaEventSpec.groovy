@@ -38,7 +38,7 @@ class JavaEventSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeEvent event = result.resolveXType('KeyPress')
-        JavaEvent javaEvent = event.javaType[0]
+        JavaEvent javaEvent = event.javaType
 
         then:
         javaEvent.typeSpec.toString() == '''\
@@ -202,7 +202,7 @@ class JavaEventSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeEvent event = result.resolveXType('MapRequest')
-        JavaEvent javaEvent = event.javaType[0]
+        JavaEvent javaEvent = event.javaType
 
         then:
         javaEvent.typeSpec.toString() == '''\

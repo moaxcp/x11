@@ -160,13 +160,7 @@ class XResult {
         for(XTypeEvent event : events.values()) {
             if(event.number != 35) {
                 readEvent.beginControlFlow('if(number - firstEvent == $L)', event.number)
-                if(event.caseSuperName.isPresent()) {
-                    readEvent.addStatement('return $T.read$L(firstEvent, sentEvent, in)', event.caseSuperName.get(), event.caseSuperName.get().simpleName())
-                } else if(event.javaType.size() == 1) {
-                    readEvent.addStatement('return $T.read$L(firstEvent, sentEvent, in)', event.javaType[0].className, event.javaType[0].className.simpleName())
-                } else {
-                    throw new IllegalStateException("event has caseSuperName and multiple java types")
-                }
+                readEvent.addStatement('return $T.read$L(firstEvent, sentEvent, in)', event.javaType.className, event.javaType.className.simpleName())
                 readEvent.endControlFlow()
             }
         }
@@ -186,10 +180,8 @@ class XResult {
             readError.beginControlFlow('if(code - firstError == $L)', error.number)
             if(error.caseSuperName.isPresent()) {
                 readError.addStatement('return $T.read$L(firstError, in)', error.caseSuperName.get(), error.caseSuperName.get().simpleName())
-            } else if(error.javaType.size() == 1) {
-                readError.addStatement('return $T.read$L(firstError, in)', error.javaType[0].className, error.javaType[0].className.simpleName())
             } else {
-                throw new IllegalStateException("event has caseSuperName and multiple java types")
+                readError.addStatement('return $T.read$L(firstError, in)', error.javaType.className, error.javaType.className.simpleName())
             }
             readError.endControlFlow()
         }
@@ -394,7 +386,7 @@ class XResult {
             throw new IllegalArgumentException("could not resolve $type in $extensionName")
         }
 
-        return resolved
+        return (T) resolved
     }
 
     @Memoized

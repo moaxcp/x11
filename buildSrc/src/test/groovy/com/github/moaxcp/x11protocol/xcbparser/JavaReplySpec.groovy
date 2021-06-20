@@ -26,8 +26,8 @@ class JavaReplySpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('QueryTree')
-        JavaRequest javaRequest = request.javaType[0]
-        JavaReply javaReply = request.reply.javaType[0]
+        JavaRequest javaRequest = request.javaType
+        JavaReply javaReply = request.reply.javaType
 
         then:
         javaRequest.typeSpec.toString() == '''\
@@ -163,7 +163,7 @@ class JavaReplySpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('TranslateCoordinates')
-        JavaReply javaReply = request.reply.javaType[0]
+        JavaReply javaReply = request.reply.javaType
 
         then:
         javaReply.typeSpec.toString() == '''\
@@ -251,7 +251,7 @@ class JavaReplySpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('ListHosts')
-        JavaReply javaReply = request.reply.javaType[0]
+        JavaReply javaReply = request.reply.javaType
 
         then:
         javaReply.typeSpec.toString() == '''\
@@ -349,7 +349,7 @@ class JavaReplySpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('QueryExtension')
-        JavaReply javaReply = request.reply.javaType[0]
+        JavaReply javaReply = request.reply.javaType
 
         then:
         javaReply.typeSpec.toString() == '''\

@@ -28,7 +28,7 @@ class JavaTypeListPropertySpec extends XmlSpec {
         addChildNodes()
 
         when:
-        TypeSpec typeSpec = result.resolveXType('Setup').javaType.typeSpec[0]
+        TypeSpec typeSpec = result.resolveXType('Setup').javaType.typeSpec
 
         then:
         typeSpec.toString() == '''\

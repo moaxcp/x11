@@ -42,7 +42,7 @@ class ReplyWithReadParamSpec extends XmlSpec {
         when:
         addChildNodes()
         XTypeRequest request = result.resolveXType('GetDeviceMotionEvents')
-        JavaReply javaReply = request.reply.javaType[0]
+        JavaReply javaReply = request.reply.javaType
 
         then:
         javaReply.typeSpec.toString() == '''\

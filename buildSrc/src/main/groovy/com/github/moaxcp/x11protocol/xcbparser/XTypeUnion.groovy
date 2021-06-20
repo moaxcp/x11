@@ -4,7 +4,6 @@ import com.squareup.javapoet.ClassName
 import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getUnionJavaName
-import static com.github.moaxcp.x11protocol.generator.Conventions.getUnionTypeName
 import static com.github.moaxcp.x11protocol.xcbparser.JavaClientMessageDataUnionProperty.javaClientMessageDataUnionProperty
 import static com.github.moaxcp.x11protocol.xcbparser.JavaNotifyDataUnionProperty.javaNotifyDataUnionProperty
 import static com.github.moaxcp.x11protocol.xcbparser.JavaTypeProperty.javaTypeProperty
@@ -38,7 +37,7 @@ class XTypeUnion extends XTypeObject {
                     union.protocol.add(xUnitPad(it))
                     break
                 case 'switch':
-                    System.out.println("switch on ${union.name}")
+                    throw new UnsupportedOperationException("switch on union")
                     break
                 default:
                     throw new IllegalArgumentException("cannot parse ${it.name()}")
@@ -49,17 +48,15 @@ class XTypeUnion extends XTypeObject {
     }
 
     @Override
-    List<ClassName> getCaseClassNames() {
-        return getCaseNames().collect {
-            getUnionTypeName(javaPackage, name + it.capitalize())
-        }
+    JavaType getJavaType() {
+        return javaUnion(this)
     }
 
     @Override
-    List<JavaType> getJavaType() {
-        return javaUnion(this)
+    JavaType getSubType(String subType) {
+        return javaUnion(this, subType)
     }
-    
+
     @Override
     JavaTypeProperty getJavaProperty(JavaType javaType, XUnitField field) {
         if(name == 'ClientMessageData') {

@@ -46,6 +46,13 @@ abstract class XTypeObject extends XType implements XTypeUnit {
         }
     }
 
+    @Override
+    List<JavaType> getSubTypes() {
+        return getCaseNames().collect {
+            getSubType(it)
+        }
+    }
+
     XUnitField getField(String name) {
         return protocol.find {
             it.hasProperty('name') && it.name == name

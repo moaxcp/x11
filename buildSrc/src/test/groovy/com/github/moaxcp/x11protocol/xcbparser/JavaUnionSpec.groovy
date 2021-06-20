@@ -78,7 +78,7 @@ class JavaUnionSpec extends XmlSpec {
         JavaStruct defaultStruct = result.resolveXType('DefaultBehavior').javaType
 
         then:
-        union.typeSpec[0].toString() == '''\
+        union.typeSpec.toString() == '''\
             public interface BehaviorUnion {
               static com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion readBehaviorUnion(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
@@ -103,7 +103,7 @@ class JavaUnionSpec extends XmlSpec {
             }
         '''.stripIndent()
 
-        common.typeSpec[0].toString() == '''\
+        common.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class CommonBehavior implements com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion, com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
@@ -140,7 +140,7 @@ class JavaUnionSpec extends XmlSpec {
             }
         '''.stripIndent()
 
-        defaultStruct.typeSpec[0].toString() == '''\
+        defaultStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
             public class DefaultBehavior implements com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion, com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {

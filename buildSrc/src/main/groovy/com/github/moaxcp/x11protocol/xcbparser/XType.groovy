@@ -19,5 +19,4 @@ abstract class XType implements XTypeUnit {
 
     abstract Optional<ClassName> getCaseSuperName()
     abstract List<String> getCaseNames()
-    abstract List<String> getCaseClassNames()
 }

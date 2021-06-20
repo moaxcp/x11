@@ -83,18 +83,18 @@ class JavaEnum implements JavaType {
         return typeSpec
     }
 
-    static List<JavaEnum> javaEnum(XTypeEnum xEnum) {
+    static JavaEnum javaEnum(XTypeEnum xEnum) {
         String simpleName = getEnumJavaName(xEnum.name)
         Map<String, String> values = xEnum.items.collectEntries {
             [(getEnumValueName(it.name)):it.value.expression]
         }
-        return [new JavaEnum(
+        return new JavaEnum(
             basePackage: xEnum.basePackage,
             javaPackage: xEnum.javaPackage,
             simpleName: simpleName,
             className: getEnumClassName(xEnum.javaPackage, xEnum.name),
             superInterface: ClassName.get(xEnum.basePackage, 'IntValue'),
             values: values
-        )]
+        )
     }
 }

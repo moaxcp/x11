@@ -1,9 +1,8 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
-import com.squareup.javapoet.ClassName
+
 import groovy.util.slurpersupport.Node
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.getReplyTypeName
 import static com.github.moaxcp.x11protocol.xcbparser.JavaReply.javaReply
 
 class XTypeReply extends XTypeObject {
@@ -31,14 +30,12 @@ class XTypeReply extends XTypeObject {
     }
 
     @Override
-    List<ClassName> getCaseClassNames() {
-        return getCaseNames().collect {
-            getReplyTypeName(javaPackage, name + it.capitalize())
-        }
+    JavaType getJavaType() {
+        return javaReply(this)
     }
 
     @Override
-    List<JavaType> getJavaType() {
-        return javaReply(this)
+    JavaType getSubType(String subType) {
+        return javaReply(this, subType)
     }
 }

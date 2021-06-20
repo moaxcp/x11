@@ -14,22 +14,7 @@ class JavaError extends JavaObjectType {
         number = map.number
     }
 
-    static List<JavaError> javaError(XTypeError error) {
-        List<ClassName> cases = error.getCaseClassNames()
-        if(cases) {
-            ClassName superType = getErrorTypeName(error.javaPackage, error.name)
-            return cases.collect {
-                JavaError javaType = new JavaError(
-                        result: error.result,
-                        superTypes: error.superTypes + superType,
-                        basePackage: error.basePackage,
-                        javaPackage: error.javaPackage,
-                        className: it,
-                        number: error.number
-                )
-                return setProtocol(error, javaType)
-            }
-        }
+    static JavaError javaError(XTypeError error) {
         JavaError javaError = new JavaError(
             result: error.result,
             superTypes: error.superTypes + ClassName.get(error.basePackage, 'XError'),
@@ -38,7 +23,22 @@ class JavaError extends JavaObjectType {
             className:getErrorTypeName(error.javaPackage, error.name),
             number: error.number
         )
-        return [setProtocol(error, javaError)]
+        return setProtocol(error, javaError)
+    }
+
+    static JavaError javaError(XTypeError error, String subType) {
+        ClassName errorClass = getErrorTypeName(error.javaPackage, error.name + subType.capitalize())
+        ClassName superType = getErrorTypeName(error.javaPackage, error.name)
+
+        JavaError javaType = new JavaError(
+            result: error.result,
+            superTypes: error.superTypes + superType,
+            basePackage: error.basePackage,
+            javaPackage: error.javaPackage,
+            className: errorClass,
+            number: error.number
+        )
+        return setProtocol(error, javaType)
     }
 
     private static JavaError setProtocol(XTypeError error, JavaError javaError) {

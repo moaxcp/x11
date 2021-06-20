@@ -27,6 +27,10 @@ class JavaUnion extends JavaObjectType {
         return javaUnion
     }
 
+    static JavaUnion javaUnion(XTypeUnion union, String subType) {
+        throw new UnsupportedOperationException("subtype with union")
+    }
+
     static JavaUnion behaviorUnionJavaUnion(Map args) {
         return new BehaviorUnion(args)
     }

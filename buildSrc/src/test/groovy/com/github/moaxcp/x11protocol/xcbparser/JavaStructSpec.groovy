@@ -19,7 +19,7 @@ class JavaStructSpec extends XmlSpec {
         addChildNodes()
 
         when:
-        TypeSpec typeSpec = result.resolveXType('Format').javaType.typeSpec[0]
+        TypeSpec typeSpec = result.resolveXType('Format').javaType.typeSpec
 
         then:
         typeSpec.toString() == '''\
@@ -91,7 +91,7 @@ class JavaStructSpec extends XmlSpec {
 
         when:
         XTypeStruct struct = result.resolveXType('SCREEN')
-        JavaStruct javaStruct = javaStruct(struct)[0]
+        JavaStruct javaStruct = javaStruct(struct)
 
         then:
         javaStruct.typeSpec.toString() == '''\
@@ -205,7 +205,7 @@ class JavaStructSpec extends XmlSpec {
 
         when:
         XTypeStruct struct = result.resolveXType('DeviceTimeCoord')
-        JavaStruct javaStruct = javaStruct(struct)[0]
+        JavaStruct javaStruct = javaStruct(struct)
 
         then:
         javaStruct.typeSpec.toString() == '''\
@@ -265,7 +265,7 @@ class JavaStructSpec extends XmlSpec {
 
         when:
         XTypeStruct struct = result.resolveXType('SetKeyType')
-        JavaStruct javaStruct = javaStruct(struct)[0]
+        JavaStruct javaStruct = javaStruct(struct)
 
         then:
         javaStruct.typeSpec.toString() == '''\
@@ -337,7 +337,7 @@ class JavaStructSpec extends XmlSpec {
         addChildNodes()
 
         when:
-        TypeSpec typeSpec = result.resolveXType('SetupRequest').javaType.typeSpec[0]
+        TypeSpec typeSpec = result.resolveXType('SetupRequest').javaType.typeSpec
 
         then:
         typeSpec.toString() == '''\

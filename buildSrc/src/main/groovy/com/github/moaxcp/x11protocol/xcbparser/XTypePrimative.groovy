@@ -21,12 +21,17 @@ class XTypePrimative extends XType {
     }
 
     @Override
-    List<String> getCaseClassNames() {
-        return []
+    JavaType getJavaType() {
+        throw new UnsupportedOperationException("primatives")
     }
 
     @Override
-    List<JavaType> getJavaType() {
+    JavaType getSubType(String subType) {
+        throw new UnsupportedOperationException("primatives")
+    }
+
+    @Override
+    List<JavaType> getSubTypes() {
         throw new UnsupportedOperationException("primatives")
     }
 

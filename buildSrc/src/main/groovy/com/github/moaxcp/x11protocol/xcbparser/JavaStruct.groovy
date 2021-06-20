@@ -10,22 +10,7 @@ class JavaStruct extends JavaObjectType {
         super(map)
     }
 
-    static List<JavaStruct> javaStruct(XTypeStruct struct) {
-        List<ClassName> cases = struct.getCaseClassNames()
-        if(cases) {
-            ClassName superType = struct.getCaseSuperName()
-            return cases.collect {
-                JavaStruct javaType = new JavaStruct(
-                        result: struct.result,
-                        superTypes: struct.superTypes + superType,
-                        basePackage: struct.basePackage,
-                        javaPackage: struct.javaPackage,
-                        className: it
-                )
-                javaType.protocol = struct.toJavaProtocol(javaType)
-                return javaType
-            }
-        }
+    static JavaStruct javaStruct(XTypeStruct struct) {
         JavaStruct javaType = new JavaStruct(
             result: struct.result,
             superTypes: struct.superTypes + ClassName.get(struct.basePackage, 'XStruct'),
@@ -35,6 +20,22 @@ class JavaStruct extends JavaObjectType {
         )
 
         javaType.protocol = struct.toJavaProtocol(javaType)
-        return [javaType]
+        return javaType
+    }
+
+    static JavaType javaStruct(XTypeStruct struct, String subType) {
+        ClassName structClass = getStructTypeName(struct.javaPackage, struct.name + subType.capitalize())
+        ClassName superType = getStructTypeName(struct.javaPackage, struct.name)
+
+        JavaStruct javaType = new JavaStruct(
+            result: struct.result,
+            superTypes: struct.superTypes + superType,
+            basePackage: struct.basePackage,
+            javaPackage: struct.javaPackage,
+            className: structClass
+        )
+
+        javaType.protocol = struct.toJavaProtocol(javaType)
+        return javaType
     }
 }

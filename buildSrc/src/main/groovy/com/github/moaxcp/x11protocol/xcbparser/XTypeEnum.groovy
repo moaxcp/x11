@@ -25,11 +25,6 @@ class XTypeEnum extends XType implements XTypeUnit {
         return []
     }
 
-    @Override
-    List<String> getCaseClassNames() {
-        return []
-    }
-
     static XTypeEnum xTypeEnum(XResult result, Node node) {
         XTypeEnum xEnum = new XTypeEnum(result: result, name:node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
         node.childNodes().each { Node it ->
@@ -48,8 +43,18 @@ class XTypeEnum extends XType implements XTypeUnit {
     }
 
     @Override
-    List<JavaType> getJavaType() {
+    JavaType getJavaType() {
         return javaEnum(this)
+    }
+
+    @Override
+    JavaType getSubType(String subType) {
+        throw new UnsupportedOperationException("enum does not support subtype")
+    }
+
+    @Override
+    List<JavaType> getSubTypes() {
+        throw new UnsupportedOperationException("enum does not support subtypes")
     }
 
     @Override

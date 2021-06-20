@@ -26,7 +26,7 @@ class XEnumSpec extends XmlSpec {
         result.enums.VisualClass.items[0].value.expression.toString() == '0'
         result.enums.VisualClass.items[1].name == 'GrayScale'
         result.enums.VisualClass.items[1].value.expression.toString() == '1'
-        result.enums.VisualClass.javaType[0].simpleName == 'VisualClass'
+        result.enums.VisualClass.javaType.simpleName == 'VisualClass'
     }
 
     def 'enum bit from node'() {
@@ -56,6 +56,6 @@ class XEnumSpec extends XmlSpec {
         result.resolveXType('EventMask').items[1].value.expression.toString() == '0b1'
         result.resolveXType('EventMask').items[2].name == 'KeyRelease'
         result.resolveXType('EventMask').items[2].value.expression.toString() == '0b10'
-        result.resolveXType('EventMask').javaType[0].simpleName == 'EventMask'
+        result.resolveXType('EventMask').javaType.simpleName == 'EventMask'
     }
 }

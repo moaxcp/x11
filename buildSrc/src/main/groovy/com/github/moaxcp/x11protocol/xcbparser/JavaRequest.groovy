@@ -16,32 +16,13 @@ class JavaRequest extends JavaObjectType {
         reply = map.reply
     }
 
-    static List<JavaRequest> javaRequest(XTypeRequest request) {
-        List<ClassName> cases = request.getCaseClassNames()
-        if(cases) {
-            ClassName superType = getRequestTypeName(request.javaPackage, request.name)
-            return cases.collect {
-                JavaRequest javaRequest = new JavaRequest(
-                        result: request.result,
-                        superTypes: request.superTypes + superType,
-                        basePackage: request.basePackage,
-                        javaPackage: request.javaPackage,
-                        className: it,
-                        opCode: request.opCode,
-                        reply: request.reply
-                )
-                return setProtocol(request, javaRequest)
-            }
-        }
-
+    static JavaRequest javaRequest(XTypeRequest request) {
         Set<ClassName> superTypes = request.superTypes
         if(request.reply) {
             if(request.reply.caseSuperName.isPresent()) {
                 superTypes += ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.caseSuperName.get())
-            } else if(request.reply.javaType.size() == 1) {
-                superTypes += ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.javaType[0].className)
             } else {
-                throw new IllegalStateException("reply cannot have multiple javaTypes without a caseSuperName")
+                superTypes += ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.javaType.className)
             }
         } else {
             superTypes += ClassName.get(request.basePackage, 'OneWayRequest')
@@ -55,7 +36,24 @@ class JavaRequest extends JavaObjectType {
             opCode: request.opCode,
             reply: request.reply
         )
-        return [setProtocol(request, javaRequest)]
+        return setProtocol(request, javaRequest)
+    }
+
+    static JavaRequest javaRequest(XTypeRequest request, String subType) {
+        ClassName requestClass = getRequestTypeName(request.javaPackage, request.name + subType.capitalize())
+        ClassName superType = getRequestTypeName(request.javaPackage, request.name)
+
+        JavaRequest javaType = new JavaRequest(
+            result: request.result,
+            superTypes: request.superTypes + superType,
+            basePackage: request.basePackage,
+            javaPackage: request.javaPackage,
+            className: requestClass,
+            opCode: request.opCode,
+            reply: request.reply
+        )
+
+        return setProtocol(request, javaType)
     }
 
     private static JavaRequest setProtocol(XTypeRequest request, JavaRequest javaRequest) {
@@ -77,14 +75,12 @@ class JavaRequest extends JavaObjectType {
                     .addModifiers(Modifier.PUBLIC)
                     .addStatement('return (field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in)', reply.getCaseSuperName().get(), reply.getCaseSuperName().get().simpleName())
                     .build())
-            } else if(reply.javaType.size() == 1) {
-                typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
-                    .returns(ParameterizedTypeName.get(ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction'), reply.javaType[0].className))
-                    .addModifiers(Modifier.PUBLIC)
-                    .addStatement('return (field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in)', reply.javaType[0].className, reply.javaType[0].simpleName)
-                    .build())
             } else {
-                throw new IllegalStateException("only one case allowed when there is no caseSuperName")
+                typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
+                    .returns(ParameterizedTypeName.get(ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction'), reply.javaType.className))
+                    .addModifiers(Modifier.PUBLIC)
+                    .addStatement('return (field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in)', reply.javaType.className, reply.javaType.simpleName)
+                    .build())
             }
         }
         typeBuilder.addMethod(MethodSpec.methodBuilder('getOpCode')
