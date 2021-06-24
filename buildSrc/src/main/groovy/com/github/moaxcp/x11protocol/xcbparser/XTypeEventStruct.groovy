@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
-import com.squareup.javapoet.ClassName
+
 import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.xcbparser.JavaEventStruct.javaEventStruct
@@ -34,18 +34,18 @@ class XTypeEventStruct extends XType implements XTypeUnit {
     }
 
     @Override
-    Optional<ClassName> getCaseSuperName() {
-        return Optional.empty()
-    }
-
-    @Override
-    List<String> getCaseNames() {
+    List<String> getSubTypeNames() {
         return []
     }
 
     @Override
     JavaType getJavaType() {
         return javaEventStruct(this)
+    }
+
+    @Override
+    boolean hasSubTypes() {
+        return false
     }
 
     @Override

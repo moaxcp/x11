@@ -18,27 +18,26 @@ import static com.github.moaxcp.x11protocol.xcbparser.XUnitSwitch.parseXUnitSwit
 abstract class XTypeObject extends XType implements XTypeUnit {
     Set<ClassName> superTypes = []
     List<XUnit> protocol = []
-    Optional<ClassName> caseSuperName
-
-    void setCaseSuperName(ClassName caseSuperName) {
-        this.caseSuperName = Optional.ofNullable(caseSuperName)
-    }
 
     XTypeObject(Map map) {
         super(map)
         superTypes = map.superTypes ?: []
         protocol = map.protocol ?: []
-        setCaseSuperName(map.caseSuperName)
+    }
+
+    @Override
+    boolean hasSubTypes() {
+        return !subTypeNames.isEmpty()
     }
 
     @Override
     @Memoized
-    List<String> getCaseNames() {
+    List<String> getSubTypeNames() {
         protocol.inject([]) { names, unit ->
             if(unit instanceof XUnitSwitchCase) {
                 unit.fields.each {field ->
                     if(field instanceof XUnitField) {
-                        names.add(field.caseInfo.caseName)
+                        names.add(field.caseInfo.enumItem)
                     }
                 }
             }
@@ -48,20 +47,20 @@ abstract class XTypeObject extends XType implements XTypeUnit {
 
     @Override
     List<JavaType> getSubTypes() {
-        return getCaseNames().collect {
+        return getSubTypeNames().collect {
             getSubType(it)
         }
     }
 
     XUnitField getField(String name) {
-        return protocol.find {
-            it.hasProperty('name') && it.name == name
+        return (XUnitField) protocol.find {
+            it instanceof XUnitField && it.name == name
         }
     }
 
     XUnitListField getListField(String name) {
-        return protocol.find {
-            it.name == name
+        return (XUnitListField) protocol.find {
+            it instanceof XUnitListField && it.name == name
         }
     }
 

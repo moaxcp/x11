@@ -1,9 +1,6 @@
 package com.github.moaxcp.x11protocol.generator
 
-import com.github.moaxcp.x11protocol.xcbparser.XParser
-import com.github.moaxcp.x11protocol.xcbparser.XResult
-import com.github.moaxcp.x11protocol.xcbparser.XTypeReply
-import com.github.moaxcp.x11protocol.xcbparser.XTypeUnit
+import com.github.moaxcp.x11protocol.xcbparser.*
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 
@@ -22,10 +19,10 @@ class ProtocolGenerator {
         writeToFile(result.javaPackage, result.errors.values())
 
         result.requests.values().each {
-            writeToFile(result.javaPackage, it.javaType.typeSpec)
+            writeToFile(result.javaPackage, it)
             XTypeReply reply = it.reply
             if(reply) {
-                writeToFile(result.javaPackage, reply.javaType.typeSpec)
+                writeToFile(result.javaPackage, reply)
             }
         }
 
@@ -40,14 +37,18 @@ class ProtocolGenerator {
     }
 
     private void writeToFile(String javaPackage, Collection<XTypeUnit> units) {
-        units.each {
-            writeToFile(javaPackage, it.javaType.typeSpec)
+        units.each {main ->
+            writeToFile(javaPackage, main)
         }
     }
 
-    private void writeToFile(String javaPackage, List<TypeSpec> typeSpecs) {
-        typeSpecs.each {
-            writeToFile(javaPackage, it)
+    private void writeToFile(String javaPackage, XTypeUnit unit) {
+        if(unit.hasSubTypes()) {
+            unit.getSubTypes().each {sub ->
+                writeToFile(javaPackage, sub.typeSpec)
+            }
+        } else {
+            writeToFile(javaPackage, unit.javaType.typeSpec)
         }
     }
 

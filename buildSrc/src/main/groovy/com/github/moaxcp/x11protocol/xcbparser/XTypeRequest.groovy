@@ -1,10 +1,8 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
-import com.squareup.javapoet.ClassName
-import groovy.transform.Memoized
+
 import groovy.util.slurpersupport.Node
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.getRequestTypeName
 import static com.github.moaxcp.x11protocol.xcbparser.JavaRequest.javaRequest
 
 class XTypeRequest extends XTypeObject {
@@ -14,15 +12,6 @@ class XTypeRequest extends XTypeObject {
     XTypeRequest(Map map) {
         super(map)
         opCode = map.opCode ?: 0
-    }
-
-    @Override
-    @Memoized
-    Optional<ClassName> getCaseSuperName() {
-        if(caseClassNames) {
-            return Optional.of(getRequestTypeName(javaPackage, name))
-        }
-        return Optional.empty()
     }
 
     static XTypeRequest xTypeRequest(XResult result, Node node) {

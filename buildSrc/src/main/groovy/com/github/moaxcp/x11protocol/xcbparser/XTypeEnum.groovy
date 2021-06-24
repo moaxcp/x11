@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.xcbparser.expression.Expressions
-import com.squareup.javapoet.ClassName
 import groovy.util.slurpersupport.Node
 
 import static com.github.moaxcp.x11protocol.xcbparser.JavaEnum.javaEnum
@@ -16,12 +15,7 @@ class XTypeEnum extends XType implements XTypeUnit {
     }
 
     @Override
-    Optional<ClassName> getCaseSuperName() {
-        return Optional.empty()
-    }
-
-    @Override
-    List<String> getCaseNames() {
+    List<String> getSubTypeNames() {
         return []
     }
 
@@ -48,13 +42,18 @@ class XTypeEnum extends XType implements XTypeUnit {
     }
 
     @Override
+    boolean hasSubTypes() {
+        return false
+    }
+
+    @Override
     JavaType getSubType(String subType) {
         throw new UnsupportedOperationException("enum does not support subtype")
     }
 
     @Override
     List<JavaType> getSubTypes() {
-        throw new UnsupportedOperationException("enum does not support subtypes")
+        return []
     }
 
     @Override

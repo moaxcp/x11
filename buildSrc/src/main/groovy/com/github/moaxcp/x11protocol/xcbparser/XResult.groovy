@@ -178,11 +178,7 @@ class XResult {
 
         for(XTypeError error : errors.values()) {
             readError.beginControlFlow('if(code - firstError == $L)', error.number)
-            if(error.caseSuperName.isPresent()) {
-                readError.addStatement('return $T.read$L(firstError, in)', error.caseSuperName.get(), error.caseSuperName.get().simpleName())
-            } else {
-                readError.addStatement('return $T.read$L(firstError, in)', error.javaType.className, error.javaType.className.simpleName())
-            }
+            readError.addStatement('return $T.read$L(firstError, in)', error.javaType.className, error.javaType.className.simpleName())
             readError.endControlFlow()
         }
         readError.addStatement('throw new $T("code " + code + " is not supported")', IllegalArgumentException.class)

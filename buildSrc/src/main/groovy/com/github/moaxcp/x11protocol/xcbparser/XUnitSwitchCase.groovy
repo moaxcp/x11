@@ -16,7 +16,7 @@ class XUnitSwitchCase extends XUnitSwitch {
             if(!unit.caseInfo) {
                 units.addAll(unit.getJavaUnit(javaType))
             }
-            if(javaType.simpleName.endsWith(unit.caseInfo.caseName.capitalize())) {
+            if(javaType.simpleName.endsWith(unit.caseInfo.enumItem)) {
                 units.addAll(unit.getJavaUnit(javaType))
             }
             return units

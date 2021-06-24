@@ -1,6 +1,5 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
-import com.squareup.javapoet.ClassName
 
 import static com.github.moaxcp.x11protocol.xcbparser.JavaPrimativeListProperty.javaPrimativeListProperty
 
@@ -11,18 +10,18 @@ class XTypePrimative extends XType {
     }
 
     @Override
-    Optional<ClassName> getCaseSuperName() {
-        return Optional.empty()
-    }
-
-    @Override
-    List<String> getCaseNames() {
+    List<String> getSubTypeNames() {
         return []
     }
 
     @Override
     JavaType getJavaType() {
         throw new UnsupportedOperationException("primatives")
+    }
+
+    @Override
+    boolean hasSubTypes() {
+        return false
     }
 
     @Override

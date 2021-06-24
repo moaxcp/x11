@@ -19,11 +19,7 @@ class JavaRequest extends JavaObjectType {
     static JavaRequest javaRequest(XTypeRequest request) {
         Set<ClassName> superTypes = request.superTypes
         if(request.reply) {
-            if(request.reply.caseSuperName.isPresent()) {
-                superTypes += ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.caseSuperName.get())
-            } else {
-                superTypes += ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.javaType.className)
-            }
+            superTypes += ParameterizedTypeName.get(ClassName.get(request.basePackage, 'TwoWayRequest'), request.reply.javaType.className)
         } else {
             superTypes += ClassName.get(request.basePackage, 'OneWayRequest')
         }
@@ -69,19 +65,11 @@ class JavaRequest extends JavaObjectType {
     @Override
     void addMethods(TypeSpec.Builder typeBuilder) {
         if(reply) {
-            if(reply.getCaseSuperName().isPresent()) {
-                typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
-                    .returns(ParameterizedTypeName.get(ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction'), reply.getCaseSuperName().get()))
-                    .addModifiers(Modifier.PUBLIC)
-                    .addStatement('return (field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in)', reply.getCaseSuperName().get(), reply.getCaseSuperName().get().simpleName())
-                    .build())
-            } else {
-                typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
-                    .returns(ParameterizedTypeName.get(ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction'), reply.javaType.className))
-                    .addModifiers(Modifier.PUBLIC)
-                    .addStatement('return (field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in)', reply.javaType.className, reply.javaType.simpleName)
-                    .build())
-            }
+            typeBuilder.addMethod(MethodSpec.methodBuilder('getReplyFunction')
+                .returns(ParameterizedTypeName.get(ClassName.get('com.github.moaxcp.x11client.protocol', 'XReplyFunction'), reply.javaType.className))
+                .addModifiers(Modifier.PUBLIC)
+                .addStatement('return (field, sequenceNumber, in) -> $T.read$L(field, sequenceNumber, in)', reply.javaType.className, reply.javaType.simpleName)
+                .build())
         }
         typeBuilder.addMethod(MethodSpec.methodBuilder('getOpCode')
             .returns(TypeName.BYTE)
