@@ -30,6 +30,7 @@ class JavaStruct extends JavaObjectType {
         JavaStruct javaType = new JavaStruct(
             result: struct.result,
             superTypes: struct.superTypes + superType,
+            xUnitSubtype: subType,
             basePackage: struct.basePackage,
             javaPackage: struct.javaPackage,
             className: structClass

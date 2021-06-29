@@ -55,6 +55,9 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
         this.javaType = requireNonNull(javaType, 'javaType must not be null')
         this.x11Field = requireNonNull(field, 'field must not be null')
         this.localOnly = field.localOnly
+        if(javaType.getXUnitSubtype().isPresent() && !field.caseInfo) {
+            this.readParam = true
+        }
         if(field.bitcaseInfo) {
             this.bitcaseInfo = new JavaBitcaseInfo(field.result, field.bitcaseInfo)
         }

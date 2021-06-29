@@ -42,6 +42,7 @@ class JavaRequest extends JavaObjectType {
         JavaRequest javaType = new JavaRequest(
             result: request.result,
             superTypes: request.superTypes + superType,
+            xUnitSubtype: subType,
             basePackage: request.basePackage,
             javaPackage: request.javaPackage,
             className: requestClass,

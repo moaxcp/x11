@@ -6,7 +6,9 @@ import com.squareup.javapoet.CodeBlock
 class JavaPadAlignSpec extends XmlSpec {
     def 'XPadAlign read expression 4'() {
         given:
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
         xmlBuilder.list(type:'CARD32', name:'formats') {
             value('5')
         }
@@ -19,7 +21,9 @@ class JavaPadAlignSpec extends XmlSpec {
 
     def 'XPadAlign read expression'() {
         given:
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
         xmlBuilder.list(type:'CARD32', name:'formats') {
             value('5')
         }
@@ -32,7 +36,9 @@ class JavaPadAlignSpec extends XmlSpec {
 
     def 'XPadAlign write expression 4'() {
         given:
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
         xmlBuilder.list(type:'CARD32', name:'formats') {
             value('5')
         }
@@ -49,7 +55,9 @@ class JavaPadAlignSpec extends XmlSpec {
 
     def 'XPadAlign write expression'() {
         given:
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
         xmlBuilder.list(type:'CARD32', name:'formats') {
             value('5')
         }

@@ -13,6 +13,7 @@ class JavaEnumListProperty extends JavaListProperty {
     JavaEnumListProperty(JavaType javaType, XUnitListField field) {
         super(javaType, field)
     }
+
     @Override
     TypeName getTypeName() {
         return memberTypeName

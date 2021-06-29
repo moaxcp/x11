@@ -32,7 +32,9 @@ class JavaEnumListPropertySpec extends XmlSpec {
             enumType: 'EventMask',
             lengthExpression: new XmlSlurper().parseText('<value>20</value>').nodeIterator().next()
         )
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
 
         when:
         JavaEnumListProperty property = javaEnumListProperty(javaType, field)

@@ -33,6 +33,7 @@ class JavaError extends JavaObjectType {
         JavaError javaType = new JavaError(
             result: error.result,
             superTypes: error.superTypes + superType,
+            xUnitSubtype: subType,
             basePackage: error.basePackage,
             javaPackage: error.javaPackage,
             className: errorClass,

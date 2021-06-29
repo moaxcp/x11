@@ -29,7 +29,9 @@ class AddExpressionSpec extends Specification {
     def 'nested subtract and multiply expression'() {
         given:
         XResult xResult = new XResult()
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
         javaType.getJavaProperty('a') >> new JavaPrimativeProperty(
             javaType,
             new XUnitField(result: xResult, name: 'a', type: 'CARD8')

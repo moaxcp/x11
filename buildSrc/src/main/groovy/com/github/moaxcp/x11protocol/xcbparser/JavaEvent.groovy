@@ -42,6 +42,7 @@ class JavaEvent extends JavaObjectType {
         JavaEvent javaType = new JavaEvent(
             result: event.result,
             superTypes: event.superTypes + superType,
+            xUnitSubtype: subType,
             basePackage: event.basePackage,
             javaPackage: event.javaPackage,
             className: eventClass,

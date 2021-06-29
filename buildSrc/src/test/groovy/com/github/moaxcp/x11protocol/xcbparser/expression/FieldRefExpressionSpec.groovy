@@ -13,7 +13,9 @@ class FieldRefExpressionSpec extends Specification {
     def 'name'() {
         given:
         XResult xResult = new XResult()
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
         javaType.simpleName >> 'SimpleName'
         javaType.getJavaProperty(_) >> {
             new JavaPrimativeProperty(

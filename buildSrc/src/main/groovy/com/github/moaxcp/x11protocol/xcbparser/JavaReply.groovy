@@ -30,6 +30,7 @@ class JavaReply extends JavaObjectType {
         JavaReply javaType = new JavaReply(
             result: reply.result,
             superTypes: reply.superTypes + superType,
+            xUnitSubtype: subType,
             basePackage: reply.basePackage,
             javaPackage: reply.javaPackage,
             className: replyClass,

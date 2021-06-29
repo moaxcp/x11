@@ -18,7 +18,9 @@ class MultiplyExpressionSpec extends Specification {
     def 'nested addition'() {
         given:
         XResult xResult = new XResult()
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
         javaType.simpleName >> 'SimpleName'
         javaType.getJavaProperty(_) >> {
             new JavaPrimativeProperty(
@@ -40,7 +42,9 @@ class MultiplyExpressionSpec extends Specification {
     def 'nested divide'() {
         given:
         XResult xResult = new XResult()
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
         javaType.simpleName >> 'SimpleName'
         javaType.getJavaProperty(_) >> {
             new JavaPrimativeProperty(

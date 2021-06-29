@@ -19,7 +19,9 @@ class JavaTypePropertySpec extends XmlSpec {
         }
         addChildNodes()
         XUnitField field = new XUnitField(result: result, name: 'format', type:'FORMAT')
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
 
         when:
         JavaTypeProperty property = javaTypeProperty(javaType, field)

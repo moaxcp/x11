@@ -7,7 +7,7 @@ interface JavaType {
     String getBasePackage()
     String getSimpleName()
     ClassName getClassName()
-    Optional<ClassName> getCaseSuperName()
+    Optional<String> getXUnitSubtype()
     ClassName getBuilderClassName()
     TypeSpec getTypeSpec()
     JavaProperty getJavaProperty(String name)

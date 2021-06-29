@@ -144,7 +144,6 @@ class XUnitFieldSpec extends XmlSpec {
     def 'CARD32 field'() {
         given:
         xmlBuilder.field(name:'red_mask', type:'CARD32')
-        JavaType javaType = Mock(JavaType)
 
         when:
         XUnitField field = xUnitField(result, getFirstNode())
@@ -158,7 +157,9 @@ class XUnitFieldSpec extends XmlSpec {
     def 'convert to JavaUnit'() {
         given:
         xmlBuilder.field(name:'red_mask', type:'CARD32')
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
 
         when:
         XUnitField field = xUnitField(result, getFirstNode())
@@ -191,7 +192,9 @@ class XUnitFieldSpec extends XmlSpec {
             type:'CARD8',
             enumType: 'EventMask'
         )
-        JavaType javaType = Mock(JavaType)
+        JavaType javaType = Mock(JavaType) {
+            it.getXUnitSubtype() >> Optional.empty()
+        }
 
         then:
         field.name == 'mask'

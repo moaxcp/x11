@@ -25,6 +25,11 @@ class JavaEnum implements JavaType {
         return Optional.empty()
     }
 
+    @Override
+    Optional<String> getXUnitSubtype() {
+        return Optional.empty()
+    }
+
     ClassName getBuilderClassName() {
         ClassName.get(javaPackage, "${simpleName}Builder")
     }

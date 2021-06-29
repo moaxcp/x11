@@ -11,13 +11,14 @@ abstract class JavaObjectType implements JavaType {
     String basePackage
     String javaPackage
     Set<ClassName> superTypes = []
-    Optional<ClassName> caseSuperName
+    private String xUnitSubtype
     ClassName className
     List<JavaReadParameter> readParamInput
     List<JavaUnit> protocol
 
-    void setCaseSuperName(ClassName caseSuperName) {
-        this.caseSuperName = Optional.ofNullable(caseSuperName)
+    @Override
+    Optional<String> getXUnitSubtype() {
+        return Optional.ofNullable(xUnitSubtype)
     }
 
     JavaObjectType(Map map) {
@@ -26,7 +27,7 @@ abstract class JavaObjectType implements JavaType {
         javaPackage = map.javaPackage
         superTypes = map.superTypes ? map.superTypes + ClassName.get(javaPackage, result.getPluginXObjectInterfaceName()) : [ClassName.get(javaPackage, result.getPluginXObjectInterfaceName())]
         className = map.className
-        setCaseSuperName(map.caseSuperName)
+        xUnitSubtype = map.xUnitSubtype
         setProtocol(map.prtocol)
     }
 

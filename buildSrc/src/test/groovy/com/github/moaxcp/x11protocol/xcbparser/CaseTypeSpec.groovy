@@ -125,9 +125,8 @@ class CaseTypeSpec extends XmlSpec {
               private short numKeys;
             
               public static com.github.moaxcp.x11client.protocol.xproto.InputInfoKey readInputInfoKey(
-                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
-                byte classId = in.readCard8();
-                byte len = in.readCard8();
+                  byte classId, byte len, com.github.moaxcp.x11client.protocol.X11Input in) throws
+                  java.io.IOException {
                 byte minKeycode = in.readCard8();
                 byte maxKeycode = in.readCard8();
                 short numKeys = in.readCard16();
