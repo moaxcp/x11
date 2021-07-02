@@ -33,7 +33,7 @@ class XUnitPadFactorySpec extends XmlSpec {
         given:
         xmlBuilder.pad(bytes:4)
         XUnitPad pad = (XUnitPad) xUnitPad(getFirstNode())
-        JavaType javaType = Mock(JavaType) {
+        JavaType javaType = Mock(JavaObjectType) {
             it.getXUnitSubtype() >> Optional.empty()
         }
 

@@ -93,7 +93,7 @@ class JavaReplySpec extends XmlSpec {
               private java.util.List<java.lang.Integer> children;
             
               public static com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply readQueryTreeReply(
-                  byte pad, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
+                  byte pad1, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
                 int length = in.readCard32();
                 int root = in.readCard32();
@@ -367,7 +367,7 @@ class JavaReplySpec extends XmlSpec {
               private byte firstError;
             
               public static com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply readQueryExtensionReply(
-                  byte pad, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
+                  byte pad1, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
                 int length = in.readCard32();
                 boolean present = in.readBool();

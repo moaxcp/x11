@@ -24,7 +24,7 @@ public class EventForSendEventStruct implements XStruct {
 
   public static EventForSendEventStruct readEventForSendEventStruct(X11Input in) {
     //todo find type for extension and read it. This is hard because it requires the offset for the extension
-    return null;
+    throw new UnsupportedOperationException("read not supported");
   }
 
   public void write(X11Output out) throws IOException {

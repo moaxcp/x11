@@ -9,8 +9,7 @@ import groovy.transform.ToString
 @ToString(includePackage = false)
 @EqualsAndHashCode
 class JavaPad implements JavaUnit, JavaReadParameter {
-    String name
-    JavaType javaType
+    JavaObjectType javaType
     XUnit x11Field
     int bytes
     boolean readParam
@@ -18,8 +17,9 @@ class JavaPad implements JavaUnit, JavaReadParameter {
 
     @Override
     String getName() {
-        if(name) {
-            return name
+        int index = javaType.protocol.findIndexOf {it.is(this) }
+        if(index) {
+            return "pad$index"
         }
         return 'pad'
     }

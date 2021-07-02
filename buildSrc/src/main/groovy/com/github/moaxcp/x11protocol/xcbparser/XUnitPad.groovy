@@ -7,7 +7,7 @@ class XUnitPad implements XUnit {
 
     @Override
     List<JavaPad> getJavaUnit(JavaType javaType) {
-        JavaPad javaPad = new JavaPad(javaType: javaType, xUnit:this, bytes:bytes)
+        JavaPad javaPad = new JavaPad(javaType: javaType, x11Field: this, bytes:bytes)
         if(javaType.getXUnitSubtype().isPresent() && !caseInfo) {
             javaPad.readParam = true
         }
