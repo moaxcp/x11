@@ -19,6 +19,14 @@ public interface GetDevicePropertyReply extends XReply {
       return GetDeviceProperty8BitsReply.readGetDeviceProperty8BitsReply((byte) 1, xiReplyType, sequenceNumber,
           length, type, bytesAfter, numItems, format, deviceId, new byte[10], in);
     }
-    return null;
+    if(ref == PropertyFormat.SIXTEEN_BITS) {
+      return GetDeviceProperty16BitsReply.readGetDeviceProperty16BitsReply((byte) 1, xiReplyType, sequenceNumber,
+          length, type, bytesAfter, numItems, format, deviceId, new byte[10], in);
+    }
+    if(ref == PropertyFormat.THIRTY_TWO_BITS) {
+      return GetDeviceProperty32BitsReply.readGetDeviceProperty32BitsReply((byte) 1, xiReplyType, sequenceNumber,
+          length, type, bytesAfter, numItems, format, deviceId, new byte[10], in);
+    }
+    throw new IllegalStateException("Could not find class for " + ref);
   }
 }
