@@ -452,7 +452,7 @@ https://jamey.thesharps.us/2021/03/25/xcb-protocol-specifications-data/
 
 # versions
 
-## 0.9.0-SNAPSHOT
+## 0.9.0
 
 * Added support for resolving enums directly. In xinput.xml there is an Event `Property` which has the same name as the 
 enum `Property` from xproto.xml. The current solution is to use `resolveXTypeEnum(String)` when resolving enums.
@@ -471,7 +471,7 @@ added.
 [x] Writing events is not possible without passing in the extension offset. The server will treat extension events like 
 xproto events.
 
-[ ] Added support for `<case>` tags within a `<switch>`. This creates an interface and implementing classes for each
+[x] Added support for `<case>` tags within a `<switch>`. This creates an interface and implementing classes for each
 case.
 
 ## 0.8.0
