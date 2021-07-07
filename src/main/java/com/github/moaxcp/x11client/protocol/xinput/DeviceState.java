@@ -14,7 +14,7 @@ public interface DeviceState extends XStruct {
       return DeviceStateResolution.readDeviceStateResolution(controlId, len, in);
     }
     if(ref == DeviceControl.ABS_CALIB) {
-      return DeviceStateAbs_calib.readDeviceStateAbs_calib(controlId, len, in);
+      return DeviceStateAbsCalib.readDeviceStateAbsCalib(controlId, len, in);
     }
     if(ref == DeviceControl.CORE) {
       return DeviceStateCore.readDeviceStateCore(controlId, len, in);
@@ -23,7 +23,7 @@ public interface DeviceState extends XStruct {
       return DeviceStateEnable.readDeviceStateEnable(controlId, len, in);
     }
     if(ref == DeviceControl.ABS_AREA) {
-      return DeviceStateAbs_area.readDeviceStateAbs_area(controlId, len, in);
+      return DeviceStateAbsArea.readDeviceStateAbsArea(controlId, len, in);
     }
     throw new IllegalStateException("Could not find class for " + ref);
   }

@@ -2,6 +2,7 @@ package com.github.moaxcp.x11protocol.xcbparser
 
 import com.squareup.javapoet.ClassName
 
+import static com.github.moaxcp.x11protocol.generator.Conventions.getJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
 
 class JavaStruct extends JavaObjectType {
@@ -24,7 +25,7 @@ class JavaStruct extends JavaObjectType {
     }
 
     static JavaType javaStruct(XTypeStruct struct, String subType) {
-        ClassName structClass = getStructTypeName(struct.javaPackage, struct.name + subType.capitalize())
+        ClassName structClass = getStructTypeName(struct.javaPackage, struct.name + getJavaName(subType))
         ClassName superType = getStructTypeName(struct.javaPackage, struct.name)
 
         JavaStruct javaType = new JavaStruct(

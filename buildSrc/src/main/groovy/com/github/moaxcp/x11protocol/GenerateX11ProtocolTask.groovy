@@ -5,7 +5,6 @@ import com.github.moaxcp.x11protocol.generator.ProtocolGenerator
 import com.google.common.io.Files
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.*
 
@@ -22,8 +21,8 @@ class GenerateX11ProtocolTask extends DefaultTask {
     @OutputDirectory
     final DirectoryProperty outputResources = project.objects.directoryProperty()
 
-    @InputFile
-    final RegularFileProperty keysymHeader = project.objects.fileProperty()
+    @InputDirectory
+    final DirectoryProperty keysymHeaders = project.objects.directoryProperty()
 
     @TaskAction
     def writeSource() {
@@ -41,7 +40,6 @@ class GenerateX11ProtocolTask extends DefaultTask {
                     throw e
                 }
             }
-
-        new KeySymGenerator(header: keysymHeader.get().asFile, outputSrc: outputSrc.get().asFile, basePackage: 'com.github.moaxcp.x11client.protocol').generate()
+        new KeySymGenerator(headerSrc: keysymHeaders.get().asFile, outputSrc: outputSrc.get().asFile, basePackage: 'com.github.moaxcp.x11client.protocol').generate()
     }
 }

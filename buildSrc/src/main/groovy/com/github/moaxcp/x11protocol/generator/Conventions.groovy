@@ -266,7 +266,10 @@ class Conventions {
             return x11Name.substring(0, 1) + x11Name.substring(1).toLowerCase()
         }
 
-        return x11Name
+        if(x11Name.contains('_')) {
+            x11Name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, x11Name)
+        }
+        return x11Name.capitalize()
     }
 
     static String getEnumValueName(String x11Name) {

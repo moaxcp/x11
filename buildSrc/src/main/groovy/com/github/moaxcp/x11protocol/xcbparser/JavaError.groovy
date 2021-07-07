@@ -5,6 +5,7 @@ import com.squareup.javapoet.*
 import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.getJavaName
 
 class JavaError extends JavaObjectType {
     int number
@@ -27,7 +28,7 @@ class JavaError extends JavaObjectType {
     }
 
     static JavaError javaError(XTypeError error, String subType) {
-        ClassName errorClass = getErrorTypeName(error.javaPackage, error.name + subType.capitalize())
+        ClassName errorClass = getErrorTypeName(error.javaPackage, error.name + getJavaName(subType))
         ClassName superType = getErrorTypeName(error.javaPackage, error.name)
 
         JavaError javaType = new JavaError(

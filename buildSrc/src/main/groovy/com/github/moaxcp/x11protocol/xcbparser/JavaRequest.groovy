@@ -4,6 +4,7 @@ import com.squareup.javapoet.*
 
 import javax.lang.model.element.Modifier
 
+import static com.github.moaxcp.x11protocol.generator.Conventions.getJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getRequestTypeName
 
 class JavaRequest extends JavaObjectType {
@@ -36,7 +37,7 @@ class JavaRequest extends JavaObjectType {
     }
 
     static JavaRequest javaRequest(XTypeRequest request, String subType) {
-        ClassName requestClass = getRequestTypeName(request.javaPackage, request.name + subType.capitalize())
+        ClassName requestClass = getRequestTypeName(request.javaPackage, request.name + getJavaName(subType))
         ClassName superType = getRequestTypeName(request.javaPackage, request.name)
 
         JavaRequest javaType = new JavaRequest(

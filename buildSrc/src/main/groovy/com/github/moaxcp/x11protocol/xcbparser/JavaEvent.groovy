@@ -6,6 +6,7 @@ import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorTypeName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.getJavaName
 
 class JavaEvent extends JavaObjectType {
     int number
@@ -36,7 +37,7 @@ class JavaEvent extends JavaObjectType {
     }
 
     static JavaEvent javaEvent(XTypeEvent event, String subType) {
-        ClassName eventClass = getErrorTypeName(event.javaPackage, event.name + subType.capitalize())
+        ClassName eventClass = getErrorTypeName(event.javaPackage, event.name + getJavaName(subType))
         ClassName superType = getErrorTypeName(event.javaPackage, event.name)
 
         JavaEvent javaType = new JavaEvent(
