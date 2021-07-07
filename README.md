@@ -454,8 +454,8 @@ https://jamey.thesharps.us/2021/03/25/xcb-protocol-specifications-data/
 
 ## 0.10.0
 
-[ ] Made DeviceStateAbs_area and DeviceStateAbs_calib names DeviceStateAbsArea and DeviceStateAbsCalib
-[ ] Adding other KeySyms from x11lib.
+[x] Made DeviceStateAbs_area and DeviceStateAbs_calib names DeviceStateAbsArea and DeviceStateAbsCalib
+[x] Adding other KeySyms from x11lib.
 
 ## 0.9.0
 
