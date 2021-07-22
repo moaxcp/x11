@@ -47,7 +47,7 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
         constantField = map.constantField
         localOnly = map.localOnly
         if(map.x11Field.bitcaseInfo) {
-            bitcaseInfo = new JavaBitcaseInfo(map.x11Field.result, map.x11Field.bitcaseInfo)
+            bitcaseInfo = new JavaBitcaseInfo(x11Field.result, javaType, x11Field.bitcaseInfo)
         }
     }
     
@@ -59,7 +59,7 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
             this.readParam = true
         }
         if(field.bitcaseInfo) {
-            this.bitcaseInfo = new JavaBitcaseInfo(field.result, field.bitcaseInfo)
+            this.bitcaseInfo = new JavaBitcaseInfo(field.result, javaType, field.bitcaseInfo)
         }
     }
 
@@ -130,7 +130,7 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
             return
         }
         if(bitcaseInfo) {
-            code.beginControlFlow('if(javaBuilder.is$LEnabled($T.$L))', bitcaseInfo.maskField.capitalize(), bitcaseInfo.enumType, bitcaseInfo.enumItem)
+            code.beginControlFlow('if($T.$L.enabledFor($L))', bitcaseInfo.enumType, bitcaseInfo.enumItem, bitcaseInfo.maskField.getExpression(TypeName.INT))
             code.addStatement('javaBuilder.$L($L)', name, readCode)
             code.endControlFlow()
         } else if(getBuilderValueExpression()) {

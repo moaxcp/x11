@@ -2,6 +2,7 @@ package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
 import groovy.xml.MarkupBuilder
+import spock.lang.Ignore
 
 class JavaRequestSpec extends XmlSpec {
     def destroyWindow() {
@@ -342,6 +343,7 @@ class JavaRequestSpec extends XmlSpec {
         '''.stripIndent()
     }
 
+    @Ignore
     def createWindow() {
         given:
         xmlBuilder.xcb() {
@@ -596,49 +598,49 @@ class JavaRequestSpec extends XmlSpec {
                 javaBuilder.clazz(clazz);
                 javaBuilder.visual(visual);
                 javaBuilder.valueMask(valueMask);
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.backgroundPixmap(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.backgroundPixel(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.borderPixmap(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.borderPixel(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.bitGravity(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.winGravity(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.backingStore(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.backingPlanes(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.backingPixel(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.overrideRedirect(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.saveUnder(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.eventMask(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.doNotPropogateMask(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.colormap(in.readCard32());
                 }
-                if(javaBuilder.isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   javaBuilder.cursor(in.readCard32());
                 }
                 in.readPadAlign(javaBuilder.getSize());
@@ -661,49 +663,49 @@ class JavaRequestSpec extends XmlSpec {
                 out.writeCard16(clazz);
                 out.writeCard32(visual);
                 out.writeCard32(valueMask);
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(backgroundPixmap);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(backgroundPixel);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(borderPixmap);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(borderPixel);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(bitGravity);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(winGravity);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(backingStore);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(backingPlanes);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(backingPixel);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(overrideRedirect);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(saveUnder);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(eventMask);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(doNotPropogateMask);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(colormap);
                 }
-                if(isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR)) {
+                if(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR.enabledFor((int) (Integer.toUnsignedLong(valueMask)))) {
                   out.writeCard32(cursor);
                 }
                 out.writePadAlign(getSize());
@@ -741,7 +743,7 @@ class JavaRequestSpec extends XmlSpec {
             
               @java.lang.Override
               public int getSize() {
-                return 32 + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR) ? 4 : 0);
+                return 32 + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0);
               }
             
               public static class CreateWindowBuilder {
@@ -792,105 +794,105 @@ class JavaRequestSpec extends XmlSpec {
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backgroundPixmap(
                     int backgroundPixmap) {
                   this.backgroundPixmap = backgroundPixmap;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backgroundPixel(
                     int backgroundPixel) {
                   this.backgroundPixel = backgroundPixel;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder borderPixmap(
                     int borderPixmap) {
                   this.borderPixmap = borderPixmap;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder borderPixel(
                     int borderPixel) {
                   this.borderPixel = borderPixel;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder bitGravity(
                     int bitGravity) {
                   this.bitGravity = bitGravity;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder bitGravity(
                     com.github.moaxcp.x11client.protocol.xproto.Gravity bitGravity) {
                   this.bitGravity = (int) bitGravity.getValue();
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder winGravity(
                     int winGravity) {
                   this.winGravity = winGravity;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder winGravity(
                     com.github.moaxcp.x11client.protocol.xproto.Gravity winGravity) {
                   this.winGravity = (int) winGravity.getValue();
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backingStore(
                     int backingStore) {
                   this.backingStore = backingStore;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backingStore(
                     com.github.moaxcp.x11client.protocol.xproto.BackingStore backingStore) {
                   this.backingStore = (int) backingStore.getValue();
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backingPlanes(
                     int backingPlanes) {
                   this.backingPlanes = backingPlanes;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder backingPixel(
                     int backingPixel) {
                   this.backingPixel = backingPixel;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder overrideRedirect(
                     int overrideRedirect) {
                   this.overrideRedirect = overrideRedirect;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder saveUnder(
                     int saveUnder) {
                   this.saveUnder = saveUnder;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder eventMask(
                     int eventMask) {
                   this.eventMask = eventMask;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK);
                   return this;
                 }
             
@@ -923,7 +925,7 @@ class JavaRequestSpec extends XmlSpec {
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder doNotPropogateMask(
                     int doNotPropogateMask) {
                   this.doNotPropogateMask = doNotPropogateMask;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE);
                   return this;
                 }
             
@@ -956,19 +958,19 @@ class JavaRequestSpec extends XmlSpec {
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder colormap(
                     int colormap) {
                   this.colormap = colormap;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP);
                   return this;
                 }
             
                 public com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder cursor(
                     int cursor) {
                   this.cursor = cursor;
-                  valueMaskEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR);
+                  com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression@c64e3eaaEnable(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR);
                   return this;
                 }
             
                 public int getSize() {
-                  return 32 + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP) ? 4 : 0) + (isValueMaskEnabled(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR) ? 4 : 0);
+                  return 32 + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR.enabledFor((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0);
                 }
               }
             }

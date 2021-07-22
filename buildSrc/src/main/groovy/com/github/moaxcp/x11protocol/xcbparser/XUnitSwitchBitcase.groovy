@@ -6,7 +6,7 @@ import static com.github.moaxcp.x11protocol.xcbparser.XUnitField.xUnitField
 import static com.github.moaxcp.x11protocol.xcbparser.XUnitListField.xUnitListField
 
 class XUnitSwitchBitcase extends XUnitSwitch {
-    String fieldRef
+    Node expression
     List<XUnit> fields
 
     @Override
@@ -17,7 +17,7 @@ class XUnitSwitchBitcase extends XUnitSwitch {
     }
 
     static XUnitSwitchBitcase parseValueList(XResult result, Node node) {
-        String fieldRef = node.childNodes().find{Node it -> it.name() == 'fieldref'}.text()
+        Node expression = node.childNodes()getAt(0) //expression is first node
         List<XUnit> fields = []
         node.childNodes().each { Node it ->
             if(it.name() == 'fieldref') {
@@ -31,13 +31,13 @@ class XUnitSwitchBitcase extends XUnitSwitch {
                         enumRef = bitcaseNode.attributes().get('ref')
                         enumItem = bitcaseNode.text()
                     } else {
-                        XUnit unit = parseXUnit(result, bitcaseNode, new XBitcaseInfo(maskField: fieldRef, enumType: enumRef, enumItem: enumItem))
+                        XUnit unit = parseXUnit(result, bitcaseNode, new XBitcaseInfo(expression: expression, enumType: enumRef, enumItem: enumItem))
                         fields.add(unit)
                     }
                 }
             }
         }
-        return new XUnitSwitchBitcase(fieldRef: fieldRef, fields: fields)
+        return new XUnitSwitchBitcase(expression: expression, fields: fields)
     }
 
     static XUnit parseXUnit(XResult result, Node node, XBitcaseInfo bitcaseInfo) {

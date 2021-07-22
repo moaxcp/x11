@@ -17,7 +17,7 @@ java {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 test {
@@ -27,10 +27,10 @@ test {
 dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '29.0-jre'
     implementation 'pl.allegro.finance:tradukisto:1.8.0'
-    implementation 'org.projectlombok:lombok:1.18.12'
+    implementation 'org.projectlombok:lombok:1.18.20'
     implementation 'com.squareup:javapoet:1.13.0'
 
-    testImplementation platform('org.spockframework:spock-bom:2.0-groovy-2.5')
+    testImplementation platform('org.spockframework:spock-bom:2.0-groovy-3.0')
     testImplementation 'org.spockframework:spock-core'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
