@@ -4,5 +4,8 @@ package com.github.moaxcp.x11protocol.xcbparser
  */
 interface XUnit {
     XCaseInfo getCaseInfo()
+    void setCaseInfo(XCaseInfo caseInfo)
+    XBitcaseInfo getBitcaseInfo()
+    void setBitcaseInfo(XBitcaseInfo bitcaseInfo)
     List<JavaUnit> getJavaUnit(JavaType javaType)
 }

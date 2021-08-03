@@ -220,7 +220,7 @@ abstract class JavaObjectType implements JavaType {
         CodeBlock.Builder writeProtocol = CodeBlock.builder()
         protocol.each {
             if(it instanceof JavaProperty && it.bitcaseInfo) {
-                writeProtocol.beginControlFlow('if($T.$L.enabledFor($L))', it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem, it.bitcaseInfo.maskField.getExpression(TypeName.INT))
+                writeProtocol.beginControlFlow('if($T.$L.isEnabled($L))', it.bitcaseInfo.enumType, it.bitcaseInfo.enumItem, it.bitcaseInfo.maskField.getExpression(TypeName.INT))
                 it.addWriteCode(writeProtocol)
                 writeProtocol.endControlFlow()
             } else {

@@ -17,8 +17,8 @@ class XUnitField implements XUnit {
     final String maskType
     final String altMaskType
     final boolean localOnly
-    final XBitcaseInfo bitcaseInfo
-    final XCaseInfo caseInfo
+    XBitcaseInfo bitcaseInfo
+    XCaseInfo caseInfo
 
     XUnitField(Map map) {
         result = requireNonNull(map.result, 'result must not be null')

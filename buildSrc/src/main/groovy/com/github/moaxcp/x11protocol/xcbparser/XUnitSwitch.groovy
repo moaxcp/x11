@@ -6,10 +6,8 @@ import static com.github.moaxcp.x11protocol.xcbparser.XUnitSwitchBitcase.parseVa
 import static com.github.moaxcp.x11protocol.xcbparser.XUnitSwitchCase.parseCases
 
 abstract class XUnitSwitch implements XUnit {
-
-    XCaseInfo getCaseInfo() {
-        throw new UnsupportedOperationException("nested cases not supported")
-    }
+    XBitcaseInfo bitcaseInfo
+    XCaseInfo caseInfo
 
     static XUnitSwitch parseXUnitSwitch(XResult result, Node node) {
 

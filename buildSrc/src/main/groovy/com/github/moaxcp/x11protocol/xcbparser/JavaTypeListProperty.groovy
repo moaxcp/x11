@@ -8,6 +8,7 @@ import com.squareup.javapoet.TypeName
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventStructTypeName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.getUnionTypeName
 
 class JavaTypeListProperty extends JavaListProperty {
 
@@ -30,8 +31,10 @@ class JavaTypeListProperty extends JavaListProperty {
             return getStructTypeName(type.javaPackage, type.name)
         } else if(type instanceof XTypeEventStruct) {
             return getEventStructTypeName(type.javaPackage, type.name)
+        } else if(type instanceof XTypeUnion) {
+            return getUnionTypeName(type.javaPackage, type.name)
         } else { //else Request/Reply/Event
-            throw new UnsupportedOperationException("not supported ${type.name}")
+            throw new UnsupportedOperationException("not supported ${type.name} ${type.class.simpleName}")
         }
     }
 
@@ -71,7 +74,10 @@ class JavaTypeListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getReadCode() {
-        throw new IllegalStateException()
+        if(lengthExpression instanceof EmptyExpression) {
+            throw new UnsupportedOperationException("")
+        }
+        return CodeBlock.of('in.readObject($T::read$L, $L)', baseTypeName, baseTypeName.simpleName(), lengthExpression.getExpression(TypeName.INT))
     }
 
     @Override
@@ -85,7 +91,7 @@ class JavaTypeListProperty extends JavaListProperty {
     CodeBlock getSizeExpression() {
         CodeBlock actualSize = CodeBlock.of('$T.sizeOf($L)', ClassName.get(basePackage, 'XObject'), name)
         if(bitcaseInfo) {
-            return CodeBlock.of('(is$LEnabled($T.$L) ? $L : 0)', bitcaseInfo.maskField.capitalize(), bitcaseInfo.enumType, bitcaseInfo.enumItem, actualSize)
+            return CodeBlock.of('($T.$L.isEnabled($L) ? $L : 0)', bitcaseInfo.enumType, bitcaseInfo.enumItem, bitcaseInfo.maskField.getExpression(TypeName.INT), actualSize)
         }
         return actualSize
     }

@@ -24,4 +24,15 @@ class XUnitPadFactory {
             return new XUnitPadAlign(result: result, caseInfo: caseInfo, align:Integer.valueOf(align))
         }
     }
+
+    static XUnit xUnitPad(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
+        String bytes = node.attributes().get('bytes')
+        String align = node.attributes().get('align')
+        if(bytes) {
+            return new XUnitPad(result: result, bitcaseInfo: bitcaseInfo, bytes:Integer.valueOf(bytes))
+        }
+        if(align) {
+            return new XUnitPadAlign(result: result, bitcaseInfo: bitcaseInfo, align:Integer.valueOf(align))
+        }
+    }
 }

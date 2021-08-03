@@ -4,6 +4,7 @@ class XUnitPadAlign implements XUnit {
     int align
     XResult result
     XCaseInfo caseInfo
+    XBitcaseInfo bitcaseInfo
 
     @Override
     List<JavaPadAlign> getJavaUnit(JavaType javaType) {

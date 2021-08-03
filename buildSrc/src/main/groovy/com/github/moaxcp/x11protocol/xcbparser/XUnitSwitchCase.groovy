@@ -10,6 +10,10 @@ class XUnitSwitchCase extends XUnitSwitch {
     String fieldRef
     List<XUnit> fields
 
+    XCaseInfo getCaseInfo() {
+        throw new UnsupportedOperationException("nested cases not supported")
+    }
+
     @Override
     List<JavaUnit> getJavaUnit(JavaType javaType) {
         return fields.inject([]) { List<JavaUnit> units, XUnit unit ->

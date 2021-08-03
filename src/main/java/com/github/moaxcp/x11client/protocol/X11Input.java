@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11client.protocol;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface X11Input {
@@ -69,4 +70,13 @@ public interface X11Input {
   }
 
   int available() throws IOException;
+
+  default <T> List<T> readObject(XReadFunction<T> reader, int length) throws IOException {
+    List<T> result = new ArrayList<>();
+    for(int i = 0; i < length; i++) {
+      T object = reader.read(this);
+      result.add(object);
+    }
+    return result;
+  }
 }

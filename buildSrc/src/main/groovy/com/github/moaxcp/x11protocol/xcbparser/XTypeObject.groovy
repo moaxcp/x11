@@ -104,6 +104,12 @@ abstract class XTypeObject extends XType implements XTypeUnit {
         }
     }
 
+    static XUnit parseXUnit(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
+        XUnit parsed = parseXUnit(result, node)
+        parsed.bitcaseInfo = bitcaseInfo
+        return parsed
+    }
+
     List<JavaUnit> toJavaProtocol(JavaType javaType) {
         List<JavaUnit> java = protocol.collect {
             it.getJavaUnit(javaType)

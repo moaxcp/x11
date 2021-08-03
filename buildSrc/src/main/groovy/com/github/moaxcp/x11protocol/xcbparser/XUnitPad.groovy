@@ -4,6 +4,7 @@ class XUnitPad implements XUnit {
     int bytes
     XResult result
     XCaseInfo caseInfo
+    XBitcaseInfo bitcaseInfo
 
     @Override
     List<JavaPad> getJavaUnit(JavaType javaType) {

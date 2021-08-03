@@ -2,8 +2,7 @@ package com.github.moaxcp.x11protocol.xcbparser
 
 import groovy.util.slurpersupport.Node
 
-import static com.github.moaxcp.x11protocol.xcbparser.XUnitField.xUnitField
-import static com.github.moaxcp.x11protocol.xcbparser.XUnitListField.xUnitListField
+import static com.github.moaxcp.x11protocol.xcbparser.XTypeObject.parseXUnit
 
 class XUnitSwitchBitcase extends XUnitSwitch {
     Node expression
@@ -38,16 +37,5 @@ class XUnitSwitchBitcase extends XUnitSwitch {
             }
         }
         return new XUnitSwitchBitcase(expression: expression, fields: fields)
-    }
-
-    static XUnit parseXUnit(XResult result, Node node, XBitcaseInfo bitcaseInfo) {
-        switch(node.name()) {
-            case 'field':
-                return xUnitField(result, node, bitcaseInfo)
-            case 'list':
-                return xUnitListField(result, node, bitcaseInfo)
-            default:
-                throw new IllegalArgumentException("cannot parse ${node.name()}")
-        }
     }
 }

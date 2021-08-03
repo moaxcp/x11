@@ -130,7 +130,7 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
             return
         }
         if(bitcaseInfo) {
-            code.beginControlFlow('if($T.$L.enabledFor($L))', bitcaseInfo.enumType, bitcaseInfo.enumItem, bitcaseInfo.maskField.getExpression(TypeName.INT))
+            code.beginControlFlow('if($T.$L.isEnabled($L))', bitcaseInfo.enumType, bitcaseInfo.enumItem, bitcaseInfo.maskField.getExpression(TypeName.INT))
             code.addStatement('javaBuilder.$L($L)', name, readCode)
             code.endControlFlow()
         } else if(getBuilderValueExpression()) {
@@ -153,13 +153,14 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
     
     List<MethodSpec> getBuilderMethods(ClassName outer) {
         if(bitcaseInfo) {
+            String fieldName = bitcaseInfo.maskField.fieldRefs[0].fieldName
             return [
                 MethodSpec.methodBuilder(name)
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(typeName, name)
                     .returns(javaType.builderClassName)
                     .addStatement('this.$1L = $1L', name)
-                    .addStatement('$LEnable($T.$L)', bitcaseInfo.maskField, bitcaseInfo.enumType, bitcaseInfo.enumItem)
+                    .addStatement('$LEnable($T.$L)', fieldName, bitcaseInfo.enumType, bitcaseInfo.enumItem)
                     .addStatement('return this')
                     .build()
             ]

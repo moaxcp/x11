@@ -78,7 +78,7 @@ class JavaPrimativeProperty extends JavaProperty {
     @Override
     List<MethodSpec> getMethods() {
         List<MethodSpec> methods = super.getMethods()
-        if(maskTypeName) {
+        if(maskTypeName && !localOnly) {
             methods += [
                 MethodSpec.methodBuilder("is${name.capitalize()}Enabled")
                     .addModifiers(Modifier.PUBLIC)
@@ -100,7 +100,7 @@ class JavaPrimativeProperty extends JavaProperty {
     @Override
     List<MethodSpec> getBuilderMethods(ClassName outer) {
         List<MethodSpec> methods = super.getBuilderMethods(outer)
-        if(maskTypeName) {
+        if(maskTypeName && !localOnly) {
             Modifier modifier = Modifier.PUBLIC
             if(name == 'valueMask') {
                 modifier = Modifier.PRIVATE
@@ -155,13 +155,14 @@ class JavaPrimativeProperty extends JavaProperty {
                 conversion = CodeBlock.of('($2T) $1L.getValue()', name, memberTypeName)
             }
             if(bitcaseInfo) {
+                String fieldName = bitcaseInfo.getMaskField().fieldRefs[0].fieldName
                 methods += [
                     MethodSpec.methodBuilder(name)
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(enumClassName, name)
                         .returns(javaType.builderClassName)
                         .addStatement('this.$L = $L', name, conversion)
-                        .addStatement('$LEnable($T.$L)', bitcaseInfo.maskField, bitcaseInfo.enumType, bitcaseInfo.enumItem)
+                        .addStatement('$LEnable($T.$L)', fieldName, bitcaseInfo.enumType, bitcaseInfo.enumItem)
                         .addStatement('return this')
                         .build()
                 ]
@@ -252,7 +253,7 @@ class JavaPrimativeProperty extends JavaProperty {
         }
 
         if(bitcaseInfo) {
-            return CodeBlock.of('($T.$L.enabledFor($L) ? $L : 0)', bitcaseInfo.enumType, bitcaseInfo.enumItem, bitcaseInfo.maskField.getExpression(TypeName.INT), actualSize)
+            return CodeBlock.of('($T.$L.isEnabled($L) ? $L : 0)', bitcaseInfo.enumType, bitcaseInfo.enumItem, bitcaseInfo.maskField.getExpression(TypeName.INT), actualSize)
         }
         return actualSize
     }

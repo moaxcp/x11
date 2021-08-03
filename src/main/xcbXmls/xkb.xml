@@ -777,8 +777,8 @@ authorization from the authors.
 
 	<error name="Keyboard" number="0">
 		<field name="value" type="CARD32" />
-		<field name="minorOpcode" type="CARD16" />
-		<field name="majorOpcode" type="CARD8" />
+		<field type="CARD16" name="minor_opcode" />
+		<field type="CARD8" name="major_opcode" />
 		<pad bytes="21" />
 	</error>
 
@@ -2042,7 +2042,7 @@ authorization from the authors.
 					<field name="typeMaxKeyCode" type="KEYCODE" />
 					<field name="present" type="CARD16" mask="MapPart" />
 					<field name="firstType" type="CARD8" />
-					<field name="nTypes" type="CARD8" />
+					<field name="nTypes1" type="CARD8" />
 					<field name="totalTypes" type="CARD8" />
 					<field name="firstKeySym" type="KEYCODE" />
 					<field name="totalSyms" type="CARD16" />
@@ -2063,13 +2063,13 @@ authorization from the authors.
 					<field name="nVModMapKeys" type="CARD8" />
 					<field name="totalVModMapKeys" type="CARD8" />
 					<pad bytes="1" />
-					<field name="virtualMods" type="CARD16" mask="VMod" />
+					<field name="virtualMods1" type="CARD16" mask="VMod" />
 					<switch name="map">
 						<fieldref>present</fieldref>
 						<bitcase>
 							<enumref ref="MapPart">KeyTypes</enumref>
 							<list name="types_rtrn" type="KeyType">
-								<fieldref>nTypes</fieldref>
+								<fieldref>nTypes1</fieldref>
 							</list>
 						</bitcase>
 						<bitcase>
@@ -2097,7 +2097,7 @@ authorization from the authors.
 						<bitcase>
 							<enumref ref="MapPart">VirtualMods</enumref>
 							<list name="vmods_rtrn" type="CARD8" mask="ModMask">
-								<popcount><fieldref>virtualMods</fieldref></popcount>
+								<popcount><fieldref>virtualMods1</fieldref></popcount>
 							</list>
 							<pad align="4" />
 						</bitcase>
@@ -2154,7 +2154,7 @@ authorization from the authors.
 					<field name="indicatormap_sequence" type="CARD16" />
 					<field name="indicatormap_length" type="CARD32" />
 					<!-- done 'emulating' reply header -->
-					<field name="which" type="CARD32" />
+					<field name="which1" type="CARD32" />
 					<field name="realIndicators" type="CARD32" />
 					<field name="nIndicators" type="CARD8" />
 					<pad bytes="15" />
@@ -2171,12 +2171,12 @@ authorization from the authors.
 					<field name="keyname_sequence" type="CARD16" />
 					<field name="keyname_length" type="CARD32" />
 					<!-- done 'emulating' reply header -->
-					<field name="which" type="CARD32" mask="NameDetail" />
+					<field name="which2" type="CARD32" mask="NameDetail" />
 					<field name="keyMinKeyCode" type="KEYCODE" />
 					<field name="keyMaxKeyCode" type="KEYCODE" />
-					<field name="nTypes" type="CARD8" />
+					<field name="nTypes2" type="CARD8" />
 					<field name="groupNames" type="CARD8" mask="SetOfGroup" />
-					<field name="virtualMods" type="CARD16" mask="VMod" />
+					<field name="virtualMods2" type="CARD16" mask="VMod" />
 					<field name="firstKey" type="KEYCODE" />
 					<field name="nKeys" type="CARD8" />
 					<field name="indicators" type="CARD32" />
@@ -2185,7 +2185,7 @@ authorization from the authors.
 					<field name="nKTLevels" type="CARD16" />
 					<pad bytes="4" />
 					<switch name="valueList">
-						<fieldref>which</fieldref>
+						<fieldref>which2</fieldref>
 						<bitcase>
 							<enumref ref="NameDetail">Keycodes</enumref>
 							<field name="keycodesName" type="ATOM" />
@@ -2213,13 +2213,13 @@ authorization from the authors.
 						<bitcase>
 							<enumref ref="NameDetail">KeyTypeNames</enumref>
 							<list name="typeNames" type="ATOM">
-								<fieldref>nTypes</fieldref>
+								<fieldref>nTypes2</fieldref>
 							</list>
 						</bitcase>
 						<bitcase>
 							<enumref ref="NameDetail">KTLevelNames</enumref>
 							<list name="nLevelsPerType" type="CARD8">
-								<fieldref>nTypes</fieldref>
+								<fieldref>nTypes2</fieldref>
 							</list>
 							<pad align="4" />
 							<list name="ktLevelNames" type="ATOM">
@@ -2238,7 +2238,7 @@ authorization from the authors.
 							<enumref ref="NameDetail">VirtualModNames</enumref>
 							<list name="virtualModNames" type="ATOM">
 								<popcount>
-									<fieldref>virtualMods</fieldref>
+									<fieldref>virtualMods2</fieldref>
 								</popcount>
 							</list>
 						</bitcase>
