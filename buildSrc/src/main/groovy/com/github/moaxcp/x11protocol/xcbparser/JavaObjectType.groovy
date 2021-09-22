@@ -172,17 +172,20 @@ abstract class JavaObjectType implements JavaType {
     }
 
     void addHeaderStatements(MethodSpec.Builder builder) {
-
+        builder.addStatement('$T $L = $T.builder()', builderClassName, 'javaBuilder', className)
     }
 
     void addReadStatements(MethodSpec.Builder methodBuilder) {
         CodeBlock.Builder readProtocol = CodeBlock.builder()
         protocol.each {
-            if(!it.readProtocol
-                || (it instanceof JavaProperty && it.bitcaseInfo)) {
+            if(!it.readProtocol) {
                 return
             }
-            readProtocol.add(it.declareAndReadCode)
+            if(it instanceof JavaProperty && it.bitcaseInfo) {
+                readProtocol.add(it.declareCode)
+            } else {
+                readProtocol.add(it.declareAndReadCode)
+            }
         }
 
         methodBuilder.addCode(readProtocol.build())
@@ -190,7 +193,6 @@ abstract class JavaObjectType implements JavaType {
     
     void addBuilderStatement(MethodSpec.Builder method, CodeBlock... fields) {
         CodeBlock.Builder builder = CodeBlock.builder()
-        builder.addStatement('$T $L = $T.builder()', builderClassName, 'javaBuilder', className)
         properties.each {
             it.addBuilderCode(builder)
         }

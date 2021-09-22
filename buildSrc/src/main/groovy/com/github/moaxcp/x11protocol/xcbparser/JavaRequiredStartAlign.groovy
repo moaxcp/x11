@@ -17,6 +17,21 @@ class JavaRequiredStartAlign implements JavaUnit {
     }
 
     @Override
+    CodeBlock getDeclareCode() {
+        return null
+    }
+
+    @Override
+    CodeBlock getDefaultValue() {
+        return null
+    }
+
+    @Override
+    String getName() {
+        return null
+    }
+
+    @Override
     TypeName getTypeName() {
         return ArrayTypeName.of(byte.class)
     }

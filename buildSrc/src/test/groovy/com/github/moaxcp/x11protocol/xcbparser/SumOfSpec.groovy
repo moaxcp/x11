@@ -76,6 +76,7 @@ class SumOfSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.ListInputDevicesReply readListInputDevicesReply(
                   byte xiReplyType, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in)
                   throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.ListInputDevicesReply.ListInputDevicesReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListInputDevicesReply.builder();
                 int length = in.readCard32();
                 byte devicesLen = in.readCard8();
                 in.readPad(23);
@@ -92,7 +93,6 @@ class SumOfSpec extends XmlSpec {
                   names.add(com.github.moaxcp.x11client.protocol.xproto.Str.readStr(in));
                 }
                 in.readPadAlign(Byte.toUnsignedInt(devicesLen));
-                com.github.moaxcp.x11client.protocol.xproto.ListInputDevicesReply.ListInputDevicesReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListInputDevicesReply.builder();
                 javaBuilder.xiReplyType(xiReplyType);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.devices(devices);

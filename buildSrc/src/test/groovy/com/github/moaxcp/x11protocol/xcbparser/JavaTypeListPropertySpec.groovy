@@ -40,12 +40,12 @@ class JavaTypeListPropertySpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.Setup readSetup(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.Setup.SetupBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Setup.builder();
                 byte pixmapFormatsLen = in.readCard8();
                 java.util.List<com.github.moaxcp.x11client.protocol.xproto.Format> pixmapFormats = new java.util.ArrayList<>(Byte.toUnsignedInt(pixmapFormatsLen));
                 for(int i = 0; i < Byte.toUnsignedInt(pixmapFormatsLen); i++) {
                   pixmapFormats.add(com.github.moaxcp.x11client.protocol.xproto.Format.readFormat(in));
                 }
-                com.github.moaxcp.x11client.protocol.xproto.Setup.SetupBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Setup.builder();
                 javaBuilder.pixmapFormats(pixmapFormats);
                 return javaBuilder.build();
               }

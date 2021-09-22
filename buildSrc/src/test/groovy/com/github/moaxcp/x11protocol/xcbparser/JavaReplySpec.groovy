@@ -49,10 +49,10 @@ class JavaReplySpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.QueryTree readQueryTree(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.QueryTree.QueryTreeBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTree.builder();
                 in.readPad(1);
                 short length = in.readCard16();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.QueryTree.QueryTreeBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTree.builder();
                 javaBuilder.window(window);
                 return javaBuilder.build();
               }
@@ -95,13 +95,13 @@ class JavaReplySpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply readQueryTreeReply(
                   byte pad1, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.QueryTreeReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.builder();
                 int length = in.readCard32();
                 int root = in.readCard32();
                 int parent = in.readCard32();
                 short childrenLen = in.readCard16();
                 in.readPad(14);
                 java.util.List<java.lang.Integer> children = in.readCard32(Short.toUnsignedInt(childrenLen));
-                com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.QueryTreeReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply.builder();
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.root(root);
                 javaBuilder.parent(parent);
@@ -183,12 +183,12 @@ class JavaReplySpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply readTranslateCoordinatesReply(
                   byte sameScreen, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in)
                   throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply.TranslateCoordinatesReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply.builder();
                 int length = in.readCard32();
                 int child = in.readCard32();
                 short dstY = in.readInt16();
                 short dstX = in.readInt16();
                 in.readPad(16);
-                com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply.TranslateCoordinatesReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.TranslateCoordinatesReply.builder();
                 javaBuilder.sameScreen(sameScreen > 0);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.child(child);
@@ -268,6 +268,7 @@ class JavaReplySpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.ListHostsReply readListHostsReply(
                   byte mode, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.ListHostsReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.builder();
                 int length = in.readCard32();
                 short hostsLen = in.readCard16();
                 in.readPad(22);
@@ -275,7 +276,6 @@ class JavaReplySpec extends XmlSpec {
                 for(int i = 0; i < Short.toUnsignedInt(hostsLen); i++) {
                   hosts.add(com.github.moaxcp.x11client.protocol.xproto.Host.readHost(in));
                 }
-                com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.ListHostsReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.builder();
                 javaBuilder.mode(mode);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.hosts(hosts);
@@ -369,13 +369,13 @@ class JavaReplySpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply readQueryExtensionReply(
                   byte pad1, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply.QueryExtensionReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply.builder();
                 int length = in.readCard32();
                 boolean present = in.readBool();
                 byte majorOpcode = in.readCard8();
                 byte firstEvent = in.readCard8();
                 byte firstError = in.readCard8();
                 in.readPad(20);
-                com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply.QueryExtensionReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryExtensionReply.builder();
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.present(present);
                 javaBuilder.majorOpcode(majorOpcode);

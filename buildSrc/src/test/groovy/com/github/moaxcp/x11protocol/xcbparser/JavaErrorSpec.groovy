@@ -44,13 +44,13 @@ class JavaErrorSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.RequestError readRequestError(
                   byte firstErrorOffset, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.RequestError.RequestErrorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.RequestError.builder();
                 short sequenceNumber = in.readCard16();
                 int badValue = in.readCard32();
                 short minorOpcode = in.readCard16();
                 byte majorOpcode = in.readCard8();
                 in.readPad(1);
                 in.readPad(20);
-                com.github.moaxcp.x11client.protocol.xproto.RequestError.RequestErrorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.RequestError.builder();
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.badValue(badValue);
                 javaBuilder.minorOpcode(minorOpcode);

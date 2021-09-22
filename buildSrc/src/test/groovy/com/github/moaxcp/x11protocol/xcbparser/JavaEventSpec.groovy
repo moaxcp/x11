@@ -88,6 +88,7 @@ class JavaEventSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent readKeyPressEvent(
                   byte firstEventOffset, boolean sentEvent, com.github.moaxcp.x11client.protocol.X11Input in)
                   throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.builder();
                 byte detail = in.readCard8();
                 short sequenceNumber = in.readCard16();
                 int time = in.readCard32();
@@ -101,7 +102,6 @@ class JavaEventSpec extends XmlSpec {
                 short state = in.readCard16();
                 boolean sameScreen = in.readBool();
                 in.readPad(1);
-                com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.KeyPressEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.KeyPressEvent.builder();
                 javaBuilder.detail(detail);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.time(time);
@@ -234,12 +234,12 @@ class JavaEventSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent readMapRequestEvent(
                   byte firstEventOffset, boolean sentEvent, com.github.moaxcp.x11client.protocol.X11Input in)
                   throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.MapRequestEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.builder();
                 in.readPad(1);
                 short sequenceNumber = in.readCard16();
                 int parent = in.readCard32();
                 int window = in.readCard32();
                 in.readPad(20);
-                com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.MapRequestEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.builder();
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.parent(parent);
                 javaBuilder.window(window);

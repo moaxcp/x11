@@ -29,9 +29,9 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.Window readWindow(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.Window.WindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Window.builder();
                 int numWindowModifiers = in.readCard32();
                 java.util.List<java.lang.Long> windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));
-                com.github.moaxcp.x11client.protocol.xproto.Window.WindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Window.builder();
                 javaBuilder.windowModifiers(windowModifiers);
                 return javaBuilder.build();
               }

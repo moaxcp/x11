@@ -82,6 +82,7 @@ class JavaGenericEventSpec extends XmlSpec {
                   byte firstEventOffset, boolean sentEvent, byte extension, short sequenceNumber, int length,
                   short eventType, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.ConfigureNotifyEvent.ConfigureNotifyEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ConfigureNotifyEvent.builder();
                 in.readPad(2);
                 int event = in.readCard32();
                 int window = in.readCard32();
@@ -94,7 +95,6 @@ class JavaGenericEventSpec extends XmlSpec {
                 short pixmapWidth = in.readCard16();
                 short pixmapHeight = in.readCard16();
                 int pixmapFlags = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.ConfigureNotifyEvent.ConfigureNotifyEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ConfigureNotifyEvent.builder();
                 javaBuilder.extension(extension);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.eventType(eventType);

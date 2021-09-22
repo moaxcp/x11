@@ -113,9 +113,9 @@ class JavaUnionSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.CommonBehavior readCommonBehavior(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.CommonBehavior.CommonBehaviorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.CommonBehavior.builder();
                 byte type = in.readCard8();
                 byte data = in.readCard8();
-                com.github.moaxcp.x11client.protocol.xproto.CommonBehavior.CommonBehaviorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.CommonBehavior.builder();
                 javaBuilder.type(type);
                 javaBuilder.data(data);
                 return javaBuilder.build();
@@ -148,9 +148,9 @@ class JavaUnionSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior readDefaultBehavior(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior.DefaultBehaviorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior.builder();
                 byte type = in.readCard8();
                 in.readPad(1);
-                com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior.DefaultBehaviorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior.builder();
                 javaBuilder.type(type);
                 return javaBuilder.build();
               }

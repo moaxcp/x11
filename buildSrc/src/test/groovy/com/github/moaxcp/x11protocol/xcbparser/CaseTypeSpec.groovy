@@ -61,9 +61,9 @@ class CaseTypeSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.InputInfo readInputInfo(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.InputInfo.InputInfoBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.InputInfo.builder();
                 byte classId = in.readCard8();
                 byte len = in.readCard8();
-                com.github.moaxcp.x11client.protocol.xproto.InputInfo.InputInfoBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.InputInfo.builder();
                 javaBuilder.classId(classId);
                 javaBuilder.len(len);
                 return javaBuilder.build();
@@ -127,11 +127,11 @@ class CaseTypeSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.InputInfoKey readInputInfoKey(
                   byte classId, byte len, com.github.moaxcp.x11client.protocol.X11Input in) throws
                   java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.InputInfoKey.InputInfoKeyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.InputInfoKey.builder();
                 byte minKeycode = in.readCard8();
                 byte maxKeycode = in.readCard8();
                 short numKeys = in.readCard16();
                 in.readPad(2);
-                com.github.moaxcp.x11client.protocol.xproto.InputInfoKey.InputInfoKeyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.InputInfoKey.builder();
                 javaBuilder.classId(classId);
                 javaBuilder.len(len);
                 javaBuilder.minKeycode(minKeycode);

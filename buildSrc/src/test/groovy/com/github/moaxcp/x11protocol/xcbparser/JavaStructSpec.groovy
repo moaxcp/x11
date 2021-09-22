@@ -34,11 +34,11 @@ class JavaStructSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.Format readFormat(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.Format.FormatBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Format.builder();
                 byte depth = in.readCard8();
                 byte bitsPerPixel = in.readCard8();
                 byte scanlinePad = in.readCard8();
                 in.readPad(5);
-                com.github.moaxcp.x11client.protocol.xproto.Format.FormatBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Format.builder();
                 javaBuilder.depth(depth);
                 javaBuilder.bitsPerPixel(bitsPerPixel);
                 javaBuilder.scanlinePad(scanlinePad);
@@ -108,11 +108,11 @@ class JavaStructSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.Screen readScreen(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.Screen.ScreenBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Screen.builder();
                 int root = in.readCard32();
                 int defaultColormap = in.readCard32();
                 int currentInputMasks = in.readCard32();
                 byte backingStores = in.readByte();
-                com.github.moaxcp.x11client.protocol.xproto.Screen.ScreenBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Screen.builder();
                 javaBuilder.root(root);
                 javaBuilder.defaultColormap(defaultColormap);
                 javaBuilder.currentInputMasks(currentInputMasks);
@@ -219,9 +219,9 @@ class JavaStructSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord readDeviceTimeCoord(
                   byte numAxes, com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord.DeviceTimeCoordBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord.builder();
                 int time = in.readCard32();
                 java.util.List<java.lang.Integer> axisvalues = in.readInt32(numAxes);
-                com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord.DeviceTimeCoordBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord.builder();
                 javaBuilder.time(time);
                 javaBuilder.axisvalues(axisvalues);
                 return javaBuilder.build();
@@ -281,10 +281,10 @@ class JavaStructSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.SetKeyType readSetKeyType(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.SetKeyType.SetKeyTypeBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetKeyType.builder();
                 boolean preserve = in.readBool();
                 byte nMapEntries = in.readCard8();
                 java.util.List<java.lang.Integer> preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
-                com.github.moaxcp.x11client.protocol.xproto.SetKeyType.SetKeyTypeBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetKeyType.builder();
                 javaBuilder.preserve(preserve);
                 javaBuilder.nMapEntries(nMapEntries);
                 javaBuilder.preserveEntries(preserveEntries);
@@ -358,6 +358,7 @@ class JavaStructSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.SetupRequest readSetupRequest(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.SetupRequest.SetupRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetupRequest.builder();
                 byte byteOrder = in.readCard8();
                 in.readPad(1);
                 short protocolMajorVersion = in.readCard16();
@@ -369,7 +370,6 @@ class JavaStructSpec extends XmlSpec {
                 in.readPadAlign(Short.toUnsignedInt(authorizationProtocolNameLen));
                 java.util.List<java.lang.Byte> authorizationProtocolData = in.readChar(Short.toUnsignedInt(authorizationProtocolDataLen));
                 in.readPadAlign(Short.toUnsignedInt(authorizationProtocolDataLen));
-                com.github.moaxcp.x11client.protocol.xproto.SetupRequest.SetupRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetupRequest.builder();
                 javaBuilder.byteOrder(byteOrder);
                 javaBuilder.protocolMajorVersion(protocolMajorVersion);
                 javaBuilder.protocolMinorVersion(protocolMinorVersion);

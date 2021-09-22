@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import groovy.xml.MarkupBuilder
 
 class JavaRequestSpec extends XmlSpec {
     def destroyWindow() {
@@ -34,10 +33,10 @@ class JavaRequestSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.DestroyWindow readDestroyWindow(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.DestroyWindow.DestroyWindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DestroyWindow.builder();
                 in.readPad(1);
                 short length = in.readCard16();
                 int window = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.DestroyWindow.DestroyWindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DestroyWindow.builder();
                 javaBuilder.window(window);
                 return javaBuilder.build();
               }
@@ -117,6 +116,7 @@ class JavaRequestSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.PolyPoint readPolyPoint(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.PolyPoint.PolyPointBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.PolyPoint.builder();
                 int javaStart = 1;
                 byte coordinateMode = in.readByte();
                 javaStart += 1;
@@ -132,7 +132,6 @@ class JavaRequestSpec extends XmlSpec {
                   points.add(baseObject);
                   javaStart += baseObject.getSize();
                 }
-                com.github.moaxcp.x11client.protocol.xproto.PolyPoint.PolyPointBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.PolyPoint.builder();
                 javaBuilder.coordinateMode(coordinateMode);
                 javaBuilder.drawable(drawable);
                 javaBuilder.gc(gc);
@@ -229,6 +228,7 @@ class JavaRequestSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.QueryTextExtends readQueryTextExtends(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.QueryTextExtends.QueryTextExtendsBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTextExtends.builder();
                 int javaStart = 1;
                 boolean oddLength = in.readBool();
                 javaStart += 1;
@@ -242,7 +242,6 @@ class JavaRequestSpec extends XmlSpec {
                   string.add(baseObject);
                   javaStart += baseObject.getSize();
                 }
-                com.github.moaxcp.x11client.protocol.xproto.QueryTextExtends.QueryTextExtendsBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTextExtends.builder();
                 javaBuilder.font(font);
                 javaBuilder.string(string);
                 in.readPadAlign(javaBuilder.getSize());
@@ -314,9 +313,9 @@ class JavaRequestSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.Enable readEnable(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.Enable.EnableBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Enable.builder();
                 in.readPad(1);
                 short length = in.readCard16();
-                com.github.moaxcp.x11client.protocol.xproto.Enable.EnableBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Enable.builder();
                 return javaBuilder.build();
               }
             
@@ -572,6 +571,7 @@ class JavaRequestSpec extends XmlSpec {
             
               public static com.github.moaxcp.x11client.protocol.xproto.CreateWindow readCreateWindow(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.CreateWindow.builder();
                 byte depth = in.readCard8();
                 short length = in.readCard16();
                 int wid = in.readCard32();
@@ -584,7 +584,21 @@ class JavaRequestSpec extends XmlSpec {
                 short clazz = in.readCard16();
                 int visual = in.readCard32();
                 int valueMask = in.readCard32();
-                com.github.moaxcp.x11client.protocol.xproto.CreateWindow.CreateWindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.CreateWindow.builder();
+                int backgroundPixmap = 0;
+                int backgroundPixel = 0;
+                int borderPixmap = 0;
+                int borderPixel = 0;
+                int bitGravity = 0;
+                int winGravity = 0;
+                int backingStore = 0;
+                int backingPlanes = 0;
+                int backingPixel = 0;
+                int overrideRedirect = 0;
+                int saveUnder = 0;
+                int eventMask = 0;
+                int doNotPropogateMask = 0;
+                int colormap = 0;
+                int cursor = 0;
                 javaBuilder.depth(depth);
                 javaBuilder.wid(wid);
                 javaBuilder.parent(parent);
@@ -597,49 +611,64 @@ class JavaRequestSpec extends XmlSpec {
                 javaBuilder.visual(visual);
                 javaBuilder.valueMask(valueMask);
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.backgroundPixmap(in.readCard32());
+                  backgroundPixmap = in.readCard32();
+                  javaBuilder.backgroundPixmap(backgroundPixmap);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.backgroundPixel(in.readCard32());
+                  backgroundPixel = in.readCard32();
+                  javaBuilder.backgroundPixel(backgroundPixel);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.borderPixmap(in.readCard32());
+                  borderPixmap = in.readCard32();
+                  javaBuilder.borderPixmap(borderPixmap);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.borderPixel(in.readCard32());
+                  borderPixel = in.readCard32();
+                  javaBuilder.borderPixel(borderPixel);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.bitGravity(in.readCard32());
+                  bitGravity = in.readCard32();
+                  javaBuilder.bitGravity(bitGravity);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.winGravity(in.readCard32());
+                  winGravity = in.readCard32();
+                  javaBuilder.winGravity(winGravity);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.backingStore(in.readCard32());
+                  backingStore = in.readCard32();
+                  javaBuilder.backingStore(backingStore);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.backingPlanes(in.readCard32());
+                  backingPlanes = in.readCard32();
+                  javaBuilder.backingPlanes(backingPlanes);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.backingPixel(in.readCard32());
+                  backingPixel = in.readCard32();
+                  javaBuilder.backingPixel(backingPixel);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.overrideRedirect(in.readCard32());
+                  overrideRedirect = in.readCard32();
+                  javaBuilder.overrideRedirect(overrideRedirect);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.saveUnder(in.readCard32());
+                  saveUnder = in.readCard32();
+                  javaBuilder.saveUnder(saveUnder);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.eventMask(in.readCard32());
+                  eventMask = in.readCard32();
+                  javaBuilder.eventMask(eventMask);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.doNotPropogateMask(in.readCard32());
+                  doNotPropogateMask = in.readCard32();
+                  javaBuilder.doNotPropogateMask(doNotPropogateMask);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.colormap(in.readCard32());
+                  colormap = in.readCard32();
+                  javaBuilder.colormap(colormap);
                 }
                 if(com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR.isEnabled((int) (Integer.toUnsignedLong(valueMask)))) {
-                  javaBuilder.cursor(in.readCard32());
+                  cursor = in.readCard32();
+                  javaBuilder.cursor(cursor);
                 }
                 in.readPadAlign(javaBuilder.getSize());
                 return javaBuilder.build();
@@ -969,101 +998,6 @@ class JavaRequestSpec extends XmlSpec {
             
                 public int getSize() {
                   return 32 + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0);
-                }
-              }
-            }
-        '''.stripIndent()
-    }
-
-    def await() {
-        given:
-        StringWriter syncString = new StringWriter()
-        MarkupBuilder syncXml = new MarkupBuilder(syncString)
-        syncXml.xcb() {
-            struct(name: 'INT64') {
-                field(type: 'INT32', name: 'hi')
-                field(type: 'CARD32', name: 'lo')
-            }
-        }
-        XResult syncResult = new XResult(basePackage: 'com.github.moaxcp.x11client.protocol', header:'sync')
-        new XmlSlurper().parseText(syncString.toString()).nodeIterator().next().childNodes().each {
-            syncResult.addNode(it)
-        }
-        result.imports.put('sync', syncResult)
-        xmlBuilder.xcb() {
-            struct(name:'TRIGGER') {
-                field(type:'COUNTER', name:'counter')
-                field(type:'CARD32', name:'wait_type', enum:'VALUETYPE')
-                field(type:'sync:INT64', name:'wait_value')
-                field(type:'CARD32', name:'test_type', enum:'TESTTYPE')
-            }
-            struct(name:'WAITCONDITION') {
-                field(type:'TRIGGER', name:'trigger')
-                field(type:'sync:INT64', name:'even_threshold')
-            }
-            request(name:'Await', opcode:'7') {
-                list(type:'WAITCONDITION', name:'wait_list')
-            }
-        }
-
-        when:
-        addChildNodes()
-        XTypeRequest request = result.resolveXType('Await')
-        JavaRequest javaRequest = request.javaType
-
-        then:
-        javaRequest.typeSpec.toString() == '''\
-            @lombok.Value
-            @lombok.Builder
-            public class Await implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
-              public static final byte OPCODE = 7;
-            
-              @lombok.NonNull
-              private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Waitcondition> waitList;
-            
-              public byte getOpCode() {
-                return OPCODE;
-              }
-            
-              public static com.github.moaxcp.x11client.protocol.xproto.Await readAwait(
-                  com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
-                int javaStart = 1;
-                in.readPad(1);
-                javaStart += 1;
-                short length = in.readCard16();
-                javaStart += 2;
-                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Waitcondition> waitList = new java.util.ArrayList<>(length - javaStart);
-                while(javaStart < Short.toUnsignedInt(length) * 4) {
-                  com.github.moaxcp.x11client.protocol.xproto.Waitcondition baseObject = com.github.moaxcp.x11client.protocol.xproto.Waitcondition.readWaitcondition(in);
-                  waitList.add(baseObject);
-                  javaStart += baseObject.getSize();
-                }
-                com.github.moaxcp.x11client.protocol.xproto.Await.AwaitBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Await.builder();
-                javaBuilder.waitList(waitList);
-                in.readPadAlign(javaBuilder.getSize());
-                return javaBuilder.build();
-              }
-            
-              @java.lang.Override
-              public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
-                  java.io.IOException {
-                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
-                out.writePad(1);
-                out.writeCard16((short) getLength());
-                for(com.github.moaxcp.x11client.protocol.xproto.Waitcondition t : waitList) {
-                  t.write(out);
-                }
-                out.writePadAlign(getSize());
-              }
-            
-              @java.lang.Override
-              public int getSize() {
-                return 4 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(waitList);
-              }
-            
-              public static class AwaitBuilder {
-                public int getSize() {
-                  return 4 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(waitList);
                 }
               }
             }

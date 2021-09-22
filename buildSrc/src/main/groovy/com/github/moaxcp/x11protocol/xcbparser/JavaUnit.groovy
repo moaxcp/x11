@@ -4,9 +4,12 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
 interface JavaUnit {
+    String getName()
     JavaType getJavaType()
     TypeName getTypeName()
     XUnit getXUnit()
+    CodeBlock getDeclareCode()
+    CodeBlock getDefaultValue()
     CodeBlock getDeclareAndReadCode()
     CodeBlock getReadCode()
     void addBuilderCode(CodeBlock.Builder code)

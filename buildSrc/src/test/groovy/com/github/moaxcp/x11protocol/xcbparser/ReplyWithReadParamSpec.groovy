@@ -63,6 +63,7 @@ class ReplyWithReadParamSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.GetDeviceMotionEventsReply readGetDeviceMotionEventsReply(
                   byte xiReplyType, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in)
                   throws java.io.IOException {
+                com.github.moaxcp.x11client.protocol.xproto.GetDeviceMotionEventsReply.GetDeviceMotionEventsReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.GetDeviceMotionEventsReply.builder();
                 int length = in.readCard32();
                 int numEvents = in.readCard32();
                 byte numAxes = in.readCard8();
@@ -72,7 +73,6 @@ class ReplyWithReadParamSpec extends XmlSpec {
                 for(int i = 0; i < Integer.toUnsignedLong(numEvents); i++) {
                   events.add(com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord.readDeviceTimeCoord(numAxes, in));
                 }
-                com.github.moaxcp.x11client.protocol.xproto.GetDeviceMotionEventsReply.GetDeviceMotionEventsReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.GetDeviceMotionEventsReply.builder();
                 javaBuilder.xiReplyType(xiReplyType);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.numAxes(numAxes);

@@ -30,6 +30,11 @@ class JavaPad implements JavaUnit, JavaReadParameter {
     }
 
     @Override
+    CodeBlock getDeclareCode() {
+        return CodeBlock.builder().addStatement('$T $L = $L', getTypeName(), getName(), getDefaultValue()).build()
+    }
+
+    @Override
     TypeName getTypeName() {
         return ArrayTypeName.of(byte.class)
     }
@@ -44,7 +49,7 @@ class JavaPad implements JavaUnit, JavaReadParameter {
 
     @Override
     CodeBlock getDeclareAndReadCode() {
-        return CodeBlock.builder().addStatement(getReadCode()).build()
+        return CodeBlock.builder().addStatement('$T $L = $L', getTypeName(), getName(), getReadCode()).build()
     }
 
     @Override
@@ -75,5 +80,10 @@ class JavaPad implements JavaUnit, JavaReadParameter {
     @Override
     Optional<Integer> getFixedSize() {
         return Optional.of(bytes)
+    }
+
+    @Override
+    CodeBlock getDefaultValue() {
+        CodeBlock.of('[]')
     }
 }

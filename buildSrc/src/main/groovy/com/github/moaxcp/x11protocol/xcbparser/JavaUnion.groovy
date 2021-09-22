@@ -40,7 +40,7 @@ class JavaUnion extends JavaObjectType {
     }
 
     static JavaUnion actionUnionJavaUnion(Map args) {
-        return new JavaUnion(args)
+        return new XkbActionUnion(args)
     }
 
     static JavaUnion notifyDataUnionJavaUnion(Map args) {

@@ -71,6 +71,7 @@ class SetCompatMap extends XmlSpec {
         
           public static com.github.moaxcp.x11client.protocol.xproto.SetCompatMap readSetCompatMap(
               com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
+            com.github.moaxcp.x11client.protocol.xproto.SetCompatMap.SetCompatMapBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetCompatMap.builder();
             in.readPad(1);
             short length = in.readCard16();
             short deviceSpec = in.readCard16();
@@ -89,7 +90,6 @@ class SetCompatMap extends XmlSpec {
             for(int i = 0; i < com.github.moaxcp.x11client.protocol.Popcount.popcount(Byte.toUnsignedInt(groups)); i++) {
               groupMaps.add(com.github.moaxcp.x11client.protocol.xproto.ModDef.readModDef(in));
             }
-            com.github.moaxcp.x11client.protocol.xproto.SetCompatMap.SetCompatMapBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetCompatMap.builder();
             javaBuilder.deviceSpec(deviceSpec);
             javaBuilder.recomputeActions(recomputeActions);
             javaBuilder.truncateSi(truncateSi);

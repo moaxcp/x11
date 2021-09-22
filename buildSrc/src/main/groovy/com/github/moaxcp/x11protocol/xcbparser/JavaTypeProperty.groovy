@@ -20,8 +20,8 @@ class JavaTypeProperty extends JavaProperty {
     }
 
     @Override
-    CodeBlock getDeclareAndReadCode() {
-        return declareAndInitializeTo(readCode)
+    CodeBlock getDefaultValue() {
+        return CodeBlock.of('null')
     }
 
     @Override

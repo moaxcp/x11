@@ -69,6 +69,16 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
     }
 
     @Override
+    CodeBlock getDeclareCode() {
+        return declareAndInitializeTo(defaultValue)
+    }
+
+    @Override
+    CodeBlock getDeclareAndReadCode() {
+        return declareAndInitializeTo(readCode)
+    }
+
+    @Override
     String getName() {
         return convertX11VariableNameToJava(x11Field.name)
     }
@@ -131,7 +141,8 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
         }
         if(bitcaseInfo) {
             code.beginControlFlow('if($T.$L.isEnabled($L))', bitcaseInfo.enumType, bitcaseInfo.enumItem, bitcaseInfo.maskField.getExpression(TypeName.INT))
-            code.addStatement('javaBuilder.$L($L)', name, readCode)
+            code.addStatement('$L = $L', name, readCode)
+            code.addStatement('javaBuilder.$1L($1L)', name)
             code.endControlFlow()
         } else if(getBuilderValueExpression()) {
             code.addStatement('javaBuilder.$L($L)', name, getBuilderValueExpression())

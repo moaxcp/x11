@@ -6,8 +6,6 @@ import com.squareup.javapoet.TypeName
  * Defines a {@link JavaUnit} which can be a read parameter in the read method.
  */
 interface JavaReadParameter extends JavaUnit {
-    String getName()
-
     boolean isReadParam()
     void setReadParam(boolean readParam)
 

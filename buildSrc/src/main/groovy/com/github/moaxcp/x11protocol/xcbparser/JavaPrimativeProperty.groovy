@@ -36,6 +36,15 @@ class JavaPrimativeProperty extends JavaProperty {
         return memberTypeName
     }
 
+    @Override
+    CodeBlock getDefaultValue() {
+        if(typeName == TypeName.BOOLEAN) {
+            return CodeBlock.of('false')
+        } else {
+            return CodeBlock.of('0')
+        }
+    }
+
     TypeName getMemberTypeName() {
         if(!x11Primatives.contains(x11Field.resolvedType.name)) {
             throw new IllegalStateException("Could not find ${x11Field.resolvedType.name} in primative types $x11Primatives")
@@ -186,11 +195,6 @@ class JavaPrimativeProperty extends JavaProperty {
             }
         }
         return methods
-    }
-
-    @Override
-    CodeBlock getDeclareAndReadCode() {
-        return declareAndInitializeTo(readCode)
     }
 
     @Override
