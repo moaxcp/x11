@@ -101,7 +101,7 @@ class JavaEventSpec extends XmlSpec {
                 short eventY = in.readInt16();
                 short state = in.readCard16();
                 boolean sameScreen = in.readBool();
-                in.readPad(1);
+                byte[] pad13 = in.readPad(1);
                 javaBuilder.detail(detail);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.time(time);
@@ -235,11 +235,11 @@ class JavaEventSpec extends XmlSpec {
                   byte firstEventOffset, boolean sentEvent, com.github.moaxcp.x11client.protocol.X11Input in)
                   throws java.io.IOException {
                 com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.MapRequestEventBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.MapRequestEvent.builder();
-                in.readPad(1);
+                byte[] pad1 = in.readPad(1);
                 short sequenceNumber = in.readCard16();
                 int parent = in.readCard32();
                 int window = in.readCard32();
-                in.readPad(20);
+                byte[] pad5 = in.readPad(20);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.parent(parent);
                 javaBuilder.window(window);

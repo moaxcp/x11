@@ -6,7 +6,7 @@ import com.squareup.javapoet.*
 
 import javax.lang.model.element.Modifier
 
-abstract class JavaObjectType implements JavaType {
+abstract class JavaClass implements JavaType {
     XResult result
     String basePackage
     String javaPackage
@@ -21,7 +21,7 @@ abstract class JavaObjectType implements JavaType {
         return Optional.ofNullable(xUnitSubtype)
     }
 
-    JavaObjectType(Map map) {
+    JavaClass(Map map) {
         result = map.result
         basePackage = map.basePackage
         javaPackage = map.javaPackage

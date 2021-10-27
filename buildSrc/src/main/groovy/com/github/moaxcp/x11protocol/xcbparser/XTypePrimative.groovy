@@ -35,8 +35,8 @@ class XTypePrimative extends XType {
     }
 
     @Override
-    JavaPrimativeProperty getJavaProperty(JavaType javaType, XUnitField field) {
-        return new JavaPrimativeProperty(javaType, field)
+    JavaPrimitiveProperty getJavaProperty(JavaType javaType, XUnitField field) {
+        return new JavaPrimitiveProperty(javaType, field)
     }
 
     @Override

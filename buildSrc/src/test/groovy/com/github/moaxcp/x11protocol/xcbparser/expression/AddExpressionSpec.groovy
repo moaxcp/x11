@@ -1,9 +1,6 @@
 package com.github.moaxcp.x11protocol.xcbparser.expression
 
-import com.github.moaxcp.x11protocol.xcbparser.JavaPrimativeProperty
-import com.github.moaxcp.x11protocol.xcbparser.JavaType
-import com.github.moaxcp.x11protocol.xcbparser.XResult
-import com.github.moaxcp.x11protocol.xcbparser.XUnitField
+import com.github.moaxcp.x11protocol.xcbparser.*
 import spock.lang.Specification
 
 class AddExpressionSpec extends Specification {
@@ -29,18 +26,18 @@ class AddExpressionSpec extends Specification {
     def 'nested subtract and multiply expression'() {
         given:
         XResult xResult = new XResult()
-        JavaType javaType = Mock(JavaType) {
+        JavaClass javaClass = Mock(JavaClass) {
             it.getXUnitSubtype() >> Optional.empty()
         }
-        javaType.getJavaProperty('a') >> new JavaPrimativeProperty(
-            javaType,
+        javaClass.getJavaProperty('a') >> new JavaPrimitiveProperty(
+            javaClass,
             new XUnitField(result: xResult, name: 'a', type: 'CARD8')
         )
         AddExpression expression = new AddExpression(expressions: [
             new ValueExpression(value:7),
             new MultiplyExpression(expressions:[
                 new ValueExpression(value:8),
-                new FieldRefExpression(javaType: javaType, fieldName:'a')]),
+                new FieldRefExpression(javaType: javaClass, fieldName:'a')]),
             new SubtractExpression(expressions: [
                 new ValueExpression(value:5),
                 new ValueExpression(value:4)])])

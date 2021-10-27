@@ -7,7 +7,7 @@ import javax.lang.model.element.Modifier
 import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorTypeName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getJavaName
 
-class JavaError extends JavaObjectType {
+class JavaError extends JavaClass {
     int number
 
     JavaError(Map map) {
@@ -53,7 +53,7 @@ class JavaError extends JavaObjectType {
         r.localOnly = true
         r.writeValueExpression = CodeBlock.of('getResponseCode()')
         if (javaError.fixedSize && javaError.fixedSize.get() < 32) {
-            javaError.protocol.add(new JavaPad(bytes: 32 - javaError.fixedSize.get()))
+            javaError.protocol.add(new JavaPad(javaClass: javaError, bytes: 32 - javaError.fixedSize.get()))
         }
         return javaError
     }

@@ -21,7 +21,7 @@ class JavaTypeListProperty extends JavaListProperty {
     }
 
     String getBasePackage() {
-        return javaType.basePackage
+        return javaClass.basePackage
     }
 
     @Override
@@ -45,12 +45,12 @@ class JavaTypeListProperty extends JavaListProperty {
 
     @Override
     CodeBlock getDeclareAndReadCode() {
-        JavaObjectType propertyJavaType = x11Field.resolvedType.javaType
+        JavaClass propertyJavaType = x11Field.resolvedType.javaType
         List<String> readParams = propertyJavaType.readParameters*.name
         readParams.add('in')
         CodeBlock readObjectBlock = CodeBlock.of('$T.read$L($L)', baseTypeName, baseTypeName.simpleName(), readParams.join(', '))
         if(lengthExpression instanceof EmptyExpression) {
-            JavaProperty lengthProperty = javaType.getJavaProperty('length')
+            JavaProperty lengthProperty = javaClass.getJavaProperty('length')
             CodeBlock lengthExpression = CodeBlock.of('$L', lengthProperty.name)
             if(lengthProperty.typeName == TypeName.SHORT) {
                 lengthExpression = CodeBlock.of('Short.toUnsignedInt($L)', lengthProperty.name)

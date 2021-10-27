@@ -7,7 +7,7 @@ import javax.lang.model.element.Modifier
 import static com.github.moaxcp.x11protocol.generator.Conventions.getJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getRequestTypeName
 
-class JavaRequest extends JavaObjectType {
+class JavaRequest extends JavaClass {
     int opCode
     XTypeReply reply
 

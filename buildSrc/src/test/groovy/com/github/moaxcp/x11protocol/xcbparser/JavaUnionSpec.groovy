@@ -150,7 +150,7 @@ class JavaUnionSpec extends XmlSpec {
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior.DefaultBehaviorBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior.builder();
                 byte type = in.readCard8();
-                in.readPad(1);
+                byte[] pad1 = in.readPad(1);
                 javaBuilder.type(type);
                 return javaBuilder.build();
               }

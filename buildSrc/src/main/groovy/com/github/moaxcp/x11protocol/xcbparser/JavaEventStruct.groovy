@@ -5,7 +5,7 @@ import com.squareup.javapoet.ClassName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventStructJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventStructTypeName
 
-class JavaEventStruct extends JavaObjectType {
+class JavaEventStruct extends JavaClass {
     //TODO the following properties may be used for verification of the event property when adding it to another xobject
     String allowedExtension
     boolean allowGenericEvents

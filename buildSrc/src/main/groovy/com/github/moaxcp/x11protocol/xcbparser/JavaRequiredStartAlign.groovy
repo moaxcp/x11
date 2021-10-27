@@ -5,7 +5,7 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
 class JavaRequiredStartAlign implements JavaUnit {
-    JavaType javaType
+    JavaClass javaClass
     XUnit xUnit
     int align
     boolean readParam

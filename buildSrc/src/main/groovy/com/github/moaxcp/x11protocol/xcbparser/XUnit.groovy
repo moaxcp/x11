@@ -7,5 +7,5 @@ interface XUnit {
     void setCaseInfo(XCaseInfo caseInfo)
     XBitcaseInfo getBitcaseInfo()
     void setBitcaseInfo(XBitcaseInfo bitcaseInfo)
-    List<JavaUnit> getJavaUnit(JavaType javaType)
+    List<JavaUnit> getJavaUnit(JavaClass javaClass)
 }

@@ -8,7 +8,7 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.getErrorTypeNa
 import static com.github.moaxcp.x11protocol.generator.Conventions.getEventTypeName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getJavaName
 
-class JavaEvent extends JavaObjectType {
+class JavaEvent extends JavaClass {
     int number
     boolean genericEvent
     int genericEventNumber
@@ -59,7 +59,7 @@ class JavaEvent extends JavaObjectType {
         p.constantField = true
         p.writeValueExpression = CodeBlock.of('sentEvent ? (byte) (0b10000000 & getResponseCode()) : getResponseCode()')
         if (javaEvent.fixedSize && javaEvent.fixedSize.get() < 32) {
-            javaEvent.protocol.add(new JavaPad(bytes: 32 - javaEvent.fixedSize.get()))
+            javaEvent.protocol.add(new JavaPad(javaClass: javaEvent, bytes: 32 - javaEvent.fixedSize.get()))
         }
 
         if (event.genericEvent) {

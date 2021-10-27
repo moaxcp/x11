@@ -1,7 +1,7 @@
 package com.github.moaxcp.x11protocol.xcbparser.expression
 
 import com.github.moaxcp.x11protocol.xcbparser.JavaListProperty
-import com.github.moaxcp.x11protocol.xcbparser.JavaPrimativeProperty
+import com.github.moaxcp.x11protocol.xcbparser.JavaPrimitiveProperty
 import com.github.moaxcp.x11protocol.xcbparser.JavaProperty
 import com.github.moaxcp.x11protocol.xcbparser.JavaType
 import com.squareup.javapoet.CodeBlock
@@ -45,7 +45,7 @@ class FieldRefExpression implements Expression {
         if(field instanceof JavaListProperty) {
 
         } else if(field instanceof JavaProperty) {
-            if(!(field instanceof JavaPrimativeProperty)) {
+            if(!(field instanceof JavaPrimitiveProperty)) {
                 throw new UnsupportedOperationException("field ${field.name} is not primative")
             }
             String propertyName = field.name

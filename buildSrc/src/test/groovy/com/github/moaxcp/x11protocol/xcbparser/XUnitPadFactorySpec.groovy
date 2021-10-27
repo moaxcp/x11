@@ -33,7 +33,7 @@ class XUnitPadFactorySpec extends XmlSpec {
         given:
         xmlBuilder.pad(bytes:4)
         XUnitPad pad = (XUnitPad) xUnitPad(getFirstNode())
-        JavaType javaType = Mock(JavaObjectType) {
+        JavaType javaType = Mock(JavaClass) {
             it.getXUnitSubtype() >> Optional.empty()
         }
 
@@ -48,10 +48,10 @@ class XUnitPadFactorySpec extends XmlSpec {
         given:
         xmlBuilder.pad(align:4)
         XUnitPadAlign pad = xUnitPad(getFirstNode())
-        JavaType javaType = Mock(JavaType)
+        JavaClass javaClass = Mock(JavaClass)
 
         when:
-        JavaPadAlign javaPad = pad.getJavaUnit(javaType)[0]
+        JavaPadAlign javaPad = pad.getJavaUnit(javaClass)[0]
 
         then:
         javaPad.align == 4

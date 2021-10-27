@@ -72,16 +72,16 @@ class SetCompatMap extends XmlSpec {
           public static com.github.moaxcp.x11client.protocol.xproto.SetCompatMap readSetCompatMap(
               com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
             com.github.moaxcp.x11client.protocol.xproto.SetCompatMap.SetCompatMapBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetCompatMap.builder();
-            in.readPad(1);
+            byte[] pad1 = in.readPad(1);
             short length = in.readCard16();
             short deviceSpec = in.readCard16();
-            in.readPad(1);
+            byte[] pad4 = in.readPad(1);
             boolean recomputeActions = in.readBool();
             boolean truncateSi = in.readBool();
             byte groups = in.readCard8();
             short firstSI = in.readCard16();
             short nSI = in.readCard16();
-            in.readPad(2);
+            byte[] pad10 = in.readPad(2);
             java.util.List<com.github.moaxcp.x11client.protocol.xproto.SymInterpret> si = new java.util.ArrayList<>(Short.toUnsignedInt(nSI));
             for(int i = 0; i < Short.toUnsignedInt(nSI); i++) {
               si.add(com.github.moaxcp.x11client.protocol.xproto.SymInterpret.readSymInterpret(in));

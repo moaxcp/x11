@@ -68,7 +68,7 @@ class ReplyWithReadParamSpec extends XmlSpec {
                 int numEvents = in.readCard32();
                 byte numAxes = in.readCard8();
                 byte deviceMode = in.readCard8();
-                in.readPad(18);
+                byte[] pad7 = in.readPad(18);
                 java.util.List<com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord> events = new java.util.ArrayList<>((int) (Integer.toUnsignedLong(numEvents)));
                 for(int i = 0; i < Integer.toUnsignedLong(numEvents); i++) {
                   events.add(com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord.readDeviceTimeCoord(numAxes, in));

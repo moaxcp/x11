@@ -50,7 +50,7 @@ class JavaReplySpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.QueryTree readQueryTree(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 com.github.moaxcp.x11client.protocol.xproto.QueryTree.QueryTreeBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.QueryTree.builder();
-                in.readPad(1);
+                byte[] pad1 = in.readPad(1);
                 short length = in.readCard16();
                 int window = in.readCard32();
                 javaBuilder.window(window);
@@ -100,7 +100,7 @@ class JavaReplySpec extends XmlSpec {
                 int root = in.readCard32();
                 int parent = in.readCard32();
                 short childrenLen = in.readCard16();
-                in.readPad(14);
+                byte[] pad7 = in.readPad(14);
                 java.util.List<java.lang.Integer> children = in.readCard32(Short.toUnsignedInt(childrenLen));
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.root(root);
@@ -271,7 +271,7 @@ class JavaReplySpec extends XmlSpec {
                 com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.ListHostsReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListHostsReply.builder();
                 int length = in.readCard32();
                 short hostsLen = in.readCard16();
-                in.readPad(22);
+                byte[] pad5 = in.readPad(22);
                 java.util.List<com.github.moaxcp.x11client.protocol.xproto.Host> hosts = new java.util.ArrayList<>(Short.toUnsignedInt(hostsLen));
                 for(int i = 0; i < Short.toUnsignedInt(hostsLen); i++) {
                   hosts.add(com.github.moaxcp.x11client.protocol.xproto.Host.readHost(in));

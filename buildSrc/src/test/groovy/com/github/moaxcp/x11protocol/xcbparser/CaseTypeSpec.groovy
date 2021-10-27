@@ -131,7 +131,7 @@ class CaseTypeSpec extends XmlSpec {
                 byte minKeycode = in.readCard8();
                 byte maxKeycode = in.readCard8();
                 short numKeys = in.readCard16();
-                in.readPad(2);
+                byte[] pad5 = in.readPad(2);
                 javaBuilder.classId(classId);
                 javaBuilder.len(len);
                 javaBuilder.minKeycode(minKeycode);

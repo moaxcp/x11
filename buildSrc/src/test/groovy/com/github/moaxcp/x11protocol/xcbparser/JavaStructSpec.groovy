@@ -38,7 +38,7 @@ class JavaStructSpec extends XmlSpec {
                 byte depth = in.readCard8();
                 byte bitsPerPixel = in.readCard8();
                 byte scanlinePad = in.readCard8();
-                in.readPad(5);
+                byte[] pad3 = in.readPad(5);
                 javaBuilder.depth(depth);
                 javaBuilder.bitsPerPixel(bitsPerPixel);
                 javaBuilder.scanlinePad(scanlinePad);
@@ -360,12 +360,12 @@ class JavaStructSpec extends XmlSpec {
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 com.github.moaxcp.x11client.protocol.xproto.SetupRequest.SetupRequestBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetupRequest.builder();
                 byte byteOrder = in.readCard8();
-                in.readPad(1);
+                byte[] pad1 = in.readPad(1);
                 short protocolMajorVersion = in.readCard16();
                 short protocolMinorVersion = in.readCard16();
                 short authorizationProtocolNameLen = in.readCard16();
                 short authorizationProtocolDataLen = in.readCard16();
-                in.readPad(2);
+                byte[] pad6 = in.readPad(2);
                 java.util.List<java.lang.Byte> authorizationProtocolName = in.readChar(Short.toUnsignedInt(authorizationProtocolNameLen));
                 in.readPadAlign(Short.toUnsignedInt(authorizationProtocolNameLen));
                 java.util.List<java.lang.Byte> authorizationProtocolData = in.readChar(Short.toUnsignedInt(authorizationProtocolDataLen));

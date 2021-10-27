@@ -79,7 +79,7 @@ class SumOfSpec extends XmlSpec {
                 com.github.moaxcp.x11client.protocol.xproto.ListInputDevicesReply.ListInputDevicesReplyBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.ListInputDevicesReply.builder();
                 int length = in.readCard32();
                 byte devicesLen = in.readCard8();
-                in.readPad(23);
+                byte[] pad5 = in.readPad(23);
                 java.util.List<com.github.moaxcp.x11client.protocol.xproto.DeviceInfo> devices = new java.util.ArrayList<>(Byte.toUnsignedInt(devicesLen));
                 for(int i = 0; i < Byte.toUnsignedInt(devicesLen); i++) {
                   devices.add(com.github.moaxcp.x11client.protocol.xproto.DeviceInfo.readDeviceInfo(in));

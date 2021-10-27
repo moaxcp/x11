@@ -6,14 +6,14 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 
 class JavaPadAlign implements JavaUnit {
-    JavaType javaType
+    JavaClass javaClass
     XUnit xUnit
     int align
     JavaListProperty list
 
     @Override
     String getName() {
-        int index = javaType.protocol.findIndexOf {it.is(this) }
+        int index = javaClass.protocol.findIndexOf {it.is(this) }
         if(index) {
             return "padAlign$index"
         }
@@ -75,7 +75,7 @@ class JavaPadAlign implements JavaUnit {
 
     @Override
     CodeBlock getSizeExpression() {
-        return CodeBlock.of('$T.getSizeForPadAlign($L, $L)', ClassName.get(javaType.basePackage, 'XObject'), align, list.getSizeExpression())
+        return CodeBlock.of('$T.getSizeForPadAlign($L, $L)', ClassName.get(javaClass.basePackage, 'XObject'), align, list.getSizeExpression())
     }
 
     @Override

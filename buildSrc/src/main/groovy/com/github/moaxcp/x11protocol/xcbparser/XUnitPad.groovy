@@ -7,9 +7,9 @@ class XUnitPad implements XUnit {
     XBitcaseInfo bitcaseInfo
 
     @Override
-    List<JavaPad> getJavaUnit(JavaType javaType) {
-        JavaPad javaPad = new JavaPad(javaType: javaType, x11Field: this, bytes:bytes)
-        if(javaType.getXUnitSubtype().isPresent() && !caseInfo) {
+    List<JavaPad> getJavaUnit(JavaClass javaClass) {
+        JavaPad javaPad = new JavaPad(javaClass: javaClass, x11Field: this, bytes:bytes)
+        if(javaClass.getXUnitSubtype().isPresent() && !caseInfo) {
             javaPad.readParam = true
         }
         return [javaPad]

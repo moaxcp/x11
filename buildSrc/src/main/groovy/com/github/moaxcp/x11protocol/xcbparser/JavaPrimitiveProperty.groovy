@@ -9,16 +9,16 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.*
 /**
  * for x11 primative properties
  */
-class JavaPrimativeProperty extends JavaProperty {
+class JavaPrimitiveProperty extends JavaProperty {
     String lengthOfField
 
-    JavaPrimativeProperty(Map map) {
+    JavaPrimitiveProperty(Map map) {
         super(map)
         lengthOfField = map.lengthOfField
     }
-    
-    JavaPrimativeProperty(JavaType javaType, XUnitField field) {
-        super(javaType, field)
+
+    JavaPrimitiveProperty(JavaClass javaClass, XUnitField field) {
+        super(javaClass, field)
     }
 
     @Override
@@ -115,7 +115,7 @@ class JavaPrimativeProperty extends JavaProperty {
                 modifier = Modifier.PRIVATE
                 methods += MethodSpec.methodBuilder(name)
                     .addModifiers(Modifier.PRIVATE)
-                    .returns(javaType.builderClassName)
+                    .returns(javaClass.builderClassName)
                     .addParameter(typeName, name)
                     .addStatement('this.$1L = $1L', name)
                     .addStatement('return this')
@@ -138,7 +138,7 @@ class JavaPrimativeProperty extends JavaProperty {
                     .addModifiers(modifier)
                     .addParameter(ArrayTypeName.of(maskTypeName), 'maskEnums')
                     .varargs()
-                    .returns(javaType.builderClassName)
+                    .returns(javaClass.builderClassName)
                     .beginControlFlow('for($T m : maskEnums)', maskTypeName)
                     .addStatement('$1L(($2T) m.enableFor($1L))', name, memberTypeName)
                     .endControlFlow()
@@ -148,7 +148,7 @@ class JavaPrimativeProperty extends JavaProperty {
                     .addModifiers(modifier)
                     .addParameter(ArrayTypeName.of(maskTypeName), 'maskEnums')
                     .varargs()
-                    .returns(javaType.builderClassName)
+                    .returns(javaClass.builderClassName)
                     .beginControlFlow('for($T m : maskEnums)', maskTypeName)
                     .addStatement('$1L(($2T) m.disableFor($1L))', name, memberTypeName)
                     .endControlFlow()
@@ -169,7 +169,7 @@ class JavaPrimativeProperty extends JavaProperty {
                     MethodSpec.methodBuilder(name)
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(enumClassName, name)
-                        .returns(javaType.builderClassName)
+                        .returns(javaClass.builderClassName)
                         .addStatement('this.$L = $L', name, conversion)
                         .addStatement('$LEnable($T.$L)', fieldName, bitcaseInfo.enumType, bitcaseInfo.enumItem)
                         .addStatement('return this')
@@ -180,14 +180,14 @@ class JavaPrimativeProperty extends JavaProperty {
                     MethodSpec.methodBuilder(name)
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(enumClassName, name)
-                        .returns(javaType.builderClassName)
+                        .returns(javaClass.builderClassName)
                         .addStatement('this.$L = $L', name, conversion)
                         .addStatement('return this')
                         .build(),
                     MethodSpec.methodBuilder(name)
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(typeName, name)
-                        .returns(javaType.builderClassName)
+                        .returns(javaClass.builderClassName)
                         .addStatement('this.$1L = $1L', name)
                         .addStatement('return this')
                         .build()

@@ -49,8 +49,8 @@ class JavaErrorSpec extends XmlSpec {
                 int badValue = in.readCard32();
                 short minorOpcode = in.readCard16();
                 byte majorOpcode = in.readCard8();
-                in.readPad(1);
-                in.readPad(20);
+                byte[] pad6 = in.readPad(1);
+                byte[] pad7 = in.readPad(20);
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.badValue(badValue);
                 javaBuilder.minorOpcode(minorOpcode);

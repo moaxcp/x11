@@ -37,7 +37,7 @@ class JavaEnum implements JavaType {
     @Override
     JavaProperty getJavaProperty(String name) {
         if(name == 'value') {
-            return new JavaPrimativeProperty(
+            return new JavaPrimitiveProperty(
                 name: 'value',
                 x11Primative: 'CARD32',
                 memberTypeName: TypeName.INT

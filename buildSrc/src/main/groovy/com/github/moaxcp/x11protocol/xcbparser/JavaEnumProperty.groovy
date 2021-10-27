@@ -7,7 +7,7 @@ import static com.github.moaxcp.x11protocol.generator.Conventions.*
 /**
  * for converting fields that have an enum set
  */
-class JavaEnumProperty extends JavaPrimativeProperty {
+class JavaEnumProperty extends JavaPrimitiveProperty {
 
     JavaEnumProperty(JavaType javaType, XUnitField field) {
         super(javaType, field)

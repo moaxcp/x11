@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.xcbparser.expression
 
-import com.github.moaxcp.x11protocol.xcbparser.JavaPrimativeProperty
+import com.github.moaxcp.x11protocol.xcbparser.JavaClass
+import com.github.moaxcp.x11protocol.xcbparser.JavaPrimitiveProperty
 import com.github.moaxcp.x11protocol.xcbparser.JavaType
 import com.github.moaxcp.x11protocol.xcbparser.XResult
 import com.github.moaxcp.x11protocol.xcbparser.XUnitField
@@ -13,17 +14,17 @@ class FieldRefExpressionSpec extends Specification {
     def 'name'() {
         given:
         XResult xResult = new XResult()
-        JavaType javaType = Mock(JavaType) {
+        JavaClass javaClass = Mock(JavaClass) {
             it.getXUnitSubtype() >> Optional.empty()
         }
-        javaType.simpleName >> 'SimpleName'
-        javaType.getJavaProperty(_) >> {
-            new JavaPrimativeProperty(
-                javaType,
+        javaClass.simpleName >> 'SimpleName'
+        javaClass.getJavaProperty(_) >> {
+            new JavaPrimitiveProperty(
+                javaClass,
                 new XUnitField(result: xResult, name: it[0], type: 'CARD32')
             )
         }
-        FieldRefExpression expression = new FieldRefExpression(javaType: javaType, fieldName:'name')
+        FieldRefExpression expression = new FieldRefExpression(javaType: javaClass, fieldName:'name')
 
         expect:
         expression.getExpression().toString() == 'Integer.toUnsignedLong(name)'

@@ -12,7 +12,7 @@ class XUnitRequiredStartAlign implements XUnit {
     }
 
     @Override
-    List<JavaRequiredStartAlign> getJavaUnit(JavaType javaType) {
-        return [new JavaRequiredStartAlign(javaType: javaType, xUnit: this, align:align)]
+    List<JavaRequiredStartAlign> getJavaUnit(JavaClass javaClass) {
+        return [new JavaRequiredStartAlign(javaClass: javaClass, xUnit: this, align:align)]
     }
 }

@@ -7,7 +7,7 @@ import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
-class JavaUnion extends JavaObjectType {
+class JavaUnion extends JavaClass {
 
     JavaUnion(Map map) {
         super(map)

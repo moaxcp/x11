@@ -15,13 +15,13 @@ class XUnitSwitchCase extends XUnitSwitch {
     }
 
     @Override
-    List<JavaUnit> getJavaUnit(JavaType javaType) {
+    List<JavaUnit> getJavaUnit(JavaClass javaClass) {
         return fields.inject([]) { List<JavaUnit> units, XUnit unit ->
             if(!unit.caseInfo) {
-                units.addAll(unit.getJavaUnit(javaType))
+                units.addAll(unit.getJavaUnit(javaClass))
             }
-            if(javaType.simpleName.endsWith(unit.caseInfo.enumItem)) {
-                units.addAll(unit.getJavaUnit(javaType))
+            if(javaClass.simpleName.endsWith(unit.caseInfo.enumItem)) {
+                units.addAll(unit.getJavaUnit(javaClass))
             }
             return units
         }.flatten()

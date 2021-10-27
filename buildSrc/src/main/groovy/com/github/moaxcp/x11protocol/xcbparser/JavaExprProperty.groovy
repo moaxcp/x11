@@ -8,7 +8,7 @@ import javax.lang.model.element.Modifier
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
 
-class JavaExprProperty extends JavaPrimativeProperty {
+class JavaExprProperty extends JavaPrimitiveProperty {
     final Expression expression
     JavaExprProperty(JavaType javaType, XUnitExprField field) {
         super(javaType, field)

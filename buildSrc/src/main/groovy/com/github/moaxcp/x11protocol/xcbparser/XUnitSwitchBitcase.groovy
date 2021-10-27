@@ -9,9 +9,9 @@ class XUnitSwitchBitcase extends XUnitSwitch {
     List<XUnit> fields
 
     @Override
-    List<JavaUnit> getJavaUnit(JavaType javaType) {
+    List<JavaUnit> getJavaUnit(JavaClass javaClass) {
         return fields.collect {
-            it.getJavaUnit(javaType)
+            it.getJavaUnit(javaClass)
         }.flatten()
     }
 

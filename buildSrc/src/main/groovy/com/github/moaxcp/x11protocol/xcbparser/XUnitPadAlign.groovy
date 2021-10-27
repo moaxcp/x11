@@ -7,7 +7,7 @@ class XUnitPadAlign implements XUnit {
     XBitcaseInfo bitcaseInfo
 
     @Override
-    List<JavaPadAlign> getJavaUnit(JavaType javaType) {
-        return [new JavaPadAlign(javaType: javaType, xUnit: this, align: align)]
+    List<JavaPadAlign> getJavaUnit(JavaClass javaClass) {
+        return [new JavaPadAlign(javaClass: javaClass, xUnit: this, align: align)]
     }
 }

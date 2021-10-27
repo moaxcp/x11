@@ -5,7 +5,7 @@ import com.squareup.javapoet.ClassName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getJavaName
 import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
 
-class JavaStruct extends JavaObjectType {
+class JavaStruct extends JavaClass {
 
     JavaStruct(Map map) {
         super(map)

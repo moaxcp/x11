@@ -34,7 +34,7 @@ class JavaRequestSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.DestroyWindow readDestroyWindow(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 com.github.moaxcp.x11client.protocol.xproto.DestroyWindow.DestroyWindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DestroyWindow.builder();
-                in.readPad(1);
+                byte[] pad1 = in.readPad(1);
                 short length = in.readCard16();
                 int window = in.readCard32();
                 javaBuilder.window(window);
@@ -314,7 +314,7 @@ class JavaRequestSpec extends XmlSpec {
               public static com.github.moaxcp.x11client.protocol.xproto.Enable readEnable(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 com.github.moaxcp.x11client.protocol.xproto.Enable.EnableBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Enable.builder();
-                in.readPad(1);
+                byte[] pad1 = in.readPad(1);
                 short length = in.readCard16();
                 return javaBuilder.build();
               }

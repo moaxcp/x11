@@ -7,7 +7,7 @@ import com.squareup.javapoet.TypeName
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.getReplyTypeName
 
-class JavaReply extends JavaObjectType {
+class JavaReply extends JavaClass {
     JavaReply(Map map) {
         super(map)
     }

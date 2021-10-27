@@ -6,14 +6,14 @@ import com.squareup.javapoet.CodeBlock
 class JavaPadAlignSpec extends XmlSpec {
     def 'XPadAlign read expression 4'() {
         given:
-        JavaType javaType = Mock(JavaType) {
+        JavaClass javaClass = Mock(JavaClass) {
             it.getXUnitSubtype() >> Optional.empty()
         }
         xmlBuilder.list(type:'CARD32', name:'formats') {
             value('5')
         }
         JavaPadAlign align = new JavaPadAlign(align:4,
-            list: new JavaPrimativeListProperty(javaType, new XUnitListField(result, getFirstNode())))
+            list: new JavaPrimativeListProperty(javaClass, new XUnitListField(result, getFirstNode())))
 
         expect:
         align.declareAndReadCode.toString() == 'in.readPadAlign(5);\n'
@@ -21,14 +21,14 @@ class JavaPadAlignSpec extends XmlSpec {
 
     def 'XPadAlign read expression'() {
         given:
-        JavaType javaType = Mock(JavaType) {
+        JavaClass javaClass = Mock(JavaClass) {
             it.getXUnitSubtype() >> Optional.empty()
         }
         xmlBuilder.list(type:'CARD32', name:'formats') {
             value('5')
         }
         JavaPadAlign align = new JavaPadAlign(align:5,
-            list: new JavaPrimativeListProperty(javaType, new XUnitListField(result, getFirstNode())))
+            list: new JavaPrimativeListProperty(javaClass, new XUnitListField(result, getFirstNode())))
 
         expect:
         align.declareAndReadCode.toString() == 'in.readPadAlign(5, 5);\n'
@@ -36,14 +36,14 @@ class JavaPadAlignSpec extends XmlSpec {
 
     def 'XPadAlign write expression 4'() {
         given:
-        JavaType javaType = Mock(JavaType) {
+        JavaClass javaClass = Mock(JavaClass) {
             it.getXUnitSubtype() >> Optional.empty()
         }
         xmlBuilder.list(type:'CARD32', name:'formats') {
             value('5')
         }
         JavaPadAlign align = new JavaPadAlign(align:4,
-            list: new JavaPrimativeListProperty(javaType, new XUnitListField(result, getFirstNode())))
+            list: new JavaPrimativeListProperty(javaClass, new XUnitListField(result, getFirstNode())))
 
         when:
         CodeBlock.Builder builder = CodeBlock.builder()
@@ -55,14 +55,14 @@ class JavaPadAlignSpec extends XmlSpec {
 
     def 'XPadAlign write expression'() {
         given:
-        JavaType javaType = Mock(JavaType) {
+        JavaClass javaClass = Mock(JavaClass) {
             it.getXUnitSubtype() >> Optional.empty()
         }
         xmlBuilder.list(type:'CARD32', name:'formats') {
             value('5')
         }
         JavaPadAlign align = new JavaPadAlign(align:5,
-            list: new JavaPrimativeListProperty(javaType, new XUnitListField(result, getFirstNode())))
+            list: new JavaPrimativeListProperty(javaClass, new XUnitListField(result, getFirstNode())))
 
         when:
         CodeBlock.Builder builder = CodeBlock.builder()

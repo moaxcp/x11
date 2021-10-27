@@ -157,7 +157,7 @@ class XUnitFieldSpec extends XmlSpec {
     def 'convert to JavaUnit'() {
         given:
         xmlBuilder.field(name:'red_mask', type:'CARD32')
-        JavaType javaType = Mock(JavaType) {
+        JavaClass javaClass = Mock(JavaClass) {
             it.getXUnitSubtype() >> Optional.empty()
         }
 
@@ -165,7 +165,7 @@ class XUnitFieldSpec extends XmlSpec {
         XUnitField field = xUnitField(result, getFirstNode())
 
         then:
-        field.getJavaUnit(javaType)[0].name == 'redMask'
+        field.getJavaUnit(javaClass)[0].name == 'redMask'
     }
 
     def 'convert to JavaUnit with enumType'() {
@@ -192,7 +192,7 @@ class XUnitFieldSpec extends XmlSpec {
             type:'CARD8',
             enumType: 'EventMask'
         )
-        JavaType javaType = Mock(JavaType) {
+        JavaClass javaClass = Mock(JavaClass) {
             it.getXUnitSubtype() >> Optional.empty()
         }
 
@@ -200,6 +200,6 @@ class XUnitFieldSpec extends XmlSpec {
         field.name == 'mask'
         field.type == 'CARD8'
         field.resolvedEnumType.name == 'EventMask'
-        field.getJavaUnit(javaType)[0].typeName == TypeName.BYTE
+        field.getJavaUnit(javaClass)[0].typeName == TypeName.BYTE
     }
 }

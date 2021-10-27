@@ -110,9 +110,9 @@ abstract class XTypeObject extends XType implements XTypeUnit {
         return parsed
     }
 
-    List<JavaUnit> toJavaProtocol(JavaType javaType) {
+    List<JavaUnit> toJavaProtocol(JavaClass javaClass) {
         List<JavaUnit> java = protocol.collect {
-            it.getJavaUnit(javaType)
+            it.getJavaUnit(javaClass)
         }.flatten()
 
         java.eachWithIndex { JavaUnit entry, int i ->
@@ -129,7 +129,7 @@ abstract class XTypeObject extends XType implements XTypeUnit {
                     lengthField = fieldRefs.get(0).fieldName
                 }
                 if(lengthField) {
-                    JavaPrimativeProperty lengthProperty = (JavaPrimativeProperty) java.find { it instanceof JavaPrimativeProperty && it.name == lengthField }
+                    JavaPrimitiveProperty lengthProperty = (JavaPrimitiveProperty) java.find { it instanceof JavaPrimitiveProperty && it.name == lengthField }
                     if(lengthProperty) {
                         property.lengthField = convertX11VariableNameToJava(lengthField)
                         lengthProperty.localOnly = true

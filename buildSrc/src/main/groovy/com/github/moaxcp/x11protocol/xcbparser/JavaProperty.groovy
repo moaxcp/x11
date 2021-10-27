@@ -10,7 +10,7 @@ import static java.util.Objects.requireNonNull
  * A JavaProperty represents a property within a JavaType.
  */
 abstract class JavaProperty implements JavaUnit, JavaReadParameter {
-    final JavaType javaType
+    final JavaClass javaClass
     final XUnitField x11Field
     /**
      * the field is public static final in the java class
@@ -42,24 +42,24 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
     JavaBitcaseInfo bitcaseInfo
 
     JavaProperty(Map map) {
-        javaType = requireNonNull(map.javaType, 'javaType must not be null')
+        javaClass = requireNonNull(map.javaType, 'javaType must not be null')
         x11Field = requireNonNull(map.x11Field, 'field must not be null')
         constantField = map.constantField
         localOnly = map.localOnly
         if(map.x11Field.bitcaseInfo) {
-            bitcaseInfo = new JavaBitcaseInfo(x11Field.result, javaType, x11Field.bitcaseInfo)
+            bitcaseInfo = new JavaBitcaseInfo(x11Field.result, javaClass, x11Field.bitcaseInfo)
         }
     }
     
-    JavaProperty(JavaType javaType, XUnitField field) {
-        this.javaType = requireNonNull(javaType, 'javaType must not be null')
+    JavaProperty(JavaType javaClass, XUnitField field) {
+        this.javaClass = requireNonNull(javaClass, 'javaType must not be null')
         this.x11Field = requireNonNull(field, 'field must not be null')
         this.localOnly = field.localOnly
-        if(javaType.getXUnitSubtype().isPresent() && !field.caseInfo) {
+        if(javaClass.getXUnitSubtype().isPresent() && !field.caseInfo) {
             this.readParam = true
         }
         if(field.bitcaseInfo) {
-            this.bitcaseInfo = new JavaBitcaseInfo(field.result, javaType, field.bitcaseInfo)
+            this.bitcaseInfo = new JavaBitcaseInfo(field.result, javaClass, field.bitcaseInfo)
         }
     }
 
@@ -169,7 +169,7 @@ abstract class JavaProperty implements JavaUnit, JavaReadParameter {
                 MethodSpec.methodBuilder(name)
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(typeName, name)
-                    .returns(javaType.builderClassName)
+                    .returns(javaClass.builderClassName)
                     .addStatement('this.$1L = $1L', name)
                     .addStatement('$LEnable($T.$L)', fieldName, bitcaseInfo.enumType, bitcaseInfo.enumItem)
                     .addStatement('return this')

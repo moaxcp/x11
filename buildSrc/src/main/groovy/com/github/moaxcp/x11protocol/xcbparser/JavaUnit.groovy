@@ -5,7 +5,7 @@ import com.squareup.javapoet.TypeName
 
 interface JavaUnit {
     String getName()
-    JavaType getJavaType()
+    JavaClass getJavaClass()
     TypeName getTypeName()
     XUnit getXUnit()
     CodeBlock getDeclareCode()
