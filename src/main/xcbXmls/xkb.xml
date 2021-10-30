@@ -2288,7 +2288,7 @@ authorization from the authors.
 					<field name="nShapes" type="CARD16" />
 					<field name="nSections" type="CARD16" />
 					<field name="nDoodads" type="CARD16" />
-					<field name="nKeyAliases" type="CARD16" />
+					<field name="nKeyAliases2" type="CARD16" />
 					<field name="baseColorNdx" type="CARD8" />
 					<field name="labelColorNdx" type="CARD8" />
 					<field name="labelFont" type="CountedString16" />

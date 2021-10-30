@@ -57,9 +57,7 @@ public interface X11Input {
 
   List<Integer> readFd(int length) throws IOException;
 
-  default void readPad(int length) throws IOException {
-    readByte(length);
-  }
+  byte[] readPad(int length) throws IOException;
 
   default void readPadAlign(int forLength) throws IOException {
     readPad(XObject.getSizeForPadAlign(forLength));

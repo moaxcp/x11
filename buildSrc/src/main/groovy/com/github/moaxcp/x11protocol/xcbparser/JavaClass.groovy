@@ -172,7 +172,9 @@ abstract class JavaClass implements JavaType {
     }
 
     void addHeaderStatements(MethodSpec.Builder builder) {
-        builder.addStatement('$T $L = $T.builder()', builderClassName, 'javaBuilder', className)
+        if(!properties.isEmpty()) {
+            builder.addStatement('$T $L = $T.builder()', builderClassName, 'javaBuilder', className)
+        }
     }
 
     void addReadStatements(MethodSpec.Builder methodBuilder) {
