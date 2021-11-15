@@ -2,7 +2,6 @@ package com.github.moaxcp.x11protocol.xcbparser
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.TypeName
 
 class JavaTypeProperty extends JavaProperty {
     
@@ -45,7 +44,7 @@ class JavaTypeProperty extends JavaProperty {
     CodeBlock getSizeExpression() {
         CodeBlock actualSize = CodeBlock.of('$L.getSize()', name)
         if(bitcaseInfo) {
-            return CodeBlock.of('($T.$L.isEnabled($L) ? $L : 0)', bitcaseInfo.enumType, bitcaseInfo.enumItem, bitcaseInfo.maskField.getExpression(TypeName.INT), actualSize)
+            return CodeBlock.of('($L ? $L : 0)', bitcaseInfo.expression, actualSize)
         }
         return actualSize
     }

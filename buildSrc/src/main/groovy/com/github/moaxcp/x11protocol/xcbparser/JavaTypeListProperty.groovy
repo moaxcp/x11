@@ -91,7 +91,7 @@ class JavaTypeListProperty extends JavaListProperty {
     CodeBlock getSizeExpression() {
         CodeBlock actualSize = CodeBlock.of('$T.sizeOf($L)', ClassName.get(basePackage, 'XObject'), name)
         if(bitcaseInfo) {
-            return CodeBlock.of('($T.$L.isEnabled($L) ? $L : 0)', bitcaseInfo.enumType, bitcaseInfo.enumItem, bitcaseInfo.maskField.getExpression(TypeName.INT), actualSize)
+            return CodeBlock.of('($L ? $L : 0)', bitcaseInfo.expression, actualSize)
         }
         return actualSize
     }

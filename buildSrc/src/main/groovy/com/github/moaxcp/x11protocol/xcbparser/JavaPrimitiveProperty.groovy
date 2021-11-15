@@ -165,13 +165,18 @@ class JavaPrimitiveProperty extends JavaProperty {
             }
             if(bitcaseInfo) {
                 String fieldName = bitcaseInfo.getMaskField().fieldRefs[0].fieldName
+                CodeBlock.Builder builder = CodeBlock.builder()
+
+                bitcaseInfo.enumRefs.each {
+                    builder.addStatement('$LEnable($T.$L)', fieldName, it.enumType, it.enumItem)
+                }
                 methods += [
                     MethodSpec.methodBuilder(name)
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(enumClassName, name)
                         .returns(javaClass.builderClassName)
                         .addStatement('this.$L = $L', name, conversion)
-                        .addStatement('$LEnable($T.$L)', fieldName, bitcaseInfo.enumType, bitcaseInfo.enumItem)
+                        .addCode(builder.build())
                         .addStatement('return this')
                         .build()
                 ]
@@ -257,7 +262,7 @@ class JavaPrimitiveProperty extends JavaProperty {
         }
 
         if(bitcaseInfo) {
-            return CodeBlock.of('($T.$L.isEnabled($L) ? $L : 0)', bitcaseInfo.enumType, bitcaseInfo.enumItem, bitcaseInfo.maskField.getExpression(TypeName.INT), actualSize)
+            return CodeBlock.of('($L ? $L : 0)', bitcaseInfo.expression, actualSize)
         }
         return actualSize
     }

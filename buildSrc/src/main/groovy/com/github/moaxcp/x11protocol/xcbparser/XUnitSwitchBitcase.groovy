@@ -23,14 +23,14 @@ class XUnitSwitchBitcase extends XUnitSwitch {
                 return
             }
             if(it.name() == 'bitcase') {
-                String enumRef
-                String enumItem
+                Set<XUnitEnumRef> enumRefs = []
                 it.childNodes().each { Node bitcaseNode ->
                     if(bitcaseNode.name() == 'enumref') {
-                        enumRef = bitcaseNode.attributes().get('ref')
-                        enumItem = bitcaseNode.text()
+                        String enumType = bitcaseNode.attributes().get('ref')
+                        String enumItem = bitcaseNode.text()
+                        enumRefs.add(new XUnitEnumRef(enumType: enumType, enumItem: enumItem))
                     } else {
-                        XUnit unit = parseXUnit(result, bitcaseNode, new XBitcaseInfo(expression: expression, enumType: enumRef, enumItem: enumItem))
+                        XUnit unit = parseXUnit(result, bitcaseNode, new XBitcaseInfo(expression: expression, enumRefs: enumRefs))
                         fields.add(unit)
                     }
                 }

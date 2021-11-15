@@ -5,6 +5,5 @@ import groovy.util.slurpersupport.Node
 
 class XBitcaseInfo {
     Node expression
-    String enumType
-    String enumItem
+    Set<XUnitEnumRef> enumRefs
 }
