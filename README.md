@@ -3,7 +3,7 @@
 x11-client enables java and other jvm languages to talk directly to a x11 
 server without binding to a C library. The client is similar to X11lib for C
 but uses objects to represent the protocol resulting in a simplified client. It 
-supports the core protocol and all extensions except for xkb. The 
+supports the core protocol and all extensions. The 
 client is similar to X11lib and follows the same pattern of queuing one-way 
 requests before sending them to the server.
 
@@ -22,7 +22,7 @@ This library can be added to your project using maven or gradle.
 <dependency>
  <groupId>com.github.moaxcp.x11</groupId>
  <artifactId>x11-client</artifactId>
- <version>0.9.0</version>
+ <version>0.11.0</version>
  <type>module</type>
 </dependency>
 ```
@@ -30,7 +30,7 @@ This library can be added to your project using maven or gradle.
 ## Gradle
 
 ```
-implementation 'com.github.moaxcp.x11:x11-client:0.8.0'
+implementation 'com.github.moaxcp.x11:x11-client:0.11.0'
 ```
 
 The library has one dependency for using unix sockets.
@@ -451,6 +451,10 @@ https://jamey.thesharps.us/2021/03/25/xcb-protocol-specifications-data/
 
 
 # versions
+
+## 0.11.0
+
+Adding support for xkb except for GetKbdByName
 
 ## 0.10.0
 
