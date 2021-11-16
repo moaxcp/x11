@@ -20,6 +20,6 @@ class JavaBitcaseInfo {
     CodeBlock getExpression() {
         CodeBlock.join(enumRefs.collect {
             CodeBlock.of('$T.$L.isEnabled($L)', it.enumType, it.enumItem, maskField.getExpression(TypeName.INT))
-        }, '&&')
+        }, ' && ')
     }
 }

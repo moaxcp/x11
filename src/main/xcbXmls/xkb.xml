@@ -1982,38 +1982,13 @@ authorization from the authors.
 		</reply>
 	</request>
 
+	<!--
 	<request name="GetKbdByName" opcode="23">
 		<field name="deviceSpec" type="DeviceSpec" />
 		<field name="need" type="CARD16" mask="GBNDetail" />
 		<field name="want" type="CARD16" mask="GBNDetail" />
 		<field name="load" type="BOOL" />
 		<pad bytes="1" />
-		<!-- XXX: Intermixed fixed size fields and lists are broken
-		<field name="keymapsSpecLen" type="CARD8" />
-		<list name="keymapsSpec" type="STRING8">
-			<fieldref>keymapsSpecLen</fieldref>
-		</list>
-		<field name="keycodesSpecLen" type="CARD8" />
-		<list name="keycodesSpec" type="STRING8">
-			<fieldref>keycodesSpecLen</fieldref>
-		</list>
-		<field name="typesSpecLen" type="CARD8" />
-		<list name="typesSpec" type="STRING8">
-			<fieldref>typesSpecLen</fieldref>
-		</list>
-		<field name="compatMapSpecLen" type="CARD8" />
-		<list name="compatMapSpec" type="STRING8">
-			<fieldref>compatMapSpecLen</fieldref>
-		</list>
-		<field name="symbolsSpecLen" type="CARD8" />
-		<list name="symbolsSpec" type="STRING8">
-			<fieldref>symbolsSpecLen</fieldref>
-		</list>
-		<field name="geometrySpecLen" type="CARD8" />
-		<list name="geometrySpec" type="STRING8">
-			<fieldref>geometrySpecLen</fieldref>
-		</list>
-		-->
 		<reply>
 			<field name="deviceID" type="CARD8" />
 			<field name="minKeyCode" type="KEYCODE" />
@@ -2029,14 +2004,10 @@ authorization from the authors.
 					<enumref ref="GBNDetail">Types</enumref>
 					<enumref ref="GBNDetail">ClientSymbols</enumref>
 					<enumref ref="GBNDetail">ServerSymbols</enumref>
-					<!-- from the spec, this has to be a GetMap reply -->
 					<field name="getmap_type" type="CARD8" />
-				        <!-- done 'emulating' GetMap reply header-->
 					<field name="typeDeviceID" type="CARD8" />
-					<!-- from the spec, this has to be a GetMap reply -->
 					<field name="getmap_sequence" type="CARD16" />
 					<field name="getmap_length" type="CARD32" />
-				        <!-- done 'emulating' GetMap reply header-->
 					<pad bytes="2" />
 					<field name="typeMinKeyCode" type="KEYCODE" />
 					<field name="typeMaxKeyCode" type="KEYCODE" />
@@ -2125,12 +2096,10 @@ authorization from the authors.
 				</bitcase>
 				<bitcase name="compat_map">
 					<enumref ref="GBNDetail">CompatMap</enumref>
-					<!-- from the spec, this has to include a reply header -->
 					<field name="compatmap_type" type="CARD8" />
 					<field name="compatDeviceID" type="CARD8" />
 					<field name="compatmap_sequence" type="CARD16" />
 					<field name="compatmap_length" type="CARD32" />
-					<!-- done 'emulating' reply header -->
 					<field name="groupsRtrn" type="CARD8" mask="SetOfGroup" />
 					<pad bytes="1" />
 					<field name="firstSIRtrn" type="CARD16" />
@@ -2148,12 +2117,10 @@ authorization from the authors.
 				</bitcase>
 				<bitcase name="indicator_maps">
 					<enumref ref="GBNDetail">IndicatorMaps</enumref>
-					<!-- from the spec, this has to include a reply header -->
 					<field name="indicatormap_type" type="CARD8" />
 					<field name="indicatorDeviceID" type="CARD8" />
 					<field name="indicatormap_sequence" type="CARD16" />
 					<field name="indicatormap_length" type="CARD32" />
-					<!-- done 'emulating' reply header -->
 					<field name="which1" type="CARD32" />
 					<field name="realIndicators" type="CARD32" />
 					<field name="nIndicators" type="CARD8" />
@@ -2165,12 +2132,10 @@ authorization from the authors.
 				<bitcase name="key_names">
 					<enumref ref="GBNDetail">KeyNames</enumref>
 					<enumref ref="GBNDetail">OtherNames</enumref>
-					<!-- from the spec, this has to include a reply header -->
 					<field name="keyname_type" type="CARD8" />
 					<field name="keyDeviceID" type="CARD8" />
 					<field name="keyname_sequence" type="CARD16" />
 					<field name="keyname_length" type="CARD32" />
-					<!-- done 'emulating' reply header -->
 					<field name="which2" type="CARD32" mask="NameDetail" />
 					<field name="keyMinKeyCode" type="KEYCODE" />
 					<field name="keyMaxKeyCode" type="KEYCODE" />
@@ -2272,12 +2237,10 @@ authorization from the authors.
 				</bitcase>
 				<bitcase name="geometry">
 					<enumref ref="GBNDetail">Geometry</enumref>
-					<!-- from the spec, this has to include a reply header -->
 					<field name="geometry_type" type="CARD8" />
 					<field name="geometryDeviceID" type="CARD8" />
 					<field name="geometry_sequence" type="CARD16" />
 					<field name="geometry_length" type="CARD32" />
-					<!-- done 'emulating' reply header -->
 					<field name="name" type="ATOM" />
 					<field name="geometryFound" type="BOOL" />
 					<pad bytes="1" />
@@ -2292,33 +2255,11 @@ authorization from the authors.
 					<field name="baseColorNdx" type="CARD8" />
 					<field name="labelColorNdx" type="CARD8" />
 					<field name="labelFont" type="CountedString16" />
-					<!-- XXX: Property is broken
-					<list name="properties" type="Property">
-						<fieldref>nProperties</fieldref>
-					</list>
-					<list name="colors" type="CountedString16">
-						<fieldref>nColors</fieldref>
-					</list>
-					<list name="shapes" type="Shape">
-						<fieldref>nShapes</fieldref>
-					</list>
-					-->
-					<!-- XXX: doodads are broken
-					<list name="sections" type="Section">
-						<fieldref>nSections</fieldref>
-					</list>
-					<list name="doodads" type="Doodad">
-						<fieldref>nDoodads</fieldref>
-					</list>
-					<list name="keyAliases" type="KeyAlias">
-						<fieldref>nKeyAliases</fieldref>
-					</list>
-					-->
 				</bitcase>
 			</switch>
 		</reply>
 	</request>
-
+-->
 	<request name="GetDeviceInfo" opcode="24">
 		<field name="deviceSpec" type="DeviceSpec" />
 		<field name="wanted" type="CARD16" mask="XIFeature" />

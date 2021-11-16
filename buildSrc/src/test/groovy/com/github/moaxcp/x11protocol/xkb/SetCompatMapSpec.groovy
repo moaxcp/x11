@@ -4,7 +4,7 @@ import com.github.moaxcp.x11protocol.XmlSpec
 import com.github.moaxcp.x11protocol.xcbparser.JavaRequest
 import com.github.moaxcp.x11protocol.xcbparser.XTypeRequest
 
-class SetCompatMap extends XmlSpec {
+class SetCompatMapSpec extends XmlSpec {
   def setCompatMap() {
     given:
     xmlBuilder.xcb() {

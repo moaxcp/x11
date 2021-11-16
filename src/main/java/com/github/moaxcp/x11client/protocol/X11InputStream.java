@@ -176,6 +176,9 @@ public class X11InputStream implements X11Input {
   @Override
   public byte[] readPad(int length) throws IOException {
     byte[] bytes = new byte[length];
+    if(length == 0) {
+      return bytes;
+    }
     int read = in.read(bytes);
     int sum = read;
     while(read != -1 && sum < length) {
