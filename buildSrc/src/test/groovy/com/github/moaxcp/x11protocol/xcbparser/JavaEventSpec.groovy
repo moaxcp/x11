@@ -185,7 +185,7 @@ class JavaEventSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def mapRequest() {
@@ -270,7 +270,6 @@ class JavaEventSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
-
+            '''.stripIndent()
     }
 }

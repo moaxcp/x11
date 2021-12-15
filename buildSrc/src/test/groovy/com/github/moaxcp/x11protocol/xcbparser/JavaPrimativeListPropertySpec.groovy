@@ -54,6 +54,6 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }

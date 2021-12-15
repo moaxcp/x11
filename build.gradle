@@ -1,5 +1,4 @@
 plugins {
-    id 'org.ajoberstar.reckon' version '0.13.0'
     id 'java-library'
     id 'io.freefair.lombok' version '6.1.0-m1'
     id 'org.unbroken-dome.test-sets' version '4.0.0'
@@ -11,13 +10,9 @@ plugins {
     id 'jacoco'
 }
 
+version = '0.12.0'
 group = 'com.github.moaxcp.x11'
 description = 'An x11 client implemented in java'
-
-reckon {
-    scopeFromProp()
-    snapshotFromProp()
-}
 
 apply plugin: 'java-test-fixtures'
 
@@ -59,7 +54,7 @@ integrationTest {
 
 jacocoTestReport {
     reports {
-        xml.enabled true
+        xml.required = true
     }
 }
 
@@ -137,7 +132,7 @@ signing {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "com.github.moaxcp.x11:x11-client"
+        property "sonar.projectKey", "moaxcp_x11-client"
         property 'sonar.host.url', 'https://sonarcloud.io'
         property 'sonar.organization', 'moaxcp'
         property 'sonar.scm.exclusions.disabled', 'true'

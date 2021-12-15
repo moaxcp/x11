@@ -83,7 +83,7 @@ class JavaErrorSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent();
+            '''.stripIndent();
 
     }
 }

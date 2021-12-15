@@ -452,6 +452,12 @@ https://jamey.thesharps.us/2021/03/25/xcb-protocol-specifications-data/
 
 # versions
 
+## 0.12.0
+
+Adding jbang examples
+Upgrading dependencies
+Removing rekon gradle plugin
+
 ## 0.11.0
 
 Adding support for xkb except for GetKbdByName

@@ -98,8 +98,7 @@ class CaseTypeSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
-
+            '''.stripIndent()
     }
 
     def inputInfoKey() {
@@ -173,6 +172,6 @@ class CaseTypeSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }

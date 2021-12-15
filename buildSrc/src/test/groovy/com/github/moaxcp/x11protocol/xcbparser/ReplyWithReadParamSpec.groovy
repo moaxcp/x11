@@ -124,6 +124,6 @@ class ReplyWithReadParamSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }
