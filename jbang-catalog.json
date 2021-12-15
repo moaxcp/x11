@@ -1,0 +1,9 @@
+{
+  "catalogs": {},
+  "aliases": {
+    "hello": {
+      "script-ref": "examples/hello.jsh"
+    }
+  },
+  "templates": {}
+}
