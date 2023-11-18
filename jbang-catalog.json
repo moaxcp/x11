@@ -3,6 +3,9 @@
   "aliases": {
     "hello": {
       "script-ref": "examples/hello.jsh"
+    },
+    "alloccolor": {
+      "script-ref": "examples/alloccolor.java"
     }
   },
   "templates": {}

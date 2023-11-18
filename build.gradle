@@ -1,9 +1,8 @@
 plugins {
-    id 'org.ajoberstar.reckon' version '0.13.0'
     id 'java-library'
-    id 'io.freefair.lombok' version '6.1.0-m1'
-    id 'org.unbroken-dome.test-sets' version '4.0.0'
-    id 'org.sonarqube' version '3.1.1'
+    id 'io.freefair.lombok' version '8.4'
+    id 'org.unbroken-dome.test-sets' version '4.1.0'
+    id 'org.sonarqube' version '4.4.1.3373'
     id 'com.github.moaxcp.x11protocol'
     //id 'java-test-fixtures'
     id 'maven-publish'
@@ -13,33 +12,40 @@ plugins {
 
 group = 'com.github.moaxcp.x11'
 description = 'An x11 client implemented in java'
-
-reckon {
-    scopeFromProp()
-    snapshotFromProp()
-}
+version = '0.12.0'
 
 apply plugin: 'java-test-fixtures'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
     withSourcesJar()
     withJavadocJar()
+    modularity.inferModulePath = true
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'com.kohlschutter.junixsocket:junixsocket-core:2.3.2'
-    testImplementation 'org.assertj:assertj-core:3.16.0'
-    testImplementation 'org.mockito:mockito-core:3.3.3'
-    testImplementation 'org.mockito:mockito-junit-jupiter:3.3.3'
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/xproto'
+        }
+    }
+}
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+dependencies {
+    compileOnly 'com.kohlschutter:compiler-annotations:1.6.5'
+
+    implementation 'com.kohlschutter.junixsocket:junixsocket-core:2.8.3'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+    testImplementation 'org.mockito:mockito-core:5.7.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
 }
 
 testSets {
@@ -59,13 +65,13 @@ integrationTest {
 
 jacocoTestReport {
     reports {
-        xml.enabled true
+        xml.required = true
     }
 }
 
 x11Protocol {
-    outputSrc = file('build/generated/xproto/java/')
-    outputResources = file('build/generated/xproto/resources')
+    outputSrc = file('src/main/xproto/')
+    outputResources = file('src/main/resources')
     xcbXmls = file('src/main/xcbXmls')
     keysymHeaders = file('src/main/keysym')
 }
