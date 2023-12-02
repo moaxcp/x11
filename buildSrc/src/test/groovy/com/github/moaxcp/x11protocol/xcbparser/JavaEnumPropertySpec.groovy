@@ -69,6 +69,6 @@ class JavaEnumPropertySpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }

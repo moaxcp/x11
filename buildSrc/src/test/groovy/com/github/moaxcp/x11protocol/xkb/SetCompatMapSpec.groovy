@@ -136,6 +136,6 @@ class SetCompatMapSpec extends XmlSpec {
             }
           }
         }
-    '''.stripIndent()
+        '''.stripIndent()
   }
 }

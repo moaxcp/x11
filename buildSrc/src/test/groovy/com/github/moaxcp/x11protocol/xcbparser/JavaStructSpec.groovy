@@ -64,7 +64,7 @@ class JavaStructSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def 'ScreenStruct TypeSpec'() {
@@ -187,7 +187,7 @@ class JavaStructSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def 'paramref with DeviceTimeCoord'() {
@@ -244,7 +244,7 @@ class JavaStructSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def 'fieldref with boolean type'() {
@@ -309,7 +309,7 @@ class JavaStructSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
 
     }
 
@@ -406,6 +406,6 @@ class JavaStructSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }

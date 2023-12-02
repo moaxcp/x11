@@ -70,7 +70,7 @@ class JavaTypeListPropertySpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     @Ignore
@@ -106,11 +106,11 @@ class JavaTypeListPropertySpec extends XmlSpec {
             for(int i = 0; i < 20; i++) {
               formats.add(FormatStruct.readFormatStruct(in));
             }
-        '''.stripIndent()
+            '''.stripIndent()
         property.addWriteCode().toString() == '''\
             for(com.github.moaxcp.x11client.protocol.xproto.FormatStruct t : formats) {
               t.write(out);
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }

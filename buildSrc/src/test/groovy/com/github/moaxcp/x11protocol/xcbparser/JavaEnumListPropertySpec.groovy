@@ -53,11 +53,11 @@ class JavaEnumListPropertySpec extends XmlSpec {
             for(int i = 0; i < 20; i++) {
               masks.add(com.github.moaxcp.x11client.protocol.xproto.EventMask.getByCode(in.readCard32()));
             }
-        '''.stripIndent()
+            '''.stripIndent()
         writeCode.build().toString() == '''\
             for(com.github.moaxcp.x11client.protocol.xproto.EventMask e : masks) {
               out.writeCard32(e.getValue());
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }

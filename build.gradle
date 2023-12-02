@@ -1,5 +1,5 @@
 plugins {
-    id 'org.ajoberstar.reckon' version '0.13.0'
+    id 'org.ajoberstar.reckon' version '0.18.1'
     id 'java-library'
     id 'io.freefair.lombok' version '6.1.0-m1'
     id 'org.unbroken-dome.test-sets' version '4.0.0'
@@ -59,7 +59,7 @@ integrationTest {
 
 jacocoTestReport {
     reports {
-        xml.enabled true
+        xml.required = true
     }
 }
 

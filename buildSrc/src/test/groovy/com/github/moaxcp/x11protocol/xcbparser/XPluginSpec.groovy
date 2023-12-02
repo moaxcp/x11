@@ -101,6 +101,6 @@ class XPluginSpec extends XmlSpec {
                 throw new java.lang.IllegalArgumentException("eventType " + eventType + " is not supported");
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }

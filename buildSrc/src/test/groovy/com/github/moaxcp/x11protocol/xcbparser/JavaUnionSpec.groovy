@@ -101,7 +101,7 @@ class JavaUnionSpec extends XmlSpec {
             
               void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException;
             }
-        '''.stripIndent()
+            '''.stripIndent()
 
         common.typeSpec.toString() == '''\
             @lombok.Value
@@ -138,7 +138,7 @@ class JavaUnionSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
 
         defaultStruct.typeSpec.toString() == '''\
             @lombok.Value
@@ -172,6 +172,6 @@ class JavaUnionSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }

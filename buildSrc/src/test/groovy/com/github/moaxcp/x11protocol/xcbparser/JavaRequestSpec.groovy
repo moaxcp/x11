@@ -61,7 +61,7 @@ class JavaRequestSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def polyPoint() {
@@ -177,7 +177,7 @@ class JavaRequestSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def queryTextExtends() {
@@ -276,7 +276,7 @@ class JavaRequestSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def bigRequestEnable() {
@@ -338,7 +338,7 @@ class JavaRequestSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def createWindow() {
@@ -1001,7 +1001,6 @@ class JavaRequestSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
-
+            '''.stripIndent()
     }
 }

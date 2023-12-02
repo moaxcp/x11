@@ -147,6 +147,6 @@ class JavaGenericEventSpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }

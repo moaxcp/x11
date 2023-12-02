@@ -33,9 +33,9 @@ class JavaEnumSpec extends Specification {
               static final java.util.Map<java.lang.Integer, com.github.moaxcp.x11client.protocol.xproto.EventMask> byCode = new java.util.HashMap<>();
             
               static {
-                for(com.github.moaxcp.x11client.protocol.xproto.EventMask e : values()) {
-                    byCode.put(e.value, e);
-                }
+                    for(com.github.moaxcp.x11client.protocol.xproto.EventMask e : values()) {
+                        byCode.put(e.value, e);
+                    }
               }
             
               private int value;
@@ -53,6 +53,6 @@ class JavaEnumSpec extends Specification {
                 return byCode.get(code);
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }

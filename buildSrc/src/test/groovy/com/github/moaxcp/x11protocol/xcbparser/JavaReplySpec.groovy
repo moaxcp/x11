@@ -77,7 +77,7 @@ class JavaReplySpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
 
         javaReply.typeSpec.toString() == '''\
             @lombok.Value
@@ -138,7 +138,7 @@ class JavaReplySpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def translateCoordinates() {
@@ -219,7 +219,7 @@ class JavaReplySpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def listHosts() {
@@ -323,7 +323,7 @@ class JavaReplySpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 
     def queryExtension() {
@@ -407,6 +407,6 @@ class JavaReplySpec extends XmlSpec {
                 }
               }
             }
-        '''.stripIndent()
+            '''.stripIndent()
     }
 }
