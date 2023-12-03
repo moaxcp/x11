@@ -455,6 +455,7 @@ https://jamey.thesharps.us/2021/03/25/xcb-protocol-specifications-data/
 ## 0.12.0
 
 Adding jbang examples
+Upgrading dependencies
 
 ## 0.11.0
 
