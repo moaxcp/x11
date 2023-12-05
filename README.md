@@ -10,7 +10,7 @@ requests before sending them to the server.
 [![Java CI with Gradle](https://github.com/moaxcp/x11-client/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=master)](https://github.com/moaxcp/x11-client/actions?query=workflow%3A%22Java+CI+with+Gradle%22)
 [![maven central](https://img.shields.io/maven-central/v/com.github.moaxcp.x11/x11-client)](https://search.maven.org/artifact/com.github.moaxcp.x11/x11-client)
 [![javadoc](https://javadoc.io/badge2/com.github.moaxcp.x11/x11-client/javadoc.svg)](https://javadoc.io/doc/com.github.moaxcp.x11/x11-client)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.moaxcp.x11%3Ax11-client&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.github.moaxcp.x11%3Ax11-client)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=moaxcp_x11-client&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=moaxcp_x11-client)
 
 # Users
 
@@ -22,7 +22,7 @@ This library can be added to your project using maven or gradle.
 <dependency>
  <groupId>com.github.moaxcp.x11</groupId>
  <artifactId>x11-client</artifactId>
- <version>0.11.0</version>
+ <version>0.12.0</version>
  <type>module</type>
 </dependency>
 ```
@@ -30,13 +30,13 @@ This library can be added to your project using maven or gradle.
 ## Gradle
 
 ```
-implementation 'com.github.moaxcp.x11:x11-client:0.11.0'
+implementation 'com.github.moaxcp.x11:x11-client:0.12.0'
 ```
 
 The library has one dependency for using unix sockets.
 
 ```
-implementation 'com.kohlschutter.junixsocket:junixsocket-core:2.3.2'
+implementation 'com.kohlschutter.junixsocket:junixsocket-core:x.x.x'
 ```
 
 # Usage
