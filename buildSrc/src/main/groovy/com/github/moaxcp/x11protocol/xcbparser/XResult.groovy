@@ -90,6 +90,12 @@ class XResult {
                         .build())
 
         builder.addField(
+                FieldSpec.builder(byte.class, 'majorOpcode', Modifier.PRIVATE)
+                        .addAnnotation(Getter.class)
+                        .addAnnotation(Setter.class)
+                        .build())
+
+        builder.addField(
             FieldSpec.builder(byte.class, 'firstEvent', Modifier.PRIVATE)
                 .addAnnotation(Getter.class)
                 .addAnnotation(Setter.class)
