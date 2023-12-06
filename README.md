@@ -452,6 +452,10 @@ https://jamey.thesharps.us/2021/03/25/xcb-protocol-specifications-data/
 
 # versions
 
+## 0.13.0
+
+ProtocolPluginService now sets majorOpcode on XProtocolPlugins and uses it instead of majorVersion as the base opcode for requests. This fixes a bug in loading plugins and sending requests.
+
 ## 0.12.0
 
 Adding jbang examples

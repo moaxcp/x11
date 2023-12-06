@@ -6,6 +6,8 @@ public interface XProtocolPlugin {
   String getName();
   byte getMajorVersion();
   byte getMinorVersion();
+  byte getMajorOpcode();
+  void setMajorOpcode(byte firstOpcode);
   byte getFirstEvent();
   void setFirstEvent(byte firstEvent);
   byte getFirstError();

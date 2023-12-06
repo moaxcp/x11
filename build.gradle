@@ -10,7 +10,7 @@ plugins {
     id 'jacoco'
 }
 
-version = '0.12.0'
+version = '0.13.0'
 group = 'com.github.moaxcp.x11'
 description = 'An x11 client implemented in java'
 

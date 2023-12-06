@@ -33,6 +33,10 @@ class XPluginSpec extends XmlSpec {
             
               @lombok.Getter
               @lombok.Setter
+              private byte majorOpcode;
+            
+              @lombok.Getter
+              @lombok.Setter
               private byte firstEvent;
             
               @lombok.Getter

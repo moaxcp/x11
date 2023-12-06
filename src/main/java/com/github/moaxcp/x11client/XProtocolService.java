@@ -72,7 +72,7 @@ class XProtocolService {
 
   private void actuallySend(XRequest request) {
     try {
-      request.write(pluginService.majorVersionForRequest(request), out);
+      request.write(pluginService.majorOpcodeForRequest(request), out);
     } catch(IOException e) {
       throw new X11ClientException("exception writing request \"" + request + "\"", e);
     }

@@ -53,9 +53,7 @@ class ProtocolPluginService {
     Optional<XProtocolPlugin> loaded = loadedPlugin(name);
     if(loaded.isPresent()) {
       XProtocolPlugin plugin = loaded.get();
-      if(plugin.getMajorVersion() != majorOpcode) {
-        return false; //client must match server version
-      }
+      plugin.setMajorOpcode(majorOpcode);
       plugin.setFirstEvent(firstEvent);
       plugin.setFirstError(firstError);
       activatedPlugins.add(plugin);
@@ -74,11 +72,11 @@ class ProtocolPluginService {
     return getActivatedPlugin(name).isPresent();
   }
 
-  byte majorVersionForRequest(XRequest request) {
+  byte majorOpcodeForRequest(XRequest request) {
     return activatedPlugins.stream()
         .filter(p -> p.supportedRequest(request))
         .findFirst()
-        .map(XProtocolPlugin::getMajorVersion)
+        .map(XProtocolPlugin::getMajorOpcode)
         .orElseThrow(() -> new UnsupportedOperationException("Plugin missing or not activated for request. Could not find majorOpcode for request: " + request));
   }
 
