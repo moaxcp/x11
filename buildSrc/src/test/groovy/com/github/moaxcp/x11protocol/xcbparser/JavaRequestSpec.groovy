@@ -42,9 +42,9 @@ class JavaRequestSpec extends XmlSpec {
               }
             
               @java.lang.Override
-              public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
+              public void write(byte majorOpcode, com.github.moaxcp.x11client.protocol.X11Output out) throws
                   java.io.IOException {
-                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
+                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE)));
                 out.writePad(1);
                 out.writeCard16((short) getLength());
                 out.writeCard32(window);
@@ -141,9 +141,9 @@ class JavaRequestSpec extends XmlSpec {
               }
             
               @java.lang.Override
-              public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
+              public void write(byte majorOpcode, com.github.moaxcp.x11client.protocol.X11Output out) throws
                   java.io.IOException {
-                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
+                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE)));
                 out.writeByte(coordinateMode);
                 out.writeCard16((short) getLength());
                 out.writeCard32(drawable);
@@ -249,9 +249,9 @@ class JavaRequestSpec extends XmlSpec {
               }
             
               @java.lang.Override
-              public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
+              public void write(byte majorOpcode, com.github.moaxcp.x11client.protocol.X11Output out) throws
                   java.io.IOException {
-                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
+                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE)));
                 out.writeBool(getOddLength());
                 out.writeCard16((short) getLength());
                 out.writeCard32(font);
@@ -291,7 +291,7 @@ class JavaRequestSpec extends XmlSpec {
         }
 
         when:
-        addChildNodes()
+        parseHeaderAndXml()
         XTypeRequest request = result.resolveXType('Enable')
         JavaRequest javaRequest = request.javaType
 
@@ -299,31 +299,31 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Enable implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.EnableReply>, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class Enable implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.bigreq.EnableReply>, com.github.moaxcp.x11client.protocol.bigreq.BigreqObject {
               public static final byte OPCODE = 0;
             
-              public com.github.moaxcp.x11client.protocol.XReplyFunction<com.github.moaxcp.x11client.protocol.xproto.EnableReply> getReplyFunction(
+              public com.github.moaxcp.x11client.protocol.XReplyFunction<com.github.moaxcp.x11client.protocol.bigreq.EnableReply> getReplyFunction(
                   ) {
-                return (field, sequenceNumber, in) -> com.github.moaxcp.x11client.protocol.xproto.EnableReply.readEnableReply(field, sequenceNumber, in);
+                return (field, sequenceNumber, in) -> com.github.moaxcp.x11client.protocol.bigreq.EnableReply.readEnableReply(field, sequenceNumber, in);
               }
             
               public byte getOpCode() {
                 return OPCODE;
               }
             
-              public static com.github.moaxcp.x11client.protocol.xproto.Enable readEnable(
+              public static com.github.moaxcp.x11client.protocol.bigreq.Enable readEnable(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
-                com.github.moaxcp.x11client.protocol.xproto.Enable.EnableBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Enable.builder();
-                byte[] pad1 = in.readPad(1);
+                com.github.moaxcp.x11client.protocol.bigreq.Enable.EnableBuilder javaBuilder = com.github.moaxcp.x11client.protocol.bigreq.Enable.builder();
+                byte majorOpcode = in.readCard8();
                 short length = in.readCard16();
                 return javaBuilder.build();
               }
             
               @java.lang.Override
-              public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
+              public void write(byte majorOpcode, com.github.moaxcp.x11client.protocol.X11Output out) throws
                   java.io.IOException {
-                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
-                out.writePad(1);
+                out.writeCard8(majorOpcode);
+                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE)));
                 out.writeCard16((short) getLength());
               }
             
@@ -675,9 +675,9 @@ class JavaRequestSpec extends XmlSpec {
               }
             
               @java.lang.Override
-              public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
+              public void write(byte majorOpcode, com.github.moaxcp.x11client.protocol.X11Output out) throws
                   java.io.IOException {
-                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
+                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE)));
                 out.writeCard8(depth);
                 out.writeCard16((short) getLength());
                 out.writeCard32(wid);

@@ -22,7 +22,7 @@ public class XAuthorityFamilyTest {
   }
   @Test
   void krb5principalCode() {
-    AssertionsForClassTypes.assertThat(Family.KRB5PRINCIPAL.getCode()).isEqualTo(254);
+    AssertionsForClassTypes.assertThat(Family.KRB5PRINCIPAL.getCode()).isEqualTo(253);
   }
   @Test
   void localhostCode() {
@@ -46,7 +46,7 @@ public class XAuthorityFamilyTest {
 
   @Test
   void krb_getByCode() {
-    assertThat(Family.getByCode(254)).isEqualTo(Family.KRB5PRINCIPAL);
+    assertThat(Family.getByCode(253)).isEqualTo(Family.KRB5PRINCIPAL);
   }
 
   @Test

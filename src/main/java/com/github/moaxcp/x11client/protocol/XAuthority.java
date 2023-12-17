@@ -32,12 +32,17 @@ public class XAuthority {
   @ToString
   public enum Family {
     INTERNET(0),
+    DEC_NET(1),
+    CHAOS(2),
+    SERVER_INTERPRETED(5),
+    INTERNET6(6),
     LOCAL(256),
     WILD(65535),
-    KRB5PRINCIPAL(254),
+    NETNAME(254),
+    KRB5PRINCIPAL(253),
     LOCALHOST(252);
 
-    private int code;
+    private final int code;
 
     Family(int code) {
       this.code = code;
@@ -79,7 +84,7 @@ public class XAuthority {
    */
   public XAuthority(@NonNull Family family, @NonNull List<Byte> address, int displayNumber, @NonNull List<Byte> protocolName, @NonNull List<Byte> protocolData) {
     this.family = family;
-    this.address = requireNonEmpty("address", address);
+    this.address = address;
     if(displayNumber < 0) {
       throw new IllegalArgumentException("displayNumber was \"" + displayNumber + "\" expected >= 0.");
     }

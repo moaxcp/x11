@@ -21,6 +21,12 @@ abstract class XmlSpec extends Specification {
         parser.parseXml()
     }
 
+    void parseHeaderAndXml() {
+        XParser parser = new XParser(xml: getGPathResult(), result: result)
+        parser.parseHeader()
+        parser.parseXml()
+    }
+
     Node getFirstChild() {
         (Node) getGPathResult().childNodes().next()
     }

@@ -27,12 +27,6 @@ public class XAuthorityTest {
   }
 
   @Test
-  void constructor_fails_on_empty_address() {
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new XAuthority(LOCAL, toList(new byte[]{}), 0, toList("magic".getBytes()), toList(new byte[] {1})));
-    assertThat(exception).hasMessage("address must not be empty");
-  }
-
-  @Test
   void constructor_fails_on_negative_displayNumber() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new XAuthority(LOCAL, toList("host".getBytes()), -1, toList("magic".getBytes()), toList(new byte[] {1})));
     assertThat(exception).hasMessage("displayNumber was \"-1\" expected >= 0.");

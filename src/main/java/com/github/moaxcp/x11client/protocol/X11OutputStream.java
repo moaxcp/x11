@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-public class X11OutputStream implements X11Output {
+public class X11OutputStream implements X11Output, AutoCloseable {
   private final DataOutputStream out;
 
   public X11OutputStream(OutputStream outputStream) {

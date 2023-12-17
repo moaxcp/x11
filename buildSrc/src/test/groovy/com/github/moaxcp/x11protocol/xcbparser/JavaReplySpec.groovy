@@ -5,7 +5,7 @@ import com.github.moaxcp.x11protocol.XmlSpec
 class JavaReplySpec extends XmlSpec {
     def queryTree() {
         given:
-        xmlBuilder.xcb() {
+        xmlBuilder.xcb(header: 'xproto') {
             xidtype(name:'WINDOW')
             request(name:'QueryTree', opcode:'15') {
                 pad(bytes:'1')
@@ -58,9 +58,9 @@ class JavaReplySpec extends XmlSpec {
               }
             
               @java.lang.Override
-              public void write(byte offset, com.github.moaxcp.x11client.protocol.X11Output out) throws
+              public void write(byte majorOpcode, com.github.moaxcp.x11client.protocol.X11Output out) throws
                   java.io.IOException {
-                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE) + java.lang.Byte.toUnsignedInt(offset)));
+                out.writeCard8((byte)(java.lang.Byte.toUnsignedInt(OPCODE)));
                 out.writePad(1);
                 out.writeCard16((short) getLength());
                 out.writeCard32(window);
