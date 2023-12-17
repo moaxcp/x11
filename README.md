@@ -22,7 +22,7 @@ This library can be added to your project using maven or gradle.
 <dependency>
  <groupId>com.github.moaxcp.x11</groupId>
  <artifactId>x11-client</artifactId>
- <version>0.12.0</version>
+ <version>0.14.0</version>
  <type>module</type>
 </dependency>
 ```
@@ -30,7 +30,7 @@ This library can be added to your project using maven or gradle.
 ## Gradle
 
 ```
-implementation 'com.github.moaxcp.x11:x11-client:0.12.0'
+implementation 'com.github.moaxcp.x11:x11-client:0.14.0'
 ```
 
 The library has one dependency for using unix sockets.
@@ -451,6 +451,11 @@ https://jamey.thesharps.us/2021/03/25/xcb-protocol-specifications-data/
 
 
 # versions
+
+## 0.14.0
+
+* Fixed issue where WILD XAuthority entries do not have an address
+* Fixed major bug when writing requests. For xproto the header should start with the OPCODE then 1 pad. For extensions the header should start with the majorOpcode then OPCODE. BigRequest and all QueryVersion requests worked because their OPCODE is 0 but everything else in extensions failed. This should be fixed for all extensions and has been tested with the RECORD extension.
 
 ## 0.13.0
 

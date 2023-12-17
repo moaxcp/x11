@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client.integrationTest.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client.integrationTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client.test.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client.testFixtures.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client.testFixtures.iml" />
     </modules>
   </component>

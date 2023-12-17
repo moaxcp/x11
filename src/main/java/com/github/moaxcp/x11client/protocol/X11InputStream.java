@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class X11InputStream implements X11Input {
+public class X11InputStream implements X11Input, AutoCloseable {
   private final DataInputStream in;
 
   public X11InputStream(InputStream inputStream) {

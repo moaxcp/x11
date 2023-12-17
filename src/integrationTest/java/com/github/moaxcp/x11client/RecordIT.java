@@ -1,6 +1,8 @@
 package com.github.moaxcp.x11client;
 
+import com.github.moaxcp.x11client.protocol.X11OutputStream;
 import com.github.moaxcp.x11client.protocol.record.*;
+import java.io.ByteArrayOutputStream;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +38,11 @@ public class RecordIT {
                     .elementHeader((byte) 0)
                     .ranges(Collections.singletonList(range))
                     .build();
+
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream(); X11OutputStream out = new X11OutputStream(baos)) {
+                createContext.write((byte) -110, out);
+                log.info(String.format("createContext bytes size = %d", baos.toByteArray().length));
+            }
 
             log.info(String.format("createContext: %s, size: %d, length: %d", createContext, createContext.getSize(), createContext.getLength()));
 

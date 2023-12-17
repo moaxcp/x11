@@ -58,7 +58,7 @@ class JavaRequest extends JavaClass {
         javaRequest.protocol = request.toJavaProtocol(javaRequest)
         JavaProperty c = javaRequest.getJavaProperty('OPCODE')
         c.constantField = true
-        c.writeValueExpression = CodeBlock.of('(byte)($1T.toUnsignedInt(OPCODE) + $1T.toUnsignedInt(offset))', ClassName.get('java.lang', 'Byte'))
+        c.writeValueExpression = CodeBlock.of('(byte)($1T.toUnsignedInt(OPCODE))', ClassName.get('java.lang', 'Byte'))
         JavaProperty l = javaRequest.getJavaProperty('length')
         l.writeValueExpression = CodeBlock.of('(short) getLength()')
         return javaRequest
@@ -112,7 +112,7 @@ class JavaRequest extends JavaClass {
 
     @Override
     void addWriteParameters(MethodSpec.Builder methodBuilder) {
-        methodBuilder.addParameter(byte.class, 'offset')
+        methodBuilder.addParameter(byte.class, 'majorOpcode')
     }
 
     @Override
