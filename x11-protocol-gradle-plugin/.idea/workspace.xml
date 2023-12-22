@@ -1,0 +1,1234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="85823353-3a69-4039-91b0-7ac78bebc5bf" name="Default Changelist" comment="Fixing tests with multiline strings">
+      <change beforePath="$PROJECT_DIR$/../.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules/x11-client.integrationTest.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules/x11-client.main.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules/x11-client.testFixtures.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/GenerateX11ProtocolTask.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/GenerateX11ProtocolTask.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/X11ProtocolExtension.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/X11ProtocolExtension.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/X11ProtocolPlugin.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/X11ProtocolPlugin.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/generator/Conventions.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/generator/Conventions.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/generator/KeySymGenerator.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/generator/KeySymGenerator.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/generator/KeySymParser.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/generator/KeySymParser.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/generator/KeySymResult.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/generator/KeySymResult.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/generator/ProtocolGenerator.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/generator/ProtocolGenerator.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/BehaviorUnion.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/BehaviorUnion.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/ClientMessageDataUnion.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/ClientMessageDataUnion.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaBitcaseInfo.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaBitcaseInfo.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaCaseInfo.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaCaseInfo.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaClass.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaClass.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaClientMessageDataUnionProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaClientMessageDataUnionProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnum.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnum.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumListProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumListProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumRef.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumRef.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaError.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaError.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEvent.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEvent.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEventStruct.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEventStruct.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaExprProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaExprProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaListProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaListProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaNotifyDataUnionProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaNotifyDataUnionProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPad.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPad.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPadAlign.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPadAlign.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPrimativeListProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPrimativeListProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPrimativeStringListProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPrimativeStringListProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPrimitiveProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPrimitiveProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaReadParameter.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaReadParameter.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaReply.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaReply.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaRequest.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaRequest.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaRequiredStartAlign.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaRequiredStartAlign.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaStruct.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaStruct.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaType.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaType.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaTypeListProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaTypeListProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaTypeProperty.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaTypeProperty.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaUnion.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaUnion.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaUnit.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaUnit.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/NotifyDataUnion.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/NotifyDataUnion.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XBitcaseInfo.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XBitcaseInfo.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XCaseInfo.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XCaseInfo.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XParser.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XParser.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XResult.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XResult.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XType.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XType.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeEnum.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeEnum.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeEnumItem.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeEnumItem.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeError.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeError.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeEvent.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeEvent.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeEventStruct.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeEventStruct.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeObject.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeObject.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypePrimative.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypePrimative.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeReply.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeReply.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeRequest.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeRequest.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeStruct.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeStruct.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeUnion.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeUnion.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeUnit.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeUnit.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnit.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnit.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitEnumRef.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitEnumRef.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitExprField.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitExprField.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitField.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitField.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitListField.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitListField.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitPad.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitPad.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitPadAlign.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitPadAlign.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitPadFactory.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitPadFactory.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitRequiredStartAlign.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitRequiredStartAlign.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitSwitch.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitSwitch.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitSwitchBitcase.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitSwitchBitcase.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitSwitchCase.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitSwitchCase.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XkbActionUnion.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/XkbActionUnion.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/AddExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/AddExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/AndExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/AndExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/BitValueExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/BitValueExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/DivideExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/DivideExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/EmptyExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/EmptyExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/Expression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/Expression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/Expressions.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/Expressions.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/FieldRefExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/FieldRefExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/MultiplyExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/MultiplyExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/NotExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/NotExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/OpExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/OpExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/ParamRefExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/ParamRefExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/PopcountExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/PopcountExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/SubtractExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/SubtractExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/SumOfExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/SumOfExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/UnopExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/UnopExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/ValueExpression.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/ValueExpression.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/X11ProtocolPluginSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/X11ProtocolPluginSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/XmlSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/XmlSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/generator/ConventionsSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/generator/ConventionsSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/CaseTypeSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/CaseTypeSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumListPropertySpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumListPropertySpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumPropertySpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumPropertySpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnumSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaErrorSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaErrorSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEventSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEventSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaGenericEventSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaGenericEventSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPadAlignSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPadAlignSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPrimativeListPropertySpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaPrimativeListPropertySpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaReplySpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaReplySpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaRequestSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaRequestSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaStructSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaStructSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaTypeListPropertySpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaTypeListPropertySpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaTypePropertySpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaTypePropertySpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaUnionSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaUnionSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/ReplyWithReadParamSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/ReplyWithReadParamSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/SumOfSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/SumOfSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XEnumSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XEnumSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XPluginSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XPluginSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XResultSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XResultSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeEventSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeEventSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeStructSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeStructSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeUnionSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XTypeUnionSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitFieldSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitFieldSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitListFieldSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitListFieldSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitPadFactorySpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XUnitPadFactorySpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/AddExpressionSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/AddExpressionSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/DivideExpressionSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/DivideExpressionSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/FieldRefExpressionSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/FieldRefExpressionSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/MultiplyExpressionSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/MultiplyExpressionSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/SubtractExpressionSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/SubtractExpressionSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/SumOfExpressionSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/SumOfExpressionSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/ValueExpressionSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/ValueExpressionSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xkb/GetKbdByNameReplySpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xkb/GetKbdByNameReplySpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/groovy/com/github/moaxcp/x11protocol/xkb/SetCompatMapSpec.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xkb/SetCompatMapSpec.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../examples/hello.jsh" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/examples/hello.jsh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/../gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jbang-catalog.json" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/jbang-catalog.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/KeySymIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/KeySymIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/QueryVersionIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/QueryVersionIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/RecordIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/RecordIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/X11ClientIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/X11ClientIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/X11ConnectionIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/X11ConnectionIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/X11Events/X11EventsWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/X11Events/X11EventsWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/X11Events/X11EventsWindowIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/X11Events/X11EventsWindowIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/basicwm/BasicWMIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/basicwm/BasicWMIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/basicwm/BasicWindowManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/basicwm/BasicWindowManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/experimental/DisplayIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/experimental/DisplayIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/tinywm/TinyWMIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/tinywm/TinyWMIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/integrationTest/java/com/github/moaxcp/x11client/tinywm/TinyWindowManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/integrationTest/java/com/github/moaxcp/x11client/tinywm/TinyWindowManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/AtomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/AtomService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/ConnectionFailureException.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/ConnectionFailureException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/KeyboardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/KeyboardService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/ProtocolPluginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/ProtocolPluginService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/ResourceIdService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/ResourceIdService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/X11Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/X11Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/X11ClientException.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/X11ClientException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/X11Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/X11Connection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/X11ErrorException.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/X11ErrorException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/XProtocolService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/XProtocolService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/experimental/Display.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/experimental/Display.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/experimental/Drawable.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/experimental/Drawable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/experimental/GraphicsContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/experimental/GraphicsContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/experimental/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/experimental/Resource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/experimental/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/experimental/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/AtomValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/AtomValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/DisplayName.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/DisplayName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/IntValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/IntValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/OneWayRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/OneWayRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/ParametersCheck.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/ParametersCheck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/Popcount.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/Popcount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/TwoWayRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/TwoWayRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/Utilities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/X11Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/X11Input.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/X11InputStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/X11InputStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/X11Output.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/X11Output.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/X11OutputStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/X11OutputStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XAuthority.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XAuthority.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XError.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XGenericEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XGenericEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XProtocolPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XProtocolPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XReadFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XReadFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XReply.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XReply.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XReplyFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XReplyFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/XStruct.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/XStruct.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/ChangeDeviceProperty.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/ChangeDeviceProperty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/DeviceClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/DeviceClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/DeviceCtl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/DeviceCtl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/DeviceState.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/DeviceState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/EventForSendEventStruct.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/EventForSendEventStruct.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/FeedbackCtl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/FeedbackCtl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/FeedbackState.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/FeedbackState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/GetDevicePropertyReply.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/GetDevicePropertyReply.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/HierarchyChange.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/HierarchyChange.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/InputInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/InputInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/InputState.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/InputState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/XIChangeProperty.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/XIChangeProperty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xinput/XIGetPropertyReply.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xinput/XIGetPropertyReply.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData16.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData16.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData32.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData32.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData8.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData8.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/keysym/DECkeysym.h" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/keysym/DECkeysym.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/keysym/HPkeysym.h" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/keysym/HPkeysym.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/keysym/Sunkeysym.h" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/keysym/Sunkeysym.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/keysym/XF86keysym.h" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/keysym/XF86keysym.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/keysym/keysymdef.h" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/keysym/keysymdef.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/bigreq.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/bigreq.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/composite.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/composite.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/damage.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/damage.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/dpms.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/dpms.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/dri2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/dri2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/dri3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/dri3.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/ge.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/ge.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/glx.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/glx.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/present.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/present.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/randr.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/randr.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/record.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/record.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/render.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/render.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/res.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/res.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/screensaver.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/screensaver.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/shape.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/shape.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/shm.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/shm.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/sync.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/sync.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xc_misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xc_misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xcb.xsd" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xcb.xsd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xevie.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xevie.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xf86dri.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xf86dri.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xf86vidmode.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xf86vidmode.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xfixes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xfixes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xinerama.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xinerama.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xinput.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xinput.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xkb.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xkb.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xprint.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xprint.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xproto.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xproto.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xselinux.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xselinux.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xtest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xtest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xv.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xv.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/xcbXmls/xvmc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/main/xcbXmls/xvmc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/AtomServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/AtomServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/ResourceIdServiceConstructor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/ResourceIdServiceConstructor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/ResourceIdServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/ResourceIdServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/X11ClientExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/X11ClientExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/X11ConnectionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/X11ConnectionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/X11ErrorExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/X11ErrorExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/AtomValueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/AtomValueTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/DisplayNameTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/DisplayNameTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/IntValueTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/IntValueTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/ParametersCheckTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/ParametersCheckTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/PopcountTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/PopcountTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/UtilitesTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/UtilitesTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/X11InputStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/X11InputStreamTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/X11OutputStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/X11OutputStreamTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/XAuthorityFamilyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/XAuthorityFamilyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/XAuthorityTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/XAuthorityTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/xproto/ChangePropertyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/xproto/ChangePropertyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData16Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData16Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData32Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData32Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData8Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/xproto/ClientMessageData8Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/xproto/CreateWindowTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/xproto/CreateWindowTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/xproto/EventMaskTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/xproto/EventMaskTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/xproto/GetKeyboardMappingRequestTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/xproto/GetKeyboardMappingRequestTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/xproto/QueryExtensionRequestTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/xproto/QueryExtensionRequestTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/github/moaxcp/x11client/protocol/xproto/ReadWriteTestsPrototype.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/test/java/com/github/moaxcp/x11client/protocol/xproto/ReadWriteTestsPrototype.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/testFixtures/java/com/github/moaxcp/x11client/XephyrRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/../x11-client/src/testFixtures/java/com/github/moaxcp/x11client/XephyrRunner.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="1f1MGZKjrPze5hCA9IzEIWj86BE" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;NIXITCH_NIXPKGS_CONFIG&quot;: &quot;/etc/nix/nixpkgs-config.nix&quot;,
+    &quot;NIXITCH_NIX_CONF_DIR&quot;: &quot;&quot;,
+    &quot;NIXITCH_NIX_OTHER_STORES&quot;: &quot;&quot;,
+    &quot;NIXITCH_NIX_PATH&quot;: &quot;/home/john/.nix-defexpr/channels:nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels&quot;,
+    &quot;NIXITCH_NIX_PROFILES&quot;: &quot;/run/current-system/sw /nix/var/nix/profiles/default /etc/profiles/per-user/john /home/john/.local/state/nix/profile /nix/profile /home/john/.nix-profile&quot;,
+    &quot;NIXITCH_NIX_REMOTE&quot;: &quot;&quot;,
+    &quot;NIXITCH_NIX_USER_PROFILE_DIR&quot;: &quot;/nix/var/nix/profiles/per-user/john&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.github.moaxcp.x11protocol.parser" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.github.moaxcp.x11protocol.xcbparser" />
+      <recent name="com.github.moaxcp.x11protocol.parser" />
+      <recent name="com.github.moaxcp.x11protocol.parser.expression" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="gradle test --stacktrace" />
+      <command value="gradle test" />
+      <command value="gradle --refresh-dependencies" />
+      <command value="gradle --info test" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Gradle.buildSrc [clean]">
+    <configuration name="JavaReplySpec.queryTree" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.github.moaxcp.x11protocol.xcbparser.JavaReplySpec.queryTree&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="JavaRequestSpec.bigRequestEnable" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.github.moaxcp.x11protocol.xcbparser.JavaRequestSpec.bigRequestEnable&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="buildSrc [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="buildSrc [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="buildSrc [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.buildSrc [clean]" />
+        <item itemvalue="Gradle.buildSrc [build]" />
+        <item itemvalue="Gradle.buildSrc [test]" />
+        <item itemvalue="Gradle.JavaRequestSpec.bigRequestEnable" />
+        <item itemvalue="Gradle.JavaReplySpec.queryTree" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="85823353-3a69-4039-91b0-7ac78bebc5bf" name="Default Changelist" comment="" />
+      <created>1595381050588</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1595381050588</updated>
+      <workItem from="1618323584542" duration="14294000" />
+      <workItem from="1618514006522" duration="7432000" />
+      <workItem from="1619521842144" duration="9110000" />
+      <workItem from="1619647103574" duration="39396000" />
+      <workItem from="1620135274138" duration="15867000" />
+      <workItem from="1621870067838" duration="8141000" />
+      <workItem from="1622066672348" duration="18128000" />
+      <workItem from="1623101318111" duration="773000" />
+      <workItem from="1623153893307" duration="599000" />
+      <workItem from="1623241482266" duration="3129000" />
+      <workItem from="1623412677660" duration="2737000" />
+      <workItem from="1623705333565" duration="1420000" />
+      <workItem from="1623708272996" duration="19555000" />
+      <workItem from="1624499916438" duration="8120000" />
+      <workItem from="1624917839022" duration="12209000" />
+      <workItem from="1625604757471" duration="8842000" />
+      <workItem from="1626177449846" duration="3489000" />
+      <workItem from="1626782411648" duration="10542000" />
+      <workItem from="1627336884287" duration="14233000" />
+      <workItem from="1628118936062" duration="3378000" />
+      <workItem from="1628629385719" duration="8019000" />
+      <workItem from="1632331680042" duration="27714000" />
+      <workItem from="1637331331259" duration="599000" />
+      <workItem from="1637720074620" duration="190000" />
+      <workItem from="1637791604366" duration="598000" />
+      <workItem from="1638560129152" duration="602000" />
+      <workItem from="1638842968943" duration="599000" />
+      <workItem from="1640009704742" duration="15000" />
+      <workItem from="1642025907634" duration="28000" />
+      <workItem from="1701467872989" duration="6178000" />
+      <workItem from="1701748068439" duration="601000" />
+      <workItem from="1701810713422" duration="1198000" />
+      <workItem from="1701880194517" duration="7567000" />
+      <workItem from="1702836709865" duration="7632000" />
+      <workItem from="1703106091254" duration="604000" />
+      <workItem from="1703110930216" duration="599000" />
+    </task>
+    <task id="LOCAL-00031" summary="Adding support for popcount expressions. All expressions now return a CodeBlock rather than a String.">
+      <created>1597022091215</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1597022091215</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Fixing compile errors in generated code">
+      <created>1597365851247</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1597365851247</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Adding write method to BehaviorUnion. Write methods no longer include the simpleName.">
+      <created>1597501930431</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1597501930431</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Adding readMethod to BehaviorUnion">
+      <created>1597579994584</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1597579994584</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Adding JavaEvent which brings in the sumof expression. This changes the design of expressions that reference other fields. These expressions need to be able to reference the JavaType to create a CodeBlock using the correct ClassName. Expressions are now only evaluated in JavaUnits rather than XUnits.">
+      <created>1598219239601</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1598219239601</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Updating JavaEvent to get protocol after creation.">
+      <created>1598235775072</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1598235775072</updated>
+    </task>
+    <task id="LOCAL-00037" summary="updating">
+      <created>1598578187924</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1598578187925</updated>
+    </task>
+    <task id="LOCAL-00038" summary="updating">
+      <created>1598578223298</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1598578223298</updated>
+    </task>
+    <task id="LOCAL-00039" summary="fixing ClientMessageDataUnion">
+      <created>1598579130537</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1598579130537</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Adding getNumber() to all events">
+      <created>1598585666363</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1598585666363</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Adding sentEvent to Events so we know if it was sent from a SendEvent request.">
+      <created>1598633170493</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1598633170493</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Adding sentEvent to Events so we know if it was sent from a SendEvent request.">
+      <created>1598633201122</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1598633201122</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Updating getSize in generated code to work with types and lists">
+      <created>1598640780440</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1598640780440</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Updating getSize for enums and enum lists">
+      <created>1598654066945</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1598654066945</updated>
+    </task>
+    <task id="LOCAL-00045" summary="Adding padding to make sure events are 32 bytes">
+      <created>1598664176841</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1598664176841</updated>
+    </task>
+    <task id="LOCAL-00046" summary="adding eventcopy support">
+      <created>1598665664959</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1598665664959</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Adding support for Errors">
+      <created>1598700772280</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1598700772280</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Making JavaUnit have a reference to javaType and xUnit. This allows more code to be shared between xunits.">
+      <created>1599945935404</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1599945935404</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Making JavaUnit have a reference to javaType and xUnit. This allows more code to be shared between xunits.">
+      <created>1600165497255</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1600165497255</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Adding checks for properties in XTypes. XTypes must have a result property.">
+      <created>1600224083739</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1600224083739</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Adding number to output of Events.">
+      <created>1600224447072</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1600224447073</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Adding write for error code in JavaError.">
+      <created>1600251878008</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1600251878008</updated>
+    </task>
+    <task id="LOCAL-00053" summary="adding JavaRequest">
+      <created>1600397547578</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1600397547579</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Adding support for last list in JavaRequests">
+      <created>1600999220005</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1600999220005</updated>
+    </task>
+    <task id="LOCAL-00055" summary="using getSizeExpression rather than fixedSize to increment javaStart in JavaRequest.">
+      <created>1601029672006</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1601029672006</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Adding support for replies">
+      <created>1601695831957</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1601695831957</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Removing old parsers">
+      <created>1601890988571</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1601890988572</updated>
+    </task>
+    <task id="LOCAL-00058" summary="Making properties NonNull and adding Builder">
+      <created>1604053174783</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1604053174784</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Converting objects to immutable values with a builder.">
+      <created>1604195901710</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1604195901711</updated>
+    </task>
+    <task id="LOCAL-00060" summary="Switched writeCode to a template method addWriteCode. Moved NUMBER in JavaEvent to a protocol field.">
+      <created>1606304668010</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1606304668011</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Adding fields to JavaError">
+      <created>1606344404050</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1606344404050</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Moving all constants and extra fields to protocol in each x11 object.">
+      <created>1606658715484</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1606658715484</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Adding bitcaseInfo methods for all java properties. Adding use of bitcaseInfo to size methods. Fixed compile errors.">
+      <created>1606756422536</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1606756422536</updated>
+    </task>
+    <task id="LOCAL-00064" summary="sumof works with a type list">
+      <created>1619647779069</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1619647779070</updated>
+    </task>
+    <task id="LOCAL-00065" summary="Adding support for JavaEventStruct">
+      <created>1619712943271</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1619712943271</updated>
+    </task>
+    <task id="LOCAL-00066" summary="Passing read params in GetDeviceMotionEventsReply now works">
+      <created>1619869272656</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1619869272656</updated>
+    </task>
+    <task id="LOCAL-00067" summary="Adding plugin name to plugins&#10;Adding firstEventOffset to events">
+      <created>1620045468593</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1620045468593</updated>
+    </task>
+    <task id="LOCAL-00068" summary="Adding case fields to XObjects">
+      <created>1620563344222</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1620563344222</updated>
+    </task>
+    <task id="LOCAL-00069" summary="Adding case types but it is all broken. I am going to change XTypeUnit to return the JavaType and a List of sub types.">
+      <created>1623706552923</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1623706552924</updated>
+    </task>
+    <task id="LOCAL-00070" summary="Implemented getSubTypes and getSubType methods.">
+      <created>1624228752450</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1624228752451</updated>
+    </task>
+    <task id="LOCAL-00071" summary="Testing InputInfo">
+      <created>1624481952317</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1624481952317</updated>
+    </task>
+    <task id="LOCAL-00072" summary="When JavaType is a sub type fields without caseInfo should be readParams">
+      <created>1624967684549</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1624967684550</updated>
+    </task>
+    <task id="LOCAL-00073" summary="Changed names for pad units.">
+      <created>1625233523923</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1625233523923</updated>
+    </task>
+    <task id="LOCAL-00074" summary="Not adding mask methods when they are for localOnly fields">
+      <created>1627950545139</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1627950545140</updated>
+    </task>
+    <task id="LOCAL-00075" summary="Moving declaration of switch fields out of if statements.">
+      <created>1632334615587</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1632334615587</updated>
+    </task>
+    <task id="LOCAL-00076" summary="Adding variable def for pads in read methods. Renamed JavaObjectType to JavaClass.">
+      <created>1635336856478</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1635336856478</updated>
+    </task>
+    <task id="LOCAL-00077" summary="Builder is now only used when there are properties. Added support for returning bytes for readPad. xkb.xml had a reply with duplicate fields. Renamed on of the nKeyAliases to nKeyAliases2.">
+      <created>1635599837134</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1635599837134</updated>
+    </task>
+    <task id="LOCAL-00078" summary="Fixed issue with using multiple enum items in a bitcase.">
+      <created>1637003468161</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1637003468161</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Fixing tests with multiline strings">
+      <created>1701559903176</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1701559903176</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="using getSizeExpression rather than fixedSize to increment javaStart in JavaRequest." />
+    <MESSAGE value="Adding support for replies" />
+    <MESSAGE value="Removing old parsers" />
+    <MESSAGE value="Making properties NonNull and adding Builder" />
+    <MESSAGE value="Converting objects to immutable values with a builder." />
+    <MESSAGE value="Switched writeCode to a template method addWriteCode. Moved NUMBER in JavaEvent to a protocol field." />
+    <MESSAGE value="Adding fields to JavaError" />
+    <MESSAGE value="Moving all constants and extra fields to protocol in each x11 object." />
+    <MESSAGE value="Adding bitcaseInfo methods for all java properties. Adding use of bitcaseInfo to size methods. Fixed compile errors." />
+    <MESSAGE value="sumof works with a type list" />
+    <MESSAGE value="Adding support for JavaEventStruct" />
+    <MESSAGE value="Passing read params in GetDeviceMotionEventsReply now works" />
+    <MESSAGE value="Adding plugin name to plugins&#10;Adding firstEventOffset to events" />
+    <MESSAGE value="Adding case fields to XObjects" />
+    <MESSAGE value="Adding case types but it is all broken. I am going to change XTypeUnit to return the JavaType and a List of sub types." />
+    <MESSAGE value="Implemented getSubTypes and getSubType methods." />
+    <MESSAGE value="Testing InputInfo" />
+    <MESSAGE value="When JavaType is a sub type fields without caseInfo should be readParams" />
+    <MESSAGE value="Changed names for pad units." />
+    <MESSAGE value="Not adding mask methods when they are for localOnly fields" />
+    <MESSAGE value="Moving declaration of switch fields out of if statements." />
+    <MESSAGE value="Adding variable def for pads in read methods. Renamed JavaObjectType to JavaClass." />
+    <MESSAGE value="Builder is now only used when there are properties. Added support for returning bytes for readPad. xkb.xml had a reply with duplicate fields. Renamed on of the nKeyAliases to nKeyAliases2." />
+    <MESSAGE value="Fixed issue with using multiple enum items in a bitcase." />
+    <MESSAGE value="Fixing tests with multiline strings" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing tests with multiline strings" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/parser/ResolvableVariable.groovy</url>
+          <line>14</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/parser/expression/Expressions.groovy</url>
+          <line>29</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/XUnitFieldSpec.groovy</url>
+          <line>148</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaEnumSpec.groovy</url>
+          <line>24</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaStructSpec.groovy</url>
+          <line>96</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaStructSpec.groovy</url>
+          <line>24</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaStructSpec.groovy</url>
+          <line>210</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaUnionSpec.groovy</url>
+          <line>84</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/parser/XTypeUnion.groovy</url>
+          <line>24</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaEventSpec.groovy</url>
+          <line>43</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaEventSpec.groovy</url>
+          <line>199</line>
+          <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaTypeListPropertySpec.groovy</url>
+          <line>30</line>
+          <option name="timeStamp" value="61" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/parser/JavaObjectType.groovy</url>
+          <line>37</line>
+          <option name="timeStamp" value="63" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/parser/JavaRequest.groovy</url>
+          <line>46</line>
+          <option name="timeStamp" value="65" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaReplySpec.groovy</url>
+          <line>169</line>
+          <option name="timeStamp" value="68" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaReplySpec.groovy</url>
+          <line>258</line>
+          <option name="timeStamp" value="69" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaReplySpec.groovy</url>
+          <line>359</line>
+          <option name="timeStamp" value="70" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaRequestSpec.groovy</url>
+          <line>509</line>
+          <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaReplySpec.groovy</url>
+          <line>81</line>
+          <option name="timeStamp" value="74" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaStructSpec.groovy</url>
+          <line>270</line>
+          <option name="timeStamp" value="75" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaRequestSpec.groovy</url>
+          <line>21</line>
+          <option name="timeStamp" value="76" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaRequestSpec.groovy</url>
+          <line>97</line>
+          <option name="timeStamp" value="77" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaRequestSpec.groovy</url>
+          <line>213</line>
+          <option name="timeStamp" value="78" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaRequestSpec.groovy</url>
+          <line>298</line>
+          <option name="timeStamp" value="82" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaErrorSpec.groovy</url>
+          <line>22</line>
+          <option name="timeStamp" value="90" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/parser/JavaEnumListProperty.groovy</url>
+          <line>91</line>
+          <option name="timeStamp" value="99" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaEnumPropertySpec.groovy</url>
+          <line>30</line>
+          <option name="timeStamp" value="100" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/XTypeEventSpec.groovy</url>
+          <line>23</line>
+          <option name="timeStamp" value="101" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaStructSpec.groovy</url>
+          <line>342</line>
+          <option name="timeStamp" value="102" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaPrimativeListPropertySpec.groovy</url>
+          <line>22</line>
+          <option name="timeStamp" value="103" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/parser/JavaRequestSpec.groovy</url>
+          <line>1000</line>
+          <option name="timeStamp" value="104" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/parser/JavaRequest.groovy</url>
+          <line>53</line>
+          <option name="timeStamp" value="105" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaGenericEventSpec.groovy</url>
+          <line>32</line>
+          <option name="timeStamp" value="106" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/SumOfSpec.groovy</url>
+          <line>58</line>
+          <option name="timeStamp" value="107" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/expression/SumOfExpression.groovy</url>
+          <line>40</line>
+          <option name="timeStamp" value="110" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaTypeListPropertySpec.groovy</url>
+          <line>33</line>
+          <option name="timeStamp" value="111" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaReplySpec.groovy</url>
+          <line>256</line>
+          <option name="timeStamp" value="112" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/ReplyWithReadParamSpec.groovy</url>
+          <line>47</line>
+          <option name="timeStamp" value="113" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaTypeProperty.groovy</url>
+          <line>29</line>
+          <option name="timeStamp" value="114" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/XPluginSpec.groovy</url>
+          <line>23</line>
+          <option name="timeStamp" value="122" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEventSpec.groovy</url>
+          <line>43</line>
+          <option name="timeStamp" value="123" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaUnionSpec.groovy</url>
+          <line>105</line>
+          <option name="timeStamp" value="124" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaUnionSpec.groovy</url>
+          <line>142</line>
+          <option name="timeStamp" value="125" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/CaseTypeSpec.groovy</url>
+          <line>111</line>
+          <option name="timeStamp" value="126" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/CaseTypeSpec.groovy</url>
+          <line>53</line>
+          <option name="timeStamp" value="127" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/generator/KeySymGenerator.groovy</url>
+          <line>14</line>
+          <option name="timeStamp" value="128" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/generator/Conventions.groovy</url>
+          <line>269</line>
+          <option name="timeStamp" value="129" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaRequestSpec.groovy</url>
+          <line>509</line>
+          <option name="timeStamp" value="130" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xkb/SetCompatMapSpec.groovy</url>
+          <line>47</line>
+          <option name="timeStamp" value="131" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/main/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaEnum.groovy</url>
+          <line>39</line>
+          <option name="timeStamp" value="132" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaReplySpec.groovy</url>
+          <line>32</line>
+          <option name="timeStamp" value="133" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../x11-protocol-gradle-plugin/src/test/groovy/com/github/moaxcp/x11protocol/xcbparser/JavaRequestSpec.groovy</url>
+          <line>298</line>
+          <option name="timeStamp" value="136" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Remote">
+        <watch expression="unit.name" />
+        <watch expression="ref.fieldName" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/buildSrc$buildSrc__test_.ic" NAME="buildSrc [test] Coverage Results" MODIFIED="1596893491957" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

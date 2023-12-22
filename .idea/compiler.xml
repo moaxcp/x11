@@ -6,21 +6,89 @@
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.20/18bcea7d5df4d49227b4a0743a536208ce4825bb/lombok-1.18.20.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.30/f195ee86e6c896ea47a1d39defbe20eb59cd149d/lombok-1.18.30.jar" />
         </processorPath>
-        <module name="x11-client.integrationTest" />
-        <module name="x11-client.main" />
-        <module name="x11-client.test" />
-        <module name="x11-client.testFixtures" />
+        <module name="x11.xephyr-runner.main" />
+        <module name="x11.x11-protocol.x11-protocol-xtest.main" />
+        <module name="x11.x11-protocol.x11-protocol-record.main" />
+        <module name="x11.x11-protocol.x11-protocol-xevie.main" />
+        <module name="x11.x11-protocol.x11-protocol-xprint.test" />
+        <module name="x11.x11-protocol.x11-protocol-composite.test" />
+        <module name="x11.x11-protocol.x11-protocol-res.test" />
+        <module name="x11.x11-protocol.x11-protocol-shm.test" />
+        <module name="x11.x11-toolkit.test" />
+        <module name="x11.x11-protocol.x11-protocol-xkb.test" />
+        <module name="x11.x11-protocol.x11-protocol-screensaver.test" />
+        <module name="x11.x11-protocol.x11-protocol-shape.test" />
+        <module name="x11.x11-protocol.x11-protocol-core.test" />
+        <module name="x11.x11-protocol.x11-protocol-present.test" />
+        <module name="x11.x11-protocol.x11-protocol-sync.main" />
+        <module name="x11.x11-protocol.x11-protocol-xfixes.main" />
+        <module name="x11.x11-protocol.x11-protocol-res.main" />
+        <module name="x11.x11-protocol.x11-protocol-xproto.main" />
+        <module name="x11.x11-protocol.x11-protocol-dri3.main" />
+        <module name="x11.x11-protocol.x11-protocol-glx.test" />
+        <module name="x11.x11-protocol.x11-protocol-xevie.test" />
+        <module name="x11.x11-protocol.x11-protocol-xv.main" />
+        <module name="x11.x11-protocol.x11-protocol-xprint.main" />
+        <module name="x11.xephyr-runner.test" />
+        <module name="x11.x11-protocol.x11-protocol-xkb.main" />
+        <module name="x11.x11-protocol.x11-protocol-xinerama.test" />
+        <module name="x11.x11-protocol.x11-protocol-dpms.test" />
+        <module name="x11.x11-protocol.x11-protocol-damage.test" />
+        <module name="x11.x11-protocol.x11-protocol-composite.main" />
+        <module name="x11.x11-protocol.x11-protocol-xf86vidmode.test" />
+        <module name="x11.x11-protocol.x11-protocol-xf86dri.test" />
+        <module name="x11.x11-protocol.x11-protocol-randr.test" />
+        <module name="x11.x11-protocol.x11-protocol-xinput.main" />
+        <module name="x11.x11-protocol.x11-protocol-xfixes.test" />
+        <module name="x11.x11-protocol.x11-protocol-xcmisc.test" />
+        <module name="x11.x11-protocol.x11-protocol-present.main" />
+        <module name="x11.x11-protocol.x11-protocol-bigreq.main" />
+        <module name="x11.x11-protocol.x11-protocol-xf86vidmode.main" />
+        <module name="x11.x11-protocol.x11-protocol-xselinux.main" />
+        <module name="x11.x11-protocol.x11-protocol-randr.main" />
+        <module name="x11.x11-protocol.x11-protocol-xf86dri.main" />
+        <module name="x11.examples.test" />
+        <module name="x11.x11-protocol.x11-protocol-glx.main" />
+        <module name="x11.x11-toolkit.main" />
+        <module name="x11.x11-protocol.x11-protocol-xvmc.test" />
+        <module name="x11.x11-protocol.x11-protocol-dri3.test" />
+        <module name="x11.x11-protocol.x11-protocol-xinerama.main" />
+        <module name="x11.x11-protocol.x11-protocol-ge.main" />
+        <module name="x11.x11-protocol.x11-protocol-record.test" />
+        <module name="x11.x11-protocol.x11-protocol-shm.main" />
+        <module name="x11.x11-client.test" />
+        <module name="x11.x11-protocol.x11-protocol-dri2.test" />
+        <module name="x11.x11-protocol.x11-protocol-xcmisc.main" />
+        <module name="x11.x11-protocol.x11-protocol-xv.test" />
+        <module name="x11.x11-protocol.x11-protocol-render.main" />
+        <module name="x11.x11-protocol.x11-protocol-dpms.main" />
+        <module name="x11.x11-protocol.x11-protocol-xinput.test" />
+        <module name="x11.x11-protocol.x11-protocol-xvmc.main" />
+        <module name="x11.x11-protocol.x11-protocol-ge.test" />
+        <module name="x11.x11-protocol.x11-protocol-screensaver.main" />
+        <module name="x11.x11-protocol.x11-protocol-xselinux.test" />
+        <module name="x11.x11-client.integrationTest" />
+        <module name="x11.examples.main" />
+        <module name="x11.x11-protocol.x11-protocol-core.main" />
+        <module name="x11.x11-protocol.x11-protocol-damage.main" />
+        <module name="x11.x11-protocol.x11-protocol-xtest.test" />
+        <module name="x11.x11-protocol.x11-protocol-render.test" />
+        <module name="x11.x11-protocol.x11-protocol-bigreq.test" />
+        <module name="x11.x11-protocol.x11-protocol-xproto.test" />
+        <module name="x11.x11-protocol.x11-protocol-shape.main" />
+        <module name="x11.x11-client.main" />
+        <module name="x11.x11-protocol.x11-protocol-dri2.main" />
+        <module name="x11.x11-protocol.x11-protocol-sync.test" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
-      <module name="x11.integration-tests" target="17" />
+      <module name="x11.integration-tests.integrationTest" target="17" />
       <module name="x11.integration-tests.main" target="17" />
       <module name="x11.integration-tests.test" target="17" />
-      <module name="x11.xephyr-runner" target="17" />
-      <module name="x11.xephyr-runner.main" target="17" />
-      <module name="x11.xephyr-runner.test" target="17" />
+      <module name="x11.x11-protocol-gradle-plugin.main" target="17" />
+      <module name="x11.x11-protocol-gradle-plugin.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
