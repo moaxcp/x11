@@ -4,11 +4,59 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/x11-protocol-gradle-plugin" name="x11-protocol-gradle-plugin">
+                <projects>
+                  <project path="$PROJECT_DIR$/x11-protocol-gradle-plugin" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/examples" />
+            <option value="$PROJECT_DIR$/x11-client" />
+            <option value="$PROJECT_DIR$/x11-protocol" />
+            <option value="$PROJECT_DIR$/x11-protocol-gradle-plugin" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-bigreq" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-composite" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-core" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-damage" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-dpms" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-dri2" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-dri3" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-ge" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-glx" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-present" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-randr" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-record" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-render" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-res" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-screensaver" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-shape" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-shm" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-sync" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xcmisc" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xevie" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xf86dri" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xf86vidmode" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xfixes" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xinerama" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xinput" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xkb" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xprint" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xproto" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xselinux" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xtest" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xv" />
+            <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-xvmc" />
+            <option value="$PROJECT_DIR$/x11-toolkit" />
+            <option value="$PROJECT_DIR$/xephyr-runner" />
           </set>
         </option>
       </GradleProjectSettings>

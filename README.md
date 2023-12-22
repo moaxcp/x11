@@ -1,20 +1,21 @@
-# x11-client
+# x11
 
-x11-client enables java and other jvm languages to talk directly to a x11 
+x11 enables java and other jvm languages to talk directly to a x11 
 server without binding to a C library. The client is similar to X11lib for C
 but uses objects to represent the protocol resulting in a simplified client. It 
-supports the core protocol and all extensions. The 
-client is similar to X11lib and follows the same pattern of queuing one-way 
-requests before sending them to the server.
+supports the core protocol and all extensions. The client follows the same pattern 
+as X11lib by queuing one-way requests before sending them to the server. The
+x11-protocol project enables reading and writing the entire protocol and can
+be used to help write a x11 server.
 
-[![Java CI with Gradle](https://github.com/moaxcp/x11-client/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=master)](https://github.com/moaxcp/x11-client/actions?query=workflow%3A%22Java+CI+with+Gradle%22)
+[![Java CI with Gradle](https://github.com/moaxcp/x11/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=master)](https://github.com/moaxcp/x11/actions?query=workflow%3A%22Java+CI+with+Gradle%22)
 [![maven central](https://img.shields.io/maven-central/v/com.github.moaxcp.x11/x11-client)](https://search.maven.org/artifact/com.github.moaxcp.x11/x11-client)
 [![javadoc](https://javadoc.io/badge2/com.github.moaxcp.x11/x11-client/javadoc.svg)](https://javadoc.io/doc/com.github.moaxcp.x11/x11-client)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=moaxcp_x11-client&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=moaxcp_x11-client)
 
 # Users
 
-This library can be added to your project using maven or gradle.
+The x11-client library can be added to your project using maven or gradle.
 
 ## Maven
 
@@ -22,7 +23,7 @@ This library can be added to your project using maven or gradle.
 <dependency>
  <groupId>com.github.moaxcp.x11</groupId>
  <artifactId>x11-client</artifactId>
- <version>0.14.0</version>
+ <version>0.16.0</version>
  <type>module</type>
 </dependency>
 ```
@@ -30,7 +31,7 @@ This library can be added to your project using maven or gradle.
 ## Gradle
 
 ```
-implementation 'com.github.moaxcp.x11:x11-client:0.14.0'
+implementation 'com.github.moaxcp.x11:x11-client:0.16.0'
 ```
 
 The library has one dependency for using unix sockets.
@@ -453,6 +454,12 @@ https://www.x.org/releases/X11R7.6/doc/libXtst/recordlib.html
 
 
 # versions
+
+## 0.16.0
+
+* Renaming project to x11
+* Switching to a multiproject build.
+* Change integration tests into examples in example project.
 
 ## 0.15.0
 

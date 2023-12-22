@@ -1,0 +1,106 @@
+plugins {
+    id 'java-library'
+    id 'io.freefair.lombok'
+    id 'com.github.moaxcp.x11protocol'
+    id 'maven-publish'
+    id 'signing'
+    id 'jacoco'
+}
+
+description = 'An implementation of the x11 shape protocol in java'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
+    withJavadocJar()
+}
+
+dependencies {
+    api project(':x11-protocol:x11-protocol-core')
+    api project(':x11-protocol:x11-protocol-xproto')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
+x11Protocol {
+    outputSrc = file('build/generated/xproto/java/')
+    outputResources = file('build/generated/xproto/resources')
+    xcbXmls = file('src/main/protocol')
+    exclude = ['xproto']
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            
+            artifactId = project.name
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = project.name
+                description = project.description
+                url = 'https://github.com/moaxcp/x11'
+                licenses {
+                    license {
+                        name = 'The MIT License (MIT)'
+                        url = 'http://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'moaxcp'
+                        name = 'John Mercier'
+                        email = 'moaxcp@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/moaxcp/x11.git'
+                    developerConnection = 'scm:git:git@github.com:moaxcp/x11.git'
+                    url = 'https://github.com/moaxcp/x11'
+                }
+            }
+            repositories {
+                maven {
+                    name = "OSS"
+                    def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+                    def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+                    url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                    credentials {
+                        username = project.findProperty('nexus.username')
+                        password = project.findProperty('nexus.password')
+                    }
+                }
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/moaxcp/x11")
+                    credentials {
+                        username = project.findProperty('github.user')
+                        password = project.findProperty('github.key')
+                    }
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}

@@ -1,0 +1,6 @@
+allprojects {
+    group = 'com.github.moaxcp.x11.x11-protocol'
+    repositories {
+        mavenCentral()
+    }
+}

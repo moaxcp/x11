@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+    id 'io.freefair.lombok'
+}
+
+sonar {
+    skipProject = true
+}
+
+dependencies {
+    implementation project(':x11-client')
+    implementation project(':x11-toolkit')
+    implementation project(':xephyr-runner')
+}
