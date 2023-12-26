@@ -106,7 +106,9 @@ class JavaUnionSpec extends XmlSpec {
         common.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class CommonBehavior implements com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion, com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class CommonBehavior implements com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion, com.github.moaxcp.x11client.protocol.XStruct {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private byte type;
             
               private byte data;
@@ -131,6 +133,10 @@ class JavaUnionSpec extends XmlSpec {
               public int getSize() {
                 return 2;
               }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
+              }
             
               public static class CommonBehaviorBuilder {
                 public int getSize() {
@@ -143,7 +149,9 @@ class JavaUnionSpec extends XmlSpec {
         defaultStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class DefaultBehavior implements com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion, com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class DefaultBehavior implements com.github.moaxcp.x11client.protocol.xproto.BehaviorUnion, com.github.moaxcp.x11client.protocol.XStruct {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private byte type;
             
               public static com.github.moaxcp.x11client.protocol.xproto.DefaultBehavior readDefaultBehavior(
@@ -164,6 +172,10 @@ class JavaUnionSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 2;
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class DefaultBehaviorBuilder {

@@ -12,6 +12,7 @@ import java.io.IOException;
 @Value
 @Builder
 public class EventForSendEventStruct implements XStruct {
+  public static final String PLUGIN_NAME = "xinput";
 
   XEvent event;
 
@@ -38,6 +39,6 @@ public class EventForSendEventStruct implements XStruct {
 
   @Override
   public String getPluginName() {
-    return XinputPlugin.NAME;
+    return PLUGIN_NAME;
   }
 }

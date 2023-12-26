@@ -23,14 +23,6 @@ class XPluginSpec extends XmlSpec {
         then:
         result.getXPlugin().toString() == '''\
             public class XinputPlugin implements com.github.moaxcp.x11client.protocol.XProtocolPlugin {
-              public static final java.lang.String NAME = "XInputExtension";
-            
-              @lombok.Getter
-              private byte majorVersion = 2;
-            
-              @lombok.Getter
-              private byte minorVersion = 3;
-            
               @lombok.Getter
               @lombok.Setter
               private byte majorOpcode;
@@ -43,12 +35,38 @@ class XPluginSpec extends XmlSpec {
               @lombok.Setter
               private byte firstError;
             
-              public java.lang.String getName() {
-                return NAME;
+              public java.lang.String getPluginName() {
+                return "xinput";
+              }
+            
+              public java.util.Optional<java.lang.String> getExtensionXName() {
+                return java.util.Optional.ofNullable("XInputExtension");
+              }
+            
+              public java.util.Optional<java.lang.String> getExtensionName() {
+                return java.util.Optional.ofNullable("Input");
+              }
+            
+              public java.util.Optional<java.lang.Boolean> getExtensionMultiword() {
+                return java.util.Optional.ofNullable(true);
+              }
+            
+              public java.util.Optional<java.lang.Byte> getMajorVersion() {
+                return java.util.Optional.ofNullable((byte) 2);
+              }
+            
+              public java.util.Optional<java.lang.Byte> getMinorVersion() {
+                return java.util.Optional.ofNullable((byte) 3);
               }
             
               @java.lang.Override
               public boolean supportedRequest(com.github.moaxcp.x11client.protocol.XRequest request) {
+                return request.getPluginName().equals(getPluginName());
+              }
+            
+              @java.lang.Override
+              public boolean supportedRequest(byte majorOpcode, byte minorOpcode) {
+                boolean isMajorOpcode = majorOpcode == getMajorOpcode();
                 return false;
               }
             
@@ -72,6 +90,13 @@ class XPluginSpec extends XmlSpec {
                   return true;
                 }
                 return false;
+              }
+            
+              @java.lang.Override
+              public com.github.moaxcp.x11client.protocol.XRequest readRequest(byte majorOpcode,
+                  byte minorOpcode, com.github.moaxcp.x11client.protocol.X11Input in) throws
+                  java.io.IOException {
+                throw new java.lang.IllegalArgumentException("majorOpcode " + majorOpcode + ", minorOpcode " + minorOpcode + " is not supported");
               }
             
               @java.lang.Override

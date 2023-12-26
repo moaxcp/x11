@@ -5,7 +5,7 @@ import com.github.moaxcp.x11protocol.XmlSpec
 class JavaEventSpec extends XmlSpec {
     def keyPress() {
         given:
-        xmlBuilder.xcb() {
+        xmlBuilder.xcb(header: "xproto") {
             xidtype(name:'WINDOW')
             typedef(oldname:'CARD8', newname:'KEYCODE')
             typedef(oldname:'CARD32', newname:'TIMESTAMP')
@@ -44,7 +44,9 @@ class JavaEventSpec extends XmlSpec {
         javaEvent.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class KeyPressEvent implements com.github.moaxcp.x11client.protocol.XEvent, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class KeyPressEvent implements com.github.moaxcp.x11client.protocol.XEvent {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               public static final byte NUMBER = 2;
             
               private byte firstEventOffset;
@@ -122,7 +124,7 @@ class JavaEventSpec extends XmlSpec {
             
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
-                out.writeCard8(sentEvent ? (byte) (0b10000000 & getResponseCode()) : getResponseCode());
+                out.writeCard8(sentEvent ? (byte) (0b10000000 | getResponseCode()) : getResponseCode());
                 out.writeCard8(detail);
                 out.writeCard16(sequenceNumber);
                 out.writeCard32(time);
@@ -151,6 +153,10 @@ class JavaEventSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 32;
+              }
+            
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class KeyPressEventBuilder {
@@ -208,7 +214,9 @@ class JavaEventSpec extends XmlSpec {
         javaEvent.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class MapRequestEvent implements com.github.moaxcp.x11client.protocol.XEvent, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class MapRequestEvent implements com.github.moaxcp.x11client.protocol.XEvent {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               public static final byte NUMBER = 20;
               
               private byte firstEventOffset;
@@ -251,7 +259,7 @@ class JavaEventSpec extends XmlSpec {
             
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
-                out.writeCard8(sentEvent ? (byte) (0b10000000 & getResponseCode()) : getResponseCode());
+                out.writeCard8(sentEvent ? (byte) (0b10000000 | getResponseCode()) : getResponseCode());
                 out.writePad(1);
                 out.writeCard16(sequenceNumber);
                 out.writeCard32(parent);
@@ -262,6 +270,10 @@ class JavaEventSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 32;
+              }
+            
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
               
               public static class MapRequestEventBuilder {

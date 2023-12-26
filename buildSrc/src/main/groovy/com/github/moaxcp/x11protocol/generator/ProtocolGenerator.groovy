@@ -26,7 +26,6 @@ class ProtocolGenerator {
             }
         }
 
-        writeToFile(result.javaPackage, result.getPluginXObjectInterface())
         writeToFile(result.javaPackage, result.getXPlugin())
 
         String pluginClass = result.pluginClassName.canonicalName()

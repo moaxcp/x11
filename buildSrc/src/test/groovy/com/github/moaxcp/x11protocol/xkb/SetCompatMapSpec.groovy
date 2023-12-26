@@ -48,7 +48,9 @@ class SetCompatMapSpec extends XmlSpec {
     javaRequest.typeSpec.toString() == '''\
         @lombok.Value
         @lombok.Builder
-        public class SetCompatMap implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+        public class SetCompatMap implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+          public static final java.lang.String PLUGIN_NAME = "xproto";
+            
           public static final byte OPCODE = 11;
         
           private short deviceSpec;
@@ -128,6 +130,10 @@ class SetCompatMapSpec extends XmlSpec {
           @java.lang.Override
           public int getSize() {
             return 16 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(si) + com.github.moaxcp.x11client.protocol.XObject.sizeOf(groupMaps);
+          }
+        
+          public java.lang.String getPluginName() {
+            return PLUGIN_NAME;
           }
         
           public static class SetCompatMapBuilder {

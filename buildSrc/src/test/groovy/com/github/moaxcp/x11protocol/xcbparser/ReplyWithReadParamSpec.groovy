@@ -48,7 +48,9 @@ class ReplyWithReadParamSpec extends XmlSpec {
         javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class GetDeviceMotionEventsReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class GetDeviceMotionEventsReply implements com.github.moaxcp.x11client.protocol.XReply {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private byte xiReplyType;
             
               private short sequenceNumber;
@@ -104,6 +106,10 @@ class ReplyWithReadParamSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 32 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(events);
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class GetDeviceMotionEventsReplyBuilder {

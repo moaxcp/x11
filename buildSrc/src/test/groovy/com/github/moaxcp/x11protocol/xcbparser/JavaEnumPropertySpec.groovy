@@ -31,7 +31,9 @@ class JavaEnumPropertySpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Struct implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class Struct implements com.github.moaxcp.x11client.protocol.XStruct {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private byte mask;
             
               public static com.github.moaxcp.x11client.protocol.xproto.Struct readStruct(
@@ -50,6 +52,10 @@ class JavaEnumPropertySpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 1;
+              }
+            
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class StructBuilder {

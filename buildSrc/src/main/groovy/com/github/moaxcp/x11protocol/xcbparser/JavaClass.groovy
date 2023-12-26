@@ -25,7 +25,7 @@ abstract class JavaClass implements JavaType {
         result = map.result
         basePackage = map.basePackage
         javaPackage = map.javaPackage
-        superTypes = map.superTypes ? map.superTypes + ClassName.get(javaPackage, result.getPluginXObjectInterfaceName()) : [ClassName.get(javaPackage, result.getPluginXObjectInterfaceName())]
+        superTypes = map.superTypes ?: []
         className = map.className
         xUnitSubtype = map.xUnitSubtype
         setProtocol(map.prtocol)
@@ -91,8 +91,16 @@ abstract class JavaClass implements JavaType {
     TypeSpec getTypeSpec() {
         TypeSpec.Builder typeSpec = TypeSpec.classBuilder(className)
         typeSpec.addModifiers(Modifier.PUBLIC)
+        typeSpec.addField(FieldSpec.builder(String.class, 'PLUGIN_NAME', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+            .initializer('"$L"', result.header)
+            .build())
         addFields(typeSpec)
         addMethods(typeSpec)
+        typeSpec.addMethod(MethodSpec.methodBuilder('getPluginName')
+            .addModifiers(Modifier.PUBLIC)
+            .returns(String.class)
+            .addStatement('return PLUGIN_NAME')
+            .build())
         if(superTypes) {
             typeSpec.addSuperinterfaces(superTypes)
         }

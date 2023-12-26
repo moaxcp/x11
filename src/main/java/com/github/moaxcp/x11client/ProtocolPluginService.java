@@ -24,14 +24,14 @@ class ProtocolPluginService {
   List<String> listLoadedPlugins() {
     List<String> result = new ArrayList<>();
     for(XProtocolPlugin plugin : loader) {
-      result.add(plugin.getName());
+      result.add(plugin.getPluginName());
     }
     return Collections.unmodifiableList(result);
   }
 
-  private Optional<XProtocolPlugin> loadedPlugin(String name) {
+  public Optional<XProtocolPlugin> loadedPlugin(String name) {
     for(XProtocolPlugin plugin : loader) {
-      if(plugin.getName().equals(name)) {
+      if(plugin.getPluginName().equals(name)) {
         return Optional.of(plugin);
       }
     }
@@ -40,7 +40,7 @@ class ProtocolPluginService {
 
   List<String> listActivatedPlugins() {
     return activatedPlugins.stream()
-        .map(XProtocolPlugin::getName)
+        .map(XProtocolPlugin::getPluginName)
         .collect(toList());
   }
 
@@ -64,7 +64,7 @@ class ProtocolPluginService {
 
   private Optional<XProtocolPlugin> getActivatedPlugin(String name) {
     return activatedPlugins.stream()
-        .filter(p -> p.getName().equals(name))
+        .filter(p -> p.getExtensionXName().equals(Optional.of(name)))
         .findFirst();
   }
 
@@ -76,13 +76,24 @@ class ProtocolPluginService {
     return activatedPlugins.stream()
         .filter(p -> p.supportedRequest(request))
         .findFirst()
-        .map(XProtocolPlugin::getMajorOpcode)
+        .map(p -> {
+          if (p instanceof XprotoPlugin) { //xproto
+            return request.getOpCode();
+          }
+          return p.getMajorOpcode();
+        })
         .orElseThrow(() -> new UnsupportedOperationException("Plugin missing or not activated for request. Could not find majorOpcode for request: " + request));
   }
 
   Optional<XProtocolPlugin> activePluginForMajorOpcode(byte majorOpcode) {
     return activatedPlugins.stream()
-        .filter(p -> p.getMajorVersion() == majorOpcode)
+        .filter(p -> p.getMajorOpcode() == majorOpcode)
+        .findFirst();
+  }
+
+  Optional<XProtocolPlugin> activePluginFor(byte majorOpcode, byte minorOpcode) {
+    return activatedPlugins.stream()
+        .filter(p -> p.supportedRequest(majorOpcode, minorOpcode))
         .findFirst();
   }
 

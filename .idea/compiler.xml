@@ -14,6 +14,13 @@
         <module name="x11-client.testFixtures" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="x11.integration-tests" target="17" />
+      <module name="x11.integration-tests.main" target="17" />
+      <module name="x11.integration-tests.test" target="17" />
+      <module name="x11.xephyr-runner" target="17" />
+      <module name="x11.xephyr-runner.main" target="17" />
+      <module name="x11.xephyr-runner.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
