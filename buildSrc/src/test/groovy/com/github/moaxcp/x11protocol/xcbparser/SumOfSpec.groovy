@@ -59,7 +59,9 @@ class SumOfSpec extends XmlSpec {
         javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class ListInputDevicesReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class ListInputDevicesReply implements com.github.moaxcp.x11client.protocol.XReply {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private byte xiReplyType;
             
               private short sequenceNumber;
@@ -129,6 +131,10 @@ class SumOfSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 32 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(devices) + com.github.moaxcp.x11client.protocol.XObject.sizeOf(infos) + com.github.moaxcp.x11client.protocol.XObject.sizeOf(names) + com.github.moaxcp.x11client.protocol.XObject.getSizeForPadAlign(4, com.github.moaxcp.x11client.protocol.XObject.sizeOf(names));
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class ListInputDevicesReplyBuilder {

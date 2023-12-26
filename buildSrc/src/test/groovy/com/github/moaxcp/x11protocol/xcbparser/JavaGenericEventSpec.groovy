@@ -33,7 +33,9 @@ class JavaGenericEventSpec extends XmlSpec {
         javaEvent.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class ConfigureNotifyEvent implements com.github.moaxcp.x11client.protocol.XGenericEvent, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class ConfigureNotifyEvent implements com.github.moaxcp.x11client.protocol.XGenericEvent {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               public static final byte NUMBER = 35;
             
               private byte firstEventOffset;
@@ -117,7 +119,7 @@ class JavaGenericEventSpec extends XmlSpec {
             
               @java.lang.Override
               public void write(com.github.moaxcp.x11client.protocol.X11Output out) throws java.io.IOException {
-                out.writeCard8(sentEvent ? (byte) (0b10000000 & getResponseCode()) : getResponseCode());
+                out.writeCard8(sentEvent ? (byte) (0b10000000 | getResponseCode()) : getResponseCode());
                 out.writeCard8(extension);
                 out.writeCard16(sequenceNumber);
                 out.writeCard32(getLength() - 32);
@@ -139,6 +141,10 @@ class JavaGenericEventSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 40;
+              }
+            
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class ConfigureNotifyEventBuilder {

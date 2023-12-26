@@ -73,8 +73,17 @@ authorization from the authors.
 	<item name="AllClients"><value>3</value></item>
     </enum>
 
+	<enum name="Category">
+		<item name="FromServer"><value>0</value></item>
+		<item name="FromClient"><value>1</value></item>
+		<item name="ClientStarted"><value>2</value></item>
+		<item name="ClientDied"><value>3</value></item>
+		<item name="StartOfData"><value>4</value></item>
+		<item name="EndOfData"><value>5</value></item>
+	</enum>
+
     <struct name="ClientInfo">
-	<field type="ClientSpec" name="client_resource" />
+	<field type="ClientSpec" name="client_resource" enum="CS" />
 	<field type="CARD32" name="num_ranges" />
 	<list type="Range" name="ranges">
 	    <fieldref>num_ranges</fieldref>
@@ -99,7 +108,7 @@ authorization from the authors.
 
     <request name="CreateContext" opcode="1">
 	<field type="record:CONTEXT" name="context" />
-	<field type="ElementHeader" name="element_header" />
+	<field type="ElementHeader" name="element_header" mask="HType" />
 	<pad bytes="3" />
 	<field type="CARD32" name="num_client_specs" />
 	<field type="CARD32" name="num_ranges" />
@@ -113,7 +122,7 @@ authorization from the authors.
 
     <request name="RegisterClients" opcode="2">
 	<field type="record:CONTEXT" name="context" />
-	<field type="ElementHeader" name="element_header" />
+	<field type="ElementHeader" name="element_header" mask="HType" />
 	<pad bytes="3" />
 	<field type="CARD32" name="num_client_specs" />
 	<field type="CARD32" name="num_ranges" />
@@ -137,7 +146,7 @@ authorization from the authors.
 	<field type="record:CONTEXT" name="context" />
 	<reply>
 	    <field type="BOOL" name="enabled" />
-	    <field type="ElementHeader" name="element_header" />
+	    <field type="ElementHeader" name="element_header" mask="HType" />
 	    <pad bytes="3" />
 	    <field type="CARD32" name="num_intercepted_clients" />
 	    <pad bytes="16" />
@@ -150,8 +159,8 @@ authorization from the authors.
     <request name="EnableContext" opcode="5">
 	<field type="record:CONTEXT" name="context" />
 	<reply>
-	    <field type="CARD8" name="category" />
-	    <field type="ElementHeader" name="element_header" />
+	    <field type="CARD8" name="category" enum="Category" />
+	    <field type="ElementHeader" name="element_header" mask="HType" />
 	    <field type="BOOL" name="client_swapped" />
 	    <pad bytes="2" />
 	    <field type="CARD32" name="xid_base" />

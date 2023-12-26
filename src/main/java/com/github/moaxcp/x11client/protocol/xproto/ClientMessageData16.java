@@ -9,6 +9,8 @@ import java.util.List;
 
 @Value
 public class ClientMessageData16 implements ClientMessageDataUnion {
+  public static final String PLUGIN_NAME = "xproto";
+
   List<Short> data16;
   byte format = 16;
 
@@ -22,6 +24,11 @@ public class ClientMessageData16 implements ClientMessageDataUnion {
   @Override
   public int getSize() {
     return 20;
+  }
+
+  @Override
+  public String getPluginName() {
+    return PLUGIN_NAME;
   }
 
   public void write(X11Output out) throws IOException {

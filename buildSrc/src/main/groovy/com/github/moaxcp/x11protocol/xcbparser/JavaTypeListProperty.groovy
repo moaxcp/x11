@@ -56,7 +56,7 @@ class JavaTypeListProperty extends JavaListProperty {
                 lengthExpression = CodeBlock.of('Short.toUnsignedInt($L)', lengthProperty.name)
             }
             return CodeBlock.builder()
-                .addStatement('$1T $2L = new $3T<>(length - javaStart)', typeName, name, ArrayList.class)
+                .addStatement('$1T $2L = new $3T<>($4L - javaStart)', typeName, name, ArrayList.class, lengthExpression)
                 .beginControlFlow('while(javaStart < $L * 4)', lengthExpression)
                 .addStatement('$T baseObject = $L', baseTypeName, readObjectBlock)
                 .addStatement('$L.add(baseObject)', name)

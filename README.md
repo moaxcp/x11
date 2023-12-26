@@ -448,9 +448,20 @@ https://p.janouch.name/article-xgb.html
 
 https://jamey.thesharps.us/2021/03/25/xcb-protocol-specifications-data/
 
+https://www.x.org/releases/X11R7.6/doc/libXtst/recordlib.html
+
 
 
 # versions
+
+## 0.15.0
+
+* Adding RecordApi which provides a higher level api for reading records with parsed XObjects so the user does not need to parse the data.
+* Each XObject now has a static PLUGIN_NAME assigned to the plugin name and an instance getter method.
+* Plugins now use the header as the plugin name.
+* Added all plugin info from the xml file (extensionName, extensionXName, extensionMultiword)
+* added methods to client for reading protocol from any X11Input. This is used for reading data from the record extension and for testing read/write for any object.
+* Fixed issues with list lengths which need to be unsigned.
 
 ## 0.14.0
 

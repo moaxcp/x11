@@ -4,6 +4,7 @@ import com.github.moaxcp.x11protocol.generator.Conventions
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeSpec
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.Memoized
@@ -50,44 +51,46 @@ class XResult {
         return getJavaName(header.capitalize()) + 'Object'
     }
 
-    TypeSpec getPluginXObjectInterface() {
-        TypeSpec.Builder builder = TypeSpec.interfaceBuilder(getPluginXObjectInterfaceName())
-            .addSuperinterface(ClassName.get(basePackage, 'XObject'))
-            .addMethod(MethodSpec.methodBuilder('getPluginName')
-                    .returns(String.class)
-                    .addModifiers(Modifier.DEFAULT, Modifier.PUBLIC)
-                    .addStatement('return $T.NAME', getPluginClassName())
-                    .build())
-        return builder.build()
-    }
-
     TypeSpec getXPlugin() {
         TypeSpec.Builder builder = TypeSpec.classBuilder(getPluginClassName())
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(ClassName.get(basePackage, 'XProtocolPlugin'))
 
-        builder.addField(
-            FieldSpec.builder(String.class, 'NAME', Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer('"$L"', extensionXName)
-                .build())
-
-        builder.addMethod(MethodSpec.methodBuilder('getName')
-                .addModifiers(Modifier.PUBLIC)
-                .returns(String.class)
-                .addStatement('return NAME')
-                .build())
-
-        builder.addField(
-            FieldSpec.builder(byte.class, 'majorVersion', Modifier.PRIVATE)
-            .addAnnotation(Getter.class)
-            .initializer('$L', majorVersion)
+        builder.addMethod(MethodSpec.methodBuilder('getPluginName')
+            .addModifiers(Modifier.PUBLIC)
+            .returns(String.class)
+            .addStatement('return "$L"', header)
             .build())
 
-        builder.addField(
-                FieldSpec.builder(byte.class, 'minorVersion', Modifier.PRIVATE)
-                        .addAnnotation(Getter.class)
-                        .initializer('$L', minorVersion)
-                        .build())
+        builder.addMethod(MethodSpec.methodBuilder('getExtensionXName')
+            .addModifiers(Modifier.PUBLIC)
+            .returns(ParameterizedTypeName.get(Optional.class, String.class))
+            .addStatement('return $T.ofNullable($L)', Optional.class, "\"$extensionXName\"" ?: "null")
+            .build())
+
+        builder.addMethod(MethodSpec.methodBuilder('getExtensionName')
+            .addModifiers(Modifier.PUBLIC)
+            .returns(ParameterizedTypeName.get(Optional.class, String.class))
+            .addStatement('return $T.ofNullable($L)', Optional.class,  "\"$extensionName\"" ?: "null")
+            .build())
+
+        builder.addMethod(MethodSpec.methodBuilder('getExtensionMultiword')
+            .addModifiers(Modifier.PUBLIC)
+            .returns(ParameterizedTypeName.get(Optional.class, Boolean.class))
+            .addStatement('return $T.ofNullable($L)', Optional.class, extensionMultiword ?: "null")
+            .build())
+
+        builder.addMethod(MethodSpec.methodBuilder('getMajorVersion')
+            .addModifiers(Modifier.PUBLIC)
+            .returns(ParameterizedTypeName.get(Optional.class, Byte.class))
+            .addStatement('return $T.ofNullable($L)', Optional.class, "(byte) $majorVersion" ?: "null")
+            .build())
+
+        builder.addMethod(MethodSpec.methodBuilder('getMinorVersion')
+            .addModifiers(Modifier.PUBLIC)
+            .returns(ParameterizedTypeName.get(Optional.class, Byte.class))
+            .addStatement('return $T.ofNullable($L)', Optional.class, "(byte) $minorVersion" ?: "null")
+            .build())
 
         builder.addField(
                 FieldSpec.builder(byte.class, 'majorOpcode', Modifier.PRIVATE)
@@ -112,15 +115,35 @@ class XResult {
             .addAnnotation(Override.class)
             .returns(boolean.class)
             .addParameter(ClassName.get(basePackage, 'XRequest'), 'request')
-
-        for(XTypeRequest request : requests.values()) {
-            supportedRequest.beginControlFlow('if(request instanceof $T)', request.javaType.className)
-            supportedRequest.addStatement('return true')
-            supportedRequest.endControlFlow()
-        }
-        supportedRequest.addStatement('return false')
+            .addStatement("return request.getPluginName().equals(getPluginName())")
 
         builder.addMethod(supportedRequest.build())
+
+        MethodSpec.Builder supportedRequestCode = MethodSpec.methodBuilder('supportedRequest')
+            .addModifiers(Modifier.PUBLIC)
+            .addAnnotation(Override.class)
+            .returns(boolean.class)
+            .addParameter(byte.class, 'majorOpcode')
+            .addParameter(byte.class, 'minorOpcode')
+
+        if (header == 'xproto') {
+            for(XTypeRequest request : requests.values()) {
+                supportedRequestCode.beginControlFlow('if(majorOpcode == $L)', request.opCode)
+                supportedRequestCode.addStatement('return true')
+                supportedRequestCode.endControlFlow()
+            }
+        } else {
+            supportedRequestCode.addStatement("boolean isMajorOpcode = majorOpcode == getMajorOpcode()")
+            for(XTypeRequest request : requests.values()) {
+                supportedRequestCode.beginControlFlow('if(minorOpcode == $L)', request.opCode)
+                supportedRequestCode.addStatement('return isMajorOpcode')
+                supportedRequestCode.endControlFlow()
+            }
+        }
+
+        supportedRequestCode.addStatement('return false')
+
+        builder.addMethod(supportedRequestCode.build())
 
         MethodSpec.Builder supportedEvent = MethodSpec.methodBuilder('supportedEvent')
             .addModifiers(Modifier.PUBLIC)
@@ -153,6 +176,31 @@ class XResult {
         supportedError.addStatement('return false')
 
         builder.addMethod(supportedError.build())
+
+        MethodSpec.Builder readRequest = MethodSpec.methodBuilder('readRequest')
+            .addModifiers(Modifier.PUBLIC)
+            .addAnnotation(Override.class)
+            .returns(ClassName.get(basePackage, 'XRequest'))
+            .addParameter(byte.class, 'majorOpcode')
+            .addParameter(byte.class, 'minorOpcode')
+            .addParameter(ClassName.get(basePackage, 'X11Input'), 'in')
+            .addException(IOException.class)
+
+        for(XTypeRequest request : requests.values()) {
+
+            if (!extensionName) {
+                readRequest.beginControlFlow('if(majorOpcode == $T.OPCODE)', request.javaType.className)
+                readRequest.addStatement('return $T.read$L(in)', request.javaType.className, request.javaType.className.simpleName())
+                readRequest.endControlFlow()
+            } else {
+                readRequest.beginControlFlow('if(minorOpcode == $T.OPCODE)', request.javaType.className)
+                readRequest.addStatement('return $T.read$L(in)', request.javaType.className, request.javaType.className.simpleName())
+                readRequest.endControlFlow()
+            }
+        }
+        readRequest.addStatement('throw new $T("majorOpcode " + majorOpcode + ", minorOpcode " + minorOpcode + " is not supported")', IllegalArgumentException.class)
+
+        builder.addMethod(readRequest.build())
 
         MethodSpec.Builder readEvent = MethodSpec.methodBuilder('readEvent')
             .addModifiers(Modifier.PUBLIC)

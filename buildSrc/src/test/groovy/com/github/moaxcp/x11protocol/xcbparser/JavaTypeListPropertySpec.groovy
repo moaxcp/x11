@@ -34,7 +34,9 @@ class JavaTypeListPropertySpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Setup implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class Setup implements com.github.moaxcp.x11client.protocol.XStruct {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               @lombok.NonNull
               private java.util.List<com.github.moaxcp.x11client.protocol.xproto.Format> pixmapFormats;
             
@@ -62,6 +64,10 @@ class JavaTypeListPropertySpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 1 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(pixmapFormats);
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class SetupBuilder {

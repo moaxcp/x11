@@ -1,17 +1,18 @@
 package com.github.moaxcp.x11client;
 
+import com.github.moaxcp.x11client.api.record.RecordApi;
 import com.github.moaxcp.x11client.protocol.*;
 import com.github.moaxcp.x11client.protocol.xproto.*;
-import lombok.NonNull;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.NonNull;
 
-import static com.github.moaxcp.x11client.protocol.Utilities.*;
+import static com.github.moaxcp.x11client.protocol.Utilities.toIntegers;
+import static com.github.moaxcp.x11client.protocol.Utilities.toList;
 
 /**
  * An x11 client. The client handles two types of requests: {@link OneWayRequest} and {@link TwoWayRequest}.
@@ -38,13 +39,14 @@ public class X11Client implements AutoCloseable {
   private final AtomService atomService;
   private final KeyboardService keyboardService;
   private final Map<Integer, Integer> defaultGCs = new HashMap<>();
+  private RecordApi recordApi;
 
   /**
    * Creates a client for the given {@link DisplayName} and {@link XAuthority}.
    * @param displayName to connect to. non-null
    * @param xAuthority to use. non-null
    * @return The connected client
-   * @throws X11ClientException
+   * @throws X11ClientException If connection to server could not be established
    */
   public static X11Client connect(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority) {
     try {
@@ -58,7 +60,7 @@ public class X11Client implements AutoCloseable {
    * Connects to the standard {@link DisplayName}.
    * @return The connected client
    * @see DisplayName#standard() for the standard display name.
-   * @throws X11ClientException
+   * @throws X11ClientException If connection to server could not be established
    */
   public static X11Client connect() {
     try {
@@ -70,8 +72,9 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Connects to the provided {@link DisplayName}
-   * @param name
-   * @return
+   * @param name of display
+   * @return the connected client
+   * @throws X11ClientException If connection to server could not be established
    */
   public static X11Client connect(@NonNull DisplayName name) {
     try {
@@ -101,7 +104,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the connection setup.
-   * @return
+   * @return setup created by x11 server
    */
   public Setup getSetup() {
     return connection.getSetup();
@@ -109,7 +112,6 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the default screen number.
-   * @return
    */
   public int getDefaultScreenNumber() {
     return connection.getDisplayName().getScreenNumber();
@@ -117,8 +119,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the sceen for the number provided.
-   * @param screen
-   * @return
+   * @param screen number
    */
   public Screen getScreen(int screen) {
     return getSetup().getRoots().get(screen);
@@ -126,7 +127,6 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the default {@link Screen} object.
-   * @return
    */
   public Screen getDefaultScreen() {
     return getScreen(getDefaultScreenNumber());
@@ -134,8 +134,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the root for the provided screen.
-   * @param screen
-   * @return
+   * @param screen number
    */
   public int getRoot(int screen) {
     return getScreen(screen).getRoot();
@@ -143,7 +142,6 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the default root.
-   * @return
    */
   public int getDefaultRoot() {
     return getRoot(getDefaultScreenNumber());
@@ -151,8 +149,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the white pixel for the provided screen.
-   * @param screen
-   * @return
+   * @param screen number
    */
   public int getWhitePixel(int screen) {
     return getScreen(screen).getWhitePixel();
@@ -160,7 +157,6 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the default white pixel.
-   * @return
    */
   public int getDefaultWhitePixel() {
     return getWhitePixel(getDefaultScreenNumber());
@@ -168,8 +164,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the black pixel for the provided screen.
-   * @param screen
-   * @return
+   * @param screen number
    */
   public int getBlackPixel(int screen) {
     return getScreen(screen).getBlackPixel();
@@ -177,7 +172,6 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the default black pixel.
-   * @return
    */
   public int getDefaultBlackPixel() {
     return getBlackPixel(getDefaultScreenNumber());
@@ -185,8 +179,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the depth for the provided screen.
-   * @param screen
-   * @return
+   * @param screen number
    */
   public byte getDepth(int screen) {
     return getScreen(screen).getRootDepth();
@@ -194,7 +187,6 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the default depth.
-   * @return
    */
   public byte getDefaultDepth() {
     return getDepth(getDefaultScreenNumber());
@@ -202,8 +194,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the visualId for the provided screen.
-   * @param screen
-   * @return
+   * @param screen number
    */
   public int getVisualId(int screen) {
     return getScreen(screen).getRootVisual();
@@ -211,7 +202,6 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the default visualId.
-   * @return
    */
   public int getDefaultVisualId() {
     return getVisualId(getDefaultScreenNumber());
@@ -243,7 +233,7 @@ public class X11Client implements AutoCloseable {
    * server. Then the server is polled for the next event. If an error response is returned from the server an
    * {@link X11ErrorException} is thrown. If a {@link XReply} response is returned or an {@link IOException} is thrown
    * an {@link X11ClientException} is thrown.
-   * @return
+   * @return the next event
    * @throws X11ErrorException if the server returns an {@link XError}
    * @throws X11ClientException if the server returns an {@link XReply} or an {@link IOException} is thrown
    */
@@ -252,8 +242,46 @@ public class X11Client implements AutoCloseable {
   }
 
   /**
+   * Returns the next reply from the server using the given replyFunction to read it. If there are any events sent by
+   * the server the events are added to the event queue.
+   * @param replyFunction used to read the reply from the server
+   * @return The reply from the server
+   * @param <T> type of reply
+   * @throws X11ClientException if there is an IOException when reading from the server or if there is an error reading
+   * any available events from the server.
+   * @throws X11ErrorException if the server returns an x11 error.
+   */
+  public <T extends XReply> T getNextReply(XReplyFunction<T> replyFunction) {
+    return protocolService.readReply(replyFunction);
+  }
+
+  public <T extends XRequest> T readRequest(X11Input in) throws IOException {
+      return protocolService.readRequest(in);
+  }
+
+  public byte getMajorOpcode(XRequest request) {
+    return protocolService.getMajorOpcode(request);
+  }
+
+  public <T extends XReply> T readReply(X11Input in, XReplyFunction<T> replyFunction) {
+    return protocolService.readReply(in, replyFunction);
+  }
+
+  /**
+   * Reads an event from the given bytes.
+   * @param in input for the event
+   * @return the event
+   */
+  public <T extends XEvent> T readEvent(X11Input in) {
+    return protocolService.readEvent(in);
+  }
+
+  public <T extends XError> T readError(X11Input in) {
+    return protocolService.readError(in);
+  }
+
+  /**
    * Returns true if the connection has a response available.
-   * @return
    */
   public boolean hasResponse() {
     return connection.inputAvailable() >= 32; //events and errors are always 32 bytes
@@ -269,7 +297,7 @@ public class X11Client implements AutoCloseable {
   /**
    * Sends a {@link GetInputFocus} to the server. This is a {@link TwoWayRequest} which causes a {@link #flush()} and
    * all events to be read from the server and added to the event queue.
-   * See https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/Sync.c
+   * See <a href="https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/Sync.c">...</a>
    */
   public void sync() {
     GetInputFocusReply reply = send(GetInputFocus.builder().build());
@@ -284,7 +312,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Closes the client.
-   * @throws IOException
+   * @throws IOException on issues with closing connections
    */
   @Override
   public void close() throws IOException {
@@ -294,9 +322,8 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the {@link KeySym} assiciated with the keyCode and state.
-   * @param keyCode
-   * @param state
-   * @return
+   * @param keyCode of KeySym
+   * @param state of keyboard
    */
   public KeySym keyCodeToKeySym(byte keyCode, short state) {
     return keyboardService.keyCodeToKeySym(keyCode, state);
@@ -304,8 +331,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the {@link KeySym} for the {@link KeyPressEvent}.
-   * @param event
-   * @return
+   * @param event from server
    */
   public KeySym keyCodeToKeySym(KeyPressEvent event) {
     return keyboardService.keyCodeToKeySym(event);
@@ -313,8 +339,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the {@link KeySym} for the {@link KeyReleaseEvent}.
-   * @param event
-   * @return
+   * @param event from server
    */
   public KeySym keyCodeToKeySym(KeyReleaseEvent event) {
     return keyboardService.keyCodeToKeySym(event);
@@ -322,8 +347,7 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns all keyCodes for the given {@link KeySym}.
-   * @param keySym
-   * @return
+   * @param keySym to lookup
    */
   public List<Byte> keySymToKeyCodes(KeySym keySym) {
     return keyboardService.keySymToKeyCodes(keySym);
@@ -331,9 +355,8 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the {@link KeySym} for the keyCode and col.
-   * @param keyCode
-   * @param col
-   * @return
+   * @param keyCode to lookup
+   * @param col column
    */
   public KeySym getKeySym(byte keyCode, int col) {
     return keyboardService.getKeySym(keyCode, col);
@@ -341,20 +364,27 @@ public class X11Client implements AutoCloseable {
 
   /**
    * Returns the next resource id. The client will use the Xcmisc extension to get the id range if the plugin is loaded.
-   * @return
    */
   public int nextResourceId() {
     return resourceIdService.nextResourceId();
   }
 
   /**
+   * Returns the {@link AtomValue} of the named Atom. If the atom does not exist on the x11 server an InternAtom request is made.
+   * @param name of atom
+   */
+  public AtomValue getAtom(String name) {
+    return atomService.getAtom(name);
+  }
+
+  /**
    * Creates a simple window on the default screen.
-   * @param x
-   * @param y
-   * @param width
-   * @param height
-   * @param events
-   * @return
+   * @param x coordinate
+   * @param y coordinate
+   * @param width of window
+   * @param height of window
+   * @param events events to receive
+   * @return the resource id for the window
    */
   public int createSimpleWindow(int x, int y, int width, int height, EventMask... events) {
     int wid = nextResourceId();
@@ -374,15 +404,6 @@ public class X11Client implements AutoCloseable {
       .eventMaskEnable(events)
       .build());
     return wid;
-  }
-
-  /**
-   * Returns the {@link AtomValue} of the named Atom. If the atom does not exist on the x11 server an InternAtom request is made.
-   * @param name
-   * @return
-   */
-  public AtomValue getAtom(String name) {
-    return atomService.getAtom(name);
   }
 
   //XRaiseWindow https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/RaiseWin.c
@@ -506,5 +527,12 @@ public class X11Client implements AutoCloseable {
       .focus(wid)
       .revertTo(InputFocus.POINTER_ROOT)
       .build());
+  }
+
+  public RecordApi record() {
+    if (recordApi == null) {
+      recordApi = new RecordApi(this);
+    }
+    return recordApi;
   }
 }

@@ -57,7 +57,7 @@ class JavaEvent extends JavaClass {
         javaEvent.protocol = event.toJavaProtocol(javaEvent)
         JavaProperty p = javaEvent.getJavaProperty('NUMBER')
         p.constantField = true
-        p.writeValueExpression = CodeBlock.of('sentEvent ? (byte) (0b10000000 & getResponseCode()) : getResponseCode()')
+        p.writeValueExpression = CodeBlock.of('sentEvent ? (byte) (0b10000000 | getResponseCode()) : getResponseCode()')
         if (javaEvent.fixedSize && javaEvent.fixedSize.get() < 32) {
             javaEvent.protocol.add(new JavaPad(javaClass: javaEvent, bytes: 32 - javaEvent.fixedSize.get()))
         }

@@ -22,7 +22,9 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class DestroyWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class DestroyWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               public static final byte OPCODE = 4;
             
               private int window;
@@ -53,6 +55,10 @@ class JavaRequestSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 8;
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class DestroyWindowBuilder {
@@ -98,7 +104,9 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class PolyPoint implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class PolyPoint implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               public static final byte OPCODE = 64;
             
               private byte coordinateMode;
@@ -126,7 +134,7 @@ class JavaRequestSpec extends XmlSpec {
                 javaStart += 4;
                 int gc = in.readCard32();
                 javaStart += 4;
-                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Point> points = new java.util.ArrayList<>(length - javaStart);
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Point> points = new java.util.ArrayList<>(Short.toUnsignedInt(length) - javaStart);
                 while(javaStart < Short.toUnsignedInt(length) * 4) {
                   com.github.moaxcp.x11client.protocol.xproto.Point baseObject = com.github.moaxcp.x11client.protocol.xproto.Point.readPoint(in);
                   points.add(baseObject);
@@ -157,6 +165,10 @@ class JavaRequestSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 12 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(points);
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class PolyPointBuilder {
@@ -214,7 +226,9 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryTextExtends implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class QueryTextExtends implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               public static final byte OPCODE = 48;
             
               private int font;
@@ -236,7 +250,7 @@ class JavaRequestSpec extends XmlSpec {
                 javaStart += 2;
                 int font = in.readCard32();
                 javaStart += 4;
-                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2b> string = new java.util.ArrayList<>(length - javaStart);
+                java.util.List<com.github.moaxcp.x11client.protocol.xproto.Char2b> string = new java.util.ArrayList<>(Short.toUnsignedInt(length) - javaStart);
                 while(javaStart < Short.toUnsignedInt(length) * 4) {
                   com.github.moaxcp.x11client.protocol.xproto.Char2b baseObject = com.github.moaxcp.x11client.protocol.xproto.Char2b.readChar2b(in);
                   string.add(baseObject);
@@ -269,6 +283,10 @@ class JavaRequestSpec extends XmlSpec {
               public int getSize() {
                 return 8 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(string);
               }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
+              }
             
               public static class QueryTextExtendsBuilder {
                 public int getSize() {
@@ -299,7 +317,9 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Enable implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.bigreq.EnableReply>, com.github.moaxcp.x11client.protocol.bigreq.BigreqObject {
+            public class Enable implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.bigreq.EnableReply> {
+              public static final java.lang.String PLUGIN_NAME = "bigreq";
+            
               public static final byte OPCODE = 0;
             
               public com.github.moaxcp.x11client.protocol.XReplyFunction<com.github.moaxcp.x11client.protocol.bigreq.EnableReply> getReplyFunction(
@@ -330,6 +350,10 @@ class JavaRequestSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 4;
+              }
+            
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class EnableBuilder {
@@ -510,7 +534,9 @@ class JavaRequestSpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class CreateWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class CreateWindow implements com.github.moaxcp.x11client.protocol.OneWayRequest {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               public static final byte OPCODE = 1;
             
               private byte depth;
@@ -771,6 +797,10 @@ class JavaRequestSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 32 + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXMAP.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACK_PIXEL.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXMAP.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BORDER_PIXEL.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BIT_GRAVITY.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.WIN_GRAVITY.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_STORE.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PLANES.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.BACKING_PIXEL.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.OVERRIDE_REDIRECT.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.SAVE_UNDER.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.EVENT_MASK.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.DONT_PROPAGATE.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.COLORMAP.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0) + (com.github.moaxcp.x11client.protocol.xproto.Cw.CURSOR.isEnabled((int) (Integer.toUnsignedLong(valueMask))) ? 4 : 0);
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class CreateWindowBuilder {

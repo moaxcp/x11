@@ -33,7 +33,9 @@ class JavaReplySpec extends XmlSpec {
         javaRequest.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryTree implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply>, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class QueryTree implements com.github.moaxcp.x11client.protocol.TwoWayRequest<com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply> {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               public static final byte OPCODE = 15;
             
               private int window;
@@ -70,6 +72,10 @@ class JavaReplySpec extends XmlSpec {
               public int getSize() {
                 return 8;
               }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
+              }
               
               public static class QueryTreeBuilder {
                 public int getSize() {
@@ -82,7 +88,9 @@ class JavaReplySpec extends XmlSpec {
         javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryTreeReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class QueryTreeReply implements com.github.moaxcp.x11client.protocol.XReply {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private short sequenceNumber;
             
               private int root;
@@ -131,6 +139,10 @@ class JavaReplySpec extends XmlSpec {
               public int getSize() {
                 return 32 + 4 * children.size();
               }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
+              }
             
               public static class QueryTreeReplyBuilder {
                 public int getSize() {
@@ -169,7 +181,9 @@ class JavaReplySpec extends XmlSpec {
         javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class TranslateCoordinatesReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class TranslateCoordinatesReply implements com.github.moaxcp.x11client.protocol.XReply {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private boolean sameScreen;
             
               private short sequenceNumber;
@@ -211,6 +225,10 @@ class JavaReplySpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 16;
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class TranslateCoordinatesReplyBuilder {
@@ -257,7 +275,9 @@ class JavaReplySpec extends XmlSpec {
         javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class ListHostsReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class ListHostsReply implements com.github.moaxcp.x11client.protocol.XReply {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private byte mode;
             
               private short sequenceNumber;
@@ -303,6 +323,10 @@ class JavaReplySpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 32 + com.github.moaxcp.x11client.protocol.XObject.sizeOf(hosts);
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class ListHostsReplyBuilder {
@@ -355,7 +379,9 @@ class JavaReplySpec extends XmlSpec {
         javaReply.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class QueryExtensionReply implements com.github.moaxcp.x11client.protocol.XReply, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class QueryExtensionReply implements com.github.moaxcp.x11client.protocol.XReply {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private short sequenceNumber;
             
               private boolean present;
@@ -399,6 +425,10 @@ class JavaReplySpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 12;
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
           
               public static class QueryExtensionReplyBuilder {

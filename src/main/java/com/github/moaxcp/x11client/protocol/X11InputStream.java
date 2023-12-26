@@ -30,6 +30,14 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
+  public byte peekByte() throws IOException {
+    in.mark(1);
+    byte read = readByte();
+    in.reset();
+    return read;
+  }
+
+  @Override
   public byte readInt8() throws IOException {
     return in.readByte();
   }
@@ -189,6 +197,13 @@ public class X11InputStream implements X11Input, AutoCloseable {
       throw new IOException("could not read " + length + " bytes for pad");
     }
     return bytes;
+  }
+
+  @Override
+  public void peekWith(X11InputConsumer consumer) throws IOException {
+    in.mark(Integer.MAX_VALUE);
+    consumer.accept(this);
+    in.reset();
   }
 
   @Override

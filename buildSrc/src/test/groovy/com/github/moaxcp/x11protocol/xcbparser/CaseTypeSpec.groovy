@@ -54,7 +54,9 @@ class CaseTypeSpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class InputInfo implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class InputInfo implements com.github.moaxcp.x11client.protocol.XStruct {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private byte classId;
             
               private byte len;
@@ -78,6 +80,10 @@ class CaseTypeSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 2;
+              }
+            
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class InputInfoBuilder {
@@ -112,7 +118,9 @@ class CaseTypeSpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class InputInfoKey implements com.github.moaxcp.x11client.protocol.xproto.InputInfo, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class InputInfoKey implements com.github.moaxcp.x11client.protocol.xproto.InputInfo {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private byte classId;
             
               private byte len;
@@ -152,6 +160,10 @@ class CaseTypeSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 8;
+              }
+            
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class InputInfoKeyBuilder {

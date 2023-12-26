@@ -25,7 +25,9 @@ class JavaStructSpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Format implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class Format implements com.github.moaxcp.x11client.protocol.XStruct {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private byte depth;
             
               private byte bitsPerPixel;
@@ -56,6 +58,10 @@ class JavaStructSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 8;
+              }
+            
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
               
               public static class FormatBuilder {
@@ -97,7 +103,9 @@ class JavaStructSpec extends XmlSpec {
         javaStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class Screen implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class Screen implements com.github.moaxcp.x11client.protocol.XStruct {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private int root;
             
               private int defaultColormap;
@@ -141,6 +149,10 @@ class JavaStructSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 13;
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class ScreenBuilder {
@@ -211,7 +223,9 @@ class JavaStructSpec extends XmlSpec {
         javaStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class DeviceTimeCoord implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class DeviceTimeCoord implements com.github.moaxcp.x11client.protocol.XStruct {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private int time;
             
               @lombok.NonNull
@@ -236,6 +250,10 @@ class JavaStructSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 4 + 4 * axisvalues.size();
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
               
               public static class DeviceTimeCoordBuilder {
@@ -271,7 +289,9 @@ class JavaStructSpec extends XmlSpec {
         javaStruct.typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class SetKeyType implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class SetKeyType implements com.github.moaxcp.x11client.protocol.XStruct {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private boolean preserve;
             
               private byte nMapEntries;
@@ -301,6 +321,10 @@ class JavaStructSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 2 + 4 * preserveEntries.size();
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
               
               public static class SetKeyTypeBuilder {
@@ -343,7 +367,9 @@ class JavaStructSpec extends XmlSpec {
         typeSpec.toString() == '''\
             @lombok.Value
             @lombok.Builder
-            public class SetupRequest implements com.github.moaxcp.x11client.protocol.XStruct, com.github.moaxcp.x11client.protocol.xproto.XprotoObject {
+            public class SetupRequest implements com.github.moaxcp.x11client.protocol.XStruct {
+              public static final java.lang.String PLUGIN_NAME = "xproto";
+            
               private byte byteOrder;
             
               private short protocolMajorVersion;
@@ -398,6 +424,10 @@ class JavaStructSpec extends XmlSpec {
               @java.lang.Override
               public int getSize() {
                 return 12 + 1 * authorizationProtocolName.size() + com.github.moaxcp.x11client.protocol.XObject.getSizeForPadAlign(4, 1 * authorizationProtocolName.size()) + 1 * authorizationProtocolData.size() + com.github.moaxcp.x11client.protocol.XObject.getSizeForPadAlign(4, 1 * authorizationProtocolData.size());
+              }
+
+              public java.lang.String getPluginName() {
+                return PLUGIN_NAME;
               }
             
               public static class SetupRequestBuilder {

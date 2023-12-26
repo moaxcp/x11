@@ -47,7 +47,7 @@ class JavaPrimativeListProperty extends JavaListProperty {
     @Override
     CodeBlock getReadCode() {
         if(lengthExpression instanceof EmptyExpression) {
-            return CodeBlock.of('in.read$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), CodeBlock.of('javaStart - length'))
+            return CodeBlock.of('in.read$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), CodeBlock.of('Short.toUnsignedInt(length) - javaStart'))
         } else {
             return CodeBlock.of('in.read$L($L)', fromUpperUnderscoreToUpperCamel(x11Type), lengthExpression.getExpression(TypeName.INT))
         }

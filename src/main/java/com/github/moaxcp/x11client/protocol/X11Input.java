@@ -11,6 +11,8 @@ public interface X11Input {
 
   byte readByte() throws IOException;
 
+  byte peekByte() throws IOException;
+
   byte readInt8() throws IOException;
 
   short readInt16() throws IOException;
@@ -66,6 +68,8 @@ public interface X11Input {
   default void readPadAlign(int align, int forLength) throws IOException {
     readPad(XObject.getSizeForPadAlign(align, forLength));
   }
+
+  void peekWith(X11InputConsumer consumer) throws IOException;
 
   int available() throws IOException;
 

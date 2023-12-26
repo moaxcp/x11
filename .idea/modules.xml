@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client.integrationTest.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client.integrationTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client.testFixtures.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client.testFixtures.iml" />
     </modules>
