@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11.x11client;
 
+import com.github.moaxcp.x11.keysym.KeySym;
 import com.github.moaxcp.x11.protocol.*;
 import com.github.moaxcp.x11.protocol.xproto.*;
 import com.github.moaxcp.x11.x11client.api.record.RecordApi;

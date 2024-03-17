@@ -6,16 +6,17 @@ import com.squareup.javapoet.JavaFile
 class KeySymGenerator {
     File headerSrc
     File outputSrc
-    String basePackage
+    String corePackage
+    String keysymPackage
 
     void generate() {
-        KeySymParser parser = new KeySymParser(basePackage)
+        KeySymParser parser = new KeySymParser(corePackage, keysymPackage)
         headerSrc.listFiles().collect {file ->
             file.withReader { reader ->
                 parser.merge(reader)
             }
         }
-        JavaFile javaFile = JavaFile.builder(basePackage, parser.typeSpec).skipJavaLangImports(true).build()
+        JavaFile javaFile = JavaFile.builder(keysymPackage, parser.typeSpec).skipJavaLangImports(true).build()
         javaFile.writeTo(outputSrc)
     }
 }

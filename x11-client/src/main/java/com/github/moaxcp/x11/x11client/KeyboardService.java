@@ -1,13 +1,13 @@
 package com.github.moaxcp.x11.x11client;
 
 
-import com.github.moaxcp.x11.protocol.KeySym;
+import com.github.moaxcp.x11.keysym.KeySym;
 import com.github.moaxcp.x11.protocol.xproto.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.moaxcp.x11.protocol.KeySym.*;
+import static com.github.moaxcp.x11.keysym.KeySym.*;
 
 public class KeyboardService {
   private GetKeyboardMappingReply keyboard;

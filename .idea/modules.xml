@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.integrationTest.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.integrationTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.test.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-keysym/x11.x11-keysym.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-keysym/x11.x11-keysym.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-bigreq/x11.x11-protocol.x11-protocol-bigreq.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-bigreq/x11.x11-protocol.x11-protocol-bigreq.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-composite/x11.x11-protocol.x11-protocol-composite.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-composite/x11.x11-protocol.x11-protocol-composite.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-core/x11.x11-protocol.x11-protocol-core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-core/x11.x11-protocol.x11-protocol-core.main.iml" />
