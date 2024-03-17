@@ -20,6 +20,7 @@
         <module name="x11.x11-protocol.x11-protocol-xkb.test" />
         <module name="x11.x11-protocol.x11-protocol-screensaver.test" />
         <module name="x11.x11-protocol.x11-protocol-shape.test" />
+        <module name="x11.x11-keysym.test" />
         <module name="x11.x11-protocol.x11-protocol-core.test" />
         <module name="x11.x11-protocol.x11-protocol-present.test" />
         <module name="x11.x11-protocol.x11-protocol-sync.main" />
@@ -66,6 +67,7 @@
         <module name="x11.x11-protocol.x11-protocol-dpms.main" />
         <module name="x11.x11-protocol.x11-protocol-xinput.test" />
         <module name="x11.x11-protocol.x11-protocol-xvmc.main" />
+        <module name="x11.x11-keysym.main" />
         <module name="x11.x11-protocol.x11-protocol-ge.test" />
         <module name="x11.x11-protocol.x11-protocol-screensaver.main" />
         <module name="x11.x11-protocol.x11-protocol-xselinux.test" />
@@ -83,7 +85,7 @@
         <module name="x11.x11-protocol.x11-protocol-sync.test" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
+    <bytecodeTargetLevel target="21">
       <module name="x11.integration-tests.integrationTest" target="17" />
       <module name="x11.integration-tests.main" target="17" />
       <module name="x11.integration-tests.test" target="17" />

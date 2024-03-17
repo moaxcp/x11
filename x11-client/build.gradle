@@ -10,13 +10,13 @@ plugins {
 description = 'An x11 client implemented in java'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
     withSourcesJar()
-    withJavadocJar()
 }
 
 dependencies {
+    api project(':x11-keysym')
     api project(':x11-protocol:x11-protocol-core')
     api project(':x11-protocol:x11-protocol-bigreq')
     api project(':x11-protocol:x11-protocol-composite')
@@ -49,8 +49,6 @@ dependencies {
     api project(':x11-protocol:x11-protocol-xtest')
     api project(':x11-protocol:x11-protocol-xv')
     api project(':x11-protocol:x11-protocol-xvmc')
-
-    implementation 'com.kohlschutter.junixsocket:junixsocket-core:2.3.2'
 
     testImplementation 'org.assertj:assertj-core:3.16.0'
     testImplementation 'org.mockito:mockito-core:3.3.3'

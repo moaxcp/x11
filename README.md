@@ -8,7 +8,7 @@ as X11lib by queuing one-way requests before sending them to the server. The
 x11-protocol project enables reading and writing the entire protocol and can
 be used to help write a x11 server.
 
-[![Java CI with Gradle](https://github.com/moaxcp/x11/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=master)](https://github.com/moaxcp/x11/actions?query=workflow%3A%22Java+CI+with+Gradle%22)
+[![Java CI with Gradle](https://github.com/moaxcp/x11/actions/workflows/gradle.yml/badge.svg)](https://github.com/moaxcp/x11/actions/workflows/gradle.yml)
 [![maven central](https://img.shields.io/maven-central/v/com.github.moaxcp.x11/x11-client)](https://search.maven.org/artifact/com.github.moaxcp.x11/x11-client)
 [![javadoc](https://javadoc.io/badge2/com.github.moaxcp.x11/x11-client/javadoc.svg)](https://javadoc.io/doc/com.github.moaxcp.x11/x11-client)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=moaxcp_x11-client&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=moaxcp_x11-client)
@@ -23,7 +23,7 @@ The x11-client library can be added to your project using maven or gradle.
 <dependency>
  <groupId>com.github.moaxcp.x11</groupId>
  <artifactId>x11-client</artifactId>
- <version>0.16.0</version>
+ <version>0.18.0</version>
  <type>module</type>
 </dependency>
 ```
@@ -31,13 +31,7 @@ The x11-client library can be added to your project using maven or gradle.
 ## Gradle
 
 ```
-implementation 'com.github.moaxcp.x11:x11-client:0.16.0'
-```
-
-The library has one dependency for using unix sockets.
-
-```
-implementation 'com.kohlschutter.junixsocket:junixsocket-core:x.x.x'
+implementation 'com.github.moaxcp.x11:x11-client:0.18.0'
 ```
 
 # Usage
@@ -99,13 +93,12 @@ server.
 client.flush();
 ```
 
-This project converts the x11 protocol to classes which implement certain
-interfaces. The client can read and write these objects using the read and 
-write methods defined in each object’s class. Here is a diagram of the class 
-hierarchy for the protocol:
+This project converts the x11 protocol to classes which implement core
+interfaces (XError, XEvent, XRequest, XReply, etc). The client can read and write these objects using the read and 
+write methods defined in each object’s class.
 
-X11ClientExceptions may be thrown when calling methods on a client. These 
-exceptions represent IOExceptions with the socket. X11ErrorExceptions represent 
+X11ProtocolExceptions may be thrown when there are IOExceptions with the socket. X11ClientExceptions are thrown with 
+client issues such as connection issues or api issues. X11ErrorExceptions represent 
 Errors from the X11 Server. Errors can be handled using the standard try/catch 
 method rather than using an error handler callback as is done with X11lib.
 
@@ -372,6 +365,9 @@ be shared without synchronization.
 
 # Contributors
 
+Support is most needed for example code. Other x11 libraries have tons of examples that prove the library works.
+So far this project only has a few basic examples.
+
 I am not an x11 programmer but I find the protocol to be an interesting 
 challenge and learning experience. The only other x11 client implementation for 
 java that I have found is escher. Escher is very hand written and has many 
@@ -397,22 +393,6 @@ The core protocol and every supported extension implements a plugin which
 enables the client to figure out which class to use when reading errors and 
 events from the server. These plugins are generated durring the build process. 
 Plugins are discovered and loaded using the ServiceLoader pattern.
-
-Support is needed for a few things in the protocol before all extensions can 
-be supported. Contributions are welcome!
-
-fd – file descriptors. I believe these should work like an int field. If this 
-is true this should be easy to implement.
-
-sumOf expressions – creates a sum value which is used to determine list sizes. 
-The list is the size of a sumOf function called on another list.
-
-Polymorphism – some objects use a case switch which seems to describe a 
-polymorphic object. There is usually a type field which describes the type and 
-each switch case provides additional fields for that type. The generation code 
-needs to support generating multiple objects when it runs into an object with 
-these switch constructs. Reading and writing will be tricky since the type 
-field can be deep within the protocol. These switches may also be nested.
 
 # Frameworks
 
@@ -454,6 +434,16 @@ https://www.x.org/releases/X11R7.6/doc/libXtst/recordlib.html
 
 
 # versions
+
+## 0.18.0
+
+* Switched to a multimodule project
+* Switched to jdk 21
+* Added java module system support
+* Removed delombok due to [issues](https://github.com/freefair/gradle-plugins/issues/824) with modules. This results in javadoc no longer being generated.
+* Removed dependency on junixsocket and switched to the jdk UnixDomainSocket.
+* Removed jbang
+* Moved all integration tests to the examples project with a main method.
 
 ## 0.17.0
 

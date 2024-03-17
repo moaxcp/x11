@@ -1,11 +1,11 @@
 plugins {
-  id 'org.sonarqube' version '4.4.1.3373'
-  id 'io.freefair.lombok' version '8.4' apply false
+  id 'org.sonarqube' version '5.0.0.4638'
+  id 'io.freefair.lombok' version '8.6' apply false
   id 'org.unbroken-dome.test-sets' version '4.1.0' apply false
 }
 
 allprojects {
-  version = '0.17.0'
+  version = '0.18.0'
   group = 'com.github.moaxcp.x11'
   repositories {
     mavenCentral()

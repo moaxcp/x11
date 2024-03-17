@@ -5,17 +5,15 @@ import com.github.moaxcp.x11.protocol.xproto.Setup;
 import com.github.moaxcp.x11.protocol.xproto.SetupAuthenticate;
 import com.github.moaxcp.x11.protocol.xproto.SetupFailed;
 import com.github.moaxcp.x11.protocol.xproto.SetupRequest;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.NonNull;
-import org.newsclub.net.unix.AFUNIXSocket;
-import org.newsclub.net.unix.AFUNIXSocketAddress;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.net.*;
+import java.nio.channels.SocketChannel;
+import java.util.List;
+import java.util.Optional;
 
 public class X11Connection implements AutoCloseable {
   @Getter
@@ -24,6 +22,8 @@ public class X11Connection implements AutoCloseable {
   private final XAuthority xAuthority;
   @Getter
   private final Setup setup;
+
+  private final SocketChannel socketChannel;
 
   private final Socket socket;
   private final X11InputStream in;
@@ -38,9 +38,10 @@ public class X11Connection implements AutoCloseable {
    * @throws NullPointerException if any parameter is null
    * @throws UnsupportedOperationException if the connection code is authenticate or any other result
    */
-  X11Connection(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority, @NonNull Socket socket) throws IOException {
+  X11Connection(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority, @NonNull SocketChannel socketChannel, @NonNull Socket socket) throws IOException {
     this.displayName = displayName;
     this.xAuthority = xAuthority;
+    this.socketChannel = socketChannel;
     this.socket = socket;
     //using BufferedInputStream to support mark/reset
     in = new X11InputStream(new BufferedInputStream(socket.getInputStream(), 128));
@@ -108,16 +109,21 @@ public class X11Connection implements AutoCloseable {
    */
   public static X11Connection connect(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority) throws IOException {
     Socket socket;
+    SocketChannel socketChannel;
 
     if (displayName.isForUnixSocket()) {
-      AFUNIXSocketAddress address = new AFUNIXSocketAddress(new File(displayName.getSocketFileName()));
-      socket = AFUNIXSocket.connectTo(address);
+      var address = UnixDomainSocketAddress.of(displayName.getSocketFileName());
+      socketChannel = SocketChannel.open(StandardProtocolFamily.UNIX);
+      socketChannel.connect(address);
+      socket = socketChannel.socket();
     } else {
-      InetAddress address = InetAddress.getByName(displayName.getHostName());
-      socket = new Socket(address, displayName.getPort());
+      var address = InetSocketAddress.createUnresolved(displayName.getHostName(), displayName.getPort());
+      socketChannel = SocketChannel.open(StandardProtocolFamily.INET);
+      socketChannel.connect(address);
+      socket = socketChannel.socket();
     }
 
-    return new X11Connection(displayName, xAuthority, socket);
+    return new X11Connection(displayName, xAuthority, socketChannel, socket);
   }
 
   public static X11Connection connect() throws IOException {
@@ -148,6 +154,7 @@ public class X11Connection implements AutoCloseable {
         in.close();
       } finally {
         socket.close();
+        socketChannel.close();
       }
     }
   }

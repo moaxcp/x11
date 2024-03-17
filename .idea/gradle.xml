@@ -21,6 +21,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/examples" />
             <option value="$PROJECT_DIR$/x11-client" />
+            <option value="$PROJECT_DIR$/x11-keysym" />
             <option value="$PROJECT_DIR$/x11-protocol" />
             <option value="$PROJECT_DIR$/x11-protocol-gradle-plugin" />
             <option value="$PROJECT_DIR$/x11-protocol/x11-protocol-bigreq" />

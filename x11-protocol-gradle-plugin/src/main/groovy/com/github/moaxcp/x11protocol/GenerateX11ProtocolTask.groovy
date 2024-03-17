@@ -10,6 +10,7 @@ import org.gradle.api.tasks.*
 
 class GenerateX11ProtocolTask extends DefaultTask {
     @InputDirectory
+    @Optional
     final DirectoryProperty xcbXmls = project.objects.directoryProperty()
 
     @Input
@@ -28,7 +29,8 @@ class GenerateX11ProtocolTask extends DefaultTask {
     @TaskAction
     def writeSource() {
         Set<String> excludeNames = exclude.get()
-        xcbXmls.get().asFileTree
+        if (xcbXmls.isPresent()) {
+            xcbXmls.get().asFileTree
                 .findAll {
                     it.name.endsWith('xml') && !excludeNames.contains(Files.getNameWithoutExtension(it.toString()))
                 }
@@ -41,8 +43,9 @@ class GenerateX11ProtocolTask extends DefaultTask {
                         throw e
                     }
                 }
+        }
         if (keysymHeaders.isPresent()) {
-            new KeySymGenerator(headerSrc: keysymHeaders.get().asFile, outputSrc: outputSrc.get().asFile, basePackage: 'com.github.moaxcp.x11.protocol').generate()
+            new KeySymGenerator(headerSrc: keysymHeaders.get().asFile, outputSrc: outputSrc.get().asFile, corePackage: 'com.github.moaxcp.x11.protocol', keysymPackage: 'com.github.moaxcp.x11.keysym').generate()
         }
     }
 }
