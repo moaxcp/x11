@@ -1,0 +1,70 @@
+package com.github.moaxcp.x11.protocol.glx;
+
+import com.github.moaxcp.x11.protocol.TwoWayRequest;
+import com.github.moaxcp.x11.protocol.X11Input;
+import com.github.moaxcp.x11.protocol.X11Output;
+import com.github.moaxcp.x11.protocol.XReplyFunction;
+import java.io.IOException;
+import lombok.Builder;
+import lombok.Value;
+
+@Value
+@Builder
+public class GetCompressedTexImageARB implements TwoWayRequest<GetCompressedTexImageARBReply> {
+  public static final String PLUGIN_NAME = "glx";
+
+  public static final byte OPCODE = (byte) 160;
+
+  private int contextTag;
+
+  private int target;
+
+  private int level;
+
+  public XReplyFunction<GetCompressedTexImageARBReply> getReplyFunction() {
+    return (field, sequenceNumber, in) -> GetCompressedTexImageARBReply.readGetCompressedTexImageARBReply(field, sequenceNumber, in);
+  }
+
+  public byte getOpCode() {
+    return OPCODE;
+  }
+
+  public static GetCompressedTexImageARB readGetCompressedTexImageARB(X11Input in) throws
+      IOException {
+    GetCompressedTexImageARB.GetCompressedTexImageARBBuilder javaBuilder = GetCompressedTexImageARB.builder();
+    byte majorOpcode = in.readCard8();
+    short length = in.readCard16();
+    int contextTag = in.readCard32();
+    int target = in.readCard32();
+    int level = in.readInt32();
+    javaBuilder.contextTag(contextTag);
+    javaBuilder.target(target);
+    javaBuilder.level(level);
+    return javaBuilder.build();
+  }
+
+  @Override
+  public void write(byte majorOpcode, X11Output out) throws IOException {
+    out.writeCard8(majorOpcode);
+    out.writeCard8((byte)(Byte.toUnsignedInt(OPCODE)));
+    out.writeCard16((short) getLength());
+    out.writeCard32(contextTag);
+    out.writeCard32(target);
+    out.writeInt32(level);
+  }
+
+  @Override
+  public int getSize() {
+    return 16;
+  }
+
+  public String getPluginName() {
+    return PLUGIN_NAME;
+  }
+
+  public static class GetCompressedTexImageARBBuilder {
+    public int getSize() {
+      return 16;
+    }
+  }
+}

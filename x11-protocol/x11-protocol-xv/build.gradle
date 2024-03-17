@@ -34,8 +34,8 @@ jacocoTestReport {
 }
 
 x11Protocol {
-    outputSrc = file('build/generated/xproto/java/')
-    outputResources = file('build/generated/xproto/resources')
+    outputSrc = file('src/main/java')
+    outputResources = file('src/main/resources')
     xcbXmls = file('src/main/protocol')
     exclude = ['shm', 'xproto']
 }

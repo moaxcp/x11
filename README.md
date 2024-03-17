@@ -455,6 +455,10 @@ https://www.x.org/releases/X11R7.6/doc/libXtst/recordlib.html
 
 # versions
 
+## 0.17.0
+
+* Adding generated protocol sources to git
+
 ## 0.16.0
 
 * Renaming project to x11
