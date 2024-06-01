@@ -1,6 +1,9 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.github.moaxcp.x11protocol.xcbparser.JavaReply
+import com.github.moaxcp.x11protocol.xcbparser.JavaRequest
+import com.github.moaxcp.x11protocol.xcbparser.XTypeRequest
 
 class JavaReplySpec extends XmlSpec {
     def queryTree() {

@@ -1,6 +1,15 @@
 package com.github.moaxcp.x11protocol.xcbparser.expression
 
-import com.github.moaxcp.x11protocol.xcbparser.*
+
+import com.github.moaxcp.x11protocol.xcbparser.JavaClass
+import com.github.moaxcp.x11protocol.xcbparser.JavaPrimitiveProperty
+import com.github.moaxcp.x11protocol.xcbparser.XResult
+import com.github.moaxcp.x11protocol.xcbparser.XUnitField
+import com.github.moaxcp.x11protocol.xcbparser.expression.AddExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.MultiplyExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.SubtractExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.ValueExpression
 import spock.lang.Specification
 
 class AddExpressionSpec extends Specification {
@@ -34,13 +43,13 @@ class AddExpressionSpec extends Specification {
             new XUnitField(result: xResult, name: 'a', type: 'CARD8')
         )
         AddExpression expression = new AddExpression(expressions: [
-            new ValueExpression(value:7),
-            new MultiplyExpression(expressions:[
+                new ValueExpression(value:7),
+                new MultiplyExpression(expressions:[
                 new ValueExpression(value:8),
                 new FieldRefExpression(javaType: javaClass, fieldName:'a')]),
-            new SubtractExpression(expressions: [
-                new ValueExpression(value:5),
-                new ValueExpression(value:4)])])
+                new SubtractExpression(expressions: [
+                        new ValueExpression(value:5),
+                        new ValueExpression(value:4)])])
 
         when:
         String result = expression.expression.toString()

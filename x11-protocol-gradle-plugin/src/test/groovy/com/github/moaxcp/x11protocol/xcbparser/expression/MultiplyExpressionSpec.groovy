@@ -4,6 +4,11 @@ import com.github.moaxcp.x11protocol.xcbparser.JavaClass
 import com.github.moaxcp.x11protocol.xcbparser.JavaPrimitiveProperty
 import com.github.moaxcp.x11protocol.xcbparser.XResult
 import com.github.moaxcp.x11protocol.xcbparser.XUnitField
+import com.github.moaxcp.x11protocol.xcbparser.expression.AddExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.DivideExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.MultiplyExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.ValueExpression
 import spock.lang.Specification
 
 class MultiplyExpressionSpec extends Specification {

@@ -1,7 +1,7 @@
 plugins {
   id 'org.sonarqube' version '5.0.0.4638'
-  id 'io.freefair.lombok' version '8.6' apply false
   id 'org.unbroken-dome.test-sets' version '4.1.0' apply false
+  id 'io.freefair.lombok' version '8.6' apply false
 }
 
 allprojects {
@@ -13,6 +13,26 @@ allprojects {
   tasks.withType(Copy).all { duplicatesStrategy 'exclude' }
   tasks.withType(Jar).all {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+  }
+}
+
+subprojects {
+  apply plugin: 'java-library'
+  apply plugin: 'io.freefair.lombok'
+
+  java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    withSourcesJar()
+    withJavadocJar()
+  }
+
+  delombok {
+    modulePath = classpath
+  }
+
+  dependencies {
+
   }
 }
 

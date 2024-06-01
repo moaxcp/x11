@@ -1,6 +1,14 @@
 package com.github.moaxcp.x11protocol.xcbparser.expression
 
-import com.github.moaxcp.x11protocol.xcbparser.*
+
+import com.github.moaxcp.x11protocol.xcbparser.JavaClass
+import com.github.moaxcp.x11protocol.xcbparser.JavaPrimitiveProperty
+import com.github.moaxcp.x11protocol.xcbparser.XResult
+import com.github.moaxcp.x11protocol.xcbparser.XUnitField
+import com.github.moaxcp.x11protocol.xcbparser.expression.AddExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.DivideExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression
+import com.github.moaxcp.x11protocol.xcbparser.expression.ValueExpression
 import spock.lang.Specification
 
 class DivideExpressionSpec extends Specification {
@@ -26,11 +34,11 @@ class DivideExpressionSpec extends Specification {
             )
         }
         DivideExpression expression = new DivideExpression(expressions:[
-            new FieldRefExpression(javaType:javaClass, fieldName:'a'),
-            new AddExpression(expressions:[
+                new FieldRefExpression(javaType:javaClass, fieldName:'a'),
+                new AddExpression(expressions:[
                 new FieldRefExpression(javaType:javaClass, fieldName:'b'),
                 new FieldRefExpression(javaType:javaClass, fieldName:'c')]),
-            new FieldRefExpression(javaType:javaClass, fieldName:'d')])
+                new FieldRefExpression(javaType:javaClass, fieldName:'d')])
 
         when:
         String result = expression.expression.toString()

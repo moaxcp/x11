@@ -435,6 +435,10 @@ https://www.x.org/releases/X11R7.6/doc/libXtst/recordlib.html
 
 # versions
 
+## 0.18.1
+
+* fixing delombok task so javadoc works again and the project can be published to maven central
+
 ## 0.18.0
 
 * Switched to a multimodule project

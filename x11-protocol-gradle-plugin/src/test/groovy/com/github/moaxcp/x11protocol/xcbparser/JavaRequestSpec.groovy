@@ -1,6 +1,8 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.github.moaxcp.x11protocol.xcbparser.JavaRequest
+import com.github.moaxcp.x11protocol.xcbparser.XTypeRequest
 
 class JavaRequestSpec extends XmlSpec {
     def destroyWindow() {

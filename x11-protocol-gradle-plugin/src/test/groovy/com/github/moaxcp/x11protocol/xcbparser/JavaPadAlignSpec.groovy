@@ -1,6 +1,10 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.github.moaxcp.x11protocol.xcbparser.JavaClass
+import com.github.moaxcp.x11protocol.xcbparser.JavaPadAlign
+import com.github.moaxcp.x11protocol.xcbparser.JavaPrimativeListProperty
+import com.github.moaxcp.x11protocol.xcbparser.XUnitListField
 import com.squareup.javapoet.CodeBlock
 
 class JavaPadAlignSpec extends XmlSpec {

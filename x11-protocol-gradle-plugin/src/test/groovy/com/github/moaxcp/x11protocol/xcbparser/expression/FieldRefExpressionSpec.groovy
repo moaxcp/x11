@@ -5,6 +5,7 @@ import com.github.moaxcp.x11protocol.xcbparser.JavaPrimitiveProperty
 import com.github.moaxcp.x11protocol.xcbparser.JavaType
 import com.github.moaxcp.x11protocol.xcbparser.XResult
 import com.github.moaxcp.x11protocol.xcbparser.XUnitField
+import com.github.moaxcp.x11protocol.xcbparser.expression.FieldRefExpression
 import spock.lang.Specification
 
 class FieldRefExpressionSpec extends Specification {

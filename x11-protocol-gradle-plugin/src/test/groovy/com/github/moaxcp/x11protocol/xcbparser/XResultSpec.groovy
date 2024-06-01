@@ -1,5 +1,8 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
+import com.github.moaxcp.x11protocol.xcbparser.XResult
+import com.github.moaxcp.x11protocol.xcbparser.XType
+import com.github.moaxcp.x11protocol.xcbparser.XTypePrimative
 import groovy.util.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
 import spock.lang.Specification

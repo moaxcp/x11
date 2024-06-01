@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.github.moaxcp.x11protocol.xcbparser.XTypeEvent
 
 class XTypeEventSpec extends XmlSpec {
     def create() {
