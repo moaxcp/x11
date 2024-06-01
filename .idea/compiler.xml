@@ -10,6 +10,7 @@
         </processorPath>
         <module name="x11.xephyr-runner.main" />
         <module name="x11.x11-protocol.x11-protocol-xtest.main" />
+        <module name="x11.x11-protocol.main" />
         <module name="x11.x11-protocol.x11-protocol-record.main" />
         <module name="x11.x11-protocol.x11-protocol-xevie.main" />
         <module name="x11.x11-protocol.x11-protocol-xprint.test" />
@@ -60,6 +61,7 @@
         <module name="x11.x11-protocol.x11-protocol-record.test" />
         <module name="x11.x11-protocol.x11-protocol-shm.main" />
         <module name="x11.x11-client.test" />
+        <module name="x11.x11-protocol.test" />
         <module name="x11.x11-protocol.x11-protocol-dri2.test" />
         <module name="x11.x11-protocol.x11-protocol-xcmisc.main" />
         <module name="x11.x11-protocol.x11-protocol-xv.test" />

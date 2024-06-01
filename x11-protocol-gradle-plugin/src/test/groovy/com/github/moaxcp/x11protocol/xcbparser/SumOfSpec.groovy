@@ -1,6 +1,8 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.github.moaxcp.x11protocol.xcbparser.JavaReply
+import com.github.moaxcp.x11protocol.xcbparser.XTypeRequest
 
 class SumOfSpec extends XmlSpec {
     def listInputDevices() {

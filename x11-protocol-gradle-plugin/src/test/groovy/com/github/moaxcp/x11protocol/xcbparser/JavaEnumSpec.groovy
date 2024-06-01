@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
+import com.github.moaxcp.x11protocol.xcbparser.JavaEnum
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeSpec
 import spock.lang.Specification

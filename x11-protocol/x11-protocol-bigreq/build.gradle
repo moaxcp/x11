@@ -1,6 +1,4 @@
 plugins {
-    id 'java-library'
-    id 'io.freefair.lombok'
     id 'com.github.moaxcp.x11protocol'
     id 'maven-publish'
     id 'signing'
@@ -8,12 +6,6 @@ plugins {
 }
 
 description = 'An implementation of the x11 bigreq protocol in java'
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-    withSourcesJar()
-}
 
 dependencies {
     api project(':x11-protocol:x11-protocol-core')

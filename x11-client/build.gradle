@@ -1,19 +1,11 @@
 plugins {
-    id 'java-library'
     id 'org.unbroken-dome.test-sets'
-    id 'io.freefair.lombok'
     id 'maven-publish'
     id 'signing'
     id 'jacoco'
 }
 
 description = 'An x11 client implemented in java'
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-    withSourcesJar()
-}
 
 dependencies {
     api project(':x11-keysym')

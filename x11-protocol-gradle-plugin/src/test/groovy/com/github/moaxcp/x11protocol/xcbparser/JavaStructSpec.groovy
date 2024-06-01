@@ -1,6 +1,8 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.github.moaxcp.x11protocol.xcbparser.JavaStruct
+import com.github.moaxcp.x11protocol.xcbparser.XTypeStruct
 import com.squareup.javapoet.TypeSpec
 
 import static com.github.moaxcp.x11protocol.xcbparser.JavaStruct.javaStruct

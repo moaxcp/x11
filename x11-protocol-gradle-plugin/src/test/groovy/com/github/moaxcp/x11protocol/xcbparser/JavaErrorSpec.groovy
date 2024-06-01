@@ -1,6 +1,8 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.github.moaxcp.x11protocol.xcbparser.JavaError
+import com.github.moaxcp.x11protocol.xcbparser.XTypeError
 
 class JavaErrorSpec extends XmlSpec {
     def requestError() {

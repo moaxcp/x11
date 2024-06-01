@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol
 
+import com.github.moaxcp.x11protocol.GenerateX11ProtocolTask
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification

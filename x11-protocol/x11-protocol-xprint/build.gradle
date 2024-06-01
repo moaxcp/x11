@@ -1,6 +1,4 @@
 plugins {
-    id 'java-library'
-    id 'io.freefair.lombok'
     id 'com.github.moaxcp.x11protocol'
     id 'maven-publish'
     id 'signing'

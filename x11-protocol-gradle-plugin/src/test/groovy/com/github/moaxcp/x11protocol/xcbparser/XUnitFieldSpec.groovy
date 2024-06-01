@@ -1,6 +1,8 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
+import com.github.moaxcp.x11protocol.xcbparser.JavaClass
+import com.github.moaxcp.x11protocol.xcbparser.XUnitField
 import com.squareup.javapoet.TypeName
 
 import static com.github.moaxcp.x11protocol.xcbparser.XUnitField.xUnitField

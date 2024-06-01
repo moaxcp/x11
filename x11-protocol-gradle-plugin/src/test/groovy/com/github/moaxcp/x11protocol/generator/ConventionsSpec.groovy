@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11protocol.generator
 
+import com.github.moaxcp.x11protocol.generator.Conventions
 import com.squareup.javapoet.ClassName
 import spock.lang.Specification
 
