@@ -22,7 +22,7 @@ public class X11ConnectionTest {
   @Mock
   private Socket socket;
 
-  private XAuthority xAuthority = new XAuthority(Family.LOCAL, Utilities.toList("host".getBytes()), 0, Utilities.toList("MIT-MAGIC-COOKIE-1".getBytes()), Utilities.toList(new byte[] { 1, 2, 3 }));
+  private XAuthority xAuthority = new XAuthority(Family.LOCAL, Utilities.toList("host".getBytes()), "0", Utilities.toList("MIT-MAGIC-COOKIE-1".getBytes()), Utilities.toList(new byte[] { 1, 2, 3 }));
 
   @Test
   void constructor_fails_on_null_displayName() {

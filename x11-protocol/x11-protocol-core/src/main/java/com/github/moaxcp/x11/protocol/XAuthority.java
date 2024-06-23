@@ -1,5 +1,9 @@
 package com.github.moaxcp.x11.protocol;
 
+import lombok.NonNull;
+import lombok.ToString;
+import lombok.Value;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -7,9 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import lombok.NonNull;
-import lombok.ToString;
-import lombok.Value;
 
 import static com.github.moaxcp.x11.protocol.ParametersCheck.requireNonEmpty;
 import static com.github.moaxcp.x11.protocol.Utilities.toList;
@@ -22,7 +23,7 @@ import static com.github.moaxcp.x11.protocol.Utilities.toList;
 public class XAuthority {
   @NonNull Family family;
   @NonNull List<Byte> address;
-  int displayNumber;
+  @NonNull String displayNumber;
   @NonNull List<Byte> protocolName;
   @NonNull List<Byte> protocolData;
 
@@ -82,12 +83,9 @@ public class XAuthority {
    * @throws NullPointerException if any parameter is null.
    * @throws IllegalArgumentException if displayNumber is less than 0 or protocolName is empty.
    */
-  public XAuthority(@NonNull Family family, @NonNull List<Byte> address, int displayNumber, @NonNull List<Byte> protocolName, @NonNull List<Byte> protocolData) {
+  public XAuthority(@NonNull Family family, @NonNull List<Byte> address, @NonNull String displayNumber, @NonNull List<Byte> protocolName, @NonNull List<Byte> protocolData) {
     this.family = family;
     this.address = address;
-    if(displayNumber < 0) {
-      throw new IllegalArgumentException("displayNumber was \"" + displayNumber + "\" expected >= 0.");
-    }
     this.displayNumber = displayNumber;
     this.protocolName = requireNonEmpty("protocolName", protocolName);
     this.protocolData = requireNonEmpty("protocolData", protocolData);
@@ -98,7 +96,14 @@ public class XAuthority {
       Family family = Family.getByCode(in.readUnsignedShort());
       int dataLength = in.readUnsignedShort();
       List<Byte> address = readBytes(in, dataLength);
-      int number = Integer.parseInt(in.readUTF());
+      dataLength = in.readUnsignedShort();
+      List<Byte> numberBytes = readBytes(in, dataLength);
+      String number;
+      if(dataLength == 0){
+        number = "0";
+      } else {
+        number = Utilities.toString(numberBytes, StandardCharsets.UTF_8);
+      }
       dataLength = in.readUnsignedShort();
       List<Byte> name = readBytes(in, dataLength);
       dataLength = in.readUnsignedShort();
