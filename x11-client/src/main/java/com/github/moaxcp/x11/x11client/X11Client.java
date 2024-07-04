@@ -4,7 +4,6 @@ import com.github.moaxcp.x11.keysym.KeySym;
 import com.github.moaxcp.x11.protocol.*;
 import com.github.moaxcp.x11.protocol.xproto.*;
 import com.github.moaxcp.x11.x11client.api.record.RecordApi;
-import lombok.NonNull;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -50,7 +49,7 @@ public class X11Client implements AutoCloseable {
    * @return The connected client
    * @throws X11ClientException If connection to server could not be established
    */
-  public static X11Client connect(@NonNull DisplayName displayName, @NonNull XAuthority xAuthority) {
+  public static X11Client connect(DisplayName displayName, XAuthority xAuthority) {
     try {
       return new X11Client(X11Connection.connect(displayName, xAuthority));
     } catch (IOException e) {
@@ -78,7 +77,7 @@ public class X11Client implements AutoCloseable {
    * @return the connected client
    * @throws X11ClientException If connection to server could not be established
    */
-  public static X11Client connect(@NonNull DisplayName name) {
+  public static X11Client connect(DisplayName name) {
     try {
       return new X11Client(X11Connection.connect(name));
     } catch (IOException e) {

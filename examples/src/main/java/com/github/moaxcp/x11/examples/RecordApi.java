@@ -7,17 +7,19 @@ import com.github.moaxcp.x11.protocol.xproto.KeyPressEvent;
 import com.github.moaxcp.x11.x11client.X11Client;
 import com.github.moaxcp.x11.x11client.api.record.RecordData;
 import com.github.moaxcp.x11.x11client.api.record.RecordReply;
-import lombok.extern.java.Log;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.logging.Logger;
 
-@Log
 public class RecordApi {
+
+    private static final Logger log = Logger.getLogger(RecordApi.class.getName());
 
     /**
      * Tests all xproto events including generic events. Also tests errors.
+     *
      * @throws IOException
      */
     public static void main(String... args) throws IOException {
@@ -65,7 +67,7 @@ public class RecordApi {
                         .context(rc)
                         .build();
                 data.send(enableContext);
-                while(true) {
+                while (true) {
                     RecordReply recordReply = data.record().readNextRecord();
                     log.info(String.format("%s", recordReply));
                     Optional<KeySym> first = recordReply.getData().stream()

@@ -1,6 +1,5 @@
 package com.github.moaxcp.x11.protocol.xproto;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

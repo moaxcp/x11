@@ -4,3 +4,11 @@ allprojects {
         mavenCentral()
     }
 }
+
+subprojects {
+    apply plugin: 'io.freefair.lombok'
+
+    delombok {
+        modulePath = classpath
+    }
+}

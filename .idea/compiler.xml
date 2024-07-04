@@ -8,20 +8,16 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.30/f195ee86e6c896ea47a1d39defbe20eb59cd149d/lombok-1.18.30.jar" />
         </processorPath>
-        <module name="x11.xephyr-runner.main" />
         <module name="x11.x11-protocol.x11-protocol-xtest.main" />
-        <module name="x11.x11-protocol.main" />
         <module name="x11.x11-protocol.x11-protocol-record.main" />
         <module name="x11.x11-protocol.x11-protocol-xevie.main" />
         <module name="x11.x11-protocol.x11-protocol-xprint.test" />
         <module name="x11.x11-protocol.x11-protocol-composite.test" />
         <module name="x11.x11-protocol.x11-protocol-res.test" />
         <module name="x11.x11-protocol.x11-protocol-shm.test" />
-        <module name="x11.x11-toolkit.test" />
         <module name="x11.x11-protocol.x11-protocol-xkb.test" />
         <module name="x11.x11-protocol.x11-protocol-screensaver.test" />
         <module name="x11.x11-protocol.x11-protocol-shape.test" />
-        <module name="x11.x11-keysym.test" />
         <module name="x11.x11-protocol.x11-protocol-core.test" />
         <module name="x11.x11-protocol.x11-protocol-present.test" />
         <module name="x11.x11-protocol.x11-protocol-sync.main" />
@@ -33,7 +29,6 @@
         <module name="x11.x11-protocol.x11-protocol-xevie.test" />
         <module name="x11.x11-protocol.x11-protocol-xv.main" />
         <module name="x11.x11-protocol.x11-protocol-xprint.main" />
-        <module name="x11.xephyr-runner.test" />
         <module name="x11.x11-protocol.x11-protocol-xkb.main" />
         <module name="x11.x11-protocol.x11-protocol-xinerama.test" />
         <module name="x11.x11-protocol.x11-protocol-dpms.test" />
@@ -51,17 +46,13 @@
         <module name="x11.x11-protocol.x11-protocol-xselinux.main" />
         <module name="x11.x11-protocol.x11-protocol-randr.main" />
         <module name="x11.x11-protocol.x11-protocol-xf86dri.main" />
-        <module name="x11.examples.test" />
         <module name="x11.x11-protocol.x11-protocol-glx.main" />
-        <module name="x11.x11-toolkit.main" />
         <module name="x11.x11-protocol.x11-protocol-xvmc.test" />
         <module name="x11.x11-protocol.x11-protocol-dri3.test" />
         <module name="x11.x11-protocol.x11-protocol-xinerama.main" />
         <module name="x11.x11-protocol.x11-protocol-ge.main" />
         <module name="x11.x11-protocol.x11-protocol-record.test" />
         <module name="x11.x11-protocol.x11-protocol-shm.main" />
-        <module name="x11.x11-client.test" />
-        <module name="x11.x11-protocol.test" />
         <module name="x11.x11-protocol.x11-protocol-dri2.test" />
         <module name="x11.x11-protocol.x11-protocol-xcmisc.main" />
         <module name="x11.x11-protocol.x11-protocol-xv.test" />
@@ -69,12 +60,9 @@
         <module name="x11.x11-protocol.x11-protocol-dpms.main" />
         <module name="x11.x11-protocol.x11-protocol-xinput.test" />
         <module name="x11.x11-protocol.x11-protocol-xvmc.main" />
-        <module name="x11.x11-keysym.main" />
         <module name="x11.x11-protocol.x11-protocol-ge.test" />
         <module name="x11.x11-protocol.x11-protocol-screensaver.main" />
         <module name="x11.x11-protocol.x11-protocol-xselinux.test" />
-        <module name="x11.x11-client.integrationTest" />
-        <module name="x11.examples.main" />
         <module name="x11.x11-protocol.x11-protocol-core.main" />
         <module name="x11.x11-protocol.x11-protocol-damage.main" />
         <module name="x11.x11-protocol.x11-protocol-xtest.test" />
@@ -82,7 +70,6 @@
         <module name="x11.x11-protocol.x11-protocol-bigreq.test" />
         <module name="x11.x11-protocol.x11-protocol-xproto.test" />
         <module name="x11.x11-protocol.x11-protocol-shape.main" />
-        <module name="x11.x11-client.main" />
         <module name="x11.x11-protocol.x11-protocol-dri2.main" />
         <module name="x11.x11-protocol.x11-protocol-sync.test" />
       </profile>

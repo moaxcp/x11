@@ -2,7 +2,8 @@ package com.github.moaxcp.x11.x11client;
 
 import com.github.moaxcp.x11.protocol.xc_misc.GetXIDRange;
 import com.github.moaxcp.x11.protocol.xc_misc.GetXIDRangeReply;
-import lombok.NonNull;
+
+import static java.util.Objects.requireNonNull;
 
 public class ResourceIdService {
   private int nextResourceId;
@@ -15,8 +16,8 @@ public class ResourceIdService {
 
   private final XProtocolService protocolService;
 
-  public ResourceIdService(@NonNull XProtocolService protocolService, int resourceIdMask, int resourceIdBase) {
-    this.protocolService = protocolService;
+  public ResourceIdService(XProtocolService protocolService, int resourceIdMask, int resourceIdBase) {
+    this.protocolService = requireNonNull(protocolService, "protocolService");
     this.resourceIdMask = resourceIdMask;
     this.resourceIdBase = resourceIdBase;
     this.nextResourceId = 1;

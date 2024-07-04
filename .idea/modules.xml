@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/examples/x11.examples.main.iml" filepath="$PROJECT_DIR$/.idea/modules/examples/x11.examples.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.integrationTest.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.integrationTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.test.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-keysym/x11.x11-keysym.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-keysym/x11.x11-keysym.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-bigreq/x11.x11-protocol.x11-protocol-bigreq.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-bigreq/x11.x11-protocol.x11-protocol-bigreq.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-composite/x11.x11-protocol.x11-protocol-composite.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-composite/x11.x11-protocol.x11-protocol-composite.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-core/x11.x11-protocol.x11-protocol-core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-core/x11.x11-protocol.x11-protocol-core.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-core/x11.x11-protocol.x11-protocol-core.test.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-core/x11.x11-protocol.x11-protocol-core.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-damage/x11.x11-protocol.x11-protocol-damage.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-damage/x11.x11-protocol.x11-protocol-damage.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-dpms/x11.x11-protocol.x11-protocol-dpms.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-dpms/x11.x11-protocol.x11-protocol-dpms.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-dri2/x11.x11-protocol.x11-protocol-dri2.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-dri2/x11.x11-protocol.x11-protocol-dri2.main.iml" />
@@ -35,12 +32,11 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xkb/x11.x11-protocol.x11-protocol-xkb.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xkb/x11.x11-protocol.x11-protocol-xkb.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xprint/x11.x11-protocol.x11-protocol-xprint.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xprint/x11.x11-protocol.x11-protocol-xprint.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xproto/x11.x11-protocol.x11-protocol-xproto.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xproto/x11.x11-protocol.x11-protocol-xproto.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xproto/x11.x11-protocol.x11-protocol-xproto.test.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xproto/x11.x11-protocol.x11-protocol-xproto.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xselinux/x11.x11-protocol.x11-protocol-xselinux.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xselinux/x11.x11-protocol.x11-protocol-xselinux.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xtest/x11.x11-protocol.x11-protocol-xtest.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xtest/x11.x11-protocol.x11-protocol-xtest.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xv/x11.x11-protocol.x11-protocol-xv.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xv/x11.x11-protocol.x11-protocol-xv.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xvmc/x11.x11-protocol.x11-protocol-xvmc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-xvmc/x11.x11-protocol.x11-protocol-xvmc.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-toolkit/x11.x11-toolkit.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-toolkit/x11.x11-toolkit.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/xephyr-runner/x11.xephyr-runner.main.iml" filepath="$PROJECT_DIR$/.idea/modules/xephyr-runner/x11.xephyr-runner.main.iml" />
     </modules>
   </component>
 </project>

@@ -5,7 +5,7 @@ plugins {
 }
 
 allprojects {
-  version = '0.18.1'
+  version = '0.18.2'
   group = 'com.github.moaxcp.x11'
   repositories {
     mavenCentral()
@@ -18,17 +18,12 @@ allprojects {
 
 subprojects {
   apply plugin: 'java-library'
-  apply plugin: 'io.freefair.lombok'
 
   java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
     withSourcesJar()
     withJavadocJar()
-  }
-
-  delombok {
-    modulePath = classpath
   }
 
   dependencies {

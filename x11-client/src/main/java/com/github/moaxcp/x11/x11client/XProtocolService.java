@@ -4,7 +4,6 @@ import com.github.moaxcp.x11.protocol.*;
 import com.github.moaxcp.x11.protocol.bigreq.Enable;
 import com.github.moaxcp.x11.protocol.xproto.QueryExtension;
 import com.github.moaxcp.x11.protocol.xproto.Setup;
-import lombok.Getter;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -17,11 +16,8 @@ import static com.github.moaxcp.x11.protocol.Utilities.toX11Input;
 public class XProtocolService {
   private final X11Input in;
   private final X11Output out;
-  @Getter
   private final Setup setup;
-  @Getter
   private int nextSequenceNumber = 1;
-  @Getter
   private long maximumRequestLength;
   private final Queue<OneWayRequest> requests = new LinkedList<>();
   private final Queue<XEvent> events = new LinkedList<>();
@@ -33,25 +29,37 @@ public class XProtocolService {
     this.setup = setup;
     maximumRequestLength = setup.getMaximumRequestLength();
     pluginService = new ProtocolPluginService();
-    for(String name : pluginService.listLoadedPlugins()) {
+    for (String name : pluginService.listLoadedPlugins()) {
       activatePlugin(name);
     }
 
-    if(pluginService.activatedPlugin("BIG-REQUESTS")) {
+    if (pluginService.activatedPlugin("BIG-REQUESTS")) {
       maximumRequestLength = Integer.toUnsignedLong(send(Enable.builder().build())
-        .getMaximumRequestLength());
+              .getMaximumRequestLength());
     }
+  }
+
+  public Setup getSetup() {
+    return this.setup;
+  }
+
+  public int getNextSequenceNumber() {
+    return this.nextSequenceNumber;
+  }
+
+  public long getMaximumRequestLength() {
+    return this.maximumRequestLength;
   }
 
   public boolean activatePlugin(String name) {
     return pluginService.loadedPlugin(name)
-        .flatMap(XProtocolPlugin::getExtensionXName)
-        .map(xName -> QueryExtension.builder()
-            .name(Utilities.toByteList(xName))
-            .build())
-        .map(this::send)
-        .map(reply -> reply.isPresent() && pluginService.activatePlugin(name, reply.getMajorOpcode(), reply.getFirstEvent(), reply.getFirstError()))
-        .orElse(false);
+            .flatMap(XProtocolPlugin::getExtensionXName)
+            .map(xName -> QueryExtension.builder()
+                    .name(Utilities.toByteList(xName))
+                    .build())
+            .map(this::send)
+            .map(reply -> reply.isPresent() && pluginService.activatePlugin(name, reply.getMajorOpcode(), reply.getFirstEvent(), reply.getFirstError()))
+            .orElse(false);
   }
 
   public boolean loadedPlugin(String name) {
@@ -75,7 +83,7 @@ public class XProtocolService {
   private void actuallySend(XRequest request) {
     try {
       request.write(getMajorOpcode(request), out);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new X11ProtocolException("exception writing request \"" + request + "\"", e);
     }
     nextSequenceNumber++;
@@ -86,7 +94,7 @@ public class XProtocolService {
   }
 
   public <T extends XReply> T readReply(XReplyFunction<T> function) {
-    while(true) {
+    while (true) {
       try {
         byte responseCode = in.readByte();
         if (responseCode == 0) {
@@ -128,7 +136,7 @@ public class XProtocolService {
       byte code = in.readCard8();
       XProtocolPlugin plugin = pluginService.activePluginForError(code).orElseThrow(() -> new IllegalStateException(XProtocolPlugin.class.getSimpleName() + " not found for error code " + code));
       return plugin.readError(code, in);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new X11ProtocolException("could not read error", e);
     }
   }
@@ -140,10 +148,10 @@ public class XProtocolService {
   private <T extends XEvent> T readEvent(X11Input in, byte responseCode) throws IOException {
     boolean sentEvent = responseCode < 0;
     byte number = !sentEvent ? responseCode : (byte) (responseCode ^ (byte) 0b10000000);
-    if(pluginService.genericEventNumber(number)) {
+    if (pluginService.genericEventNumber(number)) {
       byte extension = in.readCard8();
       Optional<XProtocolPlugin> pluginExtension = pluginService.activePluginForMajorOpcode(extension);
-      if(!pluginExtension.isPresent()) {
+      if (!pluginExtension.isPresent()) {
         throw new IllegalStateException("Could not find plugin for generic event with major-opcode of " + extension);
       }
       XProtocolPlugin plugin = pluginExtension.get();
@@ -154,31 +162,31 @@ public class XProtocolService {
       return plugin.readGenericEvent(sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     XProtocolPlugin plugin = pluginService.activePluginForEvent(number)
-        .orElseThrow(() -> new IllegalStateException(XProtocolPlugin.class.getSimpleName() + " not found for number " + number));
+            .orElseThrow(() -> new IllegalStateException(XProtocolPlugin.class.getSimpleName() + " not found for number " + number));
     return plugin.readEvent(number, sentEvent, in);
   }
 
   public <T extends XEvent> T getNextEvent() {
-    if(!events.isEmpty()) {
+    if (!events.isEmpty()) {
       return (T) events.poll();
     }
     flush();
     try {
       byte responseCode = in.readByte();
-      if(responseCode == 0) {
+      if (responseCode == 0) {
         throw new X11ErrorException(readError());
       }
-      if(responseCode == 1) {
+      if (responseCode == 1) {
         throw new X11ProtocolException("reply not expected when reading events");
       }
       return readEvent(responseCode);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new X11ProtocolException("exception when reading event", e);
     }
   }
 
   public void flush() {
-    while(!requests.isEmpty()) {
+    while (!requests.isEmpty()) {
       XRequest request = requests.poll();
       actuallySend(request);
     }

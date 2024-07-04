@@ -6,17 +6,19 @@ import com.github.moaxcp.x11.protocol.record.*;
 import com.github.moaxcp.x11.protocol.xproto.KeyPressEvent;
 import com.github.moaxcp.x11.protocol.xproto.MotionNotifyEvent;
 import com.github.moaxcp.x11.x11client.X11Client;
-import lombok.extern.java.Log;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.logging.Logger;
 
 import static com.github.moaxcp.x11.protocol.Utilities.toX11Input;
 
-@Log
 public class Record {
+    private static final Logger log = Logger.getLogger(Record.class.getName());
+
     /**
      * Tests with only standard device events and directly parses the data
+     *
      * @throws IOException
      */
     public static void main(String... args) throws IOException {
@@ -60,7 +62,7 @@ public class Record {
 
                 log.info(String.format("enableContextReply: %s", enableContextReply));
 
-                while(true) {
+                while (true) {
                     EnableContextReply reply = data.getNextReply(enableContext.getReplyFunction());
                     log.info(String.format("Next reply: %s", reply));
                     XEvent replyData = data.readEvent(toX11Input(reply.getData()));
@@ -69,7 +71,7 @@ public class Record {
                     if (replyData instanceof KeyPressEvent) {
                         KeyPressEvent e = (KeyPressEvent) replyData;
                         KeySym keysym = data.keyCodeToKeySym(e);
-                        if(keysym == KeySym.XK_Escape) {
+                        if (keysym == KeySym.XK_Escape) {
                             break;
                         }
                     }

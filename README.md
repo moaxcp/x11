@@ -23,7 +23,7 @@ The x11-client library can be added to your project using maven or gradle.
 <dependency>
  <groupId>com.github.moaxcp.x11</groupId>
  <artifactId>x11-client</artifactId>
- <version>0.18.1</version>
+ <version>0.18.2</version>
  <type>module</type>
 </dependency>
 ```
@@ -31,7 +31,7 @@ The x11-client library can be added to your project using maven or gradle.
 ## Gradle
 
 ```
-implementation 'com.github.moaxcp.x11:x11-client:0.18.1'
+implementation 'com.github.moaxcp.x11:x11-client:0.18.2'
 ```
 
 # Usage
@@ -434,6 +434,14 @@ https://www.x.org/releases/X11R7.6/doc/libXtst/recordlib.html
 
 
 # versions
+
+## 0.18.2
+
+* Fixing XAuthority when parsing number
+* switched back to junixsocket as jdk does not support sockets only SocketChannel
+* Fixing usage of io.freefair.lombok in protocol projects. The module-path was not being set on the delombok task
+* fixing delombok by removing lombok from projects using junixsocket. Delombok does not support mutli-release jar files.
+* Switched back to junixsocket
 
 ## 0.18.1
 

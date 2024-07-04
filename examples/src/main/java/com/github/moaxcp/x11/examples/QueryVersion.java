@@ -2,12 +2,13 @@ package com.github.moaxcp.x11.examples;
 
 import com.github.moaxcp.x11.protocol.record.QueryVersionReply;
 import com.github.moaxcp.x11.x11client.X11Client;
-import lombok.extern.java.Log;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
-@Log
 public class QueryVersion {
+
+  private static final Logger log = Logger.getLogger(QueryVersion.class.getName());
 
   public static void main(String... args) throws IOException {
     try (X11Client client = X11Client.connect()) {

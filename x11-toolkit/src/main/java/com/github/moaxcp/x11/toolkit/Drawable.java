@@ -1,8 +1,5 @@
 package com.github.moaxcp.x11.toolkit;
 
-import lombok.Getter;
-
-@Getter
 public abstract class Drawable extends Resource {
   private int screen;
   private short x;
@@ -21,7 +18,7 @@ public abstract class Drawable extends Resource {
   }
 
   public GraphicsContext getGc() {
-    if(gc == null) {
+    if (gc == null) {
       gc = new GraphicsContext(display, this);
     }
     return gc;
@@ -29,8 +26,28 @@ public abstract class Drawable extends Resource {
 
   @Override
   public void close() {
-    if(gc != null) {
+    if (gc != null) {
       gc.close();
     }
+  }
+
+  public int getScreen() {
+    return this.screen;
+  }
+
+  public short getX() {
+    return this.x;
+  }
+
+  public short getY() {
+    return this.y;
+  }
+
+  public short getWidth() {
+    return this.width;
+  }
+
+  public short getHeight() {
+    return this.height;
   }
 }
