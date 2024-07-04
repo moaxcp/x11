@@ -1,7 +1,6 @@
 package com.github.moaxcp.x11.protocol;
 
 import com.github.moaxcp.x11.protocol.XAuthority.Family;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,23 +9,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class XAuthorityFamilyTest {
   @Test
   void internetCode() {
-    AssertionsForClassTypes.assertThat(Family.INTERNET.getCode()).isEqualTo(0);
+    assertThat(Family.INTERNET.getCode()).isEqualTo(0);
   }
   @Test
   void localCode() {
-    AssertionsForClassTypes.assertThat(Family.LOCAL.getCode()).isEqualTo(256);
+    assertThat(Family.LOCAL.getCode()).isEqualTo(256);
   }
   @Test
   void wildCode() {
-    AssertionsForClassTypes.assertThat(Family.WILD.getCode()).isEqualTo(65535);
+    assertThat(Family.WILD.getCode()).isEqualTo(65535);
   }
   @Test
   void krb5principalCode() {
-    AssertionsForClassTypes.assertThat(Family.KRB5PRINCIPAL.getCode()).isEqualTo(253);
+    assertThat(Family.KRB5PRINCIPAL.getCode()).isEqualTo(253);
   }
   @Test
   void localhostCode() {
-    AssertionsForClassTypes.assertThat(Family.LOCALHOST.getCode()).isEqualTo(252);
+    assertThat(Family.LOCALHOST.getCode()).isEqualTo(252);
   }
 
   @Test
@@ -57,6 +56,6 @@ public class XAuthorityFamilyTest {
   @Test
   void fail_getByCode() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> Family.getByCode(-1234));
-    AssertionsForClassTypes.assertThat(exception).hasMessage("Unsupported code \"-1234\"");
+    assertThat(exception).hasMessage("Unsupported code \"-1234\"");
   }
 }

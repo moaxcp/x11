@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class UtilitesTest {
   @Test
   void toList_byte_fails_on_null() {
-    assertThatThrownBy(() -> Utilities.toList(null))
+    Assertions.assertThatThrownBy(() -> Utilities.toList(null))
         .isInstanceOf(NullPointerException.class)
         .hasMessage("bytes is marked non-null but is null");
   }
@@ -25,14 +25,14 @@ public class UtilitesTest {
 
   @Test
   void toString_fails_on_null_byteList() {
-    assertThatThrownBy(() -> Utilities.toString(null, Charset.defaultCharset()))
+    Assertions.assertThatThrownBy(() -> Utilities.toString(null, Charset.defaultCharset()))
     .isInstanceOf(NullPointerException.class)
     .hasMessage("byteList is marked non-null but is null");
   }
 
   @Test
   void toString_fails_on_null_charSet() {
-    assertThatThrownBy(() -> Utilities.toString(new ArrayList<>(), null))
+    Assertions.assertThatThrownBy(() -> Utilities.toString(new ArrayList<>(), null))
         .isInstanceOf(NullPointerException.class)
         .hasMessage("charset is marked non-null but is null");
   }
@@ -46,12 +46,12 @@ public class UtilitesTest {
     bytes.add((byte) 'l');
     bytes.add((byte) 'o');
     String result = Utilities.toString(bytes, Charset.defaultCharset());
-    assertThat(result).isEqualTo("hello");
+    Assertions.assertThat(result).isEqualTo("hello");
   }
 
   @Test
   void toInteger_fails_on_null() {
-    assertThatThrownBy(() -> Utilities.toIntegers(null))
+    Assertions.assertThatThrownBy(() -> Utilities.toIntegers(null))
       .isInstanceOf(NullPointerException.class)
       .hasMessage("bytes is marked non-null but is null");
   }
@@ -60,7 +60,7 @@ public class UtilitesTest {
   void toInteger_fails_on_size() {
     List<Byte> input = new ArrayList<>();
     input.add((byte) 1);
-    assertThatThrownBy(() -> Utilities.toIntegers(input))
+    Assertions.assertThatThrownBy(() -> Utilities.toIntegers(input))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("bytes must have size divisible by 4 to be converted to integers got: 1");
   }

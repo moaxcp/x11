@@ -10,7 +10,7 @@ public class ResourceIdServiceConstructor {
   @Test
   void constructor_nullService() {
     NullPointerException exception = assertThrows(NullPointerException.class, () -> new ResourceIdService(null, 0b011, 0b100));
-    assertThat(exception).hasMessage("protocolService is marked non-null but is null");
+    assertThat(exception).hasMessage("protocolService");
   }
 
   @Test

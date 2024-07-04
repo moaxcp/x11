@@ -8,6 +8,7 @@ plugins {
 description = 'An x11 client implemented in java'
 
 dependencies {
+    api 'com.kohlschutter.junixsocket:junixsocket-core:2.10.0'
     api project(':x11-keysym')
     api project(':x11-protocol:x11-protocol-core')
     api project(':x11-protocol:x11-protocol-bigreq')

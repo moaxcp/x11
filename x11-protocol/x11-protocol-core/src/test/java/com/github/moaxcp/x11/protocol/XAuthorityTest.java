@@ -1,16 +1,16 @@
 package com.github.moaxcp.x11.protocol;
 
 import com.github.moaxcp.x11.protocol.XAuthority.Family;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import java.io.DataInput;
 import java.io.IOException;
 import java.util.Optional;
-import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.protocol.Utilities.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class XAuthorityTest {
 
@@ -74,9 +74,9 @@ public class XAuthorityTest {
 
   @Test
   void read_IOException() throws IOException {
-    DataInput in = mock(DataInput.class);
+    DataInput in = Mockito.mock(DataInput.class);
     IOException cause = new IOException("expected cause");
-    when(in.readUnsignedShort()).thenThrow(cause);
+    Mockito.when(in.readUnsignedShort()).thenThrow(cause);
     Optional<XAuthority> read = XAuthority.read(in);
     assertThat(read).isEmpty();
   }

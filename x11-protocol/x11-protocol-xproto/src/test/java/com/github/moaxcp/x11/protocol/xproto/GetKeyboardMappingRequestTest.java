@@ -2,11 +2,11 @@ package com.github.moaxcp.x11.protocol.xproto;
 
 import com.github.moaxcp.x11.protocol.X11Output;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
 public class GetKeyboardMappingRequestTest {
@@ -34,11 +34,11 @@ public class GetKeyboardMappingRequestTest {
       .build();
     request.write((byte) 0, out);
 
-    then(out).should().writeCard8(GetKeyboardMapping.OPCODE);
-    then(out).should().writePad(1);
-    then(out).should().writeCard16((short) 2);
-    then(out).should().writeCard8((byte) 22);
-    then(out).should().writeCard8((byte) 44);
-    then(out).should().writePadAlign(6);
+    BDDMockito.then(out).should().writeCard8(GetKeyboardMapping.OPCODE);
+    BDDMockito.then(out).should().writePad(1);
+    BDDMockito.then(out).should().writeCard16((short) 2);
+    BDDMockito.then(out).should().writeCard8((byte) 22);
+    BDDMockito.then(out).should().writeCard8((byte) 44);
+    BDDMockito.then(out).should().writePadAlign(6);
   }
 }

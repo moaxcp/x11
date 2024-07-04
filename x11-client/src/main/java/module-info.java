@@ -9,5 +9,6 @@ module com.github.moaxcp.x11.client {
     requires transitive com.github.moaxcp.x11.protocol.record;
     requires transitive com.github.moaxcp.x11.protocol.xproto;
     requires transitive com.github.moaxcp.x11.protocol.xcmisc;
-    requires static lombok;
+    requires transitive org.newsclub.net.unix;
+    requires transitive com.kohlschutter.junixsocket.nativecommon;
 }

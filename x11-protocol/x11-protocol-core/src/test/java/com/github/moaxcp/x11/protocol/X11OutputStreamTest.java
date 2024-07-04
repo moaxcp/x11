@@ -1,13 +1,14 @@
 package com.github.moaxcp.x11.protocol;
 
+import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
+import org.mockito.Mockito;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
 
 public class X11OutputStreamTest {
   private ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -94,17 +95,17 @@ public class X11OutputStreamTest {
 
   @Test
   void flush() throws IOException {
-    OutputStream origin = mock(OutputStream.class);
+    OutputStream origin = Mockito.mock(OutputStream.class);
     X11OutputStream out = new X11OutputStream(origin);
     out.flush();
-    then(origin).should().flush();
+    BDDMockito.then(origin).should().flush();
   }
 
   @Test
   void close() throws IOException {
-    OutputStream origin = mock(OutputStream.class);
+    OutputStream origin = Mockito.mock(OutputStream.class);
     X11OutputStream out = new X11OutputStream(origin);
     out.close();
-    then(origin).should().close();
+    BDDMockito.then(origin).should().close();
   }
 }

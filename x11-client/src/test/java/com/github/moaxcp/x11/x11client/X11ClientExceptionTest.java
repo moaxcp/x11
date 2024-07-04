@@ -1,7 +1,8 @@
 package com.github.moaxcp.x11.x11client;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -10,7 +11,7 @@ public class X11ClientExceptionTest {
   @Test
   void constructor_nullMessage() {
     NullPointerException exception = assertThrows(NullPointerException.class, () -> new X11ClientException(null));
-    assertThat(exception).hasMessage("message is marked non-null but is null");
+    assertThat(exception).hasMessage("message");
   }
 
   @Test
@@ -22,13 +23,13 @@ public class X11ClientExceptionTest {
   @Test
   void constructor2_nullMessage() {
     NullPointerException exception = assertThrows(NullPointerException.class, () -> new X11ClientException(null, null));
-    assertThat(exception).hasMessage("message is marked non-null but is null");
+    assertThat(exception).hasMessage("message");
   }
 
   @Test
   void constructor2_nullCause() {
     NullPointerException exception = assertThrows(NullPointerException.class, () -> new X11ClientException("message", null));
-    assertThat(exception).hasMessage("cause is marked non-null but is null");
+    assertThat(exception).hasMessage("cause");
   }
 
   @Test

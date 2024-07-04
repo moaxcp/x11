@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.Utilities;
 import com.github.moaxcp.x11.protocol.X11InputStream;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.X11OutputStream;
+import org.junit.jupiter.api.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

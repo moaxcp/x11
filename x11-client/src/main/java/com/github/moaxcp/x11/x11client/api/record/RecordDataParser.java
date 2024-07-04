@@ -7,7 +7,6 @@ import com.github.moaxcp.x11.protocol.record.HType;
 import com.github.moaxcp.x11.x11client.X11Client;
 import com.github.moaxcp.x11.x11client.api.record.RecordData.RecordDataBuilder;
 import com.github.moaxcp.x11.x11client.api.record.RecordReply.RecordReplyBuilder;
-import lombok.Data;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -106,15 +105,59 @@ class RecordDataParser {
           data.readByte();
           builder.xObject(client.readError(data));
         } else if (responseCode == 1) {
-          @Data
           class ReplyHeader implements X11InputConsumer {
             byte data;
             short sequence;
+
+            public ReplyHeader() {
+            }
 
             @Override
             public void accept(X11Input in) throws IOException {
               data = in.readByte();
               sequence = in.readCard16();
+            }
+
+            public byte getData() {
+              return this.data;
+            }
+
+            public short getSequence() {
+              return this.sequence;
+            }
+
+            public void setData(byte data) {
+              this.data = data;
+            }
+
+            public void setSequence(short sequence) {
+              this.sequence = sequence;
+            }
+
+            public boolean equals(final Object o) {
+              if (o == this) return true;
+              if (!(o instanceof ReplyHeader)) return false;
+              final ReplyHeader other = (ReplyHeader) o;
+              if (!other.canEqual((Object) this)) return false;
+              if (this.getData() != other.getData()) return false;
+              if (this.getSequence() != other.getSequence()) return false;
+              return true;
+            }
+
+            protected boolean canEqual(final Object other) {
+              return other instanceof ReplyHeader;
+            }
+
+            public int hashCode() {
+              final int PRIME = 59;
+              int result = 1;
+              result = result * PRIME + this.getData();
+              result = result * PRIME + this.getSequence();
+              return result;
+            }
+
+            public String toString() {
+              return "ReplyHeader(data=" + this.getData() + ", sequence=" + this.getSequence() + ")";
             }
           }
           ReplyHeader replyHeader = new ReplyHeader();

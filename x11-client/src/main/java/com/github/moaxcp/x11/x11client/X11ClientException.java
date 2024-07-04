@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11.x11client;
 
-import lombok.NonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Thrown when there is a client exception. This could mean an IOException or unexpected results from the server. It is
@@ -11,8 +11,8 @@ public class X11ClientException extends RuntimeException {
    * Creates an exception.
    * @param message of exception. non-null
    */
-  X11ClientException(@NonNull String message) {
-    super(message);
+  X11ClientException(String message) {
+    super(requireNonNull(message, "message"));
   }
 
   /**
@@ -20,7 +20,7 @@ public class X11ClientException extends RuntimeException {
    * @param message of exception. non-null
    * @param cause of exception. non-null
    */
-  X11ClientException(@NonNull String message, @NonNull Throwable cause) {
-    super(message, cause);
+  X11ClientException(String message, Throwable cause) {
+    super(requireNonNull(message, "message"), requireNonNull(cause, "cause"));
   }
 }

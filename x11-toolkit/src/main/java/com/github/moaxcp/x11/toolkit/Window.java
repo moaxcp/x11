@@ -1,13 +1,11 @@
 package com.github.moaxcp.x11.toolkit;
 
 import com.github.moaxcp.x11.protocol.xproto.*;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-@Getter
 public class Window extends Drawable {
   private byte depth;
   private int parent;
@@ -29,47 +27,47 @@ public class Window extends Drawable {
     backgroundPixel = display.getWhitePixel(screen);
     borderPixel = display.getBlackPixel(screen);
     display.send(CreateWindow.builder()
-        .depth(depth)
-        .wid(getId())
-        .parent(parent)
-        .x(x)
-        .y(y)
-        .width(width)
-        .height(height)
-        .borderWidth(borderWidth)
-        .clazz(clazz)
-        .visual(visual)
-        .backgroundPixel(backgroundPixel)
-        .borderPixel(borderPixel)
-        .eventMaskEnable(EventMask.EXPOSURE)
-        .eventMaskEnable(EventMask.KEY_PRESS)
-        .build());
+            .depth(depth)
+            .wid(getId())
+            .parent(parent)
+            .x(x)
+            .y(y)
+            .width(width)
+            .height(height)
+            .borderWidth(borderWidth)
+            .clazz(clazz)
+            .visual(visual)
+            .backgroundPixel(backgroundPixel)
+            .borderPixel(borderPixel)
+            .eventMaskEnable(EventMask.EXPOSURE)
+            .eventMaskEnable(EventMask.KEY_PRESS)
+            .build());
   }
 
   public void map() {
     display.send(MapWindow.builder()
-      .window(getId())
-      .build());
+            .window(getId())
+            .build());
   }
 
   @Override
   public void close() {
     super.close();
     display.send(DestroyWindow.builder()
-      .window(getId())
-      .build());
+            .window(getId())
+            .build());
     keyPressEventConsumers.clear();
     exposeEventConsumers.clear();
   }
 
   void exposeEvent(ExposeEvent event) {
-    for(BiConsumer<Window, ExposeEvent> consumer : exposeEventConsumers) {
+    for (BiConsumer<Window, ExposeEvent> consumer : exposeEventConsumers) {
       consumer.accept(this, event);
     }
   }
 
   void keyPressEvent(KeyPressEvent event) {
-    for(BiConsumer<Window, KeyPressEvent> consumer : keyPressEventConsumers) {
+    for (BiConsumer<Window, KeyPressEvent> consumer : keyPressEventConsumers) {
       consumer.accept(this, event);
     }
   }
@@ -80,5 +78,41 @@ public class Window extends Drawable {
 
   public void keyPressEvent(BiConsumer<Window, KeyPressEvent> consumer) {
     keyPressEventConsumers.add(consumer);
+  }
+
+  public byte getDepth() {
+    return this.depth;
+  }
+
+  public int getParent() {
+    return this.parent;
+  }
+
+  public short getBorderWidth() {
+    return this.borderWidth;
+  }
+
+  public WindowClass getClazz() {
+    return this.clazz;
+  }
+
+  public int getVisual() {
+    return this.visual;
+  }
+
+  public int getBackgroundPixel() {
+    return this.backgroundPixel;
+  }
+
+  public int getBorderPixel() {
+    return this.borderPixel;
+  }
+
+  public List<BiConsumer<Window, ExposeEvent>> getExposeEventConsumers() {
+    return this.exposeEventConsumers;
+  }
+
+  public List<BiConsumer<Window, KeyPressEvent>> getKeyPressEventConsumers() {
+    return this.keyPressEventConsumers;
   }
 }
