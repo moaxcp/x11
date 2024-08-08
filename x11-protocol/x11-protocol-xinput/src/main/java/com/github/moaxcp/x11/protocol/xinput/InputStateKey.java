@@ -3,10 +3,10 @@ package com.github.moaxcp.x11.protocol.xinput;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -20,18 +20,18 @@ public class InputStateKey implements InputState {
   private byte numKeys;
 
   @NonNull
-  private List<Byte> keys;
+  private ByteList keys;
 
   public static InputStateKey readInputStateKey(byte classId, byte len, X11Input in) throws
       IOException {
     InputStateKey.InputStateKeyBuilder javaBuilder = InputStateKey.builder();
     byte numKeys = in.readCard8();
     byte[] pad3 = in.readPad(1);
-    List<Byte> keys = in.readCard8(32);
+    ByteList keys = in.readCard8(32);
     javaBuilder.classId(classId);
     javaBuilder.len(len);
     javaBuilder.numKeys(numKeys);
-    javaBuilder.keys(keys);
+    javaBuilder.keys(keys.toImmutable());
     return javaBuilder.build();
   }
 

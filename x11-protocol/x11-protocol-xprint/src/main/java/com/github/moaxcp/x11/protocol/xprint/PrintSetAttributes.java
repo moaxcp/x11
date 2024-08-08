@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -25,7 +25,7 @@ public class PrintSetAttributes implements OneWayRequest {
   private byte rule;
 
   @NonNull
-  private List<Byte> attributes;
+  private ByteList attributes;
 
   public byte getOpCode() {
     return OPCODE;
@@ -48,12 +48,12 @@ public class PrintSetAttributes implements OneWayRequest {
     javaStart += 1;
     byte[] pad7 = in.readPad(2);
     javaStart += 2;
-    List<Byte> attributes = in.readChar(Short.toUnsignedInt(length) - javaStart);
+    ByteList attributes = in.readChar(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.context(context);
     javaBuilder.stringLen(stringLen);
     javaBuilder.pool(pool);
     javaBuilder.rule(rule);
-    javaBuilder.attributes(attributes);
+    javaBuilder.attributes(attributes.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

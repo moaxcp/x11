@@ -1,8 +1,6 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.github.moaxcp.x11protocol.xcbparser.JavaStruct
-import com.github.moaxcp.x11protocol.xcbparser.XTypeStruct
 import com.squareup.javapoet.TypeSpec
 
 import static com.github.moaxcp.x11protocol.xcbparser.JavaStruct.javaStruct
@@ -231,13 +229,13 @@ class JavaStructSpec extends XmlSpec {
               private int time;
             
               @lombok.NonNull
-              private java.util.List<java.lang.Integer> axisvalues;
+              private org.eclipse.collections.api.list.primitive.ImmutableIntList axisvalues;
             
               public static com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord readDeviceTimeCoord(
                   byte numAxes, com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord.DeviceTimeCoordBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.DeviceTimeCoord.builder();
                 int time = in.readCard32();
-                java.util.List<java.lang.Integer> axisvalues = in.readInt32(numAxes);
+                org.eclipse.collections.api.list.primitive.ImmutableIntList axisvalues = in.readInt32(numAxes);
                 javaBuilder.time(time);
                 javaBuilder.axisvalues(axisvalues);
                 return javaBuilder.build();
@@ -299,14 +297,14 @@ class JavaStructSpec extends XmlSpec {
               private byte nMapEntries;
             
               @lombok.NonNull
-              private java.util.List<java.lang.Integer> preserveEntries;
+              private org.eclipse.collections.api.list.primitive.ImmutableIntList preserveEntries;
             
               public static com.github.moaxcp.x11client.protocol.xproto.SetKeyType readSetKeyType(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 com.github.moaxcp.x11client.protocol.xproto.SetKeyType.SetKeyTypeBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.SetKeyType.builder();
                 boolean preserve = in.readBool();
                 byte nMapEntries = in.readCard8();
-                java.util.List<java.lang.Integer> preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
+                org.eclipse.collections.api.list.primitive.ImmutableIntList preserveEntries = in.readInt32((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
                 javaBuilder.preserve(preserve);
                 javaBuilder.nMapEntries(nMapEntries);
                 javaBuilder.preserveEntries(preserveEntries);
@@ -379,10 +377,10 @@ class JavaStructSpec extends XmlSpec {
               private short protocolMinorVersion;
             
               @lombok.NonNull
-              private java.util.List<java.lang.Byte> authorizationProtocolName;
+              private org.eclipse.collections.api.list.primitive.ImmutableByteList authorizationProtocolName;
             
               @lombok.NonNull
-              private java.util.List<java.lang.Byte> authorizationProtocolData;
+              private org.eclipse.collections.api.list.primitive.ImmutableByteList authorizationProtocolData;
             
               public static com.github.moaxcp.x11client.protocol.xproto.SetupRequest readSetupRequest(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
@@ -394,9 +392,9 @@ class JavaStructSpec extends XmlSpec {
                 short authorizationProtocolNameLen = in.readCard16();
                 short authorizationProtocolDataLen = in.readCard16();
                 byte[] pad6 = in.readPad(2);
-                java.util.List<java.lang.Byte> authorizationProtocolName = in.readChar(Short.toUnsignedInt(authorizationProtocolNameLen));
+                org.eclipse.collections.api.list.primitive.ImmutableByteList authorizationProtocolName = in.readChar(Short.toUnsignedInt(authorizationProtocolNameLen));
                 in.readPadAlign(Short.toUnsignedInt(authorizationProtocolNameLen));
-                java.util.List<java.lang.Byte> authorizationProtocolData = in.readChar(Short.toUnsignedInt(authorizationProtocolDataLen));
+                org.eclipse.collections.api.list.primitive.ImmutableByteList authorizationProtocolData = in.readChar(Short.toUnsignedInt(authorizationProtocolDataLen));
                 in.readPadAlign(Short.toUnsignedInt(authorizationProtocolDataLen));
                 javaBuilder.byteOrder(byteOrder);
                 javaBuilder.protocolMajorVersion(protocolMajorVersion);

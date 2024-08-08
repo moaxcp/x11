@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class FreeGlyphs implements OneWayRequest {
   private int glyphset;
 
   @NonNull
-  private List<Integer> glyphs;
+  private IntList glyphs;
 
   public byte getOpCode() {
     return OPCODE;
@@ -34,9 +34,9 @@ public class FreeGlyphs implements OneWayRequest {
     javaStart += 2;
     int glyphset = in.readCard32();
     javaStart += 4;
-    List<Integer> glyphs = in.readCard32(Short.toUnsignedInt(length) - javaStart);
+    IntList glyphs = in.readCard32(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.glyphset(glyphset);
-    javaBuilder.glyphs(glyphs);
+    javaBuilder.glyphs(glyphs.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

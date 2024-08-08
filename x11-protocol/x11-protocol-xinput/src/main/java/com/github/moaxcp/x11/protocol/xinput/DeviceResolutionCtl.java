@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class DeviceResolutionCtl implements XStruct {
   private byte firstValuator;
 
   @NonNull
-  private List<Integer> resolutionValues;
+  private IntList resolutionValues;
 
   public static DeviceResolutionCtl readDeviceResolutionCtl(X11Input in) throws IOException {
     DeviceResolutionCtl.DeviceResolutionCtlBuilder javaBuilder = DeviceResolutionCtl.builder();
@@ -30,11 +30,11 @@ public class DeviceResolutionCtl implements XStruct {
     byte firstValuator = in.readCard8();
     byte numValuators = in.readCard8();
     byte[] pad4 = in.readPad(2);
-    List<Integer> resolutionValues = in.readCard32(Byte.toUnsignedInt(numValuators));
+    IntList resolutionValues = in.readCard32(Byte.toUnsignedInt(numValuators));
     javaBuilder.controlId(controlId);
     javaBuilder.len(len);
     javaBuilder.firstValuator(firstValuator);
-    javaBuilder.resolutionValues(resolutionValues);
+    javaBuilder.resolutionValues(resolutionValues.toImmutable());
     return javaBuilder.build();
   }
 

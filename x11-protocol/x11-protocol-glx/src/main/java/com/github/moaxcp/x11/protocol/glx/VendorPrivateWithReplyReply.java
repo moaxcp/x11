@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -19,22 +19,22 @@ public class VendorPrivateWithReplyReply implements XReply {
   private int retval;
 
   @NonNull
-  private List<Byte> data1;
+  private ByteList data1;
 
   @NonNull
-  private List<Byte> data2;
+  private ByteList data2;
 
   public static VendorPrivateWithReplyReply readVendorPrivateWithReplyReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
     VendorPrivateWithReplyReply.VendorPrivateWithReplyReplyBuilder javaBuilder = VendorPrivateWithReplyReply.builder();
     int length = in.readCard32();
     int retval = in.readCard32();
-    List<Byte> data1 = in.readByte(24);
-    List<Byte> data2 = in.readByte((int) (Integer.toUnsignedLong(length) * 4));
+    ByteList data1 = in.readByte(24);
+    ByteList data2 = in.readByte((int) (Integer.toUnsignedLong(length) * 4));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.retval(retval);
-    javaBuilder.data1(data1);
-    javaBuilder.data2(data2);
+    javaBuilder.data1(data1.toImmutable());
+    javaBuilder.data2(data2.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

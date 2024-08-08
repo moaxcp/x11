@@ -12,6 +12,7 @@ abstract class JavaListProperty extends JavaProperty {
     JavaListProperty(JavaType javaType, XUnitListField field) {
         super(javaType, field)
         lengthExpression = Expressions.getExpression(javaType, field.lengthExpression)
+        builderValueExpression = CodeBlock.of('$L.toImmutable()', name)
     }
     
     @Override

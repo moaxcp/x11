@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -23,7 +24,7 @@ public class GetBuffersWithFormatReply implements XReply {
   private int height;
 
   @NonNull
-  private List<DRI2Buffer> buffers;
+  private ImmutableList<DRI2Buffer> buffers;
 
   public static GetBuffersWithFormatReply readGetBuffersWithFormatReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -33,14 +34,14 @@ public class GetBuffersWithFormatReply implements XReply {
     int height = in.readCard32();
     int count = in.readCard32();
     byte[] pad7 = in.readPad(12);
-    List<DRI2Buffer> buffers = new ArrayList<>((int) (Integer.toUnsignedLong(count)));
+    MutableList<DRI2Buffer> buffers = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(count)));
     for(int i = 0; i < Integer.toUnsignedLong(count); i++) {
       buffers.add(DRI2Buffer.readDRI2Buffer(in));
     }
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.width(width);
     javaBuilder.height(height);
-    javaBuilder.buffers(buffers);
+    javaBuilder.buffers(buffers.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -21,7 +22,7 @@ public class StoreColors implements OneWayRequest {
   private int cmap;
 
   @NonNull
-  private List<Coloritem> items;
+  private ImmutableList<Coloritem> items;
 
   public byte getOpCode() {
     return OPCODE;
@@ -36,14 +37,14 @@ public class StoreColors implements OneWayRequest {
     javaStart += 2;
     int cmap = in.readCard32();
     javaStart += 4;
-    List<Coloritem> items = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Coloritem> items = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Coloritem baseObject = Coloritem.readColoritem(in);
       items.add(baseObject);
       javaStart += baseObject.getSize();
     }
     javaBuilder.cmap(cmap);
-    javaBuilder.items(items);
+    javaBuilder.items(items.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

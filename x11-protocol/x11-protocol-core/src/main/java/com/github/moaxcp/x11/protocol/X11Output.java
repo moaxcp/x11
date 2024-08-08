@@ -1,15 +1,18 @@
 package com.github.moaxcp.x11.protocol;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.IntStream;
+import org.eclipse.collections.api.list.primitive.*;
+import org.eclipse.collections.impl.factory.primitive.ByteLists;
 
-import static java.util.stream.Collectors.toList;
+import java.io.IOException;
 
 public interface X11Output {
   void writeBool(boolean bool) throws IOException;
 
-  void writeBool(List<Boolean> bool) throws IOException;
+  default void writeBool(BooleanList bool) throws IOException{
+    for(int i = 0; i < bool.size(); i++) {
+      writeBool(bool.get(i));
+    }
+  }
 
   void writeByte(byte b) throws IOException;
 
@@ -19,48 +22,90 @@ public interface X11Output {
 
   void writeInt32(int int32) throws IOException;
 
-  void writeInt32(List<Integer> int32) throws IOException;
+  default void writeInt32(IntList int32) throws IOException {
+    for(int i = 0; i < int32.size(); i++) {
+      writeInt32(int32.get(i));
+    }
+  }
 
   void writeInt64(long int64) throws IOException;
 
   void writeCard8(byte card8) throws IOException;
 
-  void writeCard8(List<Byte> card8) throws IOException;
+  default void writeCard8(ByteList card8) throws IOException {
+    for(int i = 0; i < card8.size(); i++) {
+      writeCard8(card8.get(i));
+    }
+  }
 
   void writeCard16(short card16) throws IOException;
 
-  void writeCard16(List<Short> card16) throws IOException;
+  default void writeCard16(ShortList card16) throws IOException {
+    for(int i = 0; i < card16.size(); i++) {
+      writeCard16(card16.get(i));
+    }
+  }
 
   void writeCard32(int card32) throws IOException;
 
-  void writeCard32(List<Integer> card32) throws IOException;
+  default void writeCard32(IntList card32) throws IOException {
+    for(int i = 0; i < card32.size(); i++) {
+      writeCard32(card32.get(i));
+    }
+  }
 
   void writeCard64(long card64) throws IOException;
 
-  void writeCard64(List<Long> card64) throws IOException;
+  default void writeCard64(LongList card64) throws IOException {
+    for(int i = 0; i < card64.size(); i++) {
+      writeCard64(card64.get(i));
+    }
+  }
 
   void writeFloat(float f) throws IOException;
 
-  void writeFloat(List<Float> f) throws IOException;
+  default void writeFloat(FloatList f) throws IOException {
+    for(int i = 0; i < f.size(); i++) {
+      writeFloat(f.get(i));
+    }
+  }
 
   void writeDouble(double d) throws IOException;
 
-  void writeDouble(List<Double> d) throws IOException;
+  default void writeDouble(DoubleList d) throws IOException {
+    for(int i = 0; i < d.size(); i++) {
+      writeDouble(d.get(i));
+    }
+  }
 
-  void writeChar(List<Byte> string) throws IOException;
+  default void writeChar(ByteList string) throws IOException {
+    writeByte(string);
+  }
 
   void writeString8(String string) throws IOException;
 
-  void writeByte(List<Byte> bytes) throws IOException;
+  default void writeByte(ByteList bytes) throws IOException {
+    for(int i = 0; i < bytes.size(); i++) {
+      writeByte(bytes.get(i));
+    }
+  }
 
-  void writeVoid(List<Byte> bytes) throws IOException;
+  default void writeVoid(ByteList bytes) throws IOException {
+    writeByte(bytes);
+  }
 
   void writeFd(int fd) throws IOException;
 
-  void writeFd(List<Integer> fd) throws IOException;
+  default void writeFd(IntList fd) throws IOException {
+    writeInt32(fd);
+  }
 
   default void writePad(int length) throws IOException {
-    writeByte(IntStream.range(0, length).mapToObj(i -> (byte) 0).collect(toList()));
+    var result = ByteLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add((byte) 0);
+    }
+    writeByte(result.toImmutable());
   }
 
   default void writePadAlign(int forLength) throws IOException {

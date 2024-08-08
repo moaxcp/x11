@@ -6,10 +6,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import com.github.moaxcp.x11.protocol.xproto.GrabMode;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -31,7 +31,7 @@ public class GrabDevice implements TwoWayRequest<GrabDeviceReply> {
   private byte deviceId;
 
   @NonNull
-  private List<Integer> classes;
+  private IntList classes;
 
   public XReplyFunction<GrabDeviceReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> GrabDeviceReply.readGrabDeviceReply(field, sequenceNumber, in);
@@ -53,14 +53,14 @@ public class GrabDevice implements TwoWayRequest<GrabDeviceReply> {
     boolean ownerEvents = in.readBool();
     byte deviceId = in.readCard8();
     byte[] pad10 = in.readPad(2);
-    List<Integer> classes = in.readCard32(Short.toUnsignedInt(numClasses));
+    IntList classes = in.readCard32(Short.toUnsignedInt(numClasses));
     javaBuilder.grabWindow(grabWindow);
     javaBuilder.time(time);
     javaBuilder.thisDeviceMode(thisDeviceMode);
     javaBuilder.otherDeviceMode(otherDeviceMode);
     javaBuilder.ownerEvents(ownerEvents);
     javaBuilder.deviceId(deviceId);
-    javaBuilder.classes(classes);
+    javaBuilder.classes(classes.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

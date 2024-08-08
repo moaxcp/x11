@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -19,7 +20,7 @@ public class XIBarrierReleasePointer implements OneWayRequest {
   public static final byte OPCODE = 61;
 
   @NonNull
-  private List<BarrierReleasePointerInfo> barriers;
+  private ImmutableList<BarrierReleasePointerInfo> barriers;
 
   public byte getOpCode() {
     return OPCODE;
@@ -31,11 +32,11 @@ public class XIBarrierReleasePointer implements OneWayRequest {
     byte majorOpcode = in.readCard8();
     short length = in.readCard16();
     int numBarriers = in.readCard32();
-    List<BarrierReleasePointerInfo> barriers = new ArrayList<>((int) (Integer.toUnsignedLong(numBarriers)));
+    MutableList<BarrierReleasePointerInfo> barriers = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(numBarriers)));
     for(int i = 0; i < Integer.toUnsignedLong(numBarriers); i++) {
       barriers.add(BarrierReleasePointerInfo.readBarrierReleasePointerInfo(in));
     }
-    javaBuilder.barriers(barriers);
+    javaBuilder.barriers(barriers.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

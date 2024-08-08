@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -19,17 +19,17 @@ public class GetKeyboardMappingReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> keysyms;
+  private IntList keysyms;
 
   public static GetKeyboardMappingReply readGetKeyboardMappingReply(byte keysymsPerKeycode,
       short sequenceNumber, X11Input in) throws IOException {
     GetKeyboardMappingReply.GetKeyboardMappingReplyBuilder javaBuilder = GetKeyboardMappingReply.builder();
     int length = in.readCard32();
     byte[] pad4 = in.readPad(24);
-    List<Integer> keysyms = in.readCard32((int) (Integer.toUnsignedLong(length)));
+    IntList keysyms = in.readCard32((int) (Integer.toUnsignedLong(length)));
     javaBuilder.keysymsPerKeycode(keysymsPerKeycode);
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.keysyms(keysyms);
+    javaBuilder.keysyms(keysyms.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

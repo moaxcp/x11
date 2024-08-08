@@ -6,9 +6,10 @@ import com.github.moaxcp.x11.protocol.record.*;
 import com.github.moaxcp.x11.protocol.xproto.KeyPressEvent;
 import com.github.moaxcp.x11.protocol.xproto.MotionNotifyEvent;
 import com.github.moaxcp.x11.x11client.X11Client;
+import org.eclipse.collections.impl.factory.Lists;
+import org.eclipse.collections.impl.factory.primitive.IntLists;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.logging.Logger;
 
 import static com.github.moaxcp.x11.protocol.Utilities.toX11Input;
@@ -43,9 +44,9 @@ public class Record {
 
             CreateContext createContext = CreateContext.builder()
                     .context(rc)
-                    .clientSpecs(Collections.singletonList(Cs.ALL_CLIENTS.getValue()))
+                    .clientSpecs(IntLists.immutable.of(Cs.ALL_CLIENTS.getValue()))
                     .elementHeader((byte) 0)
-                    .ranges(Collections.singletonList(range))
+                    .ranges(Lists.immutable.of(range))
                     .build();
 
             control.send(createContext);

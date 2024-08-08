@@ -7,9 +7,10 @@ import com.github.moaxcp.x11.protocol.xproto.KeyPressEvent;
 import com.github.moaxcp.x11.x11client.X11Client;
 import com.github.moaxcp.x11.x11client.api.record.RecordData;
 import com.github.moaxcp.x11.x11client.api.record.RecordReply;
+import org.eclipse.collections.impl.factory.Lists;
+import org.eclipse.collections.impl.factory.primitive.IntLists;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -53,8 +54,8 @@ public class RecordApiExample {
 
             CreateContext createContext = CreateContext.builder()
                     .context(rc)
-                    .clientSpecs(Collections.singletonList(Cs.ALL_CLIENTS.getValue()))
-                    .ranges(Collections.singletonList(range))
+                    .clientSpecs(IntLists.immutable.of(Cs.ALL_CLIENTS.getValue()))
+                    .ranges(Lists.immutable.of(range))
                     .build();
 
             control.send(createContext);

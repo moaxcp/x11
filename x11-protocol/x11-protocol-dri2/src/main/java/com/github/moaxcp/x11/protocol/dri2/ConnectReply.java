@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -17,13 +17,13 @@ public class ConnectReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Byte> driverName;
+  private ByteList driverName;
 
   @NonNull
-  private List<Byte> alignmentPad;
+  private ByteList alignmentPad;
 
   @NonNull
-  private List<Byte> deviceName;
+  private ByteList deviceName;
 
   public static ConnectReply readConnectReply(byte pad1, short sequenceNumber, X11Input in) throws
       IOException {
@@ -32,13 +32,13 @@ public class ConnectReply implements XReply {
     int driverNameLength = in.readCard32();
     int deviceNameLength = in.readCard32();
     byte[] pad6 = in.readPad(16);
-    List<Byte> driverName = in.readChar((int) (Integer.toUnsignedLong(driverNameLength)));
-    List<Byte> alignmentPad = in.readVoid((int) ((Integer.toUnsignedLong(driverNameLength) + 3) & (~ (3)) - Integer.toUnsignedLong(driverNameLength)));
-    List<Byte> deviceName = in.readChar((int) (Integer.toUnsignedLong(deviceNameLength)));
+    ByteList driverName = in.readChar((int) (Integer.toUnsignedLong(driverNameLength)));
+    ByteList alignmentPad = in.readVoid((int) ((Integer.toUnsignedLong(driverNameLength) + 3) & (~ (3)) - Integer.toUnsignedLong(driverNameLength)));
+    ByteList deviceName = in.readChar((int) (Integer.toUnsignedLong(deviceNameLength)));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.driverName(driverName);
-    javaBuilder.alignmentPad(alignmentPad);
-    javaBuilder.deviceName(deviceName);
+    javaBuilder.driverName(driverName.toImmutable());
+    javaBuilder.alignmentPad(alignmentPad.toImmutable());
+    javaBuilder.deviceName(deviceName.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

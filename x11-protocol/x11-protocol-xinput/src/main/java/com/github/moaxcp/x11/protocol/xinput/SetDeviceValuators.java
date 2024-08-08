@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -22,7 +22,7 @@ public class SetDeviceValuators implements TwoWayRequest<SetDeviceValuatorsReply
   private byte firstValuator;
 
   @NonNull
-  private List<Integer> valuators;
+  private IntList valuators;
 
   public XReplyFunction<SetDeviceValuatorsReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> SetDeviceValuatorsReply.readSetDeviceValuatorsReply(field, sequenceNumber, in);
@@ -40,10 +40,10 @@ public class SetDeviceValuators implements TwoWayRequest<SetDeviceValuatorsReply
     byte firstValuator = in.readCard8();
     byte numValuators = in.readCard8();
     byte[] pad6 = in.readPad(1);
-    List<Integer> valuators = in.readInt32(Byte.toUnsignedInt(numValuators));
+    IntList valuators = in.readInt32(Byte.toUnsignedInt(numValuators));
     javaBuilder.deviceId(deviceId);
     javaBuilder.firstValuator(firstValuator);
-    javaBuilder.valuators(valuators);
+    javaBuilder.valuators(valuators.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

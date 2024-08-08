@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -25,7 +25,7 @@ public class ConfigureOutputProperty implements OneWayRequest {
   private boolean range;
 
   @NonNull
-  private List<Integer> values;
+  private IntList values;
 
   public byte getOpCode() {
     return OPCODE;
@@ -49,12 +49,12 @@ public class ConfigureOutputProperty implements OneWayRequest {
     javaStart += 1;
     byte[] pad7 = in.readPad(2);
     javaStart += 2;
-    List<Integer> values = in.readInt32(Short.toUnsignedInt(length) - javaStart);
+    IntList values = in.readInt32(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.output(output);
     javaBuilder.property(property);
     javaBuilder.pending(pending);
     javaBuilder.range(range);
-    javaBuilder.values(values);
+    javaBuilder.values(values.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

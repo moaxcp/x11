@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -37,7 +37,7 @@ public class XIQueryPointerReply implements XReply {
   private GroupInfo group;
 
   @NonNull
-  private List<Integer> buttons;
+  private IntList buttons;
 
   public static XIQueryPointerReply readXIQueryPointerReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -54,7 +54,7 @@ public class XIQueryPointerReply implements XReply {
     short buttonsLen = in.readCard16();
     ModifierInfo mods = ModifierInfo.readModifierInfo(in);
     GroupInfo group = GroupInfo.readGroupInfo(in);
-    List<Integer> buttons = in.readCard32(Short.toUnsignedInt(buttonsLen));
+    IntList buttons = in.readCard32(Short.toUnsignedInt(buttonsLen));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.root(root);
     javaBuilder.child(child);
@@ -65,7 +65,7 @@ public class XIQueryPointerReply implements XReply {
     javaBuilder.sameScreen(sameScreen);
     javaBuilder.mods(mods);
     javaBuilder.group(group);
-    javaBuilder.buttons(buttons);
+    javaBuilder.buttons(buttons.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

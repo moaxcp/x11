@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -19,19 +20,19 @@ public class ListExtensionsReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Str> names;
+  private ImmutableList<Str> names;
 
   public static ListExtensionsReply readListExtensionsReply(byte namesLen, short sequenceNumber,
       X11Input in) throws IOException {
     ListExtensionsReply.ListExtensionsReplyBuilder javaBuilder = ListExtensionsReply.builder();
     int length = in.readCard32();
     byte[] pad4 = in.readPad(24);
-    List<Str> names = new ArrayList<>(Byte.toUnsignedInt(namesLen));
+    MutableList<Str> names = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(namesLen));
     for(int i = 0; i < Byte.toUnsignedInt(namesLen); i++) {
       names.add(Str.readStr(in));
     }
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.names(names);
+    javaBuilder.names(names.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XGenericEvent;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -35,7 +36,7 @@ public class HierarchyEvent implements XGenericEvent {
   private int flags;
 
   @NonNull
-  private List<HierarchyInfo> infos;
+  private ImmutableList<HierarchyInfo> infos;
 
   @Override
   public byte getResponseCode() {
@@ -56,7 +57,7 @@ public class HierarchyEvent implements XGenericEvent {
     int flags = in.readCard32();
     short numInfos = in.readCard16();
     byte[] pad9 = in.readPad(10);
-    List<HierarchyInfo> infos = new ArrayList<>(Short.toUnsignedInt(numInfos));
+    MutableList<HierarchyInfo> infos = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(numInfos));
     for(int i = 0; i < Short.toUnsignedInt(numInfos); i++) {
       infos.add(HierarchyInfo.readHierarchyInfo(in));
     }
@@ -66,7 +67,7 @@ public class HierarchyEvent implements XGenericEvent {
     javaBuilder.deviceid(deviceid);
     javaBuilder.time(time);
     javaBuilder.flags(flags);
-    javaBuilder.infos(infos);
+    javaBuilder.infos(infos.toImmutable());
 
     javaBuilder.sentEvent(sentEvent);
     javaBuilder.firstEventOffset(firstEventOffset);

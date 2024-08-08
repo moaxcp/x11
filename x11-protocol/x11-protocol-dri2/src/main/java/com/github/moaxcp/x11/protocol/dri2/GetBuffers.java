@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -22,7 +22,7 @@ public class GetBuffers implements TwoWayRequest<GetBuffersReply> {
   private int count;
 
   @NonNull
-  private List<Integer> attachments;
+  private IntList attachments;
 
   public XReplyFunction<GetBuffersReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> GetBuffersReply.readGetBuffersReply(field, sequenceNumber, in);
@@ -43,10 +43,10 @@ public class GetBuffers implements TwoWayRequest<GetBuffersReply> {
     javaStart += 4;
     int count = in.readCard32();
     javaStart += 4;
-    List<Integer> attachments = in.readCard32(Short.toUnsignedInt(length) - javaStart);
+    IntList attachments = in.readCard32(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.drawable(drawable);
     javaBuilder.count(count);
-    javaBuilder.attachments(attachments);
+    javaBuilder.attachments(attachments.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

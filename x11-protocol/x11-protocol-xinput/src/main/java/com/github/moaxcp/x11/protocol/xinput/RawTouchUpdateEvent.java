@@ -5,11 +5,13 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XGenericEvent;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -39,13 +41,13 @@ public class RawTouchUpdateEvent implements XGenericEvent {
   private int flags;
 
   @NonNull
-  private List<Integer> valuatorMask;
+  private IntList valuatorMask;
 
   @NonNull
-  private List<Fp3232> axisvalues;
+  private ImmutableList<Fp3232> axisvalues;
 
   @NonNull
-  private List<Fp3232> axisvaluesRaw;
+  private ImmutableList<Fp3232> axisvaluesRaw;
 
   @Override
   public byte getResponseCode() {
@@ -68,13 +70,13 @@ public class RawTouchUpdateEvent implements XGenericEvent {
     short valuatorsLen = in.readCard16();
     int flags = in.readCard32();
     byte[] pad11 = in.readPad(4);
-    List<Integer> valuatorMask = in.readCard32(Short.toUnsignedInt(valuatorsLen));
-    List<Fp3232> axisvalues = new ArrayList<>(valuatorMask.stream().mapToInt(mapToInt -> mapToInt).sum());
-    for(int i = 0; i < valuatorMask.stream().mapToInt(mapToInt -> mapToInt).sum(); i++) {
+    IntList valuatorMask = in.readCard32(Short.toUnsignedInt(valuatorsLen));
+    MutableList<Fp3232> axisvalues = Lists.mutable.withInitialCapacity((int) valuatorMask.sum());
+    for(int i = 0; i < (int) valuatorMask.sum(); i++) {
       axisvalues.add(Fp3232.readFp3232(in));
     }
-    List<Fp3232> axisvaluesRaw = new ArrayList<>(valuatorMask.stream().mapToInt(mapToInt -> mapToInt).sum());
-    for(int i = 0; i < valuatorMask.stream().mapToInt(mapToInt -> mapToInt).sum(); i++) {
+    MutableList<Fp3232> axisvaluesRaw = Lists.mutable.withInitialCapacity((int) valuatorMask.sum());
+    for(int i = 0; i < (int) valuatorMask.sum(); i++) {
       axisvaluesRaw.add(Fp3232.readFp3232(in));
     }
     javaBuilder.extension(extension);
@@ -85,9 +87,9 @@ public class RawTouchUpdateEvent implements XGenericEvent {
     javaBuilder.detail(detail);
     javaBuilder.sourceid(sourceid);
     javaBuilder.flags(flags);
-    javaBuilder.valuatorMask(valuatorMask);
-    javaBuilder.axisvalues(axisvalues);
-    javaBuilder.axisvaluesRaw(axisvaluesRaw);
+    javaBuilder.valuatorMask(valuatorMask.toImmutable());
+    javaBuilder.axisvalues(axisvalues.toImmutable());
+    javaBuilder.axisvaluesRaw(axisvaluesRaw.toImmutable());
 
     javaBuilder.sentEvent(sentEvent);
     javaBuilder.firstEventOffset(firstEventOffset);

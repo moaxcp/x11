@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -19,7 +20,7 @@ public class ListSurfaceTypesReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<SurfaceInfo> surfaces;
+  private ImmutableList<SurfaceInfo> surfaces;
 
   public static ListSurfaceTypesReply readListSurfaceTypesReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -27,12 +28,12 @@ public class ListSurfaceTypesReply implements XReply {
     int length = in.readCard32();
     int num = in.readCard32();
     byte[] pad5 = in.readPad(20);
-    List<SurfaceInfo> surfaces = new ArrayList<>((int) (Integer.toUnsignedLong(num)));
+    MutableList<SurfaceInfo> surfaces = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(num)));
     for(int i = 0; i < Integer.toUnsignedLong(num); i++) {
       surfaces.add(SurfaceInfo.readSurfaceInfo(in));
     }
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.surfaces(surfaces);
+    javaBuilder.surfaces(surfaces.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

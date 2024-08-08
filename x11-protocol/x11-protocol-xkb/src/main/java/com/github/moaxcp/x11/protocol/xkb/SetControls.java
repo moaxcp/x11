@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.xproto.ModMask;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -76,7 +76,7 @@ public class SetControls implements OneWayRequest {
   private short accessXTimeoutOptionsValues;
 
   @NonNull
-  private List<Byte> perKeyRepeat;
+  private ByteList perKeyRepeat;
 
   public byte getOpCode() {
     return OPCODE;
@@ -116,7 +116,7 @@ public class SetControls implements OneWayRequest {
     int accessXTimeoutValues = in.readCard32();
     short accessXTimeoutOptionsMask = in.readCard16();
     short accessXTimeoutOptionsValues = in.readCard16();
-    List<Byte> perKeyRepeat = in.readCard8(32);
+    ByteList perKeyRepeat = in.readCard8(32);
     javaBuilder.deviceSpec(deviceSpec);
     javaBuilder.affectInternalRealMods(affectInternalRealMods);
     javaBuilder.internalRealMods(internalRealMods);
@@ -146,7 +146,7 @@ public class SetControls implements OneWayRequest {
     javaBuilder.accessXTimeoutValues(accessXTimeoutValues);
     javaBuilder.accessXTimeoutOptionsMask(accessXTimeoutOptionsMask);
     javaBuilder.accessXTimeoutOptionsValues(accessXTimeoutOptionsValues);
-    javaBuilder.perKeyRepeat(perKeyRepeat);
+    javaBuilder.perKeyRepeat(perKeyRepeat.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

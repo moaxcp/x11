@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -20,7 +21,7 @@ public class QueryClientIds implements TwoWayRequest<QueryClientIdsReply> {
   public static final byte OPCODE = 4;
 
   @NonNull
-  private List<ClientIdSpec> specs;
+  private ImmutableList<ClientIdSpec> specs;
 
   public XReplyFunction<QueryClientIdsReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> QueryClientIdsReply.readQueryClientIdsReply(field, sequenceNumber, in);
@@ -35,11 +36,11 @@ public class QueryClientIds implements TwoWayRequest<QueryClientIdsReply> {
     byte majorOpcode = in.readCard8();
     short length = in.readCard16();
     int numSpecs = in.readCard32();
-    List<ClientIdSpec> specs = new ArrayList<>((int) (Integer.toUnsignedLong(numSpecs)));
+    MutableList<ClientIdSpec> specs = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(numSpecs)));
     for(int i = 0; i < Integer.toUnsignedLong(numSpecs); i++) {
       specs.add(ClientIdSpec.readClientIdSpec(in));
     }
-    javaBuilder.specs(specs);
+    javaBuilder.specs(specs.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

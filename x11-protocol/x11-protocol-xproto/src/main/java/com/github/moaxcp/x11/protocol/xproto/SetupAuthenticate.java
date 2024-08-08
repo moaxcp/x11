@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -17,16 +17,16 @@ public class SetupAuthenticate implements XStruct {
   private byte status;
 
   @NonNull
-  private List<Byte> reason;
+  private ByteList reason;
 
   public static SetupAuthenticate readSetupAuthenticate(X11Input in) throws IOException {
     SetupAuthenticate.SetupAuthenticateBuilder javaBuilder = SetupAuthenticate.builder();
     byte status = in.readCard8();
     byte[] pad1 = in.readPad(5);
     short length = in.readCard16();
-    List<Byte> reason = in.readChar(Short.toUnsignedInt(length) * 4);
+    ByteList reason = in.readChar(Short.toUnsignedInt(length) * 4);
     javaBuilder.status(status);
-    javaBuilder.reason(reason);
+    javaBuilder.reason(reason.toImmutable());
     return javaBuilder.build();
   }
 

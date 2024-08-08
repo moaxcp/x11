@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11.protocol;
 
+import org.eclipse.collections.impl.factory.primitive.ByteLists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -9,10 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
@@ -82,17 +81,8 @@ public class X11InputStreamTest {
   @Test
   void readBytes() throws IOException {
     X11BigEndianInputStream in = makeInputStream(1, 2, 3, 4);
-    List<Byte> bytes = in.readByte(4);
-    assertThat(bytes).containsExactly((byte) 1, (byte) 2, (byte) 3, (byte) 4);
-  }
-
-  @Test
-  void readBytes_wrongLength() throws IOException {
-    InputStream origin = mock(InputStream.class);
-    X11BigEndianInputStream in = new X11BigEndianInputStream(origin);
-    when(origin.read(any(), eq(0), eq(4))).thenReturn(2);
-    IllegalStateException exception = assertThrows(IllegalStateException.class, () -> in.readByte(4));
-    assertThat(exception).hasMessage("could not read all bytes for length: \"4\"");
+    var bytes = in.readByte(4);
+    assertThat(bytes).isEqualTo(ByteLists.immutable.of((byte) 1, (byte) 2, (byte) 3, (byte) 4));
   }
 
   @Test

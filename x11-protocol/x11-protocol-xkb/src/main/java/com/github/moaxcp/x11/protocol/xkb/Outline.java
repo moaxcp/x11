@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import com.github.moaxcp.x11.protocol.xproto.Point;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -20,19 +21,19 @@ public class Outline implements XStruct {
   private byte cornerRadius;
 
   @NonNull
-  private List<Point> points;
+  private ImmutableList<Point> points;
 
   public static Outline readOutline(X11Input in) throws IOException {
     Outline.OutlineBuilder javaBuilder = Outline.builder();
     byte nPoints = in.readCard8();
     byte cornerRadius = in.readCard8();
     byte[] pad2 = in.readPad(2);
-    List<Point> points = new ArrayList<>(Byte.toUnsignedInt(nPoints));
+    MutableList<Point> points = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(nPoints));
     for(int i = 0; i < Byte.toUnsignedInt(nPoints); i++) {
       points.add(Point.readPoint(in));
     }
     javaBuilder.cornerRadius(cornerRadius);
-    javaBuilder.points(points);
+    javaBuilder.points(points.toImmutable());
     return javaBuilder.build();
   }
 

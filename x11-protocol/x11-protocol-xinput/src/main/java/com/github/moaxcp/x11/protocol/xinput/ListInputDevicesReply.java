@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import com.github.moaxcp.x11.protocol.xproto.Str;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -22,13 +23,13 @@ public class ListInputDevicesReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<DeviceInfo> devices;
+  private ImmutableList<DeviceInfo> devices;
 
   @NonNull
-  private List<InputInfo> infos;
+  private ImmutableList<InputInfo> infos;
 
   @NonNull
-  private List<Str> names;
+  private ImmutableList<Str> names;
 
   public static ListInputDevicesReply readListInputDevicesReply(byte xiReplyType,
       short sequenceNumber, X11Input in) throws IOException {
@@ -36,24 +37,24 @@ public class ListInputDevicesReply implements XReply {
     int length = in.readCard32();
     byte devicesLen = in.readCard8();
     byte[] pad5 = in.readPad(23);
-    List<DeviceInfo> devices = new ArrayList<>(Byte.toUnsignedInt(devicesLen));
+    MutableList<DeviceInfo> devices = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(devicesLen));
     for(int i = 0; i < Byte.toUnsignedInt(devicesLen); i++) {
       devices.add(DeviceInfo.readDeviceInfo(in));
     }
-    List<InputInfo> infos = new ArrayList<>(devices.stream().mapToInt(o -> Byte.toUnsignedInt(o.getNumClassInfo())).sum());
+    MutableList<InputInfo> infos = Lists.mutable.withInitialCapacity(devices.stream().mapToInt(o -> Byte.toUnsignedInt(o.getNumClassInfo())).sum());
     for(int i = 0; i < devices.stream().mapToInt(o -> Byte.toUnsignedInt(o.getNumClassInfo())).sum(); i++) {
       infos.add(InputInfo.readInputInfo(in));
     }
-    List<Str> names = new ArrayList<>(Byte.toUnsignedInt(devicesLen));
+    MutableList<Str> names = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(devicesLen));
     for(int i = 0; i < Byte.toUnsignedInt(devicesLen); i++) {
       names.add(Str.readStr(in));
     }
     in.readPadAlign(Byte.toUnsignedInt(devicesLen));
     javaBuilder.xiReplyType(xiReplyType);
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.devices(devices);
-    javaBuilder.infos(infos);
-    javaBuilder.names(names);
+    javaBuilder.devices(devices.toImmutable());
+    javaBuilder.infos(infos.toImmutable());
+    javaBuilder.names(names.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -21,7 +22,7 @@ public class QueryPortAttributesReply implements XReply {
   private int textSize;
 
   @NonNull
-  private List<AttributeInfo> attributes;
+  private ImmutableList<AttributeInfo> attributes;
 
   public static QueryPortAttributesReply readQueryPortAttributesReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -30,13 +31,13 @@ public class QueryPortAttributesReply implements XReply {
     int numAttributes = in.readCard32();
     int textSize = in.readCard32();
     byte[] pad6 = in.readPad(16);
-    List<AttributeInfo> attributes = new ArrayList<>((int) (Integer.toUnsignedLong(numAttributes)));
+    MutableList<AttributeInfo> attributes = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(numAttributes)));
     for(int i = 0; i < Integer.toUnsignedLong(numAttributes); i++) {
       attributes.add(AttributeInfo.readAttributeInfo(in));
     }
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.textSize(textSize);
-    javaBuilder.attributes(attributes);
+    javaBuilder.attributes(attributes.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

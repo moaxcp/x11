@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -22,7 +22,7 @@ public class PrintGetOneAttributes implements TwoWayRequest<PrintGetOneAttribute
   private byte pool;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public XReplyFunction<PrintGetOneAttributesReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> PrintGetOneAttributesReply.readPrintGetOneAttributesReply(field, sequenceNumber, in);
@@ -40,10 +40,10 @@ public class PrintGetOneAttributes implements TwoWayRequest<PrintGetOneAttribute
     int nameLen = in.readCard32();
     byte pool = in.readCard8();
     byte[] pad6 = in.readPad(3);
-    List<Byte> name = in.readChar((int) (Integer.toUnsignedLong(nameLen)));
+    ByteList name = in.readChar((int) (Integer.toUnsignedLong(nameLen)));
     javaBuilder.context(context);
     javaBuilder.pool(pool);
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

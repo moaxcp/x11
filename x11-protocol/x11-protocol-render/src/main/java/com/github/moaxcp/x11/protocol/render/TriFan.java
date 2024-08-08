@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -31,7 +32,7 @@ public class TriFan implements OneWayRequest {
   private short srcY;
 
   @NonNull
-  private List<Pointfix> points;
+  private ImmutableList<Pointfix> points;
 
   public byte getOpCode() {
     return OPCODE;
@@ -58,7 +59,7 @@ public class TriFan implements OneWayRequest {
     javaStart += 2;
     short srcY = in.readInt16();
     javaStart += 2;
-    List<Pointfix> points = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Pointfix> points = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Pointfix baseObject = Pointfix.readPointfix(in);
       points.add(baseObject);
@@ -70,7 +71,7 @@ public class TriFan implements OneWayRequest {
     javaBuilder.maskFormat(maskFormat);
     javaBuilder.srcX(srcX);
     javaBuilder.srcY(srcY);
-    javaBuilder.points(points);
+    javaBuilder.points(points.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

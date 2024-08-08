@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XGenericEvent;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -61,7 +61,7 @@ public class EnterEvent implements XGenericEvent {
   private GroupInfo group;
 
   @NonNull
-  private List<Integer> buttons;
+  private IntList buttons;
 
   @Override
   public byte getResponseCode() {
@@ -93,7 +93,7 @@ public class EnterEvent implements XGenericEvent {
     short buttonsLen = in.readCard16();
     ModifierInfo mods = ModifierInfo.readModifierInfo(in);
     GroupInfo group = GroupInfo.readGroupInfo(in);
-    List<Integer> buttons = in.readCard32(Short.toUnsignedInt(buttonsLen));
+    IntList buttons = in.readCard32(Short.toUnsignedInt(buttonsLen));
     javaBuilder.extension(extension);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.eventType(eventType);
@@ -113,7 +113,7 @@ public class EnterEvent implements XGenericEvent {
     javaBuilder.focus(focus);
     javaBuilder.mods(mods);
     javaBuilder.group(group);
-    javaBuilder.buttons(buttons);
+    javaBuilder.buttons(buttons.toImmutable());
 
     javaBuilder.sentEvent(sentEvent);
     javaBuilder.firstEventOffset(firstEventOffset);

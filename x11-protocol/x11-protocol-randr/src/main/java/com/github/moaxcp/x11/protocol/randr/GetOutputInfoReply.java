@@ -5,10 +5,11 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import com.github.moaxcp.x11.protocol.render.SubPixel;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -34,16 +35,16 @@ public class GetOutputInfoReply implements XReply {
   private short numPreferred;
 
   @NonNull
-  private List<Integer> crtcs;
+  private IntList crtcs;
 
   @NonNull
-  private List<Integer> modes;
+  private IntList modes;
 
   @NonNull
-  private List<Integer> clones;
+  private IntList clones;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public static GetOutputInfoReply readGetOutputInfoReply(byte status, short sequenceNumber,
       X11Input in) throws IOException {
@@ -60,10 +61,10 @@ public class GetOutputInfoReply implements XReply {
     short numPreferred = in.readCard16();
     short numClones = in.readCard16();
     short nameLen = in.readCard16();
-    List<Integer> crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
-    List<Integer> modes = in.readCard32(Short.toUnsignedInt(numModes));
-    List<Integer> clones = in.readCard32(Short.toUnsignedInt(numClones));
-    List<Byte> name = in.readByte(Short.toUnsignedInt(nameLen));
+    IntList crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
+    IntList modes = in.readCard32(Short.toUnsignedInt(numModes));
+    IntList clones = in.readCard32(Short.toUnsignedInt(numClones));
+    ByteList name = in.readByte(Short.toUnsignedInt(nameLen));
     javaBuilder.status(status);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.timestamp(timestamp);
@@ -73,10 +74,10 @@ public class GetOutputInfoReply implements XReply {
     javaBuilder.connection(connection);
     javaBuilder.subpixelOrder(subpixelOrder);
     javaBuilder.numPreferred(numPreferred);
-    javaBuilder.crtcs(crtcs);
-    javaBuilder.modes(modes);
-    javaBuilder.clones(clones);
-    javaBuilder.name(name);
+    javaBuilder.crtcs(crtcs.toImmutable());
+    javaBuilder.modes(modes.toImmutable());
+    javaBuilder.clones(clones.toImmutable());
+    javaBuilder.name(name.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

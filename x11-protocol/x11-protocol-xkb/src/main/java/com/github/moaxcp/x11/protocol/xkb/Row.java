@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -23,7 +24,7 @@ public class Row implements XStruct {
   private boolean vertical;
 
   @NonNull
-  private List<Key> keys;
+  private ImmutableList<Key> keys;
 
   public static Row readRow(X11Input in) throws IOException {
     Row.RowBuilder javaBuilder = Row.builder();
@@ -32,14 +33,14 @@ public class Row implements XStruct {
     byte nKeys = in.readCard8();
     boolean vertical = in.readBool();
     byte[] pad4 = in.readPad(2);
-    List<Key> keys = new ArrayList<>(Byte.toUnsignedInt(nKeys));
+    MutableList<Key> keys = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(nKeys));
     for(int i = 0; i < Byte.toUnsignedInt(nKeys); i++) {
       keys.add(Key.readKey(in));
     }
     javaBuilder.top(top);
     javaBuilder.left(left);
     javaBuilder.vertical(vertical);
-    javaBuilder.keys(keys);
+    javaBuilder.keys(keys.toImmutable());
     return javaBuilder.build();
   }
 

@@ -11,7 +11,6 @@ import com.github.moaxcp.x11.x11client.X11Client;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BasicWindowManager {
@@ -42,9 +41,7 @@ public class BasicWindowManager {
       client.send(GrabServer.builder().build());
 
       QueryTreeReply tree = client.send(QueryTree.builder().window(client.getDefaultRoot()).build());
-      for(int window : tree.getChildren()) {
-        frameExisting(window);
-      }
+      tree.getChildren().forEach(this::frameExisting);
 
       client.send(UngrabServer.builder().build());
 
@@ -197,7 +194,7 @@ public class BasicWindowManager {
 
   private void onKeyPress(KeyPressEvent event) {
     if(event.isStateEnabled(KeyButMask.MOD1) && client.keyCodeToKeySym(event.getDetail(), event.getState()) == KeySym.XK_F4) {
-      List<Integer> wmProtocols = client.getWMProtocols(event.getEvent());
+      var wmProtocols = client.getWMProtocols(event.getEvent());
       AtomValue delete = client.getAtom("WM_DELETE_WINDOW");
       if(wmProtocols.contains(delete.getId())) {
         ClientMessageEvent message = ClientMessageEvent.builder()

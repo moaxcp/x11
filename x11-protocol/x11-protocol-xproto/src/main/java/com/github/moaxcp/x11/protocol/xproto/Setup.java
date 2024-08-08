@@ -5,11 +5,13 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -47,13 +49,13 @@ public class Setup implements XStruct {
   private byte maxKeycode;
 
   @NonNull
-  private List<Byte> vendor;
+  private ByteList vendor;
 
   @NonNull
-  private List<Format> pixmapFormats;
+  private ImmutableList<Format> pixmapFormats;
 
   @NonNull
-  private List<Screen> roots;
+  private ImmutableList<Screen> roots;
 
   public static Setup readSetup(X11Input in) throws IOException {
     Setup.SetupBuilder javaBuilder = Setup.builder();
@@ -77,13 +79,13 @@ public class Setup implements XStruct {
     byte minKeycode = in.readCard8();
     byte maxKeycode = in.readCard8();
     byte[] pad19 = in.readPad(4);
-    List<Byte> vendor = in.readChar(Short.toUnsignedInt(vendorLen));
+    ByteList vendor = in.readChar(Short.toUnsignedInt(vendorLen));
     in.readPadAlign(Short.toUnsignedInt(vendorLen));
-    List<Format> pixmapFormats = new ArrayList<>(Byte.toUnsignedInt(pixmapFormatsLen));
+    MutableList<Format> pixmapFormats = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(pixmapFormatsLen));
     for(int i = 0; i < Byte.toUnsignedInt(pixmapFormatsLen); i++) {
       pixmapFormats.add(Format.readFormat(in));
     }
-    List<Screen> roots = new ArrayList<>(Byte.toUnsignedInt(rootsLen));
+    MutableList<Screen> roots = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(rootsLen));
     for(int i = 0; i < Byte.toUnsignedInt(rootsLen); i++) {
       roots.add(Screen.readScreen(in));
     }
@@ -102,9 +104,9 @@ public class Setup implements XStruct {
     javaBuilder.bitmapFormatScanlinePad(bitmapFormatScanlinePad);
     javaBuilder.minKeycode(minKeycode);
     javaBuilder.maxKeycode(maxKeycode);
-    javaBuilder.vendor(vendor);
-    javaBuilder.pixmapFormats(pixmapFormats);
-    javaBuilder.roots(roots);
+    javaBuilder.vendor(vendor.toImmutable());
+    javaBuilder.pixmapFormats(pixmapFormats.toImmutable());
+    javaBuilder.roots(roots.toImmutable());
     return javaBuilder.build();
   }
 

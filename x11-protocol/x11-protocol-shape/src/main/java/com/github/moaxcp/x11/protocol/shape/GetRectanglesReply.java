@@ -7,11 +7,12 @@ import com.github.moaxcp.x11.protocol.XReply;
 import com.github.moaxcp.x11.protocol.xproto.ClipOrdering;
 import com.github.moaxcp.x11.protocol.xproto.Rectangle;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -23,7 +24,7 @@ public class GetRectanglesReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Rectangle> rectangles;
+  private ImmutableList<Rectangle> rectangles;
 
   public static GetRectanglesReply readGetRectanglesReply(byte ordering, short sequenceNumber,
       X11Input in) throws IOException {
@@ -31,13 +32,13 @@ public class GetRectanglesReply implements XReply {
     int length = in.readCard32();
     int rectanglesLen = in.readCard32();
     byte[] pad5 = in.readPad(20);
-    List<Rectangle> rectangles = new ArrayList<>((int) (Integer.toUnsignedLong(rectanglesLen)));
+    MutableList<Rectangle> rectangles = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(rectanglesLen)));
     for(int i = 0; i < Integer.toUnsignedLong(rectanglesLen); i++) {
       rectangles.add(Rectangle.readRectangle(in));
     }
     javaBuilder.ordering(ordering);
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.rectangles(rectangles);
+    javaBuilder.rectangles(rectangles.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

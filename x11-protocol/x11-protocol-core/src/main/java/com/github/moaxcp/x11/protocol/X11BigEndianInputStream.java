@@ -1,11 +1,11 @@
 package com.github.moaxcp.x11.protocol;
 
+import org.eclipse.collections.api.list.primitive.ByteList;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 public class X11BigEndianInputStream implements X11InputStream {
   private final DataInputStream in;
@@ -17,11 +17,6 @@ public class X11BigEndianInputStream implements X11InputStream {
   @Override
   public boolean readBool() throws IOException {
     return readByte() > 0;
-  }
-
-  @Override
-  public List<Boolean> readBool(int length) throws IOException {
-    return readList(length, this::readBool);
   }
 
   @Override
@@ -53,23 +48,6 @@ public class X11BigEndianInputStream implements X11InputStream {
   }
 
   @Override
-  public List<Integer> readInt32(int length) throws IOException {
-    return readList(length, this::readInt32);
-  }
-
-  private interface IOSupplier<T> {
-    T get() throws IOException;
-  }
-
-  private <T> List<T> readList(int length, IOSupplier<T> supplier) throws IOException {
-    List<T> result = new ArrayList<>(length);
-    for(int i = 0; i < length; i++) {
-      result.add(supplier.get());
-    }
-    return result;
-  }
-
-  @Override
   public long readInt64() throws IOException {
     return in.readLong();
   }
@@ -80,18 +58,8 @@ public class X11BigEndianInputStream implements X11InputStream {
   }
 
   @Override
-  public List<Byte> readCard8(int length) throws IOException {
-    return readList(length, this::readCard8);
-  }
-
-  @Override
   public short readCard16() throws IOException {
     return (short) in.readUnsignedShort();
-  }
-
-  @Override
-  public List<Short> readCard16(int length) throws IOException {
-    return readList(length, this::readCard16);
   }
 
   @Override
@@ -100,18 +68,8 @@ public class X11BigEndianInputStream implements X11InputStream {
   }
 
   @Override
-  public List<Integer> readCard32(int length) throws IOException {
-    return readList(length, this::readCard32);
-  }
-
-  @Override
   public long readCard64() throws IOException {
     return in.readLong();
-  }
-
-  @Override
-  public List<Long> readCard64(int length) throws IOException {
-    return readList(length, this::readCard64);
   }
 
   @Override
@@ -120,23 +78,8 @@ public class X11BigEndianInputStream implements X11InputStream {
   }
 
   @Override
-  public List<Float> readFloat(int length) throws IOException {
-    return readList(length, this::readFloat);
-  }
-
-  @Override
   public double readDouble() throws IOException {
     return in.readDouble();
-  }
-
-  @Override
-  public List<Double> readDouble(int length) throws IOException {
-    return readList(length, this::readDouble);
-  }
-
-  @Override
-  public List<Byte> readChar(int length) throws IOException {
-    return readList(length, this::readByte);
   }
 
   @Override
@@ -150,35 +93,13 @@ public class X11BigEndianInputStream implements X11InputStream {
   }
 
   @Override
-  public List<Byte> readByte(int length) throws IOException {
-    if(length == 0) {
-      return new ArrayList<>();
-    }
-    byte[] bytes = new byte[length];
-    int read = in.read(bytes);
-    if(read != bytes.length) {
-      throw new IllegalStateException("could not read all bytes for length: \"" + bytes.length + "\"");
-    }
-    List<Byte> result = new ArrayList<>(length);
-    for(byte b : bytes) {
-      result.add(b);
-    }
-    return result;
-  }
-
-  @Override
-  public List<Byte> readVoid(int length) throws IOException {
+  public ByteList readVoid(int length) throws IOException {
     return readByte(length);
   }
 
   @Override
   public int readFd() throws IOException {
     return readInt32();
-  }
-
-  @Override
-  public List<Integer> readFd(int length) throws IOException {
-    return readInt32(length);
   }
 
   @Override

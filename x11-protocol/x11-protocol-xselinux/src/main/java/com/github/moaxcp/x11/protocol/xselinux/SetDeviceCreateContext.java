@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -17,7 +17,7 @@ public class SetDeviceCreateContext implements OneWayRequest {
   public static final byte OPCODE = 1;
 
   @NonNull
-  private List<Byte> context;
+  private ByteList context;
 
   public byte getOpCode() {
     return OPCODE;
@@ -28,8 +28,8 @@ public class SetDeviceCreateContext implements OneWayRequest {
     byte majorOpcode = in.readCard8();
     short length = in.readCard16();
     int contextLen = in.readCard32();
-    List<Byte> context = in.readChar((int) (Integer.toUnsignedLong(contextLen)));
-    javaBuilder.context(context);
+    ByteList context = in.readChar((int) (Integer.toUnsignedLong(contextLen)));
+    javaBuilder.context(context.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -23,7 +23,7 @@ public class GetDotClocksReply implements XReply {
   private int maxclocks;
 
   @NonNull
-  private List<Integer> clock;
+  private IntList clock;
 
   public static GetDotClocksReply readGetDotClocksReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -33,12 +33,12 @@ public class GetDotClocksReply implements XReply {
     int clocks = in.readCard32();
     int maxclocks = in.readCard32();
     byte[] pad7 = in.readPad(12);
-    List<Integer> clock = in.readCard32((int) ((1 - (Integer.toUnsignedLong(flags)) & (1)) * Integer.toUnsignedLong(clocks)));
+    IntList clock = in.readCard32((int) ((1 - (Integer.toUnsignedLong(flags)) & (1)) * Integer.toUnsignedLong(clocks)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.flags(flags);
     javaBuilder.clocks(clocks);
     javaBuilder.maxclocks(maxclocks);
-    javaBuilder.clock(clock);
+    javaBuilder.clock(clock.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

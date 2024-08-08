@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -27,7 +28,7 @@ public class SetClipRectangles implements OneWayRequest {
   private short clipYOrigin;
 
   @NonNull
-  private List<Rectangle> rectangles;
+  private ImmutableList<Rectangle> rectangles;
 
   public byte getOpCode() {
     return OPCODE;
@@ -46,7 +47,7 @@ public class SetClipRectangles implements OneWayRequest {
     javaStart += 2;
     short clipYOrigin = in.readInt16();
     javaStart += 2;
-    List<Rectangle> rectangles = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Rectangle> rectangles = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Rectangle baseObject = Rectangle.readRectangle(in);
       rectangles.add(baseObject);
@@ -56,7 +57,7 @@ public class SetClipRectangles implements OneWayRequest {
     javaBuilder.gc(gc);
     javaBuilder.clipXOrigin(clipXOrigin);
     javaBuilder.clipYOrigin(clipYOrigin);
-    javaBuilder.rectangles(rectangles);
+    javaBuilder.rectangles(rectangles.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

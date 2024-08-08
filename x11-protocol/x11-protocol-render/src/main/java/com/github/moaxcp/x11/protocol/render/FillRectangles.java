@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.xproto.Rectangle;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -27,7 +28,7 @@ public class FillRectangles implements OneWayRequest {
   private Color color;
 
   @NonNull
-  private List<Rectangle> rects;
+  private ImmutableList<Rectangle> rects;
 
   public byte getOpCode() {
     return OPCODE;
@@ -48,7 +49,7 @@ public class FillRectangles implements OneWayRequest {
     javaStart += 4;
     Color color = Color.readColor(in);
     javaStart += color.getSize();
-    List<Rectangle> rects = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Rectangle> rects = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Rectangle baseObject = Rectangle.readRectangle(in);
       rects.add(baseObject);
@@ -57,7 +58,7 @@ public class FillRectangles implements OneWayRequest {
     javaBuilder.op(op);
     javaBuilder.dst(dst);
     javaBuilder.color(color);
-    javaBuilder.rects(rects);
+    javaBuilder.rects(rects.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

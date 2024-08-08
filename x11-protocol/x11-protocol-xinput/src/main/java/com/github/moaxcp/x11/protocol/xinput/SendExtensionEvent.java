@@ -5,11 +5,13 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -25,10 +27,10 @@ public class SendExtensionEvent implements OneWayRequest {
   private boolean propagate;
 
   @NonNull
-  private List<EventForSendEventStruct> events;
+  private ImmutableList<EventForSendEventStruct> events;
 
   @NonNull
-  private List<Integer> classes;
+  private IntList classes;
 
   public byte getOpCode() {
     return OPCODE;
@@ -44,16 +46,16 @@ public class SendExtensionEvent implements OneWayRequest {
     short numClasses = in.readCard16();
     byte numEvents = in.readCard8();
     byte[] pad8 = in.readPad(3);
-    List<EventForSendEventStruct> events = new ArrayList<>(Byte.toUnsignedInt(numEvents));
+    MutableList<EventForSendEventStruct> events = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(numEvents));
     for(int i = 0; i < Byte.toUnsignedInt(numEvents); i++) {
       events.add(EventForSendEventStruct.readEventForSendEventStruct(in));
     }
-    List<Integer> classes = in.readCard32(Short.toUnsignedInt(numClasses));
+    IntList classes = in.readCard32(Short.toUnsignedInt(numClasses));
     javaBuilder.destination(destination);
     javaBuilder.deviceId(deviceId);
     javaBuilder.propagate(propagate);
-    javaBuilder.events(events);
-    javaBuilder.classes(classes);
+    javaBuilder.events(events.toImmutable());
+    javaBuilder.classes(classes.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

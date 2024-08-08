@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.FloatList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class GetLightfvReply implements XReply {
   private float datum;
 
   @NonNull
-  private List<Float> data;
+  private FloatList data;
 
   public static GetLightfvReply readGetLightfvReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -29,10 +29,10 @@ public class GetLightfvReply implements XReply {
     int n = in.readCard32();
     float datum = in.readFloat();
     byte[] pad7 = in.readPad(12);
-    List<Float> data = in.readFloat((int) (Integer.toUnsignedLong(n)));
+    FloatList data = in.readFloat((int) (Integer.toUnsignedLong(n)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.datum(datum);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

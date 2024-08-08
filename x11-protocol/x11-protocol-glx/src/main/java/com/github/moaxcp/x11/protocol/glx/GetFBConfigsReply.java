@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class GetFBConfigsReply implements XReply {
   private int numProperties;
 
   @NonNull
-  private List<Integer> propertyList;
+  private IntList propertyList;
 
   public static GetFBConfigsReply readGetFBConfigsReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -30,11 +30,11 @@ public class GetFBConfigsReply implements XReply {
     int numFbConfigs = in.readCard32();
     int numProperties = in.readCard32();
     byte[] pad6 = in.readPad(16);
-    List<Integer> propertyList = in.readCard32((int) (Integer.toUnsignedLong(length)));
+    IntList propertyList = in.readCard32((int) (Integer.toUnsignedLong(length)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.numFbConfigs(numFbConfigs);
     javaBuilder.numProperties(numProperties);
-    javaBuilder.propertyList(propertyList);
+    javaBuilder.propertyList(propertyList.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

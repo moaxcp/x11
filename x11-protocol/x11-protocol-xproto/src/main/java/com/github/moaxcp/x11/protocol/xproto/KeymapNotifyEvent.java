@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XEvent;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class KeymapNotifyEvent implements XEvent {
   private boolean sentEvent;
 
   @NonNull
-  private List<Byte> keys;
+  private ByteList keys;
 
   @Override
   public byte getResponseCode() {
@@ -41,8 +41,8 @@ public class KeymapNotifyEvent implements XEvent {
   public static KeymapNotifyEvent readKeymapNotifyEvent(byte firstEventOffset, boolean sentEvent,
       X11Input in) throws IOException {
     KeymapNotifyEvent.KeymapNotifyEventBuilder javaBuilder = KeymapNotifyEvent.builder();
-    List<Byte> keys = in.readCard8(31);
-    javaBuilder.keys(keys);
+    ByteList keys = in.readCard8(31);
+    javaBuilder.keys(keys.toImmutable());
 
     javaBuilder.sentEvent(sentEvent);
     javaBuilder.firstEventOffset(firstEventOffset);

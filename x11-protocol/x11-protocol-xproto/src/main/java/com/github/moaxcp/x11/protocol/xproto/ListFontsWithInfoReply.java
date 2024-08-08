@@ -5,11 +5,13 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -45,10 +47,10 @@ public class ListFontsWithInfoReply implements XReply {
   private int repliesHint;
 
   @NonNull
-  private List<Fontprop> properties;
+  private ImmutableList<Fontprop> properties;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public static ListFontsWithInfoReply readListFontsWithInfoReply(byte nameLen,
       short sequenceNumber, X11Input in) throws IOException {
@@ -69,11 +71,11 @@ public class ListFontsWithInfoReply implements XReply {
     short fontAscent = in.readInt16();
     short fontDescent = in.readInt16();
     int repliesHint = in.readCard32();
-    List<Fontprop> properties = new ArrayList<>(Short.toUnsignedInt(propertiesLen));
+    MutableList<Fontprop> properties = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(propertiesLen));
     for(int i = 0; i < Short.toUnsignedInt(propertiesLen); i++) {
       properties.add(Fontprop.readFontprop(in));
     }
-    List<Byte> name = in.readChar(Byte.toUnsignedInt(nameLen));
+    ByteList name = in.readChar(Byte.toUnsignedInt(nameLen));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.minBounds(minBounds);
     javaBuilder.maxBounds(maxBounds);
@@ -87,8 +89,8 @@ public class ListFontsWithInfoReply implements XReply {
     javaBuilder.fontAscent(fontAscent);
     javaBuilder.fontDescent(fontDescent);
     javaBuilder.repliesHint(repliesHint);
-    javaBuilder.properties(properties);
-    javaBuilder.name(name);
+    javaBuilder.properties(properties.toImmutable());
+    javaBuilder.name(name.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

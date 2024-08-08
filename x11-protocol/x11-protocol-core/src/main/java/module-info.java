@@ -4,5 +4,7 @@ module com.github.moaxcp.x11.protocol.core {
 
     uses com.github.moaxcp.x11.protocol.XProtocolPlugin;
 
+    requires transitive org.eclipse.collections.api;
+    requires transitive org.eclipse.collections.impl;
     requires static lombok;
 }

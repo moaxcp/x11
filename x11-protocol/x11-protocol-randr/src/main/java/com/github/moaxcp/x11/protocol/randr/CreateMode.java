@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -23,7 +23,7 @@ public class CreateMode implements TwoWayRequest<CreateModeReply> {
   private ModeInfo modeInfo;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public XReplyFunction<CreateModeReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> CreateModeReply.readCreateModeReply(field, sequenceNumber, in);
@@ -44,10 +44,10 @@ public class CreateMode implements TwoWayRequest<CreateModeReply> {
     javaStart += 4;
     ModeInfo modeInfo = ModeInfo.readModeInfo(in);
     javaStart += modeInfo.getSize();
-    List<Byte> name = in.readChar(Short.toUnsignedInt(length) - javaStart);
+    ByteList name = in.readChar(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.window(window);
     javaBuilder.modeInfo(modeInfo);
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class GetProvidersReply implements XReply {
   private int timestamp;
 
   @NonNull
-  private List<Integer> providers;
+  private IntList providers;
 
   public static GetProvidersReply readGetProvidersReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -28,10 +28,10 @@ public class GetProvidersReply implements XReply {
     int timestamp = in.readCard32();
     short numProviders = in.readCard16();
     byte[] pad6 = in.readPad(18);
-    List<Integer> providers = in.readCard32(Short.toUnsignedInt(numProviders));
+    IntList providers = in.readCard32(Short.toUnsignedInt(numProviders));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.timestamp(timestamp);
-    javaBuilder.providers(providers);
+    javaBuilder.providers(providers.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

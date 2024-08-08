@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -18,10 +18,10 @@ public class PrintGetPrinterList implements TwoWayRequest<PrintGetPrinterListRep
   public static final byte OPCODE = 1;
 
   @NonNull
-  private List<Byte> printerName;
+  private ByteList printerName;
 
   @NonNull
-  private List<Byte> locale;
+  private ByteList locale;
 
   public XReplyFunction<PrintGetPrinterListReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> PrintGetPrinterListReply.readPrintGetPrinterListReply(field, sequenceNumber, in);
@@ -37,10 +37,10 @@ public class PrintGetPrinterList implements TwoWayRequest<PrintGetPrinterListRep
     short length = in.readCard16();
     int printerNameLen = in.readCard32();
     int localeLen = in.readCard32();
-    List<Byte> printerName = in.readChar((int) (Integer.toUnsignedLong(printerNameLen)));
-    List<Byte> locale = in.readChar((int) (Integer.toUnsignedLong(localeLen)));
-    javaBuilder.printerName(printerName);
-    javaBuilder.locale(locale);
+    ByteList printerName = in.readChar((int) (Integer.toUnsignedLong(printerNameLen)));
+    ByteList locale = in.readChar((int) (Integer.toUnsignedLong(localeLen)));
+    javaBuilder.printerName(printerName.toImmutable());
+    javaBuilder.locale(locale.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

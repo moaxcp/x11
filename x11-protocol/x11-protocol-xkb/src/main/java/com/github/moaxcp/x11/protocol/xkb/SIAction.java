@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -17,14 +17,14 @@ public class SIAction implements XStruct {
   private byte type;
 
   @NonNull
-  private List<Byte> data;
+  private ByteList data;
 
   public static SIAction readSIAction(X11Input in) throws IOException {
     SIAction.SIActionBuilder javaBuilder = SIAction.builder();
     byte type = in.readCard8();
-    List<Byte> data = in.readCard8(7);
+    ByteList data = in.readCard8(7);
     javaBuilder.type(type);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     return javaBuilder.build();
   }
 

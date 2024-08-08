@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class GetDeviceModifierMappingReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Byte> keymaps;
+  private ByteList keymaps;
 
   public static GetDeviceModifierMappingReply readGetDeviceModifierMappingReply(byte xiReplyType,
       short sequenceNumber, X11Input in) throws IOException {
@@ -27,10 +27,10 @@ public class GetDeviceModifierMappingReply implements XReply {
     int length = in.readCard32();
     byte keycodesPerModifier = in.readCard8();
     byte[] pad5 = in.readPad(23);
-    List<Byte> keymaps = in.readCard8(Byte.toUnsignedInt(keycodesPerModifier) * 8);
+    ByteList keymaps = in.readCard8(Byte.toUnsignedInt(keycodesPerModifier) * 8);
     javaBuilder.xiReplyType(xiReplyType);
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.keymaps(keymaps);
+    javaBuilder.keymaps(keymaps.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

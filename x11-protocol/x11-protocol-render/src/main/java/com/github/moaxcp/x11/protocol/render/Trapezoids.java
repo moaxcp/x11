@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -31,7 +32,7 @@ public class Trapezoids implements OneWayRequest {
   private short srcY;
 
   @NonNull
-  private List<Trapezoid> traps;
+  private ImmutableList<Trapezoid> traps;
 
   public byte getOpCode() {
     return OPCODE;
@@ -58,7 +59,7 @@ public class Trapezoids implements OneWayRequest {
     javaStart += 2;
     short srcY = in.readInt16();
     javaStart += 2;
-    List<Trapezoid> traps = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Trapezoid> traps = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Trapezoid baseObject = Trapezoid.readTrapezoid(in);
       traps.add(baseObject);
@@ -70,7 +71,7 @@ public class Trapezoids implements OneWayRequest {
     javaBuilder.maskFormat(maskFormat);
     javaBuilder.srcX(srcX);
     javaBuilder.srcY(srcY);
-    javaBuilder.traps(traps);
+    javaBuilder.traps(traps.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

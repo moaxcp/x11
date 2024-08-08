@@ -5,11 +5,13 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -23,10 +25,10 @@ public class AdaptorInfo implements XStruct {
   private byte type;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   @NonNull
-  private List<Format> formats;
+  private ImmutableList<Format> formats;
 
   public static AdaptorInfo readAdaptorInfo(X11Input in) throws IOException {
     AdaptorInfo.AdaptorInfoBuilder javaBuilder = AdaptorInfo.builder();
@@ -36,17 +38,17 @@ public class AdaptorInfo implements XStruct {
     short numFormats = in.readCard16();
     byte type = in.readCard8();
     byte[] pad5 = in.readPad(1);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameSize));
+    ByteList name = in.readChar(Short.toUnsignedInt(nameSize));
     in.readPadAlign(Short.toUnsignedInt(nameSize));
-    List<Format> formats = new ArrayList<>(Short.toUnsignedInt(numFormats));
+    MutableList<Format> formats = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(numFormats));
     for(int i = 0; i < Short.toUnsignedInt(numFormats); i++) {
       formats.add(Format.readFormat(in));
     }
     javaBuilder.baseId(baseId);
     javaBuilder.numPorts(numPorts);
     javaBuilder.type(type);
-    javaBuilder.name(name);
-    javaBuilder.formats(formats);
+    javaBuilder.name(name.toImmutable());
+    javaBuilder.formats(formats.toImmutable());
     return javaBuilder.build();
   }
 

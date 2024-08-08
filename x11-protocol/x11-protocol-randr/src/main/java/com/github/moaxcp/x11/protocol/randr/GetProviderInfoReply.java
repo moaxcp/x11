@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -23,19 +24,19 @@ public class GetProviderInfoReply implements XReply {
   private int capabilities;
 
   @NonNull
-  private List<Integer> crtcs;
+  private IntList crtcs;
 
   @NonNull
-  private List<Integer> outputs;
+  private IntList outputs;
 
   @NonNull
-  private List<Integer> associatedProviders;
+  private IntList associatedProviders;
 
   @NonNull
-  private List<Integer> associatedCapability;
+  private IntList associatedCapability;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public static GetProviderInfoReply readGetProviderInfoReply(byte status, short sequenceNumber,
       X11Input in) throws IOException {
@@ -48,20 +49,20 @@ public class GetProviderInfoReply implements XReply {
     short numAssociatedProviders = in.readCard16();
     short nameLen = in.readCard16();
     byte[] pad10 = in.readPad(8);
-    List<Integer> crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
-    List<Integer> outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
-    List<Integer> associatedProviders = in.readCard32(Short.toUnsignedInt(numAssociatedProviders));
-    List<Integer> associatedCapability = in.readCard32(Short.toUnsignedInt(numAssociatedProviders));
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    IntList crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
+    IntList outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
+    IntList associatedProviders = in.readCard32(Short.toUnsignedInt(numAssociatedProviders));
+    IntList associatedCapability = in.readCard32(Short.toUnsignedInt(numAssociatedProviders));
+    ByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     javaBuilder.status(status);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.timestamp(timestamp);
     javaBuilder.capabilities(capabilities);
-    javaBuilder.crtcs(crtcs);
-    javaBuilder.outputs(outputs);
-    javaBuilder.associatedProviders(associatedProviders);
-    javaBuilder.associatedCapability(associatedCapability);
-    javaBuilder.name(name);
+    javaBuilder.crtcs(crtcs.toImmutable());
+    javaBuilder.outputs(outputs.toImmutable());
+    javaBuilder.associatedProviders(associatedProviders.toImmutable());
+    javaBuilder.associatedCapability(associatedCapability.toImmutable());
+    javaBuilder.name(name.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

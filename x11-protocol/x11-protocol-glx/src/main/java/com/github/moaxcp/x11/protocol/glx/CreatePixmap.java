@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -25,7 +25,7 @@ public class CreatePixmap implements OneWayRequest {
   private int glxPixmap;
 
   @NonNull
-  private List<Integer> attribs;
+  private IntList attribs;
 
   public byte getOpCode() {
     return OPCODE;
@@ -40,12 +40,12 @@ public class CreatePixmap implements OneWayRequest {
     int pixmap = in.readCard32();
     int glxPixmap = in.readCard32();
     int numAttribs = in.readCard32();
-    List<Integer> attribs = in.readCard32((int) (Integer.toUnsignedLong(numAttribs) * 2));
+    IntList attribs = in.readCard32((int) (Integer.toUnsignedLong(numAttribs) * 2));
     javaBuilder.screen(screen);
     javaBuilder.fbconfig(fbconfig);
     javaBuilder.pixmap(pixmap);
     javaBuilder.glxPixmap(glxPixmap);
-    javaBuilder.attribs(attribs);
+    javaBuilder.attribs(attribs.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

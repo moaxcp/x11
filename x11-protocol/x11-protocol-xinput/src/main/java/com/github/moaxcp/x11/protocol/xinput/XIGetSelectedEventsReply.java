@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -19,7 +20,7 @@ public class XIGetSelectedEventsReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<EventMask> masks;
+  private ImmutableList<EventMask> masks;
 
   public static XIGetSelectedEventsReply readXIGetSelectedEventsReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -27,12 +28,12 @@ public class XIGetSelectedEventsReply implements XReply {
     int length = in.readCard32();
     short numMasks = in.readCard16();
     byte[] pad5 = in.readPad(22);
-    List<EventMask> masks = new ArrayList<>(Short.toUnsignedInt(numMasks));
+    MutableList<EventMask> masks = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(numMasks));
     for(int i = 0; i < Short.toUnsignedInt(numMasks); i++) {
       masks.add(EventMask.readEventMask(in));
     }
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.masks(masks);
+    javaBuilder.masks(masks.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

@@ -6,10 +6,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -45,31 +47,31 @@ public class SetNames implements OneWayRequest {
   private int compatName;
 
   @NonNull
-  private List<Integer> typeNames;
+  private IntList typeNames;
 
   @NonNull
-  private List<Byte> nLevelsPerType;
+  private ByteList nLevelsPerType;
 
   @NonNull
-  private List<Integer> ktLevelNames;
+  private IntList ktLevelNames;
 
   @NonNull
-  private List<Integer> indicatorNames;
+  private IntList indicatorNames;
 
   @NonNull
-  private List<Integer> virtualModNames;
+  private IntList virtualModNames;
 
   @NonNull
-  private List<Integer> groups;
+  private IntList groups;
 
   @NonNull
-  private List<KeyName> keyNames;
+  private ImmutableList<KeyName> keyNames;
 
   @NonNull
-  private List<KeyAlias> keyAliases;
+  private ImmutableList<KeyAlias> keyAliases;
 
   @NonNull
-  private List<Integer> radioGroupNames;
+  private IntList radioGroupNames;
 
   public byte getOpCode() {
     return OPCODE;
@@ -100,16 +102,16 @@ public class SetNames implements OneWayRequest {
     int physSymbolsName = 0;
     int typesName = 0;
     int compatName = 0;
-    List<Integer> typeNames = null;
-    List<Byte> nLevelsPerType = null;
+    IntList typeNames = null;
+    ByteList nLevelsPerType = null;
     in.readPadAlign(Byte.toUnsignedInt(nTypes));
-    List<Integer> ktLevelNames = null;
-    List<Integer> indicatorNames = null;
-    List<Integer> virtualModNames = null;
-    List<Integer> groups = null;
-    List<KeyName> keyNames = null;
-    List<KeyAlias> keyAliases = null;
-    List<Integer> radioGroupNames = null;
+    IntList ktLevelNames = null;
+    IntList indicatorNames = null;
+    IntList virtualModNames = null;
+    IntList groups = null;
+    ImmutableList<KeyName> keyNames = null;
+    ImmutableList<KeyAlias> keyAliases = null;
+    IntList radioGroupNames = null;
     javaBuilder.deviceSpec(deviceSpec);
     javaBuilder.which(which);
     javaBuilder.firstType(firstType);
@@ -150,7 +152,7 @@ public class SetNames implements OneWayRequest {
       javaBuilder.nLevelsPerType(nLevelsPerType);
     }
     if(NameDetail.K_T_LEVEL_NAMES.isEnabled((int) (Integer.toUnsignedLong(which)))) {
-      ktLevelNames = in.readCard32(nLevelsPerType.stream().mapToInt(mapToInt -> mapToInt).sum());
+      ktLevelNames = in.readCard32((int) nLevelsPerType.sum());
       javaBuilder.ktLevelNames(ktLevelNames);
     }
     if(NameDetail.INDICATOR_NAMES.isEnabled((int) (Integer.toUnsignedLong(which)))) {
@@ -339,55 +341,55 @@ public class SetNames implements OneWayRequest {
       return this;
     }
 
-    public SetNames.SetNamesBuilder typeNames(List<Integer> typeNames) {
+    public SetNames.SetNamesBuilder typeNames(IntList typeNames) {
       this.typeNames = typeNames;
       whichEnable(NameDetail.KEY_TYPE_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder nLevelsPerType(List<Byte> nLevelsPerType) {
+    public SetNames.SetNamesBuilder nLevelsPerType(ByteList nLevelsPerType) {
       this.nLevelsPerType = nLevelsPerType;
       whichEnable(NameDetail.K_T_LEVEL_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder ktLevelNames(List<Integer> ktLevelNames) {
+    public SetNames.SetNamesBuilder ktLevelNames(IntList ktLevelNames) {
       this.ktLevelNames = ktLevelNames;
       whichEnable(NameDetail.K_T_LEVEL_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder indicatorNames(List<Integer> indicatorNames) {
+    public SetNames.SetNamesBuilder indicatorNames(IntList indicatorNames) {
       this.indicatorNames = indicatorNames;
       whichEnable(NameDetail.INDICATOR_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder virtualModNames(List<Integer> virtualModNames) {
+    public SetNames.SetNamesBuilder virtualModNames(IntList virtualModNames) {
       this.virtualModNames = virtualModNames;
       whichEnable(NameDetail.VIRTUAL_MOD_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder groups(List<Integer> groups) {
+    public SetNames.SetNamesBuilder groups(IntList groups) {
       this.groups = groups;
       whichEnable(NameDetail.GROUP_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder keyNames(List<KeyName> keyNames) {
+    public SetNames.SetNamesBuilder keyNames(ImmutableList<KeyName> keyNames) {
       this.keyNames = keyNames;
       whichEnable(NameDetail.KEY_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder keyAliases(List<KeyAlias> keyAliases) {
+    public SetNames.SetNamesBuilder keyAliases(ImmutableList<KeyAlias> keyAliases) {
       this.keyAliases = keyAliases;
       whichEnable(NameDetail.KEY_ALIASES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder radioGroupNames(List<Integer> radioGroupNames) {
+    public SetNames.SetNamesBuilder radioGroupNames(IntList radioGroupNames) {
       this.radioGroupNames = radioGroupNames;
       whichEnable(NameDetail.R_G_NAMES);
       return this;

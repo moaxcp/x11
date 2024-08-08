@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XEvent;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -35,13 +36,13 @@ public class DeviceStateNotifyEvent implements XEvent {
   private byte classesReported;
 
   @NonNull
-  private List<Byte> buttons;
+  private ByteList buttons;
 
   @NonNull
-  private List<Byte> keys;
+  private ByteList keys;
 
   @NonNull
-  private List<Integer> valuators;
+  private IntList valuators;
 
   @Override
   public byte getResponseCode() {
@@ -63,9 +64,9 @@ public class DeviceStateNotifyEvent implements XEvent {
     byte numButtons = in.readCard8();
     byte numValuators = in.readCard8();
     byte classesReported = in.readCard8();
-    List<Byte> buttons = in.readCard8(4);
-    List<Byte> keys = in.readCard8(4);
-    List<Integer> valuators = in.readCard32(3);
+    ByteList buttons = in.readCard8(4);
+    ByteList keys = in.readCard8(4);
+    IntList valuators = in.readCard32(3);
     javaBuilder.deviceId(deviceId);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.time(time);
@@ -73,9 +74,9 @@ public class DeviceStateNotifyEvent implements XEvent {
     javaBuilder.numButtons(numButtons);
     javaBuilder.numValuators(numValuators);
     javaBuilder.classesReported(classesReported);
-    javaBuilder.buttons(buttons);
-    javaBuilder.keys(keys);
-    javaBuilder.valuators(valuators);
+    javaBuilder.buttons(buttons.toImmutable());
+    javaBuilder.keys(keys.toImmutable());
+    javaBuilder.valuators(valuators.toImmutable());
 
     javaBuilder.sentEvent(sentEvent);
     javaBuilder.firstEventOffset(firstEventOffset);

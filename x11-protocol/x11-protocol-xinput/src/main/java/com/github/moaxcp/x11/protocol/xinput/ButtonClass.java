@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,10 +21,10 @@ public class ButtonClass implements XStruct {
   private short sourceid;
 
   @NonNull
-  private List<Integer> state;
+  private IntList state;
 
   @NonNull
-  private List<Integer> labels;
+  private IntList labels;
 
   public static ButtonClass readButtonClass(X11Input in) throws IOException {
     ButtonClass.ButtonClassBuilder javaBuilder = ButtonClass.builder();
@@ -32,13 +32,13 @@ public class ButtonClass implements XStruct {
     short len = in.readCard16();
     short sourceid = in.readCard16();
     short numButtons = in.readCard16();
-    List<Integer> state = in.readCard32((Short.toUnsignedInt(numButtons) + 31) / 32);
-    List<Integer> labels = in.readCard32(Short.toUnsignedInt(numButtons));
+    IntList state = in.readCard32((Short.toUnsignedInt(numButtons) + 31) / 32);
+    IntList labels = in.readCard32(Short.toUnsignedInt(numButtons));
     javaBuilder.type(type);
     javaBuilder.len(len);
     javaBuilder.sourceid(sourceid);
-    javaBuilder.state(state);
-    javaBuilder.labels(labels);
+    javaBuilder.state(state.toImmutable());
+    javaBuilder.labels(labels.toImmutable());
     return javaBuilder.build();
   }
 

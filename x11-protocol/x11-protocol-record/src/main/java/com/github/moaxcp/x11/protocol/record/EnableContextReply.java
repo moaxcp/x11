@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -29,7 +29,7 @@ public class EnableContextReply implements XReply {
   private int recSequenceNum;
 
   @NonNull
-  private List<Byte> data;
+  private ByteList data;
 
   public static EnableContextReply readEnableContextReply(byte category, short sequenceNumber,
       X11Input in) throws IOException {
@@ -42,7 +42,7 @@ public class EnableContextReply implements XReply {
     int serverTime = in.readCard32();
     int recSequenceNum = in.readCard32();
     byte[] pad10 = in.readPad(8);
-    List<Byte> data = in.readByte((int) (Integer.toUnsignedLong(length) * 4));
+    ByteList data = in.readByte((int) (Integer.toUnsignedLong(length) * 4));
     javaBuilder.category(category);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.elementHeader(elementHeader);
@@ -50,7 +50,7 @@ public class EnableContextReply implements XReply {
     javaBuilder.xidBase(xidBase);
     javaBuilder.serverTime(serverTime);
     javaBuilder.recSequenceNum(recSequenceNum);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class RotateProperties implements OneWayRequest {
   private short delta;
 
   @NonNull
-  private List<Integer> atoms;
+  private IntList atoms;
 
   public byte getOpCode() {
     return OPCODE;
@@ -34,10 +34,10 @@ public class RotateProperties implements OneWayRequest {
     int window = in.readCard32();
     short atomsLen = in.readCard16();
     short delta = in.readInt16();
-    List<Integer> atoms = in.readCard32(Short.toUnsignedInt(atomsLen));
+    IntList atoms = in.readCard32(Short.toUnsignedInt(atomsLen));
     javaBuilder.window(window);
     javaBuilder.delta(delta);
-    javaBuilder.atoms(atoms);
+    javaBuilder.atoms(atoms.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

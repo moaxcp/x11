@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -17,10 +17,10 @@ public class AllocColorCellsReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> pixels;
+  private IntList pixels;
 
   @NonNull
-  private List<Integer> masks;
+  private IntList masks;
 
   public static AllocColorCellsReply readAllocColorCellsReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -29,11 +29,11 @@ public class AllocColorCellsReply implements XReply {
     short pixelsLen = in.readCard16();
     short masksLen = in.readCard16();
     byte[] pad6 = in.readPad(20);
-    List<Integer> pixels = in.readCard32(Short.toUnsignedInt(pixelsLen));
-    List<Integer> masks = in.readCard32(Short.toUnsignedInt(masksLen));
+    IntList pixels = in.readCard32(Short.toUnsignedInt(pixelsLen));
+    IntList masks = in.readCard32(Short.toUnsignedInt(masksLen));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.pixels(pixels);
-    javaBuilder.masks(masks);
+    javaBuilder.pixels(pixels.toImmutable());
+    javaBuilder.masks(masks.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

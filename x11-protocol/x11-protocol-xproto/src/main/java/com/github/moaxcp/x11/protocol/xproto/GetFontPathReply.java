@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -19,7 +20,7 @@ public class GetFontPathReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Str> path;
+  private ImmutableList<Str> path;
 
   public static GetFontPathReply readGetFontPathReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -27,12 +28,12 @@ public class GetFontPathReply implements XReply {
     int length = in.readCard32();
     short pathLen = in.readCard16();
     byte[] pad5 = in.readPad(22);
-    List<Str> path = new ArrayList<>(Short.toUnsignedInt(pathLen));
+    MutableList<Str> path = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(pathLen));
     for(int i = 0; i < Short.toUnsignedInt(pathLen); i++) {
       path.add(Str.readStr(in));
     }
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.path(path);
+    javaBuilder.path(path.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

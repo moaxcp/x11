@@ -7,10 +7,10 @@ import com.github.moaxcp.x11.protocol.Utilities;
 import com.github.moaxcp.x11.protocol.XEvent;
 import com.github.moaxcp.x11.protocol.xproto.*;
 import com.github.moaxcp.x11.x11client.X11Client;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SimpleHelloWorldMouse {
 
@@ -47,7 +47,7 @@ public class SimpleHelloWorldMouse {
             InternAtomReply wmProtocols = client.send(InternAtom.builder().name(Utilities.toByteList("WM_PROTOCOLS")).build());
             InternAtomReply deleteAtom = client.send(InternAtom.builder().name(Utilities.toByteList("WM_DELETE_WINDOW")).build());
 
-            List<Byte> write;
+            ByteList write;
             if (client.getBigEndian()) {
                 write = BigEndian.writeList(deleteAtom.getAtom());
             } else {
@@ -76,7 +76,7 @@ public class SimpleHelloWorldMouse {
             while(true) {
                 XEvent event = client.getNextEvent();
                 if(event instanceof ExposeEvent) {
-                    List<Rectangle> rectangles = new ArrayList<>();
+                    var rectangles = Lists.mutable.<Rectangle>empty();
                     rectangles.add(Rectangle.builder()
                             .x((short) 20)
                             .y((short) 20)
@@ -86,7 +86,7 @@ public class SimpleHelloWorldMouse {
                     client.send(PolyFillRectangle.builder()
                             .drawable(window.getWid())
                             .gc(gc.getCid())
-                            .rectangles(rectangles)
+                            .rectangles(rectangles.toImmutable())
                             .build());
                     client.send(ImageText8.builder()
                             .drawable(window.getWid())

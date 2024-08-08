@@ -3,10 +3,10 @@ package com.github.moaxcp.x11.protocol.xinput;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -22,19 +22,19 @@ public class FeedbackStateString implements FeedbackState {
   private short maxSymbols;
 
   @NonNull
-  private List<Integer> keysyms;
+  private IntList keysyms;
 
   public static FeedbackStateString readFeedbackStateString(byte classId, byte feedbackId,
       short len, X11Input in) throws IOException {
     FeedbackStateString.FeedbackStateStringBuilder javaBuilder = FeedbackStateString.builder();
     short maxSymbols = in.readCard16();
     short numKeysyms = in.readCard16();
-    List<Integer> keysyms = in.readCard32(Short.toUnsignedInt(numKeysyms));
+    IntList keysyms = in.readCard32(Short.toUnsignedInt(numKeysyms));
     javaBuilder.classId(classId);
     javaBuilder.feedbackId(feedbackId);
     javaBuilder.len(len);
     javaBuilder.maxSymbols(maxSymbols);
-    javaBuilder.keysyms(keysyms);
+    javaBuilder.keysyms(keysyms.toImmutable());
     return javaBuilder.build();
   }
 

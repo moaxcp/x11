@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -20,7 +20,7 @@ public class SetDeviceModifierMapping implements TwoWayRequest<SetDeviceModifier
   private byte deviceId;
 
   @NonNull
-  private List<Byte> keymaps;
+  private ByteList keymaps;
 
   public XReplyFunction<SetDeviceModifierMappingReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> SetDeviceModifierMappingReply.readSetDeviceModifierMappingReply(field, sequenceNumber, in);
@@ -38,9 +38,9 @@ public class SetDeviceModifierMapping implements TwoWayRequest<SetDeviceModifier
     byte deviceId = in.readCard8();
     byte keycodesPerModifier = in.readCard8();
     byte[] pad5 = in.readPad(2);
-    List<Byte> keymaps = in.readCard8(Byte.toUnsignedInt(keycodesPerModifier) * 8);
+    ByteList keymaps = in.readCard8(Byte.toUnsignedInt(keycodesPerModifier) * 8);
     javaBuilder.deviceId(deviceId);
-    javaBuilder.keymaps(keymaps);
+    javaBuilder.keymaps(keymaps.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

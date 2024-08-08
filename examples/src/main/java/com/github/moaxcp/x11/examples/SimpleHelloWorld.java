@@ -4,10 +4,9 @@ import com.github.moaxcp.x11.protocol.Utilities;
 import com.github.moaxcp.x11.protocol.XEvent;
 import com.github.moaxcp.x11.protocol.xproto.*;
 import com.github.moaxcp.x11.x11client.X11Client;
+import org.eclipse.collections.api.factory.Lists;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SimpleHelloWorld {
 
@@ -42,7 +41,7 @@ public class SimpleHelloWorld {
             while(true) {
                 XEvent event = x11Client.getNextEvent();
                 if(event instanceof ExposeEvent) {
-                    List<Rectangle> rectangles = new ArrayList<>();
+                    var rectangles = Lists.mutable.<Rectangle>empty();
                     rectangles.add(Rectangle.builder()
                             .x((short) 20)
                             .y((short) 20)
@@ -52,7 +51,7 @@ public class SimpleHelloWorld {
                     x11Client.send(PolyFillRectangle.builder()
                             .drawable(window.getWid())
                             .gc(gc.getCid())
-                            .rectangles(rectangles)
+                            .rectangles(rectangles.toImmutable())
                             .build());
                     x11Client.send(ImageText8.builder()
                             .drawable(window.getWid())

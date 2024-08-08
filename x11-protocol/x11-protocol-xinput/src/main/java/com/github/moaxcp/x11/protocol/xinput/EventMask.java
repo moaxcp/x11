@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -17,15 +17,15 @@ public class EventMask implements XStruct {
   private short deviceid;
 
   @NonNull
-  private List<Integer> mask;
+  private IntList mask;
 
   public static EventMask readEventMask(X11Input in) throws IOException {
     EventMask.EventMaskBuilder javaBuilder = EventMask.builder();
     short deviceid = in.readCard16();
     short maskLen = in.readCard16();
-    List<Integer> mask = in.readCard32(Short.toUnsignedInt(maskLen));
+    IntList mask = in.readCard32(Short.toUnsignedInt(maskLen));
     javaBuilder.deviceid(deviceid);
-    javaBuilder.mask(mask);
+    javaBuilder.mask(mask.toImmutable());
     return javaBuilder.build();
   }
 

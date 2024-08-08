@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class ChangeDeviceDontPropagateList implements OneWayRequest {
   private byte mode;
 
   @NonNull
-  private List<Integer> classes;
+  private IntList classes;
 
   public byte getOpCode() {
     return OPCODE;
@@ -36,10 +36,10 @@ public class ChangeDeviceDontPropagateList implements OneWayRequest {
     short numClasses = in.readCard16();
     byte mode = in.readCard8();
     byte[] pad6 = in.readPad(1);
-    List<Integer> classes = in.readCard32(Short.toUnsignedInt(numClasses));
+    IntList classes = in.readCard32(Short.toUnsignedInt(numClasses));
     javaBuilder.window(window);
     javaBuilder.mode(mode);
-    javaBuilder.classes(classes);
+    javaBuilder.classes(classes.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

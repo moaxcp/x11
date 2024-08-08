@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -25,7 +25,7 @@ public class EncodingInfo implements XStruct {
   private Rational rate;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public static EncodingInfo readEncodingInfo(X11Input in) throws IOException {
     EncodingInfo.EncodingInfoBuilder javaBuilder = EncodingInfo.builder();
@@ -35,13 +35,13 @@ public class EncodingInfo implements XStruct {
     short height = in.readCard16();
     byte[] pad4 = in.readPad(2);
     Rational rate = Rational.readRational(in);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameSize));
+    ByteList name = in.readChar(Short.toUnsignedInt(nameSize));
     in.readPadAlign(Short.toUnsignedInt(nameSize));
     javaBuilder.encoding(encoding);
     javaBuilder.width(width);
     javaBuilder.height(height);
     javaBuilder.rate(rate);
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     return javaBuilder.build();
   }
 

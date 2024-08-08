@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import com.github.moaxcp.x11.protocol.xproto.Rectangle;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -23,7 +24,7 @@ public class FetchRegionReply implements XReply {
   private Rectangle extents;
 
   @NonNull
-  private List<Rectangle> rectangles;
+  private ImmutableList<Rectangle> rectangles;
 
   public static FetchRegionReply readFetchRegionReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -31,13 +32,13 @@ public class FetchRegionReply implements XReply {
     int length = in.readCard32();
     Rectangle extents = Rectangle.readRectangle(in);
     byte[] pad5 = in.readPad(16);
-    List<Rectangle> rectangles = new ArrayList<>((int) (Integer.toUnsignedLong(length) / 2));
+    MutableList<Rectangle> rectangles = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(length) / 2));
     for(int i = 0; i < Integer.toUnsignedLong(length) / 2; i++) {
       rectangles.add(Rectangle.readRectangle(in));
     }
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.extents(extents);
-    javaBuilder.rectangles(rectangles);
+    javaBuilder.rectangles(rectangles.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

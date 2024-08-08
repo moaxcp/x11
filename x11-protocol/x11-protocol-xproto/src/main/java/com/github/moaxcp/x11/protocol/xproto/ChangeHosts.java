@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class ChangeHosts implements OneWayRequest {
   private byte family;
 
   @NonNull
-  private List<Byte> address;
+  private ByteList address;
 
   public byte getOpCode() {
     return OPCODE;
@@ -34,10 +34,10 @@ public class ChangeHosts implements OneWayRequest {
     byte family = in.readCard8();
     byte[] pad4 = in.readPad(1);
     short addressLen = in.readCard16();
-    List<Byte> address = in.readByte(Short.toUnsignedInt(addressLen));
+    ByteList address = in.readByte(Short.toUnsignedInt(addressLen));
     javaBuilder.mode(mode);
     javaBuilder.family(family);
-    javaBuilder.address(address);
+    javaBuilder.address(address.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

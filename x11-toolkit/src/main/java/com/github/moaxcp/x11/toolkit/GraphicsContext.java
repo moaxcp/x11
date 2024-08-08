@@ -2,8 +2,7 @@ package com.github.moaxcp.x11.toolkit;
 
 import com.github.moaxcp.x11.protocol.Utilities;
 import com.github.moaxcp.x11.protocol.xproto.*;
-
-import java.util.Collections;
+import org.eclipse.collections.impl.factory.Lists;
 
 public class GraphicsContext extends Resource {
   private final int drawable;
@@ -27,7 +26,7 @@ public class GraphicsContext extends Resource {
     display.send(PolyFillRectangle.builder()
             .drawable(drawable)
             .gc(getId())
-            .rectangles(Collections.singletonList(rectangle))
+            .rectangles(Lists.immutable.of(rectangle))
             .build());
   }
 

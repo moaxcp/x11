@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -20,7 +20,7 @@ public class GetDeviceButtonMappingReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Byte> map;
+  private ByteList map;
 
   public static GetDeviceButtonMappingReply readGetDeviceButtonMappingReply(byte xiReplyType,
       short sequenceNumber, X11Input in) throws IOException {
@@ -28,11 +28,11 @@ public class GetDeviceButtonMappingReply implements XReply {
     int length = in.readCard32();
     byte mapSize = in.readCard8();
     byte[] pad5 = in.readPad(23);
-    List<Byte> map = in.readCard8(Byte.toUnsignedInt(mapSize));
+    ByteList map = in.readCard8(Byte.toUnsignedInt(mapSize));
     in.readPadAlign(Byte.toUnsignedInt(mapSize));
     javaBuilder.xiReplyType(xiReplyType);
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.map(map);
+    javaBuilder.map(map.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

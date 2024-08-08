@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -20,7 +20,7 @@ public class InternAtom implements TwoWayRequest<InternAtomReply> {
   private boolean onlyIfExists;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public XReplyFunction<InternAtomReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> InternAtomReply.readInternAtomReply(field, sequenceNumber, in);
@@ -36,9 +36,9 @@ public class InternAtom implements TwoWayRequest<InternAtomReply> {
     short length = in.readCard16();
     short nameLen = in.readCard16();
     byte[] pad4 = in.readPad(2);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     javaBuilder.onlyIfExists(onlyIfExists);
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

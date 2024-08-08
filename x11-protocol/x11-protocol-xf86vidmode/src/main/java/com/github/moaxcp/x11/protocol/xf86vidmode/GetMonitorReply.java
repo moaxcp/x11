@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -17,19 +18,19 @@ public class GetMonitorReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> hsync;
+  private IntList hsync;
 
   @NonNull
-  private List<Integer> vsync;
+  private IntList vsync;
 
   @NonNull
-  private List<Byte> vendor;
+  private ByteList vendor;
 
   @NonNull
-  private List<Byte> alignmentPad;
+  private ByteList alignmentPad;
 
   @NonNull
-  private List<Byte> model;
+  private ByteList model;
 
   public static GetMonitorReply readGetMonitorReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -40,17 +41,17 @@ public class GetMonitorReply implements XReply {
     byte numHsync = in.readCard8();
     byte numVsync = in.readCard8();
     byte[] pad8 = in.readPad(20);
-    List<Integer> hsync = in.readCard32(Byte.toUnsignedInt(numHsync));
-    List<Integer> vsync = in.readCard32(Byte.toUnsignedInt(numVsync));
-    List<Byte> vendor = in.readChar(Byte.toUnsignedInt(vendorLength));
-    List<Byte> alignmentPad = in.readVoid((Byte.toUnsignedInt(vendorLength) + 3) & (~ (3)) - Byte.toUnsignedInt(vendorLength));
-    List<Byte> model = in.readChar(Byte.toUnsignedInt(modelLength));
+    IntList hsync = in.readCard32(Byte.toUnsignedInt(numHsync));
+    IntList vsync = in.readCard32(Byte.toUnsignedInt(numVsync));
+    ByteList vendor = in.readChar(Byte.toUnsignedInt(vendorLength));
+    ByteList alignmentPad = in.readVoid((Byte.toUnsignedInt(vendorLength) + 3) & (~ (3)) - Byte.toUnsignedInt(vendorLength));
+    ByteList model = in.readChar(Byte.toUnsignedInt(modelLength));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.hsync(hsync);
-    javaBuilder.vsync(vsync);
-    javaBuilder.vendor(vendor);
-    javaBuilder.alignmentPad(alignmentPad);
-    javaBuilder.model(model);
+    javaBuilder.hsync(hsync.toImmutable());
+    javaBuilder.vsync(vsync.toImmutable());
+    javaBuilder.vendor(vendor.toImmutable());
+    javaBuilder.alignmentPad(alignmentPad.toImmutable());
+    javaBuilder.model(model.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

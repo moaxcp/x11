@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class StringFeedbackCtl implements XStruct {
   private short len;
 
   @NonNull
-  private List<Integer> keysyms;
+  private IntList keysyms;
 
   public static StringFeedbackCtl readStringFeedbackCtl(X11Input in) throws IOException {
     StringFeedbackCtl.StringFeedbackCtlBuilder javaBuilder = StringFeedbackCtl.builder();
@@ -30,11 +30,11 @@ public class StringFeedbackCtl implements XStruct {
     short len = in.readCard16();
     byte[] pad3 = in.readPad(2);
     short numKeysyms = in.readCard16();
-    List<Integer> keysyms = in.readCard32(Short.toUnsignedInt(numKeysyms));
+    IntList keysyms = in.readCard32(Short.toUnsignedInt(numKeysyms));
     javaBuilder.classId(classId);
     javaBuilder.feedbackId(feedbackId);
     javaBuilder.len(len);
-    javaBuilder.keysyms(keysyms);
+    javaBuilder.keysyms(keysyms.toImmutable());
     return javaBuilder.build();
   }
 

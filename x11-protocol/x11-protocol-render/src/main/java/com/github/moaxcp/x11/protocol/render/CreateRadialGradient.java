@@ -5,11 +5,13 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -31,10 +33,10 @@ public class CreateRadialGradient implements OneWayRequest {
   private int outerRadius;
 
   @NonNull
-  private List<Integer> stops;
+  private IntList stops;
 
   @NonNull
-  private List<Color> colors;
+  private ImmutableList<Color> colors;
 
   public byte getOpCode() {
     return OPCODE;
@@ -50,8 +52,8 @@ public class CreateRadialGradient implements OneWayRequest {
     int innerRadius = in.readInt32();
     int outerRadius = in.readInt32();
     int numStops = in.readCard32();
-    List<Integer> stops = in.readInt32((int) (Integer.toUnsignedLong(numStops)));
-    List<Color> colors = new ArrayList<>((int) (Integer.toUnsignedLong(numStops)));
+    IntList stops = in.readInt32((int) (Integer.toUnsignedLong(numStops)));
+    MutableList<Color> colors = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(numStops)));
     for(int i = 0; i < Integer.toUnsignedLong(numStops); i++) {
       colors.add(Color.readColor(in));
     }
@@ -60,8 +62,8 @@ public class CreateRadialGradient implements OneWayRequest {
     javaBuilder.outer(outer);
     javaBuilder.innerRadius(innerRadius);
     javaBuilder.outerRadius(outerRadius);
-    javaBuilder.stops(stops);
-    javaBuilder.colors(colors);
+    javaBuilder.stops(stops.toImmutable());
+    javaBuilder.colors(colors.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

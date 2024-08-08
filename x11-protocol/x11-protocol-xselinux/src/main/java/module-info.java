@@ -5,7 +5,7 @@ import com.github.moaxcp.x11.protocol.xselinux.XselinuxPlugin;
 module com.github.moaxcp.x11.protocol.xselinux {
     exports com.github.moaxcp.x11.protocol.xselinux;
 
-    requires com.github.moaxcp.x11.protocol.core;
+    requires transitive com.github.moaxcp.x11.protocol.core;
     requires static lombok;
     provides XProtocolPlugin with XselinuxPlugin;
 }

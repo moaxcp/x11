@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import com.github.moaxcp.x11.protocol.xproto.ModMask;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -70,7 +70,7 @@ public class GetControlsReply implements XReply {
   private int enabledControls;
 
   @NonNull
-  private List<Byte> perKeyRepeat;
+  private ByteList perKeyRepeat;
 
   public static GetControlsReply readGetControlsReply(byte deviceID, short sequenceNumber,
       X11Input in) throws IOException {
@@ -103,7 +103,7 @@ public class GetControlsReply implements XReply {
     int accessXTimeoutMask = in.readCard32();
     int accessXTimeoutValues = in.readCard32();
     int enabledControls = in.readCard32();
-    List<Byte> perKeyRepeat = in.readCard8(32);
+    ByteList perKeyRepeat = in.readCard8(32);
     javaBuilder.deviceID(deviceID);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.mouseKeysDfltBtn(mouseKeysDfltBtn);
@@ -131,7 +131,7 @@ public class GetControlsReply implements XReply {
     javaBuilder.accessXTimeoutMask(accessXTimeoutMask);
     javaBuilder.accessXTimeoutValues(accessXTimeoutValues);
     javaBuilder.enabledControls(enabledControls);
-    javaBuilder.perKeyRepeat(perKeyRepeat);
+    javaBuilder.perKeyRepeat(perKeyRepeat.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

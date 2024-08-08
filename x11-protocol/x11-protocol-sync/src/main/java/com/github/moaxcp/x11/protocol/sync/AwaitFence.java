@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -17,7 +17,7 @@ public class AwaitFence implements OneWayRequest {
   public static final byte OPCODE = 19;
 
   @NonNull
-  private List<Integer> fenceList;
+  private IntList fenceList;
 
   public byte getOpCode() {
     return OPCODE;
@@ -30,8 +30,8 @@ public class AwaitFence implements OneWayRequest {
     javaStart += 1;
     short length = in.readCard16();
     javaStart += 2;
-    List<Integer> fenceList = in.readCard32(Short.toUnsignedInt(length) - javaStart);
-    javaBuilder.fenceList(fenceList);
+    IntList fenceList = in.readCard32(Short.toUnsignedInt(length) - javaStart);
+    javaBuilder.fenceList(fenceList.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

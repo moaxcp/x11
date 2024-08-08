@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -26,7 +27,7 @@ public class GetIndicatorMapReply implements XReply {
   private byte nIndicators;
 
   @NonNull
-  private List<IndicatorMap> maps;
+  private ImmutableList<IndicatorMap> maps;
 
   public static GetIndicatorMapReply readGetIndicatorMapReply(byte deviceID, short sequenceNumber,
       X11Input in) throws IOException {
@@ -36,7 +37,7 @@ public class GetIndicatorMapReply implements XReply {
     int realIndicators = in.readCard32();
     byte nIndicators = in.readCard8();
     byte[] pad7 = in.readPad(15);
-    List<IndicatorMap> maps = new ArrayList<>(Popcount.popcount(Integer.toUnsignedLong(which)));
+    MutableList<IndicatorMap> maps = Lists.mutable.withInitialCapacity(Popcount.popcount(Integer.toUnsignedLong(which)));
     for(int i = 0; i < Popcount.popcount(Integer.toUnsignedLong(which)); i++) {
       maps.add(IndicatorMap.readIndicatorMap(in));
     }
@@ -44,7 +45,7 @@ public class GetIndicatorMapReply implements XReply {
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.realIndicators(realIndicators);
     javaBuilder.nIndicators(nIndicators);
-    javaBuilder.maps(maps);
+    javaBuilder.maps(maps.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

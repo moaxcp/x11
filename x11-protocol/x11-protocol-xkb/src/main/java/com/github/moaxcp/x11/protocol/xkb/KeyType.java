@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import com.github.moaxcp.x11.protocol.xproto.ModMask;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -28,10 +29,10 @@ public class KeyType implements XStruct {
   private boolean hasPreserve;
 
   @NonNull
-  private List<KTMapEntry> map;
+  private ImmutableList<KTMapEntry> map;
 
   @NonNull
-  private List<ModDef> preserve;
+  private ImmutableList<ModDef> preserve;
 
   public static KeyType readKeyType(X11Input in) throws IOException {
     KeyType.KeyTypeBuilder javaBuilder = KeyType.builder();
@@ -42,11 +43,11 @@ public class KeyType implements XStruct {
     byte nMapEntries = in.readCard8();
     boolean hasPreserve = in.readBool();
     byte[] pad6 = in.readPad(1);
-    List<KTMapEntry> map = new ArrayList<>(Byte.toUnsignedInt(nMapEntries));
+    MutableList<KTMapEntry> map = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(nMapEntries));
     for(int i = 0; i < Byte.toUnsignedInt(nMapEntries); i++) {
       map.add(KTMapEntry.readKTMapEntry(in));
     }
-    List<ModDef> preserve = new ArrayList<>((hasPreserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
+    MutableList<ModDef> preserve = Lists.mutable.withInitialCapacity((hasPreserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
     for(int i = 0; i < (hasPreserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries); i++) {
       preserve.add(ModDef.readModDef(in));
     }
@@ -55,8 +56,8 @@ public class KeyType implements XStruct {
     javaBuilder.modsVmods(modsVmods);
     javaBuilder.numLevels(numLevels);
     javaBuilder.hasPreserve(hasPreserve);
-    javaBuilder.map(map);
-    javaBuilder.preserve(preserve);
+    javaBuilder.map(map.toImmutable());
+    javaBuilder.preserve(preserve.toImmutable());
     return javaBuilder.build();
   }
 

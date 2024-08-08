@@ -5,11 +5,13 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -23,10 +25,10 @@ public class CreateContext implements OneWayRequest {
   private byte elementHeader;
 
   @NonNull
-  private List<Integer> clientSpecs;
+  private IntList clientSpecs;
 
   @NonNull
-  private List<Range> ranges;
+  private ImmutableList<Range> ranges;
 
   public byte getOpCode() {
     return OPCODE;
@@ -41,15 +43,15 @@ public class CreateContext implements OneWayRequest {
     byte[] pad5 = in.readPad(3);
     int numClientSpecs = in.readCard32();
     int numRanges = in.readCard32();
-    List<Integer> clientSpecs = in.readCard32((int) (Integer.toUnsignedLong(numClientSpecs)));
-    List<Range> ranges = new ArrayList<>((int) (Integer.toUnsignedLong(numRanges)));
+    IntList clientSpecs = in.readCard32((int) (Integer.toUnsignedLong(numClientSpecs)));
+    MutableList<Range> ranges = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(numRanges)));
     for(int i = 0; i < Integer.toUnsignedLong(numRanges); i++) {
       ranges.add(Range.readRange(in));
     }
     javaBuilder.context(context);
     javaBuilder.elementHeader(elementHeader);
-    javaBuilder.clientSpecs(clientSpecs);
-    javaBuilder.ranges(ranges);
+    javaBuilder.clientSpecs(clientSpecs.toImmutable());
+    javaBuilder.ranges(ranges.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

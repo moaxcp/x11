@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -23,7 +23,7 @@ public class AllocColorPlanesReply implements XReply {
   private int blueMask;
 
   @NonNull
-  private List<Integer> pixels;
+  private IntList pixels;
 
   public static AllocColorPlanesReply readAllocColorPlanesReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -35,12 +35,12 @@ public class AllocColorPlanesReply implements XReply {
     int greenMask = in.readCard32();
     int blueMask = in.readCard32();
     byte[] pad9 = in.readPad(8);
-    List<Integer> pixels = in.readCard32(Short.toUnsignedInt(pixelsLen));
+    IntList pixels = in.readCard32(Short.toUnsignedInt(pixelsLen));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.redMask(redMask);
     javaBuilder.greenMask(greenMask);
     javaBuilder.blueMask(blueMask);
-    javaBuilder.pixels(pixels);
+    javaBuilder.pixels(pixels.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -18,7 +18,7 @@ public class GetExtensionVersion implements TwoWayRequest<GetExtensionVersionRep
   public static final byte OPCODE = 1;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public XReplyFunction<GetExtensionVersionReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> GetExtensionVersionReply.readGetExtensionVersionReply(field, sequenceNumber, in);
@@ -34,8 +34,8 @@ public class GetExtensionVersion implements TwoWayRequest<GetExtensionVersionRep
     short length = in.readCard16();
     short nameLen = in.readCard16();
     byte[] pad4 = in.readPad(2);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
-    javaBuilder.name(name);
+    ByteList name = in.readChar(Short.toUnsignedInt(nameLen));
+    javaBuilder.name(name.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

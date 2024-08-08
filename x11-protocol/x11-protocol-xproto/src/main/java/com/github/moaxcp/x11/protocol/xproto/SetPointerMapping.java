@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -18,7 +18,7 @@ public class SetPointerMapping implements TwoWayRequest<SetPointerMappingReply> 
   public static final byte OPCODE = 116;
 
   @NonNull
-  private List<Byte> map;
+  private ByteList map;
 
   public XReplyFunction<SetPointerMappingReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> SetPointerMappingReply.readSetPointerMappingReply(field, sequenceNumber, in);
@@ -32,8 +32,8 @@ public class SetPointerMapping implements TwoWayRequest<SetPointerMappingReply> 
     SetPointerMapping.SetPointerMappingBuilder javaBuilder = SetPointerMapping.builder();
     byte mapLen = in.readCard8();
     short length = in.readCard16();
-    List<Byte> map = in.readCard8(Byte.toUnsignedInt(mapLen));
-    javaBuilder.map(map);
+    ByteList map = in.readCard8(Byte.toUnsignedInt(mapLen));
+    javaBuilder.map(map.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

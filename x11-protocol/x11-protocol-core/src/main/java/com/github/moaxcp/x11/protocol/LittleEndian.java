@@ -1,8 +1,8 @@
 package com.github.moaxcp.x11.protocol;
 
 import lombok.experimental.UtilityClass;
-
-import java.util.List;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.impl.factory.primitive.ByteLists;
 
 @UtilityClass
 public class LittleEndian {
@@ -37,7 +37,7 @@ public class LittleEndian {
         return bytes;
     }
 
-    public static List<Byte> writeList(int value) {
+    public static ByteList writeList(int value) {
         var first = (byte) (value & 0xFF);
         value >>= 8;
         var second = (byte) (value & 0xFF);
@@ -45,7 +45,7 @@ public class LittleEndian {
         var third = (byte) (value & 0xFF);
         value >>= 8;
         var fourth = (byte) (value & 0xFF);
-        return List.of(first, second, third, fourth);
+        return ByteLists.immutable.of(first, second, third, fourth);
     }
 
     public static Long toLong(byte[] bytes) {

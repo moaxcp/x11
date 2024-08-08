@@ -1,15 +1,15 @@
 package com.github.moaxcp.x11.protocol.xproto;
 
 import com.github.moaxcp.x11.protocol.*;
+import org.eclipse.collections.api.factory.primitive.ByteLists;
+import org.eclipse.collections.api.factory.primitive.IntLists;
+import org.eclipse.collections.api.factory.primitive.ShortLists;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReadWriteTestsPrototype {
@@ -64,9 +64,10 @@ public class ReadWriteTestsPrototype {
 
   @Test
   void clientMessageData8() throws IOException {
-    List<Byte> data8 = IntStream.range(0, 20)
-        .mapToObj(i -> (byte) i)
-        .collect(toList());
+    var data8 = ByteLists.mutable.withInitialCapacity(20);
+    for (int i = 0; i < 20; i++) {
+      data8.add((byte) i);
+    }
     ClientMessageData8 expected = new ClientMessageData8(data8);
 
     assertWriteObjectEqualsReadObject(expected, ClientMessageDataUnion::readClientMessageDataUnion);
@@ -74,9 +75,10 @@ public class ReadWriteTestsPrototype {
 
   @Test
   void clientMessageData16() throws IOException {
-    List<Short> data16 = IntStream.range(0, 10)
-        .mapToObj(i -> (short) i)
-        .collect(toList());
+    var data16 = ShortLists.mutable.withInitialCapacity(10);
+    for (int i = 0; i < 10; i++) {
+      data16.add((byte) i);
+    }
     ClientMessageData16 expected = new ClientMessageData16(data16);
 
     assertWriteObjectEqualsReadObject(expected, ClientMessageDataUnion::readClientMessageDataUnion);
@@ -84,9 +86,10 @@ public class ReadWriteTestsPrototype {
 
   @Test
   void clientMessageData32() throws IOException {
-    List<Integer> data32 = IntStream.range(0, 5)
-        .mapToObj(i -> i)
-        .collect(toList());
+    var data32 = IntLists.mutable.withInitialCapacity(5);
+    for (int i = 0; i < 5; i++) {
+      data32.add((byte) i);
+    }
     ClientMessageData32 expected = new ClientMessageData32(data32);
 
     assertWriteObjectEqualsReadObject(expected, ClientMessageDataUnion::readClientMessageDataUnion);

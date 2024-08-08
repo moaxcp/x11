@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.BooleanList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class GetBooleanvReply implements XReply {
   private boolean datum;
 
   @NonNull
-  private List<Boolean> data;
+  private BooleanList data;
 
   public static GetBooleanvReply readGetBooleanvReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -29,10 +29,10 @@ public class GetBooleanvReply implements XReply {
     int n = in.readCard32();
     boolean datum = in.readBool();
     byte[] pad7 = in.readPad(15);
-    List<Boolean> data = in.readBool((int) (Integer.toUnsignedLong(n)));
+    BooleanList data = in.readBool((int) (Integer.toUnsignedLong(n)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.datum(datum);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

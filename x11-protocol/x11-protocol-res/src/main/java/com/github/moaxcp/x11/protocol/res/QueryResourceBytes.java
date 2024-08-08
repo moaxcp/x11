@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -22,7 +23,7 @@ public class QueryResourceBytes implements TwoWayRequest<QueryResourceBytesReply
   private int client;
 
   @NonNull
-  private List<ResourceIdSpec> specs;
+  private ImmutableList<ResourceIdSpec> specs;
 
   public XReplyFunction<QueryResourceBytesReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> QueryResourceBytesReply.readQueryResourceBytesReply(field, sequenceNumber, in);
@@ -38,12 +39,12 @@ public class QueryResourceBytes implements TwoWayRequest<QueryResourceBytesReply
     short length = in.readCard16();
     int client = in.readCard32();
     int numSpecs = in.readCard32();
-    List<ResourceIdSpec> specs = new ArrayList<>((int) (Integer.toUnsignedLong(numSpecs)));
+    MutableList<ResourceIdSpec> specs = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(numSpecs)));
     for(int i = 0; i < Integer.toUnsignedLong(numSpecs); i++) {
       specs.add(ResourceIdSpec.readResourceIdSpec(in));
     }
     javaBuilder.client(client);
-    javaBuilder.specs(specs);
+    javaBuilder.specs(specs.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

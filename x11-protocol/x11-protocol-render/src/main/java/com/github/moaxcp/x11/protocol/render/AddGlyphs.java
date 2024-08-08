@@ -5,11 +5,14 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,13 +24,13 @@ public class AddGlyphs implements OneWayRequest {
   private int glyphset;
 
   @NonNull
-  private List<Integer> glyphids;
+  private IntList glyphids;
 
   @NonNull
-  private List<Glyphinfo> glyphs;
+  private ImmutableList<Glyphinfo> glyphs;
 
   @NonNull
-  private List<Byte> data;
+  private ByteList data;
 
   public byte getOpCode() {
     return OPCODE;
@@ -44,18 +47,18 @@ public class AddGlyphs implements OneWayRequest {
     javaStart += 4;
     int glyphsLen = in.readCard32();
     javaStart += 4;
-    List<Integer> glyphids = in.readCard32((int) (Integer.toUnsignedLong(glyphsLen)));
+    IntList glyphids = in.readCard32((int) (Integer.toUnsignedLong(glyphsLen)));
     javaStart += 4 * glyphids.size();
-    List<Glyphinfo> glyphs = new ArrayList<>((int) (Integer.toUnsignedLong(glyphsLen)));
+    MutableList<Glyphinfo> glyphs = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(glyphsLen)));
     for(int i = 0; i < Integer.toUnsignedLong(glyphsLen); i++) {
       glyphs.add(Glyphinfo.readGlyphinfo(in));
     }
     javaStart += XObject.sizeOf(glyphs);
-    List<Byte> data = in.readByte(Short.toUnsignedInt(length) - javaStart);
+    ByteList data = in.readByte(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.glyphset(glyphset);
-    javaBuilder.glyphids(glyphids);
-    javaBuilder.glyphs(glyphs);
-    javaBuilder.data(data);
+    javaBuilder.glyphids(glyphids.toImmutable());
+    javaBuilder.glyphs(glyphs.toImmutable());
+    javaBuilder.data(data.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

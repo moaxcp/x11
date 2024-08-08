@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -22,10 +22,10 @@ public class SetupRequest implements XStruct {
   private short protocolMinorVersion;
 
   @NonNull
-  private List<Byte> authorizationProtocolName;
+  private ByteList authorizationProtocolName;
 
   @NonNull
-  private List<Byte> authorizationProtocolData;
+  private ByteList authorizationProtocolData;
 
   public static SetupRequest readSetupRequest(X11Input in) throws IOException {
     SetupRequest.SetupRequestBuilder javaBuilder = SetupRequest.builder();
@@ -36,15 +36,15 @@ public class SetupRequest implements XStruct {
     short authorizationProtocolNameLen = in.readCard16();
     short authorizationProtocolDataLen = in.readCard16();
     byte[] pad6 = in.readPad(2);
-    List<Byte> authorizationProtocolName = in.readChar(Short.toUnsignedInt(authorizationProtocolNameLen));
+    ByteList authorizationProtocolName = in.readChar(Short.toUnsignedInt(authorizationProtocolNameLen));
     in.readPadAlign(Short.toUnsignedInt(authorizationProtocolNameLen));
-    List<Byte> authorizationProtocolData = in.readChar(Short.toUnsignedInt(authorizationProtocolDataLen));
+    ByteList authorizationProtocolData = in.readChar(Short.toUnsignedInt(authorizationProtocolDataLen));
     in.readPadAlign(Short.toUnsignedInt(authorizationProtocolDataLen));
     javaBuilder.byteOrder(byteOrder);
     javaBuilder.protocolMajorVersion(protocolMajorVersion);
     javaBuilder.protocolMinorVersion(protocolMinorVersion);
-    javaBuilder.authorizationProtocolName(authorizationProtocolName);
-    javaBuilder.authorizationProtocolData(authorizationProtocolData);
+    javaBuilder.authorizationProtocolName(authorizationProtocolName.toImmutable());
+    javaBuilder.authorizationProtocolData(authorizationProtocolData.toImmutable());
     return javaBuilder.build();
   }
 

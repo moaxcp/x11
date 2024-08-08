@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -35,10 +36,10 @@ public class GetDrawableInfoReply implements XReply {
   private short backY;
 
   @NonNull
-  private List<DrmClipRect> clipRects;
+  private ImmutableList<DrmClipRect> clipRects;
 
   @NonNull
-  private List<DrmClipRect> backClipRects;
+  private ImmutableList<DrmClipRect> backClipRects;
 
   public static GetDrawableInfoReply readGetDrawableInfoReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -54,11 +55,11 @@ public class GetDrawableInfoReply implements XReply {
     short backX = in.readInt16();
     short backY = in.readInt16();
     int numBackClipRects = in.readCard32();
-    List<DrmClipRect> clipRects = new ArrayList<>((int) (Integer.toUnsignedLong(numClipRects)));
+    MutableList<DrmClipRect> clipRects = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(numClipRects)));
     for(int i = 0; i < Integer.toUnsignedLong(numClipRects); i++) {
       clipRects.add(DrmClipRect.readDrmClipRect(in));
     }
-    List<DrmClipRect> backClipRects = new ArrayList<>((int) (Integer.toUnsignedLong(numBackClipRects)));
+    MutableList<DrmClipRect> backClipRects = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(numBackClipRects)));
     for(int i = 0; i < Integer.toUnsignedLong(numBackClipRects); i++) {
       backClipRects.add(DrmClipRect.readDrmClipRect(in));
     }
@@ -71,8 +72,8 @@ public class GetDrawableInfoReply implements XReply {
     javaBuilder.drawableSizeH(drawableSizeH);
     javaBuilder.backX(backX);
     javaBuilder.backY(backY);
-    javaBuilder.clipRects(clipRects);
-    javaBuilder.backClipRects(backClipRects);
+    javaBuilder.clipRects(clipRects.toImmutable());
+    javaBuilder.backClipRects(backClipRects.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

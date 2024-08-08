@@ -7,11 +7,12 @@ import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.xproto.ClipOrdering;
 import com.github.moaxcp.x11.protocol.xproto.Rectangle;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -33,7 +34,7 @@ public class Rectangles implements OneWayRequest {
   private short yOffset;
 
   @NonNull
-  private List<Rectangle> rectangles;
+  private ImmutableList<Rectangle> rectangles;
 
   public byte getOpCode() {
     return OPCODE;
@@ -60,7 +61,7 @@ public class Rectangles implements OneWayRequest {
     javaStart += 2;
     short yOffset = in.readInt16();
     javaStart += 2;
-    List<Rectangle> rectangles = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Rectangle> rectangles = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Rectangle baseObject = Rectangle.readRectangle(in);
       rectangles.add(baseObject);
@@ -72,7 +73,7 @@ public class Rectangles implements OneWayRequest {
     javaBuilder.destinationWindow(destinationWindow);
     javaBuilder.xOffset(xOffset);
     javaBuilder.yOffset(yOffset);
-    javaBuilder.rectangles(rectangles);
+    javaBuilder.rectangles(rectangles.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

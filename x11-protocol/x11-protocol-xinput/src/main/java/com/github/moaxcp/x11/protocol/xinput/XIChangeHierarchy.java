@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -19,7 +20,7 @@ public class XIChangeHierarchy implements OneWayRequest {
   public static final byte OPCODE = 43;
 
   @NonNull
-  private List<HierarchyChange> changes;
+  private ImmutableList<HierarchyChange> changes;
 
   public byte getOpCode() {
     return OPCODE;
@@ -31,11 +32,11 @@ public class XIChangeHierarchy implements OneWayRequest {
     short length = in.readCard16();
     byte numChanges = in.readCard8();
     byte[] pad4 = in.readPad(3);
-    List<HierarchyChange> changes = new ArrayList<>(Byte.toUnsignedInt(numChanges));
+    MutableList<HierarchyChange> changes = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(numChanges));
     for(int i = 0; i < Byte.toUnsignedInt(numChanges); i++) {
       changes.add(HierarchyChange.readHierarchyChange(in));
     }
-    javaBuilder.changes(changes);
+    javaBuilder.changes(changes.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

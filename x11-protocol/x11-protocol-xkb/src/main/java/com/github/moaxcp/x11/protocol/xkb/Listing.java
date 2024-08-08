@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -18,16 +18,16 @@ public class Listing implements XStruct {
   private short flags;
 
   @NonNull
-  private List<Byte> string;
+  private ByteList string;
 
   public static Listing readListing(X11Input in) throws IOException {
     Listing.ListingBuilder javaBuilder = Listing.builder();
     short flags = in.readCard16();
     short length = in.readCard16();
-    List<Byte> string = in.readChar(Short.toUnsignedInt(length));
+    ByteList string = in.readChar(Short.toUnsignedInt(length));
     in.readPadAlign(2, Short.toUnsignedInt(length));
     javaBuilder.flags(flags);
-    javaBuilder.string(string);
+    javaBuilder.string(string.toImmutable());
     return javaBuilder.build();
   }
 

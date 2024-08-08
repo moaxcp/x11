@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -19,7 +20,7 @@ public class SetFontPath implements OneWayRequest {
   public static final byte OPCODE = 51;
 
   @NonNull
-  private List<Str> font;
+  private ImmutableList<Str> font;
 
   public byte getOpCode() {
     return OPCODE;
@@ -31,11 +32,11 @@ public class SetFontPath implements OneWayRequest {
     short length = in.readCard16();
     short fontQty = in.readCard16();
     byte[] pad4 = in.readPad(2);
-    List<Str> font = new ArrayList<>(Short.toUnsignedInt(fontQty));
+    MutableList<Str> font = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(fontQty));
     for(int i = 0; i < Short.toUnsignedInt(fontQty); i++) {
       font.add(Str.readStr(in));
     }
-    javaBuilder.font(font);
+    javaBuilder.font(font.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

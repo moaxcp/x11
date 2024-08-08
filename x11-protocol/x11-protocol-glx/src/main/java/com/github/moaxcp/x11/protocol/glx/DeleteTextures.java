@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class DeleteTextures implements OneWayRequest {
   private int contextTag;
 
   @NonNull
-  private List<Integer> textures;
+  private IntList textures;
 
   public byte getOpCode() {
     return OPCODE;
@@ -31,9 +31,9 @@ public class DeleteTextures implements OneWayRequest {
     short length = in.readCard16();
     int contextTag = in.readCard32();
     int n = in.readInt32();
-    List<Integer> textures = in.readCard32(n);
+    IntList textures = in.readCard32(n);
     javaBuilder.contextTag(contextTag);
-    javaBuilder.textures(textures);
+    javaBuilder.textures(textures.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

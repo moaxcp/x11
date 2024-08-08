@@ -3,10 +3,10 @@ package com.github.moaxcp.x11.protocol.xinput;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -34,7 +34,7 @@ public class FeedbackStateKeyboard implements FeedbackState {
   private byte percent;
 
   @NonNull
-  private List<Byte> autoRepeats;
+  private ByteList autoRepeats;
 
   public static FeedbackStateKeyboard readFeedbackStateKeyboard(byte classId, byte feedbackId,
       short len, X11Input in) throws IOException {
@@ -47,7 +47,7 @@ public class FeedbackStateKeyboard implements FeedbackState {
     byte click = in.readCard8();
     byte percent = in.readCard8();
     byte[] pad10 = in.readPad(1);
-    List<Byte> autoRepeats = in.readCard8(32);
+    ByteList autoRepeats = in.readCard8(32);
     javaBuilder.classId(classId);
     javaBuilder.feedbackId(feedbackId);
     javaBuilder.len(len);
@@ -58,7 +58,7 @@ public class FeedbackStateKeyboard implements FeedbackState {
     javaBuilder.globalAutoRepeat(globalAutoRepeat);
     javaBuilder.click(click);
     javaBuilder.percent(percent);
-    javaBuilder.autoRepeats(autoRepeats);
+    javaBuilder.autoRepeats(autoRepeats.toImmutable());
     return javaBuilder.build();
   }
 

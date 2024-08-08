@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -24,7 +24,7 @@ public class AddMaster implements XStruct {
   private boolean enable;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public static AddMaster readAddMaster(X11Input in) throws IOException {
     AddMaster.AddMasterBuilder javaBuilder = AddMaster.builder();
@@ -33,13 +33,13 @@ public class AddMaster implements XStruct {
     short nameLen = in.readCard16();
     boolean sendCore = in.readBool();
     boolean enable = in.readBool();
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     in.readPadAlign(Short.toUnsignedInt(nameLen));
     javaBuilder.type(type);
     javaBuilder.len(len);
     javaBuilder.sendCore(sendCore);
     javaBuilder.enable(enable);
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     return javaBuilder.build();
   }
 

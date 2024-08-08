@@ -5,10 +5,11 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
+import org.eclipse.collections.api.factory.Lists
+import org.eclipse.collections.api.list.ImmutableList
+import org.eclipse.collections.api.list.MutableList
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.getEventStructTypeName
-import static com.github.moaxcp.x11protocol.generator.Conventions.getStructTypeName
-import static com.github.moaxcp.x11protocol.generator.Conventions.getUnionTypeName
+import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
 class JavaTypeListProperty extends JavaListProperty {
 
@@ -40,7 +41,11 @@ class JavaTypeListProperty extends JavaListProperty {
 
     @Override
     TypeName getTypeName() {
-        return ParameterizedTypeName.get(ClassName.get(List), baseTypeName)
+        return ParameterizedTypeName.get(ClassName.get(ImmutableList), baseTypeName)
+    }
+
+    TypeName getMutableTypeName() {
+        return ParameterizedTypeName.get(ClassName.get(MutableList), baseTypeName)
     }
 
     @Override
@@ -56,7 +61,7 @@ class JavaTypeListProperty extends JavaListProperty {
                 lengthExpression = CodeBlock.of('Short.toUnsignedInt($L)', lengthProperty.name)
             }
             return CodeBlock.builder()
-                .addStatement('$1T $2L = new $3T<>($4L - javaStart)', typeName, name, ArrayList.class, lengthExpression)
+                .addStatement('$1T $2L = $3T.mutable.withInitialCapacity($4L - javaStart)', mutableTypeName, name, Lists.class, lengthExpression)
                 .beginControlFlow('while(javaStart < $L * 4)', lengthExpression)
                 .addStatement('$T baseObject = $L', baseTypeName, readObjectBlock)
                 .addStatement('$L.add(baseObject)', name)
@@ -65,7 +70,7 @@ class JavaTypeListProperty extends JavaListProperty {
                 .build()
         }
         return CodeBlock.builder()
-            .addStatement('$1T $2L = new $3T<>($4L)', typeName, name, ArrayList.class, lengthExpression.getExpression(TypeName.INT))
+            .addStatement('$1T $2L = $3T.mutable.withInitialCapacity($4L)', mutableTypeName, name, Lists.class, lengthExpression.getExpression(TypeName.INT))
             .beginControlFlow('for(int i = 0; i < $L; i++)', lengthExpression.expression)
             .addStatement('$L.add($L)', name, readObjectBlock)
             .endControlFlow()

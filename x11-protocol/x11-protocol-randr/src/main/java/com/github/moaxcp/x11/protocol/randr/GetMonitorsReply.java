@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -23,7 +24,7 @@ public class GetMonitorsReply implements XReply {
   private int nOutputs;
 
   @NonNull
-  private List<MonitorInfo> monitors;
+  private ImmutableList<MonitorInfo> monitors;
 
   public static GetMonitorsReply readGetMonitorsReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -33,14 +34,14 @@ public class GetMonitorsReply implements XReply {
     int nMonitors = in.readCard32();
     int nOutputs = in.readCard32();
     byte[] pad7 = in.readPad(12);
-    List<MonitorInfo> monitors = new ArrayList<>((int) (Integer.toUnsignedLong(nMonitors)));
+    MutableList<MonitorInfo> monitors = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(nMonitors)));
     for(int i = 0; i < Integer.toUnsignedLong(nMonitors); i++) {
       monitors.add(MonitorInfo.readMonitorInfo(in));
     }
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.timestamp(timestamp);
     javaBuilder.nOutputs(nOutputs);
-    javaBuilder.monitors(monitors);
+    javaBuilder.monitors(monitors.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

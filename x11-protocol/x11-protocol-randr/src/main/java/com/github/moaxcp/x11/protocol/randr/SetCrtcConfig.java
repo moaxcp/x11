@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -32,7 +32,7 @@ public class SetCrtcConfig implements TwoWayRequest<SetCrtcConfigReply> {
   private short rotation;
 
   @NonNull
-  private List<Integer> outputs;
+  private IntList outputs;
 
   public XReplyFunction<SetCrtcConfigReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> SetCrtcConfigReply.readSetCrtcConfigReply(field, sequenceNumber, in);
@@ -65,7 +65,7 @@ public class SetCrtcConfig implements TwoWayRequest<SetCrtcConfigReply> {
     javaStart += 2;
     byte[] pad10 = in.readPad(2);
     javaStart += 2;
-    List<Integer> outputs = in.readCard32(Short.toUnsignedInt(length) - javaStart);
+    IntList outputs = in.readCard32(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.crtc(crtc);
     javaBuilder.timestamp(timestamp);
     javaBuilder.configTimestamp(configTimestamp);
@@ -73,7 +73,7 @@ public class SetCrtcConfig implements TwoWayRequest<SetCrtcConfigReply> {
     javaBuilder.y(y);
     javaBuilder.mode(mode);
     javaBuilder.rotation(rotation);
-    javaBuilder.outputs(outputs);
+    javaBuilder.outputs(outputs.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

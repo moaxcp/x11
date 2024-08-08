@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -25,7 +25,7 @@ public class ChangeDeviceKeyMapping implements OneWayRequest {
   private byte keycodeCount;
 
   @NonNull
-  private List<Integer> keysyms;
+  private IntList keysyms;
 
   public byte getOpCode() {
     return OPCODE;
@@ -39,12 +39,12 @@ public class ChangeDeviceKeyMapping implements OneWayRequest {
     byte firstKeycode = in.readCard8();
     byte keysymsPerKeycode = in.readCard8();
     byte keycodeCount = in.readCard8();
-    List<Integer> keysyms = in.readCard32(Byte.toUnsignedInt(keycodeCount) * Byte.toUnsignedInt(keysymsPerKeycode));
+    IntList keysyms = in.readCard32(Byte.toUnsignedInt(keycodeCount) * Byte.toUnsignedInt(keysymsPerKeycode));
     javaBuilder.deviceId(deviceId);
     javaBuilder.firstKeycode(firstKeycode);
     javaBuilder.keysymsPerKeycode(keysymsPerKeycode);
     javaBuilder.keycodeCount(keycodeCount);
-    javaBuilder.keysyms(keysyms);
+    javaBuilder.keysyms(keysyms.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

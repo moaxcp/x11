@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -17,14 +17,14 @@ public class DeviceTimeCoord implements XStruct {
   private int time;
 
   @NonNull
-  private List<Integer> axisvalues;
+  private IntList axisvalues;
 
   public static DeviceTimeCoord readDeviceTimeCoord(byte numAxes, X11Input in) throws IOException {
     DeviceTimeCoord.DeviceTimeCoordBuilder javaBuilder = DeviceTimeCoord.builder();
     int time = in.readCard32();
-    List<Integer> axisvalues = in.readInt32(numAxes);
+    IntList axisvalues = in.readInt32(numAxes);
     javaBuilder.time(time);
-    javaBuilder.axisvalues(axisvalues);
+    javaBuilder.axisvalues(axisvalues.toImmutable());
     return javaBuilder.build();
   }
 

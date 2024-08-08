@@ -5,11 +5,14 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -23,16 +26,16 @@ public class GetScreenResourcesCurrentReply implements XReply {
   private int configTimestamp;
 
   @NonNull
-  private List<Integer> crtcs;
+  private IntList crtcs;
 
   @NonNull
-  private List<Integer> outputs;
+  private IntList outputs;
 
   @NonNull
-  private List<ModeInfo> modes;
+  private ImmutableList<ModeInfo> modes;
 
   @NonNull
-  private List<Byte> names;
+  private ByteList names;
 
   public static GetScreenResourcesCurrentReply readGetScreenResourcesCurrentReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -45,20 +48,20 @@ public class GetScreenResourcesCurrentReply implements XReply {
     short numModes = in.readCard16();
     short namesLen = in.readCard16();
     byte[] pad10 = in.readPad(8);
-    List<Integer> crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
-    List<Integer> outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
-    List<ModeInfo> modes = new ArrayList<>(Short.toUnsignedInt(numModes));
+    IntList crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
+    IntList outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
+    MutableList<ModeInfo> modes = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(numModes));
     for(int i = 0; i < Short.toUnsignedInt(numModes); i++) {
       modes.add(ModeInfo.readModeInfo(in));
     }
-    List<Byte> names = in.readByte(Short.toUnsignedInt(namesLen));
+    ByteList names = in.readByte(Short.toUnsignedInt(namesLen));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.timestamp(timestamp);
     javaBuilder.configTimestamp(configTimestamp);
-    javaBuilder.crtcs(crtcs);
-    javaBuilder.outputs(outputs);
-    javaBuilder.modes(modes);
-    javaBuilder.names(names);
+    javaBuilder.crtcs(crtcs.toImmutable());
+    javaBuilder.outputs(outputs.toImmutable());
+    javaBuilder.modes(modes.toImmutable());
+    javaBuilder.names(names.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

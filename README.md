@@ -23,7 +23,7 @@ The x11-client library can be added to your project using maven or gradle.
 <dependency>
  <groupId>com.github.moaxcp.x11</groupId>
  <artifactId>x11-client</artifactId>
- <version>0.20.0</version>
+ <version>0.22.0</version>
  <type>module</type>
 </dependency>
 ```
@@ -31,7 +31,7 @@ The x11-client library can be added to your project using maven or gradle.
 ## Gradle
 
 ```
-implementation 'com.github.moaxcp.x11:x11-client:0.18.2'
+implementation 'com.github.moaxcp.x11:x11-client:0.22.0'
 ```
 
 # Usage
@@ -434,6 +434,10 @@ https://www.x.org/releases/X11R7.6/doc/libXtst/recordlib.html
 
 
 # versions
+
+## 0.22.0
+
+* switching to eclipse-collections
 
 ## 0.21.0
 

@@ -1,11 +1,13 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.xcbparser.expression.EmptyExpression
-import com.squareup.javapoet.*
+import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.TypeName
+import org.eclipse.collections.api.list.primitive.*
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
-import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumClassName
-import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToBoxedType
+import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
 class JavaPrimativeListProperty extends JavaListProperty {
 
@@ -20,7 +22,31 @@ class JavaPrimativeListProperty extends JavaListProperty {
 
     @Override
     TypeName getTypeName() {
-        return ParameterizedTypeName.get(ClassName.get(List.class), baseTypeName)
+        def x11Type = x11Field.resolvedType.name
+        if(x11Type == 'void') {
+            return ClassName.get(ByteList.class)
+        }
+        String primative = x11PrimativeToStorageTypeName(x11Type)
+        switch(primative) {
+            case 'boolean':
+                return TypeName.get(BooleanList.class)
+            case 'byte':
+                return TypeName.get(ByteList.class)
+            case 'short':
+                return TypeName.get(ShortList.class)
+            case 'char':
+                return TypeName.get(CharList.class)
+            case 'int':
+                return TypeName.get(IntList.class)
+            case 'long':
+                return TypeName.get(LongList.class)
+            case 'float':
+                return TypeName.get(FloatList.class)
+            case 'double':
+                return TypeName.get(DoubleList.class)
+            default:
+                throw new IllegalArgumentException(primative)
+        }
     }
 
     static JavaPrimativeListProperty javaPrimativeListProperty(JavaType javaType, XUnitListField field) {

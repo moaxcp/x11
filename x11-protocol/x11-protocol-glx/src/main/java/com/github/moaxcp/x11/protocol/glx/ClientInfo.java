@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class ClientInfo implements OneWayRequest {
   private int minorVersion;
 
   @NonNull
-  private List<Byte> string;
+  private ByteList string;
 
   public byte getOpCode() {
     return OPCODE;
@@ -34,10 +34,10 @@ public class ClientInfo implements OneWayRequest {
     int majorVersion = in.readCard32();
     int minorVersion = in.readCard32();
     int strLen = in.readCard32();
-    List<Byte> string = in.readChar((int) (Integer.toUnsignedLong(strLen)));
+    ByteList string = in.readChar((int) (Integer.toUnsignedLong(strLen)));
     javaBuilder.majorVersion(majorVersion);
     javaBuilder.minorVersion(minorVersion);
-    javaBuilder.string(string);
+    javaBuilder.string(string.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

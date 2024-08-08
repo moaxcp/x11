@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import com.github.moaxcp.x11.protocol.xproto.ModMask;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -28,10 +29,10 @@ public class SetKeyType implements XStruct {
   private boolean preserve;
 
   @NonNull
-  private List<KTSetMapEntry> entries;
+  private ImmutableList<KTSetMapEntry> entries;
 
   @NonNull
-  private List<KTSetMapEntry> preserveEntries;
+  private ImmutableList<KTSetMapEntry> preserveEntries;
 
   public static SetKeyType readSetKeyType(X11Input in) throws IOException {
     SetKeyType.SetKeyTypeBuilder javaBuilder = SetKeyType.builder();
@@ -42,11 +43,11 @@ public class SetKeyType implements XStruct {
     byte nMapEntries = in.readCard8();
     boolean preserve = in.readBool();
     byte[] pad6 = in.readPad(1);
-    List<KTSetMapEntry> entries = new ArrayList<>(Byte.toUnsignedInt(nMapEntries));
+    MutableList<KTSetMapEntry> entries = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(nMapEntries));
     for(int i = 0; i < Byte.toUnsignedInt(nMapEntries); i++) {
       entries.add(KTSetMapEntry.readKTSetMapEntry(in));
     }
-    List<KTSetMapEntry> preserveEntries = new ArrayList<>((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
+    MutableList<KTSetMapEntry> preserveEntries = Lists.mutable.withInitialCapacity((preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries));
     for(int i = 0; i < (preserve ? 1 : 0) * Byte.toUnsignedInt(nMapEntries); i++) {
       preserveEntries.add(KTSetMapEntry.readKTSetMapEntry(in));
     }
@@ -55,8 +56,8 @@ public class SetKeyType implements XStruct {
     javaBuilder.virtualMods(virtualMods);
     javaBuilder.numLevels(numLevels);
     javaBuilder.preserve(preserve);
-    javaBuilder.entries(entries);
-    javaBuilder.preserveEntries(preserveEntries);
+    javaBuilder.entries(entries.toImmutable());
+    javaBuilder.preserveEntries(preserveEntries.toImmutable());
     return javaBuilder.build();
   }
 

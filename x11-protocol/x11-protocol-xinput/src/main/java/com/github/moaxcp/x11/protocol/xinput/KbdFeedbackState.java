@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -35,7 +35,7 @@ public class KbdFeedbackState implements XStruct {
   private byte percent;
 
   @NonNull
-  private List<Byte> autoRepeats;
+  private ByteList autoRepeats;
 
   public static KbdFeedbackState readKbdFeedbackState(X11Input in) throws IOException {
     KbdFeedbackState.KbdFeedbackStateBuilder javaBuilder = KbdFeedbackState.builder();
@@ -50,7 +50,7 @@ public class KbdFeedbackState implements XStruct {
     byte click = in.readCard8();
     byte percent = in.readCard8();
     byte[] pad10 = in.readPad(1);
-    List<Byte> autoRepeats = in.readCard8(32);
+    ByteList autoRepeats = in.readCard8(32);
     javaBuilder.classId(classId);
     javaBuilder.feedbackId(feedbackId);
     javaBuilder.len(len);
@@ -61,7 +61,7 @@ public class KbdFeedbackState implements XStruct {
     javaBuilder.globalAutoRepeat(globalAutoRepeat);
     javaBuilder.click(click);
     javaBuilder.percent(percent);
-    javaBuilder.autoRepeats(autoRepeats);
+    javaBuilder.autoRepeats(autoRepeats.toImmutable());
     return javaBuilder.build();
   }
 

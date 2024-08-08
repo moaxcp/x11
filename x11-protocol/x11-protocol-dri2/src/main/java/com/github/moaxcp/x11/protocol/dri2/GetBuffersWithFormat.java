@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -24,7 +25,7 @@ public class GetBuffersWithFormat implements TwoWayRequest<GetBuffersWithFormatR
   private int count;
 
   @NonNull
-  private List<AttachFormat> attachments;
+  private ImmutableList<AttachFormat> attachments;
 
   public XReplyFunction<GetBuffersWithFormatReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> GetBuffersWithFormatReply.readGetBuffersWithFormatReply(field, sequenceNumber, in);
@@ -45,7 +46,7 @@ public class GetBuffersWithFormat implements TwoWayRequest<GetBuffersWithFormatR
     javaStart += 4;
     int count = in.readCard32();
     javaStart += 4;
-    List<AttachFormat> attachments = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<AttachFormat> attachments = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       AttachFormat baseObject = AttachFormat.readAttachFormat(in);
       attachments.add(baseObject);
@@ -53,7 +54,7 @@ public class GetBuffersWithFormat implements TwoWayRequest<GetBuffersWithFormatR
     }
     javaBuilder.drawable(drawable);
     javaBuilder.count(count);
-    javaBuilder.attachments(attachments);
+    javaBuilder.attachments(attachments.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

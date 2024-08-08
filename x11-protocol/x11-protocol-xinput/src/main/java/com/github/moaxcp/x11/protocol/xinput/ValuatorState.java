@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class ValuatorState implements XStruct {
   private byte mode;
 
   @NonNull
-  private List<Integer> valuators;
+  private IntList valuators;
 
   public static ValuatorState readValuatorState(X11Input in) throws IOException {
     ValuatorState.ValuatorStateBuilder javaBuilder = ValuatorState.builder();
@@ -29,11 +29,11 @@ public class ValuatorState implements XStruct {
     byte len = in.readCard8();
     byte numValuators = in.readCard8();
     byte mode = in.readCard8();
-    List<Integer> valuators = in.readInt32(Byte.toUnsignedInt(numValuators));
+    IntList valuators = in.readInt32(Byte.toUnsignedInt(numValuators));
     javaBuilder.classId(classId);
     javaBuilder.len(len);
     javaBuilder.mode(mode);
-    javaBuilder.valuators(valuators);
+    javaBuilder.valuators(valuators.toImmutable());
     return javaBuilder.build();
   }
 

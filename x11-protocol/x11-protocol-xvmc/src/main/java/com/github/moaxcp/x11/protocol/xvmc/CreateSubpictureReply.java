@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -25,10 +26,10 @@ public class CreateSubpictureReply implements XReply {
   private short entryBytes;
 
   @NonNull
-  private List<Byte> componentOrder;
+  private ByteList componentOrder;
 
   @NonNull
-  private List<Integer> privData;
+  private IntList privData;
 
   public static CreateSubpictureReply readCreateSubpictureReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -38,16 +39,16 @@ public class CreateSubpictureReply implements XReply {
     short heightActual = in.readCard16();
     short numPaletteEntries = in.readCard16();
     short entryBytes = in.readCard16();
-    List<Byte> componentOrder = in.readCard8(4);
+    ByteList componentOrder = in.readCard8(4);
     byte[] pad9 = in.readPad(12);
-    List<Integer> privData = in.readCard32((int) (Integer.toUnsignedLong(length)));
+    IntList privData = in.readCard32((int) (Integer.toUnsignedLong(length)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.widthActual(widthActual);
     javaBuilder.heightActual(heightActual);
     javaBuilder.numPaletteEntries(numPaletteEntries);
     javaBuilder.entryBytes(entryBytes);
-    javaBuilder.componentOrder(componentOrder);
-    javaBuilder.privData(privData);
+    javaBuilder.componentOrder(componentOrder.toImmutable());
+    javaBuilder.privData(privData.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }
