@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -31,7 +32,7 @@ public class Triangles implements OneWayRequest {
   private short srcY;
 
   @NonNull
-  private List<Triangle> triangles;
+  private ImmutableList<Triangle> triangles;
 
   public byte getOpCode() {
     return OPCODE;
@@ -58,7 +59,7 @@ public class Triangles implements OneWayRequest {
     javaStart += 2;
     short srcY = in.readInt16();
     javaStart += 2;
-    List<Triangle> triangles = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Triangle> triangles = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Triangle baseObject = Triangle.readTriangle(in);
       triangles.add(baseObject);
@@ -70,7 +71,7 @@ public class Triangles implements OneWayRequest {
     javaBuilder.maskFormat(maskFormat);
     javaBuilder.srcX(srcX);
     javaBuilder.srcY(srcY);
-    javaBuilder.triangles(triangles);
+    javaBuilder.triangles(triangles.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

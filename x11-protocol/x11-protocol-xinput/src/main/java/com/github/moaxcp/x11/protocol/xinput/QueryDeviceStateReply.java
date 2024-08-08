@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -21,7 +22,7 @@ public class QueryDeviceStateReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<InputState> classes;
+  private ImmutableList<InputState> classes;
 
   public static QueryDeviceStateReply readQueryDeviceStateReply(byte xiReplyType,
       short sequenceNumber, X11Input in) throws IOException {
@@ -29,13 +30,13 @@ public class QueryDeviceStateReply implements XReply {
     int length = in.readCard32();
     byte numClasses = in.readCard8();
     byte[] pad5 = in.readPad(23);
-    List<InputState> classes = new ArrayList<>(Byte.toUnsignedInt(numClasses));
+    MutableList<InputState> classes = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(numClasses));
     for(int i = 0; i < Byte.toUnsignedInt(numClasses); i++) {
       classes.add(InputState.readInputState(in));
     }
     javaBuilder.xiReplyType(xiReplyType);
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.classes(classes);
+    javaBuilder.classes(classes.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

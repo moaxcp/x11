@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.*;
 import com.github.moaxcp.x11.protocol.bigreq.Enable;
 import com.github.moaxcp.x11.protocol.xproto.QueryExtension;
 import com.github.moaxcp.x11.protocol.xproto.Setup;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 
@@ -201,7 +201,7 @@ public class XProtocolService {
     byte minorOpcode = in.peekByte();
 
     Optional<XProtocolPlugin> pluginOptional = pluginService.activePluginFor(majorOpcode, minorOpcode);
-    if (!pluginOptional.isPresent()) {
+    if (pluginOptional.isEmpty()) {
       throw new IllegalStateException("Could not find plugin for request with major opcode of " + majorOpcode);
     }
     XProtocolPlugin plugin = pluginOptional.get();
@@ -222,7 +222,7 @@ public class XProtocolService {
       .map(XProtocolPlugin::getFirstEvent);
   }
 
-  public <T extends XError> T readError(List<Byte> bytes) {
+  public <T extends XError> T readError(ByteList bytes) {
     X11Input in = toX11Input(bytes);
     try {
       byte responseCode = in.readByte();

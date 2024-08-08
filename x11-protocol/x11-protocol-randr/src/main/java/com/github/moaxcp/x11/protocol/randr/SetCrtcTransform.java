@@ -6,10 +6,11 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.render.Transform;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -24,10 +25,10 @@ public class SetCrtcTransform implements OneWayRequest {
   private Transform transform;
 
   @NonNull
-  private List<Byte> filterName;
+  private ByteList filterName;
 
   @NonNull
-  private List<Integer> filterParams;
+  private IntList filterParams;
 
   public byte getOpCode() {
     return OPCODE;
@@ -48,15 +49,15 @@ public class SetCrtcTransform implements OneWayRequest {
     javaStart += 2;
     byte[] pad6 = in.readPad(2);
     javaStart += 2;
-    List<Byte> filterName = in.readChar(Short.toUnsignedInt(filterLen));
+    ByteList filterName = in.readChar(Short.toUnsignedInt(filterLen));
     javaStart += 1 * filterName.size();
     in.readPadAlign(Short.toUnsignedInt(filterLen));
     javaStart += XObject.getSizeForPadAlign(4, 1 * filterName.size());
-    List<Integer> filterParams = in.readInt32(Short.toUnsignedInt(length) - javaStart);
+    IntList filterParams = in.readInt32(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.crtc(crtc);
     javaBuilder.transform(transform);
-    javaBuilder.filterName(filterName);
-    javaBuilder.filterParams(filterParams);
+    javaBuilder.filterName(filterName.toImmutable());
+    javaBuilder.filterParams(filterParams.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -21,18 +21,18 @@ public class Systemcounter implements XStruct {
   private Int64 resolution;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public static Systemcounter readSystemcounter(X11Input in) throws IOException {
     Systemcounter.SystemcounterBuilder javaBuilder = Systemcounter.builder();
     int counter = in.readCard32();
     Int64 resolution = Int64.readInt64(in);
     short nameLen = in.readCard16();
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     in.readPadAlign(Short.toUnsignedInt(nameLen));
     javaBuilder.counter(counter);
     javaBuilder.resolution(resolution);
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     return javaBuilder.build();
   }
 

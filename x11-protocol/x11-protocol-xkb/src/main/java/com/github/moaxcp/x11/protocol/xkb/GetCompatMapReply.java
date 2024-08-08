@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -26,10 +27,10 @@ public class GetCompatMapReply implements XReply {
   private short nTotalSI;
 
   @NonNull
-  private List<SymInterpret> siRtrn;
+  private ImmutableList<SymInterpret> siRtrn;
 
   @NonNull
-  private List<ModDef> groupRtrn;
+  private ImmutableList<ModDef> groupRtrn;
 
   public static GetCompatMapReply readGetCompatMapReply(byte deviceID, short sequenceNumber,
       X11Input in) throws IOException {
@@ -41,11 +42,11 @@ public class GetCompatMapReply implements XReply {
     short nSIRtrn = in.readCard16();
     short nTotalSI = in.readCard16();
     byte[] pad9 = in.readPad(16);
-    List<SymInterpret> siRtrn = new ArrayList<>(Short.toUnsignedInt(nSIRtrn));
+    MutableList<SymInterpret> siRtrn = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nSIRtrn));
     for(int i = 0; i < Short.toUnsignedInt(nSIRtrn); i++) {
       siRtrn.add(SymInterpret.readSymInterpret(in));
     }
-    List<ModDef> groupRtrn = new ArrayList<>(Popcount.popcount(Byte.toUnsignedInt(groupsRtrn)));
+    MutableList<ModDef> groupRtrn = Lists.mutable.withInitialCapacity(Popcount.popcount(Byte.toUnsignedInt(groupsRtrn)));
     for(int i = 0; i < Popcount.popcount(Byte.toUnsignedInt(groupsRtrn)); i++) {
       groupRtrn.add(ModDef.readModDef(in));
     }
@@ -53,8 +54,8 @@ public class GetCompatMapReply implements XReply {
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.firstSIRtrn(firstSIRtrn);
     javaBuilder.nTotalSI(nTotalSI);
-    javaBuilder.siRtrn(siRtrn);
-    javaBuilder.groupRtrn(groupRtrn);
+    javaBuilder.siRtrn(siRtrn.toImmutable());
+    javaBuilder.groupRtrn(groupRtrn.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

@@ -6,10 +6,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -43,31 +45,31 @@ public class GetNamesReply implements XReply {
   private int compatName;
 
   @NonNull
-  private List<Integer> typeNames;
+  private IntList typeNames;
 
   @NonNull
-  private List<Byte> nLevelsPerType;
+  private ByteList nLevelsPerType;
 
   @NonNull
-  private List<Integer> ktLevelNames;
+  private IntList ktLevelNames;
 
   @NonNull
-  private List<Integer> indicatorNames;
+  private IntList indicatorNames;
 
   @NonNull
-  private List<Integer> virtualModNames;
+  private IntList virtualModNames;
 
   @NonNull
-  private List<Integer> groups;
+  private IntList groups;
 
   @NonNull
-  private List<KeyName> keyNames;
+  private ImmutableList<KeyName> keyNames;
 
   @NonNull
-  private List<KeyAlias> keyAliases;
+  private ImmutableList<KeyAlias> keyAliases;
 
   @NonNull
-  private List<Integer> radioGroupNames;
+  private IntList radioGroupNames;
 
   public static GetNamesReply readGetNamesReply(byte deviceID, short sequenceNumber, X11Input in)
       throws IOException {
@@ -92,16 +94,16 @@ public class GetNamesReply implements XReply {
     int physSymbolsName = 0;
     int typesName = 0;
     int compatName = 0;
-    List<Integer> typeNames = null;
-    List<Byte> nLevelsPerType = null;
+    IntList typeNames = null;
+    ByteList nLevelsPerType = null;
     in.readPadAlign(Byte.toUnsignedInt(nTypes));
-    List<Integer> ktLevelNames = null;
-    List<Integer> indicatorNames = null;
-    List<Integer> virtualModNames = null;
-    List<Integer> groups = null;
-    List<KeyName> keyNames = null;
-    List<KeyAlias> keyAliases = null;
-    List<Integer> radioGroupNames = null;
+    IntList ktLevelNames = null;
+    IntList indicatorNames = null;
+    IntList virtualModNames = null;
+    IntList groups = null;
+    ImmutableList<KeyName> keyNames = null;
+    ImmutableList<KeyAlias> keyAliases = null;
+    IntList radioGroupNames = null;
     javaBuilder.deviceID(deviceID);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.which(which);
@@ -142,7 +144,7 @@ public class GetNamesReply implements XReply {
       javaBuilder.nLevelsPerType(nLevelsPerType);
     }
     if(NameDetail.K_T_LEVEL_NAMES.isEnabled((int) (Integer.toUnsignedLong(which)))) {
-      ktLevelNames = in.readCard32(nLevelsPerType.stream().mapToInt(mapToInt -> mapToInt).sum());
+      ktLevelNames = in.readCard32((int) nLevelsPerType.sum());
       javaBuilder.ktLevelNames(ktLevelNames);
     }
     if(NameDetail.INDICATOR_NAMES.isEnabled((int) (Integer.toUnsignedLong(which)))) {
@@ -333,55 +335,55 @@ public class GetNamesReply implements XReply {
       return this;
     }
 
-    public GetNamesReply.GetNamesReplyBuilder typeNames(List<Integer> typeNames) {
+    public GetNamesReply.GetNamesReplyBuilder typeNames(IntList typeNames) {
       this.typeNames = typeNames;
       whichEnable(NameDetail.KEY_TYPE_NAMES);
       return this;
     }
 
-    public GetNamesReply.GetNamesReplyBuilder nLevelsPerType(List<Byte> nLevelsPerType) {
+    public GetNamesReply.GetNamesReplyBuilder nLevelsPerType(ByteList nLevelsPerType) {
       this.nLevelsPerType = nLevelsPerType;
       whichEnable(NameDetail.K_T_LEVEL_NAMES);
       return this;
     }
 
-    public GetNamesReply.GetNamesReplyBuilder ktLevelNames(List<Integer> ktLevelNames) {
+    public GetNamesReply.GetNamesReplyBuilder ktLevelNames(IntList ktLevelNames) {
       this.ktLevelNames = ktLevelNames;
       whichEnable(NameDetail.K_T_LEVEL_NAMES);
       return this;
     }
 
-    public GetNamesReply.GetNamesReplyBuilder indicatorNames(List<Integer> indicatorNames) {
+    public GetNamesReply.GetNamesReplyBuilder indicatorNames(IntList indicatorNames) {
       this.indicatorNames = indicatorNames;
       whichEnable(NameDetail.INDICATOR_NAMES);
       return this;
     }
 
-    public GetNamesReply.GetNamesReplyBuilder virtualModNames(List<Integer> virtualModNames) {
+    public GetNamesReply.GetNamesReplyBuilder virtualModNames(IntList virtualModNames) {
       this.virtualModNames = virtualModNames;
       whichEnable(NameDetail.VIRTUAL_MOD_NAMES);
       return this;
     }
 
-    public GetNamesReply.GetNamesReplyBuilder groups(List<Integer> groups) {
+    public GetNamesReply.GetNamesReplyBuilder groups(IntList groups) {
       this.groups = groups;
       whichEnable(NameDetail.GROUP_NAMES);
       return this;
     }
 
-    public GetNamesReply.GetNamesReplyBuilder keyNames(List<KeyName> keyNames) {
+    public GetNamesReply.GetNamesReplyBuilder keyNames(ImmutableList<KeyName> keyNames) {
       this.keyNames = keyNames;
       whichEnable(NameDetail.KEY_NAMES);
       return this;
     }
 
-    public GetNamesReply.GetNamesReplyBuilder keyAliases(List<KeyAlias> keyAliases) {
+    public GetNamesReply.GetNamesReplyBuilder keyAliases(ImmutableList<KeyAlias> keyAliases) {
       this.keyAliases = keyAliases;
       whichEnable(NameDetail.KEY_ALIASES);
       return this;
     }
 
-    public GetNamesReply.GetNamesReplyBuilder radioGroupNames(List<Integer> radioGroupNames) {
+    public GetNamesReply.GetNamesReplyBuilder radioGroupNames(IntList radioGroupNames) {
       this.radioGroupNames = radioGroupNames;
       whichEnable(NameDetail.R_G_NAMES);
       return this;

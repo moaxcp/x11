@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -23,22 +24,22 @@ public class ListComponentsReply implements XReply {
   private short extra;
 
   @NonNull
-  private List<Listing> keymaps;
+  private ImmutableList<Listing> keymaps;
 
   @NonNull
-  private List<Listing> keycodes;
+  private ImmutableList<Listing> keycodes;
 
   @NonNull
-  private List<Listing> types;
+  private ImmutableList<Listing> types;
 
   @NonNull
-  private List<Listing> compatMaps;
+  private ImmutableList<Listing> compatMaps;
 
   @NonNull
-  private List<Listing> symbols;
+  private ImmutableList<Listing> symbols;
 
   @NonNull
-  private List<Listing> geometries;
+  private ImmutableList<Listing> geometries;
 
   public static ListComponentsReply readListComponentsReply(byte deviceID, short sequenceNumber,
       X11Input in) throws IOException {
@@ -52,39 +53,39 @@ public class ListComponentsReply implements XReply {
     short nGeometries = in.readCard16();
     short extra = in.readCard16();
     byte[] pad11 = in.readPad(10);
-    List<Listing> keymaps = new ArrayList<>(Short.toUnsignedInt(nKeymaps));
+    MutableList<Listing> keymaps = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nKeymaps));
     for(int i = 0; i < Short.toUnsignedInt(nKeymaps); i++) {
       keymaps.add(Listing.readListing(in));
     }
-    List<Listing> keycodes = new ArrayList<>(Short.toUnsignedInt(nKeycodes));
+    MutableList<Listing> keycodes = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nKeycodes));
     for(int i = 0; i < Short.toUnsignedInt(nKeycodes); i++) {
       keycodes.add(Listing.readListing(in));
     }
-    List<Listing> types = new ArrayList<>(Short.toUnsignedInt(nTypes));
+    MutableList<Listing> types = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nTypes));
     for(int i = 0; i < Short.toUnsignedInt(nTypes); i++) {
       types.add(Listing.readListing(in));
     }
-    List<Listing> compatMaps = new ArrayList<>(Short.toUnsignedInt(nCompatMaps));
+    MutableList<Listing> compatMaps = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nCompatMaps));
     for(int i = 0; i < Short.toUnsignedInt(nCompatMaps); i++) {
       compatMaps.add(Listing.readListing(in));
     }
-    List<Listing> symbols = new ArrayList<>(Short.toUnsignedInt(nSymbols));
+    MutableList<Listing> symbols = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nSymbols));
     for(int i = 0; i < Short.toUnsignedInt(nSymbols); i++) {
       symbols.add(Listing.readListing(in));
     }
-    List<Listing> geometries = new ArrayList<>(Short.toUnsignedInt(nGeometries));
+    MutableList<Listing> geometries = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nGeometries));
     for(int i = 0; i < Short.toUnsignedInt(nGeometries); i++) {
       geometries.add(Listing.readListing(in));
     }
     javaBuilder.deviceID(deviceID);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.extra(extra);
-    javaBuilder.keymaps(keymaps);
-    javaBuilder.keycodes(keycodes);
-    javaBuilder.types(types);
-    javaBuilder.compatMaps(compatMaps);
-    javaBuilder.symbols(symbols);
-    javaBuilder.geometries(geometries);
+    javaBuilder.keymaps(keymaps.toImmutable());
+    javaBuilder.keycodes(keycodes.toImmutable());
+    javaBuilder.types(types.toImmutable());
+    javaBuilder.compatMaps(compatMaps.toImmutable());
+    javaBuilder.symbols(symbols.toImmutable());
+    javaBuilder.geometries(geometries.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

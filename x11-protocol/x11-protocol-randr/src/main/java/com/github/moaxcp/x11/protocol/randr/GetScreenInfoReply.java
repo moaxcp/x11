@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -35,10 +36,10 @@ public class GetScreenInfoReply implements XReply {
   private short nInfo;
 
   @NonNull
-  private List<ScreenSize> sizes;
+  private ImmutableList<ScreenSize> sizes;
 
   @NonNull
-  private List<RefreshRates> rates;
+  private ImmutableList<RefreshRates> rates;
 
   public static GetScreenInfoReply readGetScreenInfoReply(byte rotations, short sequenceNumber,
       X11Input in) throws IOException {
@@ -53,11 +54,11 @@ public class GetScreenInfoReply implements XReply {
     short rate = in.readCard16();
     short nInfo = in.readCard16();
     byte[] pad12 = in.readPad(2);
-    List<ScreenSize> sizes = new ArrayList<>(Short.toUnsignedInt(nSizes));
+    MutableList<ScreenSize> sizes = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nSizes));
     for(int i = 0; i < Short.toUnsignedInt(nSizes); i++) {
       sizes.add(ScreenSize.readScreenSize(in));
     }
-    List<RefreshRates> rates = new ArrayList<>(Short.toUnsignedInt(nInfo) - Short.toUnsignedInt(nSizes));
+    MutableList<RefreshRates> rates = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nInfo) - Short.toUnsignedInt(nSizes));
     for(int i = 0; i < Short.toUnsignedInt(nInfo) - Short.toUnsignedInt(nSizes); i++) {
       rates.add(RefreshRates.readRefreshRates(in));
     }
@@ -70,8 +71,8 @@ public class GetScreenInfoReply implements XReply {
     javaBuilder.rotation(rotation);
     javaBuilder.rate(rate);
     javaBuilder.nInfo(nInfo);
-    javaBuilder.sizes(sizes);
-    javaBuilder.rates(rates);
+    javaBuilder.sizes(sizes.toImmutable());
+    javaBuilder.rates(rates.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

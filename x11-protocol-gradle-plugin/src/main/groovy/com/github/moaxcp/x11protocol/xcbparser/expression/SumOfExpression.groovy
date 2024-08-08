@@ -52,7 +52,7 @@ class SumOfExpression implements Expression {
             return builder.build()
         }
         CodeBlock.Builder builder = CodeBlock.builder()
-        builder.add('$L.stream().mapToInt(mapToInt -> mapToInt).sum()', listProperty.name)
+        builder.add('(int) $L.sum()', listProperty.name)
         return builder.build()
     }
 

@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -23,7 +23,7 @@ public class GetTexImageReply implements XReply {
   private int depth;
 
   @NonNull
-  private List<Byte> data;
+  private ByteList data;
 
   public static GetTexImageReply readGetTexImageReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -34,12 +34,12 @@ public class GetTexImageReply implements XReply {
     int height = in.readInt32();
     int depth = in.readInt32();
     byte[] pad8 = in.readPad(4);
-    List<Byte> data = in.readByte((int) (Integer.toUnsignedLong(length) * 4));
+    ByteList data = in.readByte((int) (Integer.toUnsignedLong(length) * 4));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.width(width);
     javaBuilder.height(height);
     javaBuilder.depth(depth);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

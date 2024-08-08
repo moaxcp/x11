@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -47,7 +48,7 @@ public class Pixmap implements OneWayRequest {
   private long remainder;
 
   @NonNull
-  private List<Notify> notifies;
+  private ImmutableList<Notify> notifies;
 
   public byte getOpCode() {
     return OPCODE;
@@ -90,7 +91,7 @@ public class Pixmap implements OneWayRequest {
     javaStart += 8;
     long remainder = in.readCard64();
     javaStart += 8;
-    List<Notify> notifies = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Notify> notifies = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Notify baseObject = Notify.readNotify(in);
       notifies.add(baseObject);
@@ -110,7 +111,7 @@ public class Pixmap implements OneWayRequest {
     javaBuilder.targetMsc(targetMsc);
     javaBuilder.divisor(divisor);
     javaBuilder.remainder(remainder);
-    javaBuilder.notifies(notifies);
+    javaBuilder.notifies(notifies.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

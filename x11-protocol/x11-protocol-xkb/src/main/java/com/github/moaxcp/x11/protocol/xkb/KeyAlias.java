@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -15,17 +15,17 @@ public class KeyAlias implements XStruct {
   public static final String PLUGIN_NAME = "xkb";
 
   @NonNull
-  private List<Byte> real;
+  private ByteList real;
 
   @NonNull
-  private List<Byte> alias;
+  private ByteList alias;
 
   public static KeyAlias readKeyAlias(X11Input in) throws IOException {
     KeyAlias.KeyAliasBuilder javaBuilder = KeyAlias.builder();
-    List<Byte> real = in.readChar(4);
-    List<Byte> alias = in.readChar(4);
-    javaBuilder.real(real);
-    javaBuilder.alias(alias);
+    ByteList real = in.readChar(4);
+    ByteList alias = in.readChar(4);
+    javaBuilder.real(real.toImmutable());
+    javaBuilder.alias(alias.toImmutable());
     return javaBuilder.build();
   }
 

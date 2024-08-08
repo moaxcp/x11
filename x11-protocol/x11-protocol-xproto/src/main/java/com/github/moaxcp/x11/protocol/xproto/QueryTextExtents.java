@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -22,7 +23,7 @@ public class QueryTextExtents implements TwoWayRequest<QueryTextExtentsReply> {
   private int font;
 
   @NonNull
-  private List<Char2b> string;
+  private ImmutableList<Char2b> string;
 
   public XReplyFunction<QueryTextExtentsReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> QueryTextExtentsReply.readQueryTextExtentsReply(field, sequenceNumber, in);
@@ -41,14 +42,14 @@ public class QueryTextExtents implements TwoWayRequest<QueryTextExtentsReply> {
     javaStart += 2;
     int font = in.readCard32();
     javaStart += 4;
-    List<Char2b> string = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Char2b> string = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Char2b baseObject = Char2b.readChar2b(in);
       string.add(baseObject);
       javaStart += baseObject.getSize();
     }
     javaBuilder.font(font);
-    javaBuilder.string(string);
+    javaBuilder.string(string.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

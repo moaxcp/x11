@@ -1,14 +1,14 @@
 package com.github.moaxcp.x11.protocol;
 
 import org.assertj.core.api.Assertions;
+import org.eclipse.collections.api.factory.primitive.ByteLists;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.impl.factory.primitive.IntLists;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class UtilitesTest {
   @Test
@@ -20,12 +20,12 @@ public class UtilitesTest {
 
   @Test
   void toList_byte() {
-    Assertions.assertThat(Utilities.toList(new byte[]{0, 1, 2, 3})).containsExactly((byte) 0, (byte) 1, (byte) 2, (byte) 3);
+    Assertions.assertThat(Utilities.toList(new byte[]{0, 1, 2, 3})).isEqualTo(ByteLists.immutable.of((byte) 0, (byte) 1, (byte) 2, (byte) 3));
   }
 
   @Test
   void toString_fails_on_null_byteList() {
-    Assertions.assertThatThrownBy(() -> Utilities.toString(null, Charset.defaultCharset()))
+    Assertions.assertThatThrownBy(() -> Utilities.toString((ByteList) null, Charset.defaultCharset()))
     .isInstanceOf(NullPointerException.class)
     .hasMessage("byteList is marked non-null but is null");
   }
@@ -58,8 +58,7 @@ public class UtilitesTest {
 
   @Test
   void toInteger_fails_on_size() {
-    List<Byte> input = new ArrayList<>();
-    input.add((byte) 1);
+    var input = ByteLists.immutable.of((byte) 1);
     Assertions.assertThatThrownBy(() -> Utilities.toIntegers(input))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("bytes must have size divisible by 4 to be converted to integers got: 1");
@@ -67,12 +66,8 @@ public class UtilitesTest {
 
   @Test
   void toInteger_success() {
-    List<Byte> bytes = new ArrayList<>();
-    bytes.add((byte) 0b11111110);
-    bytes.add((byte) 0b11111101);
-    bytes.add((byte) 0b11111011);
-    bytes.add((byte) 0b11110111);
+    var bytes = ByteLists.immutable.of((byte) 0b11111110, (byte) 0b11111101, (byte) 0b11111011, (byte) 0b11110111);
 
-    Assertions.assertThat(Utilities.toIntegers(bytes)).containsExactly(0b11111110_11111101_11111011_11110111);
+    Assertions.assertThat(Utilities.toIntegers(bytes)).isEqualTo(IntLists.immutable.of(0b11111110_11111101_11111011_11110111));
   }
 }

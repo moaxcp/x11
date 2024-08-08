@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -15,7 +15,7 @@ public class Key implements XStruct {
   public static final String PLUGIN_NAME = "xkb";
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   private short gap;
 
@@ -25,11 +25,11 @@ public class Key implements XStruct {
 
   public static Key readKey(X11Input in) throws IOException {
     Key.KeyBuilder javaBuilder = Key.builder();
-    List<Byte> name = in.readChar(4);
+    ByteList name = in.readChar(4);
     short gap = in.readInt16();
     byte shapeNdx = in.readCard8();
     byte colorNdx = in.readCard8();
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     javaBuilder.gap(gap);
     javaBuilder.shapeNdx(shapeNdx);
     javaBuilder.colorNdx(colorNdx);

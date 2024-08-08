@@ -6,10 +6,11 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -53,31 +54,31 @@ public class SetMap implements OneWayRequest {
   private byte nVModMapKeys;
 
   @NonNull
-  private List<SetKeyType> types;
+  private ImmutableList<SetKeyType> types;
 
   @NonNull
-  private List<KeySymMap> syms;
+  private ImmutableList<KeySymMap> syms;
 
   @NonNull
-  private List<Byte> actionsCount;
+  private ByteList actionsCount;
 
   @NonNull
-  private List<ActionUnion> actions;
+  private ImmutableList<ActionUnion> actions;
 
   @NonNull
-  private List<SetBehavior> behaviors;
+  private ImmutableList<SetBehavior> behaviors;
 
   @NonNull
-  private List<Byte> vmods;
+  private ByteList vmods;
 
   @NonNull
-  private List<SetExplicit> explicit;
+  private ImmutableList<SetExplicit> explicit;
 
   @NonNull
-  private List<KeyModMap> modmap;
+  private ImmutableList<KeyModMap> modmap;
 
   @NonNull
-  private List<KeyVModMap> vmodmap;
+  private ImmutableList<KeyVModMap> vmodmap;
 
   public byte getOpCode() {
     return OPCODE;
@@ -113,17 +114,17 @@ public class SetMap implements OneWayRequest {
     byte nVModMapKeys = in.readCard8();
     byte totalVModMapKeys = in.readCard8();
     short virtualMods = in.readCard16();
-    List<SetKeyType> types = null;
-    List<KeySymMap> syms = null;
-    List<Byte> actionsCount = null;
+    ImmutableList<SetKeyType> types = null;
+    ImmutableList<KeySymMap> syms = null;
+    ByteList actionsCount = null;
     in.readPadAlign(Byte.toUnsignedInt(nKeyActions));
-    List<ActionUnion> actions = null;
-    List<SetBehavior> behaviors = null;
-    List<Byte> vmods = null;
+    ImmutableList<ActionUnion> actions = null;
+    ImmutableList<SetBehavior> behaviors = null;
+    ByteList vmods = null;
     in.readPadAlign(com.github.moaxcp.x11.protocol.Popcount.popcount(Short.toUnsignedInt(virtualMods)));
-    List<SetExplicit> explicit = null;
-    List<KeyModMap> modmap = null;
-    List<KeyVModMap> vmodmap = null;
+    ImmutableList<SetExplicit> explicit = null;
+    ImmutableList<KeyModMap> modmap = null;
+    ImmutableList<KeyVModMap> vmodmap = null;
     javaBuilder.deviceSpec(deviceSpec);
     javaBuilder.present(present);
     javaBuilder.flags(flags);
@@ -341,55 +342,55 @@ public class SetMap implements OneWayRequest {
       return this;
     }
 
-    public SetMap.SetMapBuilder types(List<SetKeyType> types) {
+    public SetMap.SetMapBuilder types(ImmutableList<SetKeyType> types) {
       this.types = types;
       presentEnable(MapPart.KEY_TYPES);
       return this;
     }
 
-    public SetMap.SetMapBuilder syms(List<KeySymMap> syms) {
+    public SetMap.SetMapBuilder syms(ImmutableList<KeySymMap> syms) {
       this.syms = syms;
       presentEnable(MapPart.KEY_SYMS);
       return this;
     }
 
-    public SetMap.SetMapBuilder actionsCount(List<Byte> actionsCount) {
+    public SetMap.SetMapBuilder actionsCount(ByteList actionsCount) {
       this.actionsCount = actionsCount;
       presentEnable(MapPart.KEY_ACTIONS);
       return this;
     }
 
-    public SetMap.SetMapBuilder actions(List<ActionUnion> actions) {
+    public SetMap.SetMapBuilder actions(ImmutableList<ActionUnion> actions) {
       this.actions = actions;
       presentEnable(MapPart.KEY_ACTIONS);
       return this;
     }
 
-    public SetMap.SetMapBuilder behaviors(List<SetBehavior> behaviors) {
+    public SetMap.SetMapBuilder behaviors(ImmutableList<SetBehavior> behaviors) {
       this.behaviors = behaviors;
       presentEnable(MapPart.KEY_BEHAVIORS);
       return this;
     }
 
-    public SetMap.SetMapBuilder vmods(List<Byte> vmods) {
+    public SetMap.SetMapBuilder vmods(ByteList vmods) {
       this.vmods = vmods;
       presentEnable(MapPart.VIRTUAL_MODS);
       return this;
     }
 
-    public SetMap.SetMapBuilder explicit(List<SetExplicit> explicit) {
+    public SetMap.SetMapBuilder explicit(ImmutableList<SetExplicit> explicit) {
       this.explicit = explicit;
       presentEnable(MapPart.EXPLICIT_COMPONENTS);
       return this;
     }
 
-    public SetMap.SetMapBuilder modmap(List<KeyModMap> modmap) {
+    public SetMap.SetMapBuilder modmap(ImmutableList<KeyModMap> modmap) {
       this.modmap = modmap;
       presentEnable(MapPart.MODIFIER_MAP);
       return this;
     }
 
-    public SetMap.SetMapBuilder vmodmap(List<KeyVModMap> vmodmap) {
+    public SetMap.SetMapBuilder vmodmap(ImmutableList<KeyVModMap> vmodmap) {
       this.vmodmap = vmodmap;
       presentEnable(MapPart.VIRTUAL_MOD_MAP);
       return this;

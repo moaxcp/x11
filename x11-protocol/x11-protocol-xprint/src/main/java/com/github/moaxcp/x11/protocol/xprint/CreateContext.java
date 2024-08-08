@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -19,10 +19,10 @@ public class CreateContext implements OneWayRequest {
   private int contextId;
 
   @NonNull
-  private List<Byte> printerName;
+  private ByteList printerName;
 
   @NonNull
-  private List<Byte> locale;
+  private ByteList locale;
 
   public byte getOpCode() {
     return OPCODE;
@@ -35,11 +35,11 @@ public class CreateContext implements OneWayRequest {
     int contextId = in.readCard32();
     int printerNameLen = in.readCard32();
     int localeLen = in.readCard32();
-    List<Byte> printerName = in.readChar((int) (Integer.toUnsignedLong(printerNameLen)));
-    List<Byte> locale = in.readChar((int) (Integer.toUnsignedLong(localeLen)));
+    ByteList printerName = in.readChar((int) (Integer.toUnsignedLong(printerNameLen)));
+    ByteList locale = in.readChar((int) (Integer.toUnsignedLong(localeLen)));
     javaBuilder.contextId(contextId);
-    javaBuilder.printerName(printerName);
-    javaBuilder.locale(locale);
+    javaBuilder.printerName(printerName.toImmutable());
+    javaBuilder.locale(locale.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

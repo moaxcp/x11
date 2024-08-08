@@ -1,8 +1,7 @@
 package com.github.moaxcp.x11.protocol;
 
+import org.eclipse.collections.api.list.primitive.ByteList;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -78,7 +77,7 @@ public class ParametersCheckTest {
 
   @Test
   void requireNonEmpty_list_bytes_fails_with_null_value() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> ParametersCheck.requireNonEmpty("value", (List<Byte>)null));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> ParametersCheck.requireNonEmpty("value", (ByteList)null));
     assertThat(exception).hasMessage("value is marked non-null but is null");
   }
 
@@ -96,7 +95,7 @@ public class ParametersCheckTest {
 
   @Test
   void requireNonEmpty_list_bytes_returns_value() {
-    List<Byte> value = ParametersCheck.requireNonEmpty("value", Utilities.toList(new byte[]{1}));
+    ByteList value = ParametersCheck.requireNonEmpty("value", Utilities.toList(new byte[]{1}));
     assertThat(value).isEqualTo(Utilities.toList(new byte[]{1}));
   }
 }

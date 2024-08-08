@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -17,16 +17,16 @@ public class GenTexturesReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> data;
+  private IntList data;
 
   public static GenTexturesReply readGenTexturesReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
     GenTexturesReply.GenTexturesReplyBuilder javaBuilder = GenTexturesReply.builder();
     int length = in.readCard32();
     byte[] pad4 = in.readPad(24);
-    List<Integer> data = in.readCard32((int) (Integer.toUnsignedLong(length)));
+    IntList data = in.readCard32((int) (Integer.toUnsignedLong(length)));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

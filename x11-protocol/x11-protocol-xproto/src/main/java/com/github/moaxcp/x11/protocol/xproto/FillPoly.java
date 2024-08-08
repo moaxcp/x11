@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -27,7 +28,7 @@ public class FillPoly implements OneWayRequest {
   private byte coordinateMode;
 
   @NonNull
-  private List<Point> points;
+  private ImmutableList<Point> points;
 
   public byte getOpCode() {
     return OPCODE;
@@ -50,7 +51,7 @@ public class FillPoly implements OneWayRequest {
     javaStart += 1;
     byte[] pad7 = in.readPad(2);
     javaStart += 2;
-    List<Point> points = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Point> points = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Point baseObject = Point.readPoint(in);
       points.add(baseObject);
@@ -60,7 +61,7 @@ public class FillPoly implements OneWayRequest {
     javaBuilder.gc(gc);
     javaBuilder.shape(shape);
     javaBuilder.coordinateMode(coordinateMode);
-    javaBuilder.points(points);
+    javaBuilder.points(points.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

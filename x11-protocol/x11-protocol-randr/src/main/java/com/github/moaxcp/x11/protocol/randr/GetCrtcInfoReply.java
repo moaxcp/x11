@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -35,10 +35,10 @@ public class GetCrtcInfoReply implements XReply {
   private short rotations;
 
   @NonNull
-  private List<Integer> outputs;
+  private IntList outputs;
 
   @NonNull
-  private List<Integer> possible;
+  private IntList possible;
 
   public static GetCrtcInfoReply readGetCrtcInfoReply(byte status, short sequenceNumber,
       X11Input in) throws IOException {
@@ -54,8 +54,8 @@ public class GetCrtcInfoReply implements XReply {
     short rotations = in.readCard16();
     short numOutputs = in.readCard16();
     short numPossibleOutputs = in.readCard16();
-    List<Integer> outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
-    List<Integer> possible = in.readCard32(Short.toUnsignedInt(numPossibleOutputs));
+    IntList outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
+    IntList possible = in.readCard32(Short.toUnsignedInt(numPossibleOutputs));
     javaBuilder.status(status);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.timestamp(timestamp);
@@ -66,8 +66,8 @@ public class GetCrtcInfoReply implements XReply {
     javaBuilder.mode(mode);
     javaBuilder.rotation(rotation);
     javaBuilder.rotations(rotations);
-    javaBuilder.outputs(outputs);
-    javaBuilder.possible(possible);
+    javaBuilder.outputs(outputs.toImmutable());
+    javaBuilder.possible(possible.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

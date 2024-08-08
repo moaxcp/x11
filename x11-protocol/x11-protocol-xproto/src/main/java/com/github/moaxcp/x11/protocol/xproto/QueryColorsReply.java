@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -19,7 +20,7 @@ public class QueryColorsReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Rgb> colors;
+  private ImmutableList<Rgb> colors;
 
   public static QueryColorsReply readQueryColorsReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -27,12 +28,12 @@ public class QueryColorsReply implements XReply {
     int length = in.readCard32();
     short colorsLen = in.readCard16();
     byte[] pad5 = in.readPad(22);
-    List<Rgb> colors = new ArrayList<>(Short.toUnsignedInt(colorsLen));
+    MutableList<Rgb> colors = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(colorsLen));
     for(int i = 0; i < Short.toUnsignedInt(colorsLen); i++) {
       colors.add(Rgb.readRgb(in));
     }
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.colors(colors);
+    javaBuilder.colors(colors.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

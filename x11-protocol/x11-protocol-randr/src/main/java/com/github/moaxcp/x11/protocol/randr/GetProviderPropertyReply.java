@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -25,7 +25,7 @@ public class GetProviderPropertyReply implements XReply {
   private int numItems;
 
   @NonNull
-  private List<Byte> data;
+  private ByteList data;
 
   public static GetProviderPropertyReply readGetProviderPropertyReply(byte format,
       short sequenceNumber, X11Input in) throws IOException {
@@ -35,13 +35,13 @@ public class GetProviderPropertyReply implements XReply {
     int bytesAfter = in.readCard32();
     int numItems = in.readCard32();
     byte[] pad7 = in.readPad(12);
-    List<Byte> data = in.readVoid((int) (Integer.toUnsignedLong(numItems) * (Byte.toUnsignedInt(format) / 8)));
+    ByteList data = in.readVoid((int) (Integer.toUnsignedLong(numItems) * (Byte.toUnsignedInt(format) / 8)));
     javaBuilder.format(format);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.type(type);
     javaBuilder.bytesAfter(bytesAfter);
     javaBuilder.numItems(numItems);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

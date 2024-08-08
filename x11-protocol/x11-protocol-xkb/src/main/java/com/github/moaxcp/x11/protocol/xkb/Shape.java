@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -23,7 +24,7 @@ public class Shape implements XStruct {
   private byte approxNdx;
 
   @NonNull
-  private List<Outline> outlines;
+  private ImmutableList<Outline> outlines;
 
   public static Shape readShape(X11Input in) throws IOException {
     Shape.ShapeBuilder javaBuilder = Shape.builder();
@@ -32,14 +33,14 @@ public class Shape implements XStruct {
     byte primaryNdx = in.readCard8();
     byte approxNdx = in.readCard8();
     byte[] pad4 = in.readPad(1);
-    List<Outline> outlines = new ArrayList<>(Byte.toUnsignedInt(nOutlines));
+    MutableList<Outline> outlines = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(nOutlines));
     for(int i = 0; i < Byte.toUnsignedInt(nOutlines); i++) {
       outlines.add(Outline.readOutline(in));
     }
     javaBuilder.name(name);
     javaBuilder.primaryNdx(primaryNdx);
     javaBuilder.approxNdx(approxNdx);
-    javaBuilder.outlines(outlines);
+    javaBuilder.outlines(outlines.toImmutable());
     return javaBuilder.build();
   }
 

@@ -3,6 +3,7 @@ package com.github.moaxcp.x11.protocol;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -22,10 +23,11 @@ import static com.github.moaxcp.x11.protocol.Utilities.toList;
 @Value
 public class XAuthority {
   @NonNull Family family;
-  @NonNull List<Byte> address;
+  @NonNull
+  ByteList address;
   int displayNumber;
-  @NonNull List<Byte> protocolName;
-  @NonNull List<Byte> protocolData;
+  @NonNull ByteList protocolName;
+  @NonNull ByteList protocolData;
 
   /**
    * Represents a Family or connection type used in authentication.
@@ -83,7 +85,7 @@ public class XAuthority {
    * @throws NullPointerException if any parameter is null.
    * @throws IllegalArgumentException if displayNumber is less than 0 or protocolName is empty.
    */
-  public XAuthority(@NonNull Family family, @NonNull List<Byte> address, int displayNumber, @NonNull List<Byte> protocolName, @NonNull List<Byte> protocolData) {
+  public XAuthority(@NonNull Family family, @NonNull ByteList address, int displayNumber, @NonNull ByteList protocolName, @NonNull ByteList protocolData) {
     this.family = family;
     this.address = address;
     if(displayNumber < 0) {
@@ -98,16 +100,16 @@ public class XAuthority {
     try {
       Family family = Family.getByCode(in.readUnsignedShort());
       int length = in.readUnsignedShort();
-      List<Byte> address = readBytesList(in, length);
+      var address = readBytesList(in, length);
       length = in.readUnsignedShort();
       int number = 0;
       if (length != 0) {
         number = Integer.parseInt(new String(readBytes(in, length)));
       }
       length = in.readUnsignedShort();
-      List<Byte> name = readBytesList(in, length);
+      var name = readBytesList(in, length);
       length = in.readUnsignedShort();
-      List<Byte> data = readBytesList(in, length);
+      var data = readBytesList(in, length);
       return Optional.of(new XAuthority(family, address, number, name, data));
     } catch (IOException ex) {
       return Optional.empty();
@@ -120,7 +122,7 @@ public class XAuthority {
     return bytes;
   }
 
-  private static List<Byte> readBytesList(DataInput in, int length) throws IOException {
+  private static ByteList readBytesList(DataInput in, int length) throws IOException {
     byte[] bytes = new byte[length];
     in.readFully(bytes);
     return toList(bytes);

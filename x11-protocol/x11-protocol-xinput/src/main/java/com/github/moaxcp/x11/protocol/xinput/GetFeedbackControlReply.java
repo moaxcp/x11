@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -21,7 +22,7 @@ public class GetFeedbackControlReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<FeedbackState> feedbacks;
+  private ImmutableList<FeedbackState> feedbacks;
 
   public static GetFeedbackControlReply readGetFeedbackControlReply(byte xiReplyType,
       short sequenceNumber, X11Input in) throws IOException {
@@ -29,13 +30,13 @@ public class GetFeedbackControlReply implements XReply {
     int length = in.readCard32();
     short numFeedbacks = in.readCard16();
     byte[] pad5 = in.readPad(22);
-    List<FeedbackState> feedbacks = new ArrayList<>(Short.toUnsignedInt(numFeedbacks));
+    MutableList<FeedbackState> feedbacks = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(numFeedbacks));
     for(int i = 0; i < Short.toUnsignedInt(numFeedbacks); i++) {
       feedbacks.add(FeedbackState.readFeedbackState(in));
     }
     javaBuilder.xiReplyType(xiReplyType);
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.feedbacks(feedbacks);
+    javaBuilder.feedbacks(feedbacks.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

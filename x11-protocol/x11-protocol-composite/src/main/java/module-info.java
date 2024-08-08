@@ -6,6 +6,6 @@ module com.github.moaxcp.x11.protocol.composite {
     exports com.github.moaxcp.x11.protocol.composite;
 
     requires static lombok;
-    requires com.github.moaxcp.x11.protocol.core;
+    requires transitive com.github.moaxcp.x11.protocol.core;
     provides XProtocolPlugin with CompositePlugin;
 }

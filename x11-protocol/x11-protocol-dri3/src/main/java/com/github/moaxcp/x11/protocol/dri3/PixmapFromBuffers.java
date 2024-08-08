@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -47,7 +47,7 @@ public class PixmapFromBuffers implements OneWayRequest {
   private long modifier;
 
   @NonNull
-  private List<Integer> buffers;
+  private IntList buffers;
 
   public byte getOpCode() {
     return OPCODE;
@@ -75,7 +75,7 @@ public class PixmapFromBuffers implements OneWayRequest {
     byte bpp = in.readCard8();
     byte[] pad19 = in.readPad(2);
     long modifier = in.readCard64();
-    List<Integer> buffers = in.readFd(Byte.toUnsignedInt(numBuffers));
+    IntList buffers = in.readFd(Byte.toUnsignedInt(numBuffers));
     javaBuilder.pixmap(pixmap);
     javaBuilder.window(window);
     javaBuilder.width(width);
@@ -91,7 +91,7 @@ public class PixmapFromBuffers implements OneWayRequest {
     javaBuilder.depth(depth);
     javaBuilder.bpp(bpp);
     javaBuilder.modifier(modifier);
-    javaBuilder.buffers(buffers);
+    javaBuilder.buffers(buffers.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

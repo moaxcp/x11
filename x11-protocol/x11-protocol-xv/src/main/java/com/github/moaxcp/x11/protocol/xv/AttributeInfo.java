@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -22,7 +22,7 @@ public class AttributeInfo implements XStruct {
   private int max;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public static AttributeInfo readAttributeInfo(X11Input in) throws IOException {
     AttributeInfo.AttributeInfoBuilder javaBuilder = AttributeInfo.builder();
@@ -30,12 +30,12 @@ public class AttributeInfo implements XStruct {
     int min = in.readInt32();
     int max = in.readInt32();
     int size = in.readCard32();
-    List<Byte> name = in.readChar((int) (Integer.toUnsignedLong(size)));
+    ByteList name = in.readChar((int) (Integer.toUnsignedLong(size)));
     in.readPadAlign((int) (Integer.toUnsignedLong(size)));
     javaBuilder.flags(flags);
     javaBuilder.min(min);
     javaBuilder.max(max);
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     return javaBuilder.build();
   }
 

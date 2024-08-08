@@ -5,11 +5,13 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -43,13 +45,13 @@ public class GetDeviceInfoReply implements XReply {
   private int devType;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   @NonNull
-  private List<ActionUnion> btnActions;
+  private ImmutableList<ActionUnion> btnActions;
 
   @NonNull
-  private List<DeviceLedInfo> leds;
+  private ImmutableList<DeviceLedInfo> leds;
 
   public static GetDeviceInfoReply readGetDeviceInfoReply(byte deviceID, short sequenceNumber,
       X11Input in) throws IOException {
@@ -70,13 +72,13 @@ public class GetDeviceInfoReply implements XReply {
     byte[] pad16 = in.readPad(2);
     int devType = in.readCard32();
     short nameLen = in.readCard16();
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     in.readPadAlign(Short.toUnsignedInt(nameLen));
-    List<ActionUnion> btnActions = new ArrayList<>(Byte.toUnsignedInt(nBtnsRtrn));
+    MutableList<ActionUnion> btnActions = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(nBtnsRtrn));
     for(int i = 0; i < Byte.toUnsignedInt(nBtnsRtrn); i++) {
       btnActions.add(ActionUnion.readActionUnion(in));
     }
-    List<DeviceLedInfo> leds = new ArrayList<>(Short.toUnsignedInt(nDeviceLedFBs));
+    MutableList<DeviceLedInfo> leds = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nDeviceLedFBs));
     for(int i = 0; i < Short.toUnsignedInt(nDeviceLedFBs); i++) {
       leds.add(DeviceLedInfo.readDeviceLedInfo(in));
     }
@@ -93,9 +95,9 @@ public class GetDeviceInfoReply implements XReply {
     javaBuilder.dfltKbdFB(dfltKbdFB);
     javaBuilder.dfltLedFB(dfltLedFB);
     javaBuilder.devType(devType);
-    javaBuilder.name(name);
-    javaBuilder.btnActions(btnActions);
-    javaBuilder.leds(leds);
+    javaBuilder.name(name.toImmutable());
+    javaBuilder.btnActions(btnActions.toImmutable());
+    javaBuilder.leds(leds.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

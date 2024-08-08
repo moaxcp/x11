@@ -9,9 +9,10 @@ import com.github.moaxcp.x11.protocol.xproto.NoOperation;
 import com.github.moaxcp.x11.x11client.X11Client;
 import com.github.moaxcp.x11.x11client.api.record.RecordData;
 import com.github.moaxcp.x11.x11client.api.record.RecordReply;
+import org.eclipse.collections.api.factory.primitive.IntLists;
+import org.eclipse.collections.impl.factory.Lists;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -56,9 +57,9 @@ public class RecordApiClientTracker {
 
             CreateContext createContext = CreateContext.builder()
                     .context(rc)
-                    .clientSpecs(Collections.singletonList(Cs.ALL_CLIENTS.getValue()))
+                    .clientSpecs(IntLists.immutable.of(Cs.ALL_CLIENTS.getValue()))
                     .elementHeaderEnable(HType.FROM_CLIENT_SEQUENCE)
-                    .ranges(Collections.singletonList(range))
+                    .ranges(Lists.immutable.of(range))
                     .build();
 
             control.send(createContext);

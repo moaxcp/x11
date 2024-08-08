@@ -2,8 +2,7 @@ package com.github.moaxcp.x11.protocol;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-
-import java.util.List;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @UtilityClass
 class ParametersCheck {
@@ -50,7 +49,7 @@ class ParametersCheck {
    * @throws IllegalArgumentException if name is blank or if value is empty
    * @throws NullPointerException if name or value is null
    */
-  public static List<Byte> requireNonEmpty(@NonNull String name, @NonNull List<Byte> value) {
+  public static ByteList requireNonEmpty(@NonNull String name, @NonNull ByteList value) {
     if(name.trim().isEmpty()) {
       throw new IllegalArgumentException("name must not be blank");
     }

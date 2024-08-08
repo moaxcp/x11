@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -17,7 +17,7 @@ public class ListInstalledColormapsReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> cmaps;
+  private IntList cmaps;
 
   public static ListInstalledColormapsReply readListInstalledColormapsReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -25,9 +25,9 @@ public class ListInstalledColormapsReply implements XReply {
     int length = in.readCard32();
     short cmapsLen = in.readCard16();
     byte[] pad5 = in.readPad(22);
-    List<Integer> cmaps = in.readCard32(Short.toUnsignedInt(cmapsLen));
+    IntList cmaps = in.readCard32(Short.toUnsignedInt(cmapsLen));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.cmaps(cmaps);
+    javaBuilder.cmaps(cmaps.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

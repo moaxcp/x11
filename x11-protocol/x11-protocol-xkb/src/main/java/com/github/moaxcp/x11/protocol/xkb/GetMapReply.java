@@ -6,10 +6,11 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -53,31 +54,31 @@ public class GetMapReply implements XReply {
   private byte nVModMapKeys;
 
   @NonNull
-  private List<KeyType> typesRtrn;
+  private ImmutableList<KeyType> typesRtrn;
 
   @NonNull
-  private List<KeySymMap> symsRtrn;
+  private ImmutableList<KeySymMap> symsRtrn;
 
   @NonNull
-  private List<Byte> actsRtrnCount;
+  private ByteList actsRtrnCount;
 
   @NonNull
-  private List<ActionUnion> actsRtrnActs;
+  private ImmutableList<ActionUnion> actsRtrnActs;
 
   @NonNull
-  private List<SetBehavior> behaviorsRtrn;
+  private ImmutableList<SetBehavior> behaviorsRtrn;
 
   @NonNull
-  private List<Byte> vmodsRtrn;
+  private ByteList vmodsRtrn;
 
   @NonNull
-  private List<SetExplicit> explicitRtrn;
+  private ImmutableList<SetExplicit> explicitRtrn;
 
   @NonNull
-  private List<KeyModMap> modmapRtrn;
+  private ImmutableList<KeyModMap> modmapRtrn;
 
   @NonNull
-  private List<KeyVModMap> vmodmapRtrn;
+  private ImmutableList<KeyVModMap> vmodmapRtrn;
 
   public static GetMapReply readGetMapReply(byte deviceID, short sequenceNumber, X11Input in) throws
       IOException {
@@ -110,19 +111,19 @@ public class GetMapReply implements XReply {
     byte totalVModMapKeys = in.readCard8();
     byte[] pad29 = in.readPad(1);
     short virtualMods = in.readCard16();
-    List<KeyType> typesRtrn = null;
-    List<KeySymMap> symsRtrn = null;
-    List<Byte> actsRtrnCount = null;
+    ImmutableList<KeyType> typesRtrn = null;
+    ImmutableList<KeySymMap> symsRtrn = null;
+    ByteList actsRtrnCount = null;
     in.readPadAlign(Byte.toUnsignedInt(nKeyActions));
-    List<ActionUnion> actsRtrnActs = null;
-    List<SetBehavior> behaviorsRtrn = null;
-    List<Byte> vmodsRtrn = null;
+    ImmutableList<ActionUnion> actsRtrnActs = null;
+    ImmutableList<SetBehavior> behaviorsRtrn = null;
+    ByteList vmodsRtrn = null;
     in.readPadAlign(com.github.moaxcp.x11.protocol.Popcount.popcount(Short.toUnsignedInt(virtualMods)));
-    List<SetExplicit> explicitRtrn = null;
+    ImmutableList<SetExplicit> explicitRtrn = null;
     in.readPadAlign(Byte.toUnsignedInt(totalKeyExplicit));
-    List<KeyModMap> modmapRtrn = null;
+    ImmutableList<KeyModMap> modmapRtrn = null;
     in.readPadAlign(Byte.toUnsignedInt(totalModMapKeys));
-    List<KeyVModMap> vmodmapRtrn = null;
+    ImmutableList<KeyVModMap> vmodmapRtrn = null;
     javaBuilder.deviceID(deviceID);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.minKeyCode(minKeyCode);
@@ -316,55 +317,55 @@ public class GetMapReply implements XReply {
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder typesRtrn(List<KeyType> typesRtrn) {
+    public GetMapReply.GetMapReplyBuilder typesRtrn(ImmutableList<KeyType> typesRtrn) {
       this.typesRtrn = typesRtrn;
       presentEnable(MapPart.KEY_TYPES);
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder symsRtrn(List<KeySymMap> symsRtrn) {
+    public GetMapReply.GetMapReplyBuilder symsRtrn(ImmutableList<KeySymMap> symsRtrn) {
       this.symsRtrn = symsRtrn;
       presentEnable(MapPart.KEY_SYMS);
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder actsRtrnCount(List<Byte> actsRtrnCount) {
+    public GetMapReply.GetMapReplyBuilder actsRtrnCount(ByteList actsRtrnCount) {
       this.actsRtrnCount = actsRtrnCount;
       presentEnable(MapPart.KEY_ACTIONS);
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder actsRtrnActs(List<ActionUnion> actsRtrnActs) {
+    public GetMapReply.GetMapReplyBuilder actsRtrnActs(ImmutableList<ActionUnion> actsRtrnActs) {
       this.actsRtrnActs = actsRtrnActs;
       presentEnable(MapPart.KEY_ACTIONS);
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder behaviorsRtrn(List<SetBehavior> behaviorsRtrn) {
+    public GetMapReply.GetMapReplyBuilder behaviorsRtrn(ImmutableList<SetBehavior> behaviorsRtrn) {
       this.behaviorsRtrn = behaviorsRtrn;
       presentEnable(MapPart.KEY_BEHAVIORS);
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder vmodsRtrn(List<Byte> vmodsRtrn) {
+    public GetMapReply.GetMapReplyBuilder vmodsRtrn(ByteList vmodsRtrn) {
       this.vmodsRtrn = vmodsRtrn;
       presentEnable(MapPart.VIRTUAL_MODS);
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder explicitRtrn(List<SetExplicit> explicitRtrn) {
+    public GetMapReply.GetMapReplyBuilder explicitRtrn(ImmutableList<SetExplicit> explicitRtrn) {
       this.explicitRtrn = explicitRtrn;
       presentEnable(MapPart.EXPLICIT_COMPONENTS);
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder modmapRtrn(List<KeyModMap> modmapRtrn) {
+    public GetMapReply.GetMapReplyBuilder modmapRtrn(ImmutableList<KeyModMap> modmapRtrn) {
       this.modmapRtrn = modmapRtrn;
       presentEnable(MapPart.MODIFIER_MAP);
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder vmodmapRtrn(List<KeyVModMap> vmodmapRtrn) {
+    public GetMapReply.GetMapReplyBuilder vmodmapRtrn(ImmutableList<KeyVModMap> vmodmapRtrn) {
       this.vmodmapRtrn = vmodmapRtrn;
       presentEnable(MapPart.VIRTUAL_MOD_MAP);
       return this;

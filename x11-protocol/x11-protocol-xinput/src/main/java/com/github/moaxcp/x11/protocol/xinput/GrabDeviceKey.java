@@ -6,10 +6,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.xproto.GrabMode;
 import com.github.moaxcp.x11.protocol.xproto.ModMask;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -35,7 +35,7 @@ public class GrabDeviceKey implements OneWayRequest {
   private boolean ownerEvents;
 
   @NonNull
-  private List<Integer> classes;
+  private IntList classes;
 
   public byte getOpCode() {
     return OPCODE;
@@ -55,7 +55,7 @@ public class GrabDeviceKey implements OneWayRequest {
     byte otherDeviceMode = in.readCard8();
     boolean ownerEvents = in.readBool();
     byte[] pad12 = in.readPad(2);
-    List<Integer> classes = in.readCard32(Short.toUnsignedInt(numClasses));
+    IntList classes = in.readCard32(Short.toUnsignedInt(numClasses));
     javaBuilder.grabWindow(grabWindow);
     javaBuilder.modifiers(modifiers);
     javaBuilder.modifierDevice(modifierDevice);
@@ -64,7 +64,7 @@ public class GrabDeviceKey implements OneWayRequest {
     javaBuilder.thisDeviceMode(thisDeviceMode);
     javaBuilder.otherDeviceMode(otherDeviceMode);
     javaBuilder.ownerEvents(ownerEvents);
-    javaBuilder.classes(classes);
+    javaBuilder.classes(classes.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

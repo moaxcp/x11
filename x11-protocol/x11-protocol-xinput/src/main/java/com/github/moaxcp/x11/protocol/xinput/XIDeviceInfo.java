@@ -5,11 +5,13 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -25,10 +27,10 @@ public class XIDeviceInfo implements XStruct {
   private boolean enabled;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   @NonNull
-  private List<DeviceClass> classes;
+  private ImmutableList<DeviceClass> classes;
 
   public static XIDeviceInfo readXIDeviceInfo(X11Input in) throws IOException {
     XIDeviceInfo.XIDeviceInfoBuilder javaBuilder = XIDeviceInfo.builder();
@@ -39,9 +41,9 @@ public class XIDeviceInfo implements XStruct {
     short nameLen = in.readCard16();
     boolean enabled = in.readBool();
     byte[] pad6 = in.readPad(1);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     in.readPadAlign(Short.toUnsignedInt(nameLen));
-    List<DeviceClass> classes = new ArrayList<>(Short.toUnsignedInt(numClasses));
+    MutableList<DeviceClass> classes = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(numClasses));
     for(int i = 0; i < Short.toUnsignedInt(numClasses); i++) {
       classes.add(DeviceClass.readDeviceClass(in));
     }
@@ -49,8 +51,8 @@ public class XIDeviceInfo implements XStruct {
     javaBuilder.type(type);
     javaBuilder.attachment(attachment);
     javaBuilder.enabled(enabled);
-    javaBuilder.name(name);
-    javaBuilder.classes(classes);
+    javaBuilder.name(name.toImmutable());
+    javaBuilder.classes(classes.toImmutable());
     return javaBuilder.build();
   }
 

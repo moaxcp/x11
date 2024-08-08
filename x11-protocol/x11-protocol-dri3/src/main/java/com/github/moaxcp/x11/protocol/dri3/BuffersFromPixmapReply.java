@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -27,13 +27,13 @@ public class BuffersFromPixmapReply implements XReply {
   private byte bpp;
 
   @NonNull
-  private List<Integer> strides;
+  private IntList strides;
 
   @NonNull
-  private List<Integer> offsets;
+  private IntList offsets;
 
   @NonNull
-  private List<Integer> buffers;
+  private IntList buffers;
 
   public static BuffersFromPixmapReply readBuffersFromPixmapReply(byte nfd, short sequenceNumber,
       X11Input in) throws IOException {
@@ -46,18 +46,18 @@ public class BuffersFromPixmapReply implements XReply {
     byte depth = in.readCard8();
     byte bpp = in.readCard8();
     byte[] pad10 = in.readPad(6);
-    List<Integer> strides = in.readCard32(Byte.toUnsignedInt(nfd));
-    List<Integer> offsets = in.readCard32(Byte.toUnsignedInt(nfd));
-    List<Integer> buffers = in.readFd(Byte.toUnsignedInt(nfd));
+    IntList strides = in.readCard32(Byte.toUnsignedInt(nfd));
+    IntList offsets = in.readCard32(Byte.toUnsignedInt(nfd));
+    IntList buffers = in.readFd(Byte.toUnsignedInt(nfd));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.width(width);
     javaBuilder.height(height);
     javaBuilder.modifier(modifier);
     javaBuilder.depth(depth);
     javaBuilder.bpp(bpp);
-    javaBuilder.strides(strides);
-    javaBuilder.offsets(offsets);
-    javaBuilder.buffers(buffers);
+    javaBuilder.strides(strides.toImmutable());
+    javaBuilder.offsets(offsets.toImmutable());
+    javaBuilder.buffers(buffers.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

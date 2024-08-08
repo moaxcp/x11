@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -23,7 +24,7 @@ public class GetContextReply implements XReply {
   private byte elementHeader;
 
   @NonNull
-  private List<ClientInfo> interceptedClients;
+  private ImmutableList<ClientInfo> interceptedClients;
 
   public static GetContextReply readGetContextReply(byte enabled, short sequenceNumber, X11Input in)
       throws IOException {
@@ -33,14 +34,14 @@ public class GetContextReply implements XReply {
     byte[] pad5 = in.readPad(3);
     int numInterceptedClients = in.readCard32();
     byte[] pad7 = in.readPad(16);
-    List<ClientInfo> interceptedClients = new ArrayList<>((int) (Integer.toUnsignedLong(numInterceptedClients)));
+    MutableList<ClientInfo> interceptedClients = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(numInterceptedClients)));
     for(int i = 0; i < Integer.toUnsignedLong(numInterceptedClients); i++) {
       interceptedClients.add(ClientInfo.readClientInfo(in));
     }
     javaBuilder.enabled(enabled > 0);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.elementHeader(elementHeader);
-    javaBuilder.interceptedClients(interceptedClients);
+    javaBuilder.interceptedClients(interceptedClients.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

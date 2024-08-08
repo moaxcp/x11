@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -29,7 +29,7 @@ public class ChangeProviderProperty implements OneWayRequest {
   private int numItems;
 
   @NonNull
-  private List<Byte> data;
+  private ByteList data;
 
   public byte getOpCode() {
     return OPCODE;
@@ -46,14 +46,14 @@ public class ChangeProviderProperty implements OneWayRequest {
     byte mode = in.readCard8();
     byte[] pad8 = in.readPad(2);
     int numItems = in.readCard32();
-    List<Byte> data = in.readVoid((int) (Integer.toUnsignedLong(numItems) * (Byte.toUnsignedInt(format) / 8)));
+    ByteList data = in.readVoid((int) (Integer.toUnsignedLong(numItems) * (Byte.toUnsignedInt(format) / 8)));
     javaBuilder.provider(provider);
     javaBuilder.property(property);
     javaBuilder.type(type);
     javaBuilder.format(format);
     javaBuilder.mode(mode);
     javaBuilder.numItems(numItems);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

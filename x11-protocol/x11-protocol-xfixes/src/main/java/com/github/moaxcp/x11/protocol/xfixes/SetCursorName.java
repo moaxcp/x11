@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class SetCursorName implements OneWayRequest {
   private int cursor;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public byte getOpCode() {
     return OPCODE;
@@ -32,9 +32,9 @@ public class SetCursorName implements OneWayRequest {
     int cursor = in.readCard32();
     short nbytes = in.readCard16();
     byte[] pad5 = in.readPad(2);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nbytes));
+    ByteList name = in.readChar(Short.toUnsignedInt(nbytes));
     javaBuilder.cursor(cursor);
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

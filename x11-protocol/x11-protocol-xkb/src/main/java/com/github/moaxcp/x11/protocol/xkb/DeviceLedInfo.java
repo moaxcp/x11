@@ -6,11 +6,13 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -26,10 +28,10 @@ public class DeviceLedInfo implements XStruct {
   private int state;
 
   @NonNull
-  private List<Integer> names;
+  private IntList names;
 
   @NonNull
-  private List<IndicatorMap> maps;
+  private ImmutableList<IndicatorMap> maps;
 
   public static DeviceLedInfo readDeviceLedInfo(X11Input in) throws IOException {
     DeviceLedInfo.DeviceLedInfoBuilder javaBuilder = DeviceLedInfo.builder();
@@ -39,8 +41,8 @@ public class DeviceLedInfo implements XStruct {
     int mapsPresent = in.readCard32();
     int physIndicators = in.readCard32();
     int state = in.readCard32();
-    List<Integer> names = in.readCard32(Popcount.popcount(Integer.toUnsignedLong(namesPresent)));
-    List<IndicatorMap> maps = new ArrayList<>(Popcount.popcount(Integer.toUnsignedLong(mapsPresent)));
+    IntList names = in.readCard32(Popcount.popcount(Integer.toUnsignedLong(namesPresent)));
+    MutableList<IndicatorMap> maps = Lists.mutable.withInitialCapacity(Popcount.popcount(Integer.toUnsignedLong(mapsPresent)));
     for(int i = 0; i < Popcount.popcount(Integer.toUnsignedLong(mapsPresent)); i++) {
       maps.add(IndicatorMap.readIndicatorMap(in));
     }
@@ -48,8 +50,8 @@ public class DeviceLedInfo implements XStruct {
     javaBuilder.ledID(ledID);
     javaBuilder.physIndicators(physIndicators);
     javaBuilder.state(state);
-    javaBuilder.names(names);
-    javaBuilder.maps(maps);
+    javaBuilder.names(names.toImmutable());
+    javaBuilder.maps(maps.toImmutable());
     return javaBuilder.build();
   }
 

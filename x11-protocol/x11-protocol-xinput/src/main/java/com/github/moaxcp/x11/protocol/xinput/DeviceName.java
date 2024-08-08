@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -15,13 +15,13 @@ public class DeviceName implements XStruct {
   public static final String PLUGIN_NAME = "xinput";
 
   @NonNull
-  private List<Byte> string;
+  private ByteList string;
 
   public static DeviceName readDeviceName(X11Input in) throws IOException {
     DeviceName.DeviceNameBuilder javaBuilder = DeviceName.builder();
     byte len = in.readCard8();
-    List<Byte> string = in.readChar(Byte.toUnsignedInt(len));
-    javaBuilder.string(string);
+    ByteList string = in.readChar(Byte.toUnsignedInt(len));
+    javaBuilder.string(string.toImmutable());
     return javaBuilder.build();
   }
 

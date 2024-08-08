@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -20,7 +20,7 @@ public class LookupColor implements TwoWayRequest<LookupColorReply> {
   private int cmap;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public XReplyFunction<LookupColorReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> LookupColorReply.readLookupColorReply(field, sequenceNumber, in);
@@ -37,9 +37,9 @@ public class LookupColor implements TwoWayRequest<LookupColorReply> {
     int cmap = in.readCard32();
     short nameLen = in.readCard16();
     byte[] pad5 = in.readPad(2);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     javaBuilder.cmap(cmap);
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

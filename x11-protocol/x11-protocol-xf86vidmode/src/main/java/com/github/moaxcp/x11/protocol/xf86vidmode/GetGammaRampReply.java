@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ShortList;
 
 @Value
 @Builder
@@ -17,13 +17,13 @@ public class GetGammaRampReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Short> red;
+  private ShortList red;
 
   @NonNull
-  private List<Short> green;
+  private ShortList green;
 
   @NonNull
-  private List<Short> blue;
+  private ShortList blue;
 
   public static GetGammaRampReply readGetGammaRampReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -31,13 +31,13 @@ public class GetGammaRampReply implements XReply {
     int length = in.readCard32();
     short size = in.readCard16();
     byte[] pad5 = in.readPad(22);
-    List<Short> red = in.readCard16((Short.toUnsignedInt(size) + 1) & (~ (1)));
-    List<Short> green = in.readCard16((Short.toUnsignedInt(size) + 1) & (~ (1)));
-    List<Short> blue = in.readCard16((Short.toUnsignedInt(size) + 1) & (~ (1)));
+    ShortList red = in.readCard16((Short.toUnsignedInt(size) + 1) & (~ (1)));
+    ShortList green = in.readCard16((Short.toUnsignedInt(size) + 1) & (~ (1)));
+    ShortList blue = in.readCard16((Short.toUnsignedInt(size) + 1) & (~ (1)));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.red(red);
-    javaBuilder.green(green);
-    javaBuilder.blue(blue);
+    javaBuilder.red(red.toImmutable());
+    javaBuilder.green(green.toImmutable());
+    javaBuilder.blue(blue.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

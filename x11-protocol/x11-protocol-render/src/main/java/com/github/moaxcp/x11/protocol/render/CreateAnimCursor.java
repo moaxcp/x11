@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -21,7 +22,7 @@ public class CreateAnimCursor implements OneWayRequest {
   private int cid;
 
   @NonNull
-  private List<Animcursorelt> cursors;
+  private ImmutableList<Animcursorelt> cursors;
 
   public byte getOpCode() {
     return OPCODE;
@@ -36,14 +37,14 @@ public class CreateAnimCursor implements OneWayRequest {
     javaStart += 2;
     int cid = in.readCard32();
     javaStart += 4;
-    List<Animcursorelt> cursors = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Animcursorelt> cursors = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Animcursorelt baseObject = Animcursorelt.readAnimcursorelt(in);
       cursors.add(baseObject);
       javaStart += baseObject.getSize();
     }
     javaBuilder.cid(cid);
-    javaBuilder.cursors(cursors);
+    javaBuilder.cursors(cursors.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

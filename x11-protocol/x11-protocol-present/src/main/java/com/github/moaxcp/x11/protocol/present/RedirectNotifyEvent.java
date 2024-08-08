@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.XGenericEvent;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.xproto.Rectangle;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -70,7 +71,7 @@ public class RedirectNotifyEvent implements XGenericEvent {
   private long remainder;
 
   @NonNull
-  private List<Notify> notifies;
+  private ImmutableList<Notify> notifies;
 
   @Override
   public byte getResponseCode() {
@@ -129,7 +130,7 @@ public class RedirectNotifyEvent implements XGenericEvent {
     javaStart += 8;
     long remainder = in.readCard64();
     javaStart += 8;
-    List<Notify> notifies = new ArrayList<>(length - javaStart);
+    MutableList<Notify> notifies = Lists.mutable.withInitialCapacity(length - javaStart);
     while(javaStart < length * 4) {
       Notify baseObject = Notify.readNotify(in);
       notifies.add(baseObject);
@@ -157,7 +158,7 @@ public class RedirectNotifyEvent implements XGenericEvent {
     javaBuilder.targetMsc(targetMsc);
     javaBuilder.divisor(divisor);
     javaBuilder.remainder(remainder);
-    javaBuilder.notifies(notifies);
+    javaBuilder.notifies(notifies.toImmutable());
 
     javaBuilder.sentEvent(sentEvent);
     javaBuilder.firstEventOffset(firstEventOffset);

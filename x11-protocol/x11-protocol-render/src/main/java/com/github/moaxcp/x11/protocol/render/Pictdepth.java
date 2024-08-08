@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -19,7 +20,7 @@ public class Pictdepth implements XStruct {
   private byte depth;
 
   @NonNull
-  private List<Pictvisual> visuals;
+  private ImmutableList<Pictvisual> visuals;
 
   public static Pictdepth readPictdepth(X11Input in) throws IOException {
     Pictdepth.PictdepthBuilder javaBuilder = Pictdepth.builder();
@@ -27,12 +28,12 @@ public class Pictdepth implements XStruct {
     byte[] pad1 = in.readPad(1);
     short numVisuals = in.readCard16();
     byte[] pad3 = in.readPad(4);
-    List<Pictvisual> visuals = new ArrayList<>(Short.toUnsignedInt(numVisuals));
+    MutableList<Pictvisual> visuals = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(numVisuals));
     for(int i = 0; i < Short.toUnsignedInt(numVisuals); i++) {
       visuals.add(Pictvisual.readPictvisual(in));
     }
     javaBuilder.depth(depth);
-    javaBuilder.visuals(visuals);
+    javaBuilder.visuals(visuals.toImmutable());
     return javaBuilder.build();
   }
 

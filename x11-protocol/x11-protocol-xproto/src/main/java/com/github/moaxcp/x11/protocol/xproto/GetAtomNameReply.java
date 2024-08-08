@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -17,7 +17,7 @@ public class GetAtomNameReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Byte> name;
+  private ByteList name;
 
   public static GetAtomNameReply readGetAtomNameReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -25,9 +25,9 @@ public class GetAtomNameReply implements XReply {
     int length = in.readCard32();
     short nameLen = in.readCard16();
     byte[] pad5 = in.readPad(22);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.name(name);
+    javaBuilder.name(name.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

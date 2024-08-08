@@ -13,6 +13,7 @@ java {
 }
 
 dependencies {
+    api 'org.eclipse.collections:eclipse-collections:11.1.0'
     testImplementation 'org.mockito:mockito-core:3.3.3'
     testImplementation 'org.mockito:mockito-junit-jupiter:3.3.3'
     testImplementation 'org.assertj:assertj-core:3.16.0'

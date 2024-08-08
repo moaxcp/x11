@@ -6,11 +6,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -28,10 +29,10 @@ public class SetCompatMap implements OneWayRequest {
   private short firstSI;
 
   @NonNull
-  private List<SymInterpret> si;
+  private ImmutableList<SymInterpret> si;
 
   @NonNull
-  private List<ModDef> groupMaps;
+  private ImmutableList<ModDef> groupMaps;
 
   public byte getOpCode() {
     return OPCODE;
@@ -49,11 +50,11 @@ public class SetCompatMap implements OneWayRequest {
     short firstSI = in.readCard16();
     short nSI = in.readCard16();
     byte[] pad10 = in.readPad(2);
-    List<SymInterpret> si = new ArrayList<>(Short.toUnsignedInt(nSI));
+    MutableList<SymInterpret> si = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nSI));
     for(int i = 0; i < Short.toUnsignedInt(nSI); i++) {
       si.add(SymInterpret.readSymInterpret(in));
     }
-    List<ModDef> groupMaps = new ArrayList<>(Popcount.popcount(Byte.toUnsignedInt(groups)));
+    MutableList<ModDef> groupMaps = Lists.mutable.withInitialCapacity(Popcount.popcount(Byte.toUnsignedInt(groups)));
     for(int i = 0; i < Popcount.popcount(Byte.toUnsignedInt(groups)); i++) {
       groupMaps.add(ModDef.readModDef(in));
     }
@@ -61,8 +62,8 @@ public class SetCompatMap implements OneWayRequest {
     javaBuilder.recomputeActions(recomputeActions);
     javaBuilder.truncateSI(truncateSI);
     javaBuilder.firstSI(firstSI);
-    javaBuilder.si(si);
-    javaBuilder.groupMaps(groupMaps);
+    javaBuilder.si(si.toImmutable());
+    javaBuilder.groupMaps(groupMaps.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

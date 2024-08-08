@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -33,7 +33,7 @@ public class MonitorInfo implements XStruct {
   private int heightInMillimeters;
 
   @NonNull
-  private List<Integer> outputs;
+  private IntList outputs;
 
   public static MonitorInfo readMonitorInfo(X11Input in) throws IOException {
     MonitorInfo.MonitorInfoBuilder javaBuilder = MonitorInfo.builder();
@@ -47,7 +47,7 @@ public class MonitorInfo implements XStruct {
     short height = in.readCard16();
     int widthInMillimeters = in.readCard32();
     int heightInMillimeters = in.readCard32();
-    List<Integer> outputs = in.readCard32(Short.toUnsignedInt(nOutput));
+    IntList outputs = in.readCard32(Short.toUnsignedInt(nOutput));
     javaBuilder.name(name);
     javaBuilder.primary(primary);
     javaBuilder.automatic(automatic);
@@ -57,7 +57,7 @@ public class MonitorInfo implements XStruct {
     javaBuilder.height(height);
     javaBuilder.widthInMillimeters(widthInMillimeters);
     javaBuilder.heightInMillimeters(heightInMillimeters);
-    javaBuilder.outputs(outputs);
+    javaBuilder.outputs(outputs.toImmutable());
     return javaBuilder.build();
   }
 

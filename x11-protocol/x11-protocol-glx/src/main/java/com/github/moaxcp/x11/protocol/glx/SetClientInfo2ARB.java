@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,13 +22,13 @@ public class SetClientInfo2ARB implements OneWayRequest {
   private int minorVersion;
 
   @NonNull
-  private List<Integer> glVersions;
+  private IntList glVersions;
 
   @NonNull
-  private List<Byte> glExtensionString;
+  private ByteList glExtensionString;
 
   @NonNull
-  private List<Byte> glxExtensionString;
+  private ByteList glxExtensionString;
 
   public byte getOpCode() {
     return OPCODE;
@@ -42,14 +43,14 @@ public class SetClientInfo2ARB implements OneWayRequest {
     int numVersions = in.readCard32();
     int glStrLen = in.readCard32();
     int glxStrLen = in.readCard32();
-    List<Integer> glVersions = in.readCard32((int) (Integer.toUnsignedLong(numVersions) * 3));
-    List<Byte> glExtensionString = in.readChar((int) (Integer.toUnsignedLong(glStrLen)));
-    List<Byte> glxExtensionString = in.readChar((int) (Integer.toUnsignedLong(glxStrLen)));
+    IntList glVersions = in.readCard32((int) (Integer.toUnsignedLong(numVersions) * 3));
+    ByteList glExtensionString = in.readChar((int) (Integer.toUnsignedLong(glStrLen)));
+    ByteList glxExtensionString = in.readChar((int) (Integer.toUnsignedLong(glxStrLen)));
     javaBuilder.majorVersion(majorVersion);
     javaBuilder.minorVersion(minorVersion);
-    javaBuilder.glVersions(glVersions);
-    javaBuilder.glExtensionString(glExtensionString);
-    javaBuilder.glxExtensionString(glxExtensionString);
+    javaBuilder.glVersions(glVersions.toImmutable());
+    javaBuilder.glExtensionString(glExtensionString.toImmutable());
+    javaBuilder.glxExtensionString(glxExtensionString.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

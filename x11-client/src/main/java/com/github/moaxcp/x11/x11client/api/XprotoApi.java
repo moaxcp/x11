@@ -3,9 +3,10 @@ package com.github.moaxcp.x11.x11client.api;
 import com.github.moaxcp.x11.protocol.*;
 import com.github.moaxcp.x11.protocol.xproto.*;
 import com.github.moaxcp.x11.x11client.X11ClientException;
-
-import java.util.Collections;
-import java.util.List;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
+import org.eclipse.collections.impl.factory.Lists;
 
 import static com.github.moaxcp.x11.protocol.Utilities.*;
 import static com.github.moaxcp.x11.protocol.xproto.EventMask.EXPOSURE;
@@ -106,7 +107,7 @@ public interface XprotoApi extends XApi {
             .build());
     }
 
-    default List<Integer> getWMProtocols(int wid) {
+    default IntList getWMProtocols(int wid) {
         GetPropertyReply property = send(GetProperty.builder()
                 .window(wid)
                 .property(getAtom("WM_PROTOCOLS").getId())
@@ -124,7 +125,7 @@ public interface XprotoApi extends XApi {
     }
 
     default void setWMProtocols(int wid, int atom) {
-        List<Byte> bytes;
+        ByteList bytes;
         if (getBigEndian()) {
             bytes = BigEndian.writeList(atom);
         } else {
@@ -162,7 +163,7 @@ public interface XprotoApi extends XApi {
         send(FreeGC.builder().gc(gc).build());
     }
 
-    default void polyPoint(int drawable, int gc, CoordMode mode, List<Point> points) {
+    default void polyPoint(int drawable, int gc, CoordMode mode, ImmutableList<Point> points) {
         send(PolyPoint.builder()
                 .drawable(drawable)
                 .gc(gc)
@@ -171,7 +172,7 @@ public interface XprotoApi extends XApi {
                 .build());
     }
 
-    default void polyLine(int drawable, int gc, CoordMode mode, List<Point> points) {
+    default void polyLine(int drawable, int gc, CoordMode mode, ImmutableList<Point> points) {
         send(PolyLine.builder()
                 .drawable(drawable)
                 .gc(gc)
@@ -180,7 +181,7 @@ public interface XprotoApi extends XApi {
                 .build());
     }
 
-    default void polySegment(int drawable, int gc, List<Segment> segments) {
+    default void polySegment(int drawable, int gc, ImmutableList<Segment> segments) {
         send(PolySegment.builder()
                 .drawable(drawable)
                 .gc(gc)
@@ -188,7 +189,7 @@ public interface XprotoApi extends XApi {
                 .build());
     }
 
-    default void polyRectangle(int drawable, int gc, List<Rectangle> rectangles) {
+    default void polyRectangle(int drawable, int gc, ImmutableList<Rectangle> rectangles) {
         send(PolyRectangle.builder()
                 .drawable(drawable)
                 .gc(gc)
@@ -196,7 +197,7 @@ public interface XprotoApi extends XApi {
                 .build());
     }
 
-    default void polyArc(int drawable, int gc, List<Arc> arcs) {
+    default void polyArc(int drawable, int gc, ImmutableList<Arc> arcs) {
         send(PolyArc.builder()
                 .drawable(drawable)
                 .gc(gc)
@@ -204,7 +205,7 @@ public interface XprotoApi extends XApi {
                 .build());
     }
 
-    default void fillPoly(int drawable, int gc, PolyShape shape, CoordMode mode, List<Point> points) {
+    default void fillPoly(int drawable, int gc, PolyShape shape, CoordMode mode, ImmutableList<Point> points) {
         send(FillPoly.builder()
                 .drawable(drawable)
                 .gc(gc)
@@ -218,7 +219,7 @@ public interface XprotoApi extends XApi {
         send(PolyFillRectangle.builder()
                 .drawable(drawable)
                 .gc(gc)
-                .rectangles(Collections.singletonList(Rectangle.builder()
+                .rectangles(Lists.immutable.of(Rectangle.builder()
                         .x(x)
                         .y(y)
                         .width(width)
@@ -227,7 +228,7 @@ public interface XprotoApi extends XApi {
                 .build());
     }
 
-    default void polyFillRectangle(int drawable, int gc, List<Rectangle> rectangles) {
+    default void polyFillRectangle(int drawable, int gc, ImmutableList<Rectangle> rectangles) {
         send(PolyFillRectangle.builder()
                 .drawable(drawable)
                 .gc(gc)
@@ -235,7 +236,7 @@ public interface XprotoApi extends XApi {
                 .build());
     }
 
-    default void polyFillArc(int drawable, int gc, List<Arc> arcs) {
+    default void polyFillArc(int drawable, int gc, ImmutableList<Arc> arcs) {
         send(PolyFillArc.builder()
                 .drawable(drawable)
                 .gc(gc)

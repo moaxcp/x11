@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -35,7 +35,7 @@ public class PutImage implements OneWayRequest {
   private byte depth;
 
   @NonNull
-  private List<Byte> data;
+  private ByteList data;
 
   public byte getOpCode() {
     return OPCODE;
@@ -66,7 +66,7 @@ public class PutImage implements OneWayRequest {
     javaStart += 1;
     byte[] pad11 = in.readPad(2);
     javaStart += 2;
-    List<Byte> data = in.readByte(Short.toUnsignedInt(length) - javaStart);
+    ByteList data = in.readByte(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.format(format);
     javaBuilder.drawable(drawable);
     javaBuilder.gc(gc);
@@ -76,7 +76,7 @@ public class PutImage implements OneWayRequest {
     javaBuilder.dstY(dstY);
     javaBuilder.leftPad(leftPad);
     javaBuilder.depth(depth);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

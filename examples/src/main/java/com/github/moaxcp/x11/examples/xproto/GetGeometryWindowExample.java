@@ -5,8 +5,6 @@ import com.github.moaxcp.x11.x11client.X11Client;
 
 import java.io.IOException;
 
-import static java.lang.Thread.sleep;
-
 public class GetGeometryWindowExample {
   public static void main(String... args) throws IOException, InterruptedException {
     try (var client = X11Client.connect()) {
@@ -15,7 +13,6 @@ public class GetGeometryWindowExample {
       System.out.println(client.send(GetGeometry.builder()
           .drawable(wid)
           .build()));
-      sleep(10_000);
     }
   }
 }

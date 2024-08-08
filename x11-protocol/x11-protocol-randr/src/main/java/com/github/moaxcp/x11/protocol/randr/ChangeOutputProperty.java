@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.xproto.PropMode;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -30,7 +30,7 @@ public class ChangeOutputProperty implements OneWayRequest {
   private int numUnits;
 
   @NonNull
-  private List<Byte> data;
+  private ByteList data;
 
   public byte getOpCode() {
     return OPCODE;
@@ -47,14 +47,14 @@ public class ChangeOutputProperty implements OneWayRequest {
     byte mode = in.readCard8();
     byte[] pad8 = in.readPad(2);
     int numUnits = in.readCard32();
-    List<Byte> data = in.readVoid((int) ((Integer.toUnsignedLong(numUnits) * Byte.toUnsignedInt(format)) / 8));
+    ByteList data = in.readVoid((int) ((Integer.toUnsignedLong(numUnits) * Byte.toUnsignedInt(format)) / 8));
     javaBuilder.output(output);
     javaBuilder.property(property);
     javaBuilder.type(type);
     javaBuilder.format(format);
     javaBuilder.mode(mode);
     javaBuilder.numUnits(numUnits);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

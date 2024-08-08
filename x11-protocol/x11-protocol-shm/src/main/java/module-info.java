@@ -6,6 +6,6 @@ module com.github.moaxcp.x11.protocol.shm {
     exports com.github.moaxcp.x11.protocol.shm;
 
     requires static lombok;
-    requires com.github.moaxcp.x11.protocol.core;
+    requires transitive com.github.moaxcp.x11.protocol.core;
     provides XProtocolPlugin with ShmPlugin;
 }

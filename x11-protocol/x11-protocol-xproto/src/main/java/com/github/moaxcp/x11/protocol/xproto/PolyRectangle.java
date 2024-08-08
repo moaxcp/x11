@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -23,7 +24,7 @@ public class PolyRectangle implements OneWayRequest {
   private int gc;
 
   @NonNull
-  private List<Rectangle> rectangles;
+  private ImmutableList<Rectangle> rectangles;
 
   public byte getOpCode() {
     return OPCODE;
@@ -40,7 +41,7 @@ public class PolyRectangle implements OneWayRequest {
     javaStart += 4;
     int gc = in.readCard32();
     javaStart += 4;
-    List<Rectangle> rectangles = new ArrayList<>(Short.toUnsignedInt(length) - javaStart);
+    MutableList<Rectangle> rectangles = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(length) - javaStart);
     while(javaStart < Short.toUnsignedInt(length) * 4) {
       Rectangle baseObject = Rectangle.readRectangle(in);
       rectangles.add(baseObject);
@@ -48,7 +49,7 @@ public class PolyRectangle implements OneWayRequest {
     }
     javaBuilder.drawable(drawable);
     javaBuilder.gc(gc);
-    javaBuilder.rectangles(rectangles);
+    javaBuilder.rectangles(rectangles.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

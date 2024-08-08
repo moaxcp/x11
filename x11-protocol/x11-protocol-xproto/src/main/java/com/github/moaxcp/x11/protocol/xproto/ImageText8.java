@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -25,7 +25,7 @@ public class ImageText8 implements OneWayRequest {
   private short y;
 
   @NonNull
-  private List<Byte> string;
+  private ByteList string;
 
   public byte getOpCode() {
     return OPCODE;
@@ -39,12 +39,12 @@ public class ImageText8 implements OneWayRequest {
     int gc = in.readCard32();
     short x = in.readInt16();
     short y = in.readInt16();
-    List<Byte> string = in.readChar(stringLen);
+    ByteList string = in.readChar(stringLen);
     javaBuilder.drawable(drawable);
     javaBuilder.gc(gc);
     javaBuilder.x(x);
     javaBuilder.y(y);
-    javaBuilder.string(string);
+    javaBuilder.string(string.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

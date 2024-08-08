@@ -1,9 +1,8 @@
 package com.github.moaxcp.x11.protocol;
 
 import lombok.experimental.UtilityClass;
-
-import java.util.Arrays;
-import java.util.List;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.impl.factory.primitive.ByteLists;
 
 @UtilityClass
 public class BigEndian {
@@ -15,7 +14,7 @@ public class BigEndian {
         return bytes;
     }
 
-    public static List<Byte> writeList(int value) {
-        return Arrays.asList((byte) (value >> 24), (byte) (value >> 16), (byte) (value >> 8), (byte) value);
+    public static ByteList writeList(int value) {
+        return ByteLists.immutable.of((byte) (value >> 24), (byte) (value >> 16), (byte) (value >> 8), (byte) value);
     }
 }

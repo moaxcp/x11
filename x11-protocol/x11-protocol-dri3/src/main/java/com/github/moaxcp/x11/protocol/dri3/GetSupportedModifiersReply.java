@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.LongList;
 
 @Value
 @Builder
@@ -17,10 +17,10 @@ public class GetSupportedModifiersReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Long> windowModifiers;
+  private LongList windowModifiers;
 
   @NonNull
-  private List<Long> screenModifiers;
+  private LongList screenModifiers;
 
   public static GetSupportedModifiersReply readGetSupportedModifiersReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -29,11 +29,11 @@ public class GetSupportedModifiersReply implements XReply {
     int numWindowModifiers = in.readCard32();
     int numScreenModifiers = in.readCard32();
     byte[] pad6 = in.readPad(16);
-    List<Long> windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));
-    List<Long> screenModifiers = in.readCard64((int) (Integer.toUnsignedLong(numScreenModifiers)));
+    LongList windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));
+    LongList screenModifiers = in.readCard64((int) (Integer.toUnsignedLong(numScreenModifiers)));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.windowModifiers(windowModifiers);
-    javaBuilder.screenModifiers(screenModifiers);
+    javaBuilder.windowModifiers(windowModifiers.toImmutable());
+    javaBuilder.screenModifiers(screenModifiers.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

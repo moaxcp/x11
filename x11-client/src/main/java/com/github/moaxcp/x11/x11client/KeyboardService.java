@@ -112,7 +112,7 @@ public class KeyboardService {
       return KeySym.NoSymbol;
     }
 
-    List<Integer> keysyms = keyboard.getKeysyms();
+    var keysyms = keyboard.getKeysyms();
 
     int keysymsStart = (keyCode - min) * per;
 

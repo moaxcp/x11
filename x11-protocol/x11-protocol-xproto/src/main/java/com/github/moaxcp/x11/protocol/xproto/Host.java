@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -18,17 +18,17 @@ public class Host implements XStruct {
   private byte family;
 
   @NonNull
-  private List<Byte> address;
+  private ByteList address;
 
   public static Host readHost(X11Input in) throws IOException {
     Host.HostBuilder javaBuilder = Host.builder();
     byte family = in.readCard8();
     byte[] pad1 = in.readPad(1);
     short addressLen = in.readCard16();
-    List<Byte> address = in.readByte(Short.toUnsignedInt(addressLen));
+    ByteList address = in.readByte(Short.toUnsignedInt(addressLen));
     in.readPadAlign(Short.toUnsignedInt(addressLen));
     javaBuilder.family(family);
-    javaBuilder.address(address);
+    javaBuilder.address(address.toImmutable());
     return javaBuilder.build();
   }
 

@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -19,19 +20,19 @@ public class OverlayRow implements XStruct {
   private byte rowUnder;
 
   @NonNull
-  private List<OverlayKey> keys;
+  private ImmutableList<OverlayKey> keys;
 
   public static OverlayRow readOverlayRow(X11Input in) throws IOException {
     OverlayRow.OverlayRowBuilder javaBuilder = OverlayRow.builder();
     byte rowUnder = in.readCard8();
     byte nKeys = in.readCard8();
     byte[] pad2 = in.readPad(2);
-    List<OverlayKey> keys = new ArrayList<>(Byte.toUnsignedInt(nKeys));
+    MutableList<OverlayKey> keys = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(nKeys));
     for(int i = 0; i < Byte.toUnsignedInt(nKeys); i++) {
       keys.add(OverlayKey.readOverlayKey(in));
     }
     javaBuilder.rowUnder(rowUnder);
-    javaBuilder.keys(keys);
+    javaBuilder.keys(keys.toImmutable());
     return javaBuilder.build();
   }
 

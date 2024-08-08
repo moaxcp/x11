@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -18,23 +18,23 @@ public class ListItem implements XStruct {
   private int name;
 
   @NonNull
-  private List<Byte> objectContext;
+  private ByteList objectContext;
 
   @NonNull
-  private List<Byte> dataContext;
+  private ByteList dataContext;
 
   public static ListItem readListItem(X11Input in) throws IOException {
     ListItem.ListItemBuilder javaBuilder = ListItem.builder();
     int name = in.readCard32();
     int objectContextLen = in.readCard32();
     int dataContextLen = in.readCard32();
-    List<Byte> objectContext = in.readChar((int) (Integer.toUnsignedLong(objectContextLen)));
+    ByteList objectContext = in.readChar((int) (Integer.toUnsignedLong(objectContextLen)));
     in.readPadAlign((int) (Integer.toUnsignedLong(objectContextLen)));
-    List<Byte> dataContext = in.readChar((int) (Integer.toUnsignedLong(dataContextLen)));
+    ByteList dataContext = in.readChar((int) (Integer.toUnsignedLong(dataContextLen)));
     in.readPadAlign((int) (Integer.toUnsignedLong(dataContextLen)));
     javaBuilder.name(name);
-    javaBuilder.objectContext(objectContext);
-    javaBuilder.dataContext(dataContext);
+    javaBuilder.objectContext(objectContext.toImmutable());
+    javaBuilder.dataContext(dataContext.toImmutable());
     return javaBuilder.build();
   }
 

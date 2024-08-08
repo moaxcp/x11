@@ -3,10 +3,10 @@ package com.github.moaxcp.x11.protocol.xinput;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -20,17 +20,17 @@ public class DeviceClassKey implements DeviceClass {
   private short sourceid;
 
   @NonNull
-  private List<Integer> keys;
+  private IntList keys;
 
   public static DeviceClassKey readDeviceClassKey(short type, short len, short sourceid,
       X11Input in) throws IOException {
     DeviceClassKey.DeviceClassKeyBuilder javaBuilder = DeviceClassKey.builder();
     short numKeys = in.readCard16();
-    List<Integer> keys = in.readCard32(Short.toUnsignedInt(numKeys));
+    IntList keys = in.readCard32(Short.toUnsignedInt(numKeys));
     javaBuilder.type(type);
     javaBuilder.len(len);
     javaBuilder.sourceid(sourceid);
-    javaBuilder.keys(keys);
+    javaBuilder.keys(keys.toImmutable());
     return javaBuilder.build();
   }
 

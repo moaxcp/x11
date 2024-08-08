@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -31,7 +31,7 @@ public class GetCursorImageReply implements XReply {
   private int cursorSerial;
 
   @NonNull
-  private List<Integer> cursorImage;
+  private IntList cursorImage;
 
   public static GetCursorImageReply readGetCursorImageReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -45,7 +45,7 @@ public class GetCursorImageReply implements XReply {
     short yhot = in.readCard16();
     int cursorSerial = in.readCard32();
     byte[] pad11 = in.readPad(8);
-    List<Integer> cursorImage = in.readCard32(Short.toUnsignedInt(width) * Short.toUnsignedInt(height));
+    IntList cursorImage = in.readCard32(Short.toUnsignedInt(width) * Short.toUnsignedInt(height));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.x(x);
     javaBuilder.y(y);
@@ -54,7 +54,7 @@ public class GetCursorImageReply implements XReply {
     javaBuilder.xhot(xhot);
     javaBuilder.yhot(yhot);
     javaBuilder.cursorSerial(cursorSerial);
-    javaBuilder.cursorImage(cursorImage);
+    javaBuilder.cursorImage(cursorImage.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

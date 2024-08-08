@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -47,7 +48,7 @@ public class Screen implements XStruct {
   private byte rootDepth;
 
   @NonNull
-  private List<Depth> allowedDepths;
+  private ImmutableList<Depth> allowedDepths;
 
   public static Screen readScreen(X11Input in) throws IOException {
     Screen.ScreenBuilder javaBuilder = Screen.builder();
@@ -67,7 +68,7 @@ public class Screen implements XStruct {
     boolean saveUnders = in.readBool();
     byte rootDepth = in.readCard8();
     byte allowedDepthsLen = in.readCard8();
-    List<Depth> allowedDepths = new ArrayList<>(Byte.toUnsignedInt(allowedDepthsLen));
+    MutableList<Depth> allowedDepths = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(allowedDepthsLen));
     for(int i = 0; i < Byte.toUnsignedInt(allowedDepthsLen); i++) {
       allowedDepths.add(Depth.readDepth(in));
     }
@@ -86,7 +87,7 @@ public class Screen implements XStruct {
     javaBuilder.backingStores(backingStores);
     javaBuilder.saveUnders(saveUnders);
     javaBuilder.rootDepth(rootDepth);
-    javaBuilder.allowedDepths(allowedDepths);
+    javaBuilder.allowedDepths(allowedDepths.toImmutable());
     return javaBuilder.build();
   }
 

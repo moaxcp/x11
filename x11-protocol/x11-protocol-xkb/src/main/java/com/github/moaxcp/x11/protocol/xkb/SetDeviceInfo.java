@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -25,10 +26,10 @@ public class SetDeviceInfo implements OneWayRequest {
   private short change;
 
   @NonNull
-  private List<ActionUnion> btnActions;
+  private ImmutableList<ActionUnion> btnActions;
 
   @NonNull
-  private List<DeviceLedInfo> leds;
+  private ImmutableList<DeviceLedInfo> leds;
 
   public byte getOpCode() {
     return OPCODE;
@@ -43,19 +44,19 @@ public class SetDeviceInfo implements OneWayRequest {
     byte nBtns = in.readCard8();
     short change = in.readCard16();
     short nDeviceLedFBs = in.readCard16();
-    List<ActionUnion> btnActions = new ArrayList<>(Byte.toUnsignedInt(nBtns));
+    MutableList<ActionUnion> btnActions = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(nBtns));
     for(int i = 0; i < Byte.toUnsignedInt(nBtns); i++) {
       btnActions.add(ActionUnion.readActionUnion(in));
     }
-    List<DeviceLedInfo> leds = new ArrayList<>(Short.toUnsignedInt(nDeviceLedFBs));
+    MutableList<DeviceLedInfo> leds = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(nDeviceLedFBs));
     for(int i = 0; i < Short.toUnsignedInt(nDeviceLedFBs); i++) {
       leds.add(DeviceLedInfo.readDeviceLedInfo(in));
     }
     javaBuilder.deviceSpec(deviceSpec);
     javaBuilder.firstBtn(firstBtn);
     javaBuilder.change(change);
-    javaBuilder.btnActions(btnActions);
-    javaBuilder.leds(leds);
+    javaBuilder.btnActions(btnActions.toImmutable());
+    javaBuilder.leds(leds.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

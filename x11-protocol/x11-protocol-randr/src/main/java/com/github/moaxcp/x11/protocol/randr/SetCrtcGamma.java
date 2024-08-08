@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ShortList;
 
 @Value
 @Builder
@@ -19,13 +19,13 @@ public class SetCrtcGamma implements OneWayRequest {
   private int crtc;
 
   @NonNull
-  private List<Short> red;
+  private ShortList red;
 
   @NonNull
-  private List<Short> green;
+  private ShortList green;
 
   @NonNull
-  private List<Short> blue;
+  private ShortList blue;
 
   public byte getOpCode() {
     return OPCODE;
@@ -38,13 +38,13 @@ public class SetCrtcGamma implements OneWayRequest {
     int crtc = in.readCard32();
     short size = in.readCard16();
     byte[] pad5 = in.readPad(2);
-    List<Short> red = in.readCard16(Short.toUnsignedInt(size));
-    List<Short> green = in.readCard16(Short.toUnsignedInt(size));
-    List<Short> blue = in.readCard16(Short.toUnsignedInt(size));
+    ShortList red = in.readCard16(Short.toUnsignedInt(size));
+    ShortList green = in.readCard16(Short.toUnsignedInt(size));
+    ShortList blue = in.readCard16(Short.toUnsignedInt(size));
     javaBuilder.crtc(crtc);
-    javaBuilder.red(red);
-    javaBuilder.green(green);
-    javaBuilder.blue(blue);
+    javaBuilder.red(red.toImmutable());
+    javaBuilder.green(green.toImmutable());
+    javaBuilder.blue(blue.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

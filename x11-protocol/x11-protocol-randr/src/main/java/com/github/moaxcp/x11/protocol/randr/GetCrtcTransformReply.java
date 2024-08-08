@@ -6,10 +6,11 @@ import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import com.github.moaxcp.x11.protocol.render.Transform;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -27,16 +28,16 @@ public class GetCrtcTransformReply implements XReply {
   private Transform currentTransform;
 
   @NonNull
-  private List<Byte> pendingFilterName;
+  private ByteList pendingFilterName;
 
   @NonNull
-  private List<Integer> pendingParams;
+  private IntList pendingParams;
 
   @NonNull
-  private List<Byte> currentFilterName;
+  private ByteList currentFilterName;
 
   @NonNull
-  private List<Integer> currentParams;
+  private IntList currentParams;
 
   public static GetCrtcTransformReply readGetCrtcTransformReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -51,20 +52,20 @@ public class GetCrtcTransformReply implements XReply {
     short pendingNparams = in.readCard16();
     short currentLen = in.readCard16();
     short currentNparams = in.readCard16();
-    List<Byte> pendingFilterName = in.readChar(Short.toUnsignedInt(pendingLen));
+    ByteList pendingFilterName = in.readChar(Short.toUnsignedInt(pendingLen));
     in.readPadAlign(Short.toUnsignedInt(pendingLen));
-    List<Integer> pendingParams = in.readInt32(Short.toUnsignedInt(pendingNparams));
-    List<Byte> currentFilterName = in.readChar(Short.toUnsignedInt(currentLen));
+    IntList pendingParams = in.readInt32(Short.toUnsignedInt(pendingNparams));
+    ByteList currentFilterName = in.readChar(Short.toUnsignedInt(currentLen));
     in.readPadAlign(Short.toUnsignedInt(currentLen));
-    List<Integer> currentParams = in.readInt32(Short.toUnsignedInt(currentNparams));
+    IntList currentParams = in.readInt32(Short.toUnsignedInt(currentNparams));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.pendingTransform(pendingTransform);
     javaBuilder.hasTransforms(hasTransforms);
     javaBuilder.currentTransform(currentTransform);
-    javaBuilder.pendingFilterName(pendingFilterName);
-    javaBuilder.pendingParams(pendingParams);
-    javaBuilder.currentFilterName(currentFilterName);
-    javaBuilder.currentParams(currentParams);
+    javaBuilder.pendingFilterName(pendingFilterName.toImmutable());
+    javaBuilder.pendingParams(pendingParams.toImmutable());
+    javaBuilder.currentFilterName(currentFilterName.toImmutable());
+    javaBuilder.currentParams(currentParams.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

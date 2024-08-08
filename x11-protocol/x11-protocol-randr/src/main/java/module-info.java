@@ -6,7 +6,7 @@ module com.github.moaxcp.x11.protocol.randr {
     exports com.github.moaxcp.x11.protocol.randr;
 
     requires static lombok;
-    requires com.github.moaxcp.x11.protocol.core;
+    requires transitive com.github.moaxcp.x11.protocol.core;
     requires com.github.moaxcp.x11.protocol.xproto;
     requires com.github.moaxcp.x11.protocol.render;
     provides XProtocolPlugin with RandrPlugin;

@@ -5,11 +5,13 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XGenericEvent;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -59,13 +61,13 @@ public class TouchUpdateEvent implements XGenericEvent {
   private GroupInfo group;
 
   @NonNull
-  private List<Integer> buttonMask;
+  private IntList buttonMask;
 
   @NonNull
-  private List<Integer> valuatorMask;
+  private IntList valuatorMask;
 
   @NonNull
-  private List<Fp3232> axisvalues;
+  private ImmutableList<Fp3232> axisvalues;
 
   @Override
   public byte getResponseCode() {
@@ -98,10 +100,10 @@ public class TouchUpdateEvent implements XGenericEvent {
     int flags = in.readCard32();
     ModifierInfo mods = ModifierInfo.readModifierInfo(in);
     GroupInfo group = GroupInfo.readGroupInfo(in);
-    List<Integer> buttonMask = in.readCard32(Short.toUnsignedInt(buttonsLen));
-    List<Integer> valuatorMask = in.readCard32(Short.toUnsignedInt(valuatorsLen));
-    List<Fp3232> axisvalues = new ArrayList<>(valuatorMask.stream().mapToInt(mapToInt -> mapToInt).sum());
-    for(int i = 0; i < valuatorMask.stream().mapToInt(mapToInt -> mapToInt).sum(); i++) {
+    IntList buttonMask = in.readCard32(Short.toUnsignedInt(buttonsLen));
+    IntList valuatorMask = in.readCard32(Short.toUnsignedInt(valuatorsLen));
+    MutableList<Fp3232> axisvalues = Lists.mutable.withInitialCapacity((int) valuatorMask.sum());
+    for(int i = 0; i < (int) valuatorMask.sum(); i++) {
       axisvalues.add(Fp3232.readFp3232(in));
     }
     javaBuilder.extension(extension);
@@ -121,9 +123,9 @@ public class TouchUpdateEvent implements XGenericEvent {
     javaBuilder.flags(flags);
     javaBuilder.mods(mods);
     javaBuilder.group(group);
-    javaBuilder.buttonMask(buttonMask);
-    javaBuilder.valuatorMask(valuatorMask);
-    javaBuilder.axisvalues(axisvalues);
+    javaBuilder.buttonMask(buttonMask.toImmutable());
+    javaBuilder.valuatorMask(valuatorMask.toImmutable());
+    javaBuilder.axisvalues(axisvalues.toImmutable());
 
     javaBuilder.sentEvent(sentEvent);
     javaBuilder.firstEventOffset(firstEventOffset);

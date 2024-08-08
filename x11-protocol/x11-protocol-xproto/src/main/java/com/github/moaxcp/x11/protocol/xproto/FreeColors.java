@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class FreeColors implements OneWayRequest {
   private int planeMask;
 
   @NonNull
-  private List<Integer> pixels;
+  private IntList pixels;
 
   public byte getOpCode() {
     return OPCODE;
@@ -38,10 +38,10 @@ public class FreeColors implements OneWayRequest {
     javaStart += 4;
     int planeMask = in.readCard32();
     javaStart += 4;
-    List<Integer> pixels = in.readCard32(Short.toUnsignedInt(length) - javaStart);
+    IntList pixels = in.readCard32(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.cmap(cmap);
     javaBuilder.planeMask(planeMask);
-    javaBuilder.pixels(pixels);
+    javaBuilder.pixels(pixels.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

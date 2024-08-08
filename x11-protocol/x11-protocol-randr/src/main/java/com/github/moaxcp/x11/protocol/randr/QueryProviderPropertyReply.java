@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -23,7 +23,7 @@ public class QueryProviderPropertyReply implements XReply {
   private boolean immutable;
 
   @NonNull
-  private List<Integer> validValues;
+  private IntList validValues;
 
   public static QueryProviderPropertyReply readQueryProviderPropertyReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -33,12 +33,12 @@ public class QueryProviderPropertyReply implements XReply {
     boolean range = in.readBool();
     boolean immutable = in.readBool();
     byte[] pad7 = in.readPad(21);
-    List<Integer> validValues = in.readInt32((int) (Integer.toUnsignedLong(length)));
+    IntList validValues = in.readInt32((int) (Integer.toUnsignedLong(length)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.pending(pending);
     javaBuilder.range(range);
     javaBuilder.immutable(immutable);
-    javaBuilder.validValues(validValues);
+    javaBuilder.validValues(validValues.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

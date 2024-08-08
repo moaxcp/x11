@@ -6,11 +6,13 @@ import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import com.github.moaxcp.x11.protocol.xproto.Str;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.list.primitive.ShortList;
 
 @Value
 @Builder
@@ -20,10 +22,10 @@ public class QueryFiltersReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Short> aliases;
+  private ShortList aliases;
 
   @NonNull
-  private List<Str> filters;
+  private ImmutableList<Str> filters;
 
   public static QueryFiltersReply readQueryFiltersReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -32,14 +34,14 @@ public class QueryFiltersReply implements XReply {
     int numAliases = in.readCard32();
     int numFilters = in.readCard32();
     byte[] pad6 = in.readPad(16);
-    List<Short> aliases = in.readCard16((int) (Integer.toUnsignedLong(numAliases)));
-    List<Str> filters = new ArrayList<>((int) (Integer.toUnsignedLong(numFilters)));
+    ShortList aliases = in.readCard16((int) (Integer.toUnsignedLong(numAliases)));
+    MutableList<Str> filters = Lists.mutable.withInitialCapacity((int) (Integer.toUnsignedLong(numFilters)));
     for(int i = 0; i < Integer.toUnsignedLong(numFilters); i++) {
       filters.add(Str.readStr(in));
     }
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.aliases(aliases);
-    javaBuilder.filters(filters);
+    javaBuilder.aliases(aliases.toImmutable());
+    javaBuilder.filters(filters.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

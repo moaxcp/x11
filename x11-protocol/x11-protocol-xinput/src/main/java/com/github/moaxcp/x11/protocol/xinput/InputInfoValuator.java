@@ -4,11 +4,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -24,7 +25,7 @@ public class InputInfoValuator implements InputInfo {
   private int motionSize;
 
   @NonNull
-  private List<AxisInfo> axes;
+  private ImmutableList<AxisInfo> axes;
 
   public static InputInfoValuator readInputInfoValuator(byte classId, byte len, X11Input in) throws
       IOException {
@@ -32,7 +33,7 @@ public class InputInfoValuator implements InputInfo {
     byte axesLen = in.readCard8();
     byte mode = in.readCard8();
     int motionSize = in.readCard32();
-    List<AxisInfo> axes = new ArrayList<>(Byte.toUnsignedInt(axesLen));
+    MutableList<AxisInfo> axes = Lists.mutable.withInitialCapacity(Byte.toUnsignedInt(axesLen));
     for(int i = 0; i < Byte.toUnsignedInt(axesLen); i++) {
       axes.add(AxisInfo.readAxisInfo(in));
     }
@@ -40,7 +41,7 @@ public class InputInfoValuator implements InputInfo {
     javaBuilder.len(len);
     javaBuilder.mode(mode);
     javaBuilder.motionSize(motionSize);
-    javaBuilder.axes(axes);
+    javaBuilder.axes(axes.toImmutable());
     return javaBuilder.build();
   }
 

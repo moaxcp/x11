@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -17,16 +17,16 @@ public class GetPointerMappingReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Byte> map;
+  private ByteList map;
 
   public static GetPointerMappingReply readGetPointerMappingReply(byte mapLen, short sequenceNumber,
       X11Input in) throws IOException {
     GetPointerMappingReply.GetPointerMappingReplyBuilder javaBuilder = GetPointerMappingReply.builder();
     int length = in.readCard32();
     byte[] pad4 = in.readPad(24);
-    List<Byte> map = in.readCard8(Byte.toUnsignedInt(mapLen));
+    ByteList map = in.readCard8(Byte.toUnsignedInt(mapLen));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.map(map);
+    javaBuilder.map(map.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

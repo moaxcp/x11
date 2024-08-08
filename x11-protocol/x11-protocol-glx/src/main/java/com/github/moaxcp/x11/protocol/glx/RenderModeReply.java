@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class RenderModeReply implements XReply {
   private int newMode;
 
   @NonNull
-  private List<Integer> data;
+  private IntList data;
 
   public static RenderModeReply readRenderModeReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -31,11 +31,11 @@ public class RenderModeReply implements XReply {
     int n = in.readCard32();
     int newMode = in.readCard32();
     byte[] pad7 = in.readPad(12);
-    List<Integer> data = in.readCard32((int) (Integer.toUnsignedLong(n)));
+    IntList data = in.readCard32((int) (Integer.toUnsignedLong(n)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.retVal(retVal);
     javaBuilder.newMode(newMode);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

@@ -5,6 +5,8 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
+import org.eclipse.collections.api.list.ImmutableList
+import org.eclipse.collections.api.list.MutableList
 
 import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
@@ -25,7 +27,11 @@ class JavaEnumListProperty extends JavaListProperty {
     }
 
     TypeName getMemberTypeName() {
-        return ParameterizedTypeName.get(ClassName.get(List), baseTypeName)
+        return ParameterizedTypeName.get(ClassName.get(ImmutableList), baseTypeName)
+    }
+
+    TypeName getMutableTypeName() {
+        return ParameterizedTypeName.get(ClassName.get(MutableList), baseTypeName)
     }
 
     TypeName getIoTypeName() {
@@ -39,7 +45,7 @@ class JavaEnumListProperty extends JavaListProperty {
     @Override
     CodeBlock getDeclareAndReadCode() {
         return CodeBlock.builder()
-            .addStatement('$1T $2L = new $3T<>($4L)', typeName, name, ArrayList.class, lengthExpression.getExpression(TypeName.INT))
+            .addStatement('$1T $2L = new $3T<>($4L)', mutableTypeName, name, ImmutableList.class, lengthExpression.getExpression(TypeName.INT))
             .beginControlFlow('for(int i = 0; i < $L; i++)', lengthExpression.expression)
             .addStatement('$L.add($T.getByCode(in.read$L()))', name, baseTypeName, fromUpperUnderscoreToUpperCamel(x11Type))
             .endControlFlow()

@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -17,7 +17,7 @@ public class GetDrawableAttributesReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> attribs;
+  private IntList attribs;
 
   public static GetDrawableAttributesReply readGetDrawableAttributesReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -25,9 +25,9 @@ public class GetDrawableAttributesReply implements XReply {
     int length = in.readCard32();
     int numAttribs = in.readCard32();
     byte[] pad5 = in.readPad(20);
-    List<Integer> attribs = in.readCard32((int) (Integer.toUnsignedLong(numAttribs) * 2));
+    IntList attribs = in.readCard32((int) (Integer.toUnsignedLong(numAttribs) * 2));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.attribs(attribs);
+    javaBuilder.attribs(attribs.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

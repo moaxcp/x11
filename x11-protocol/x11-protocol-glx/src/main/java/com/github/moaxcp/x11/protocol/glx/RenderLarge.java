@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ByteList;
 
 @Value
 @Builder
@@ -23,7 +23,7 @@ public class RenderLarge implements OneWayRequest {
   private short requestTotal;
 
   @NonNull
-  private List<Byte> data;
+  private ByteList data;
 
   public byte getOpCode() {
     return OPCODE;
@@ -37,11 +37,11 @@ public class RenderLarge implements OneWayRequest {
     short requestNum = in.readCard16();
     short requestTotal = in.readCard16();
     int dataLen = in.readCard32();
-    List<Byte> data = in.readByte((int) (Integer.toUnsignedLong(dataLen)));
+    ByteList data = in.readByte((int) (Integer.toUnsignedLong(dataLen)));
     javaBuilder.contextTag(contextTag);
     javaBuilder.requestNum(requestNum);
     javaBuilder.requestTotal(requestTotal);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

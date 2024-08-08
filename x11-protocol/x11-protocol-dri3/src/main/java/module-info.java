@@ -6,6 +6,6 @@ module com.github.moaxcp.x11.protocol.dri3 {
     exports com.github.moaxcp.x11.protocol.dri3;
 
     requires static lombok;
-    requires com.github.moaxcp.x11.protocol.core;
+    requires transitive com.github.moaxcp.x11.protocol.core;
     provides XProtocolPlugin with Dri3Plugin;
 }

@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XGenericEvent;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -37,7 +38,7 @@ public class DeviceChangedEvent implements XGenericEvent {
   private byte reason;
 
   @NonNull
-  private List<DeviceClass> classes;
+  private ImmutableList<DeviceClass> classes;
 
   @Override
   public byte getResponseCode() {
@@ -59,7 +60,7 @@ public class DeviceChangedEvent implements XGenericEvent {
     short sourceid = in.readCard16();
     byte reason = in.readCard8();
     byte[] pad10 = in.readPad(11);
-    List<DeviceClass> classes = new ArrayList<>(Short.toUnsignedInt(numClasses));
+    MutableList<DeviceClass> classes = Lists.mutable.withInitialCapacity(Short.toUnsignedInt(numClasses));
     for(int i = 0; i < Short.toUnsignedInt(numClasses); i++) {
       classes.add(DeviceClass.readDeviceClass(in));
     }
@@ -70,7 +71,7 @@ public class DeviceChangedEvent implements XGenericEvent {
     javaBuilder.time(time);
     javaBuilder.sourceid(sourceid);
     javaBuilder.reason(reason);
-    javaBuilder.classes(classes);
+    javaBuilder.classes(classes.toImmutable());
 
     javaBuilder.sentEvent(sentEvent);
     javaBuilder.firstEventOffset(firstEventOffset);

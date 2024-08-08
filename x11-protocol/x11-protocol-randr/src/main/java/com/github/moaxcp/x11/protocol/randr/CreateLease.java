@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -22,10 +22,10 @@ public class CreateLease implements TwoWayRequest<CreateLeaseReply> {
   private int lid;
 
   @NonNull
-  private List<Integer> crtcs;
+  private IntList crtcs;
 
   @NonNull
-  private List<Integer> outputs;
+  private IntList outputs;
 
   public XReplyFunction<CreateLeaseReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> CreateLeaseReply.readCreateLeaseReply(field, sequenceNumber, in);
@@ -43,12 +43,12 @@ public class CreateLease implements TwoWayRequest<CreateLeaseReply> {
     int lid = in.readCard32();
     short numCrtcs = in.readCard16();
     short numOutputs = in.readCard16();
-    List<Integer> crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
-    List<Integer> outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
+    IntList crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
+    IntList outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
     javaBuilder.window(window);
     javaBuilder.lid(lid);
-    javaBuilder.crtcs(crtcs);
-    javaBuilder.outputs(outputs);
+    javaBuilder.crtcs(crtcs.toImmutable());
+    javaBuilder.outputs(outputs.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

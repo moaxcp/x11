@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ShortList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class GetPixelMapusvReply implements XReply {
   private short datum;
 
   @NonNull
-  private List<Short> data;
+  private ShortList data;
 
   public static GetPixelMapusvReply readGetPixelMapusvReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -29,10 +29,10 @@ public class GetPixelMapusvReply implements XReply {
     int n = in.readCard32();
     short datum = in.readCard16();
     byte[] pad7 = in.readPad(16);
-    List<Short> data = in.readCard16((int) (Integer.toUnsignedLong(n)));
+    ShortList data = in.readCard16((int) (Integer.toUnsignedLong(n)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.datum(datum);
-    javaBuilder.data(data);
+    javaBuilder.data(data.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }

@@ -5,11 +5,12 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
 @Value
 @Builder
@@ -27,7 +28,7 @@ public class ImageText16 implements OneWayRequest {
   private short y;
 
   @NonNull
-  private List<Char2b> string;
+  private ImmutableList<Char2b> string;
 
   public byte getOpCode() {
     return OPCODE;
@@ -41,7 +42,7 @@ public class ImageText16 implements OneWayRequest {
     int gc = in.readCard32();
     short x = in.readInt16();
     short y = in.readInt16();
-    List<Char2b> string = new ArrayList<>(stringLen);
+    MutableList<Char2b> string = Lists.mutable.withInitialCapacity(stringLen);
     for(int i = 0; i < stringLen; i++) {
       string.add(Char2b.readChar2b(in));
     }
@@ -49,7 +50,7 @@ public class ImageText16 implements OneWayRequest {
     javaBuilder.gc(gc);
     javaBuilder.x(x);
     javaBuilder.y(y);
-    javaBuilder.string(string);
+    javaBuilder.string(string.toImmutable());
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }

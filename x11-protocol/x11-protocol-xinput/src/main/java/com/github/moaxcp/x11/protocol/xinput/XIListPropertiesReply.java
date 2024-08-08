@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 @Value
 @Builder
@@ -17,7 +17,7 @@ public class XIListPropertiesReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> properties;
+  private IntList properties;
 
   public static XIListPropertiesReply readXIListPropertiesReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -25,9 +25,9 @@ public class XIListPropertiesReply implements XReply {
     int length = in.readCard32();
     short numProperties = in.readCard16();
     byte[] pad5 = in.readPad(22);
-    List<Integer> properties = in.readCard32(Short.toUnsignedInt(numProperties));
+    IntList properties = in.readCard32(Short.toUnsignedInt(numProperties));
     javaBuilder.sequenceNumber(sequenceNumber);
-    javaBuilder.properties(properties);
+    javaBuilder.properties(properties.toImmutable());
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }
