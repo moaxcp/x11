@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -23,7 +23,7 @@ public class StoreNamedColor implements OneWayRequest {
   private int pixel;
 
   @NonNull
-  private List<Byte> name;
+  private ImmutableByteList name;
 
   public byte getOpCode() {
     return OPCODE;
@@ -37,7 +37,7 @@ public class StoreNamedColor implements OneWayRequest {
     int pixel = in.readCard32();
     short nameLen = in.readCard16();
     byte[] pad6 = in.readPad(2);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ImmutableByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     javaBuilder.flags(flags);
     javaBuilder.cmap(cmap);
     javaBuilder.pixel(pixel);

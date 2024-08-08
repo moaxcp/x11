@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class KeyState implements XStruct {
   private byte numKeys;
 
   @NonNull
-  private List<Byte> keys;
+  private ImmutableByteList keys;
 
   public static KeyState readKeyState(X11Input in) throws IOException {
     KeyState.KeyStateBuilder javaBuilder = KeyState.builder();
@@ -29,7 +29,7 @@ public class KeyState implements XStruct {
     byte len = in.readCard8();
     byte numKeys = in.readCard8();
     byte[] pad3 = in.readPad(1);
-    List<Byte> keys = in.readCard8(32);
+    ImmutableByteList keys = in.readCard8(32);
     javaBuilder.classId(classId);
     javaBuilder.len(len);
     javaBuilder.numKeys(numKeys);

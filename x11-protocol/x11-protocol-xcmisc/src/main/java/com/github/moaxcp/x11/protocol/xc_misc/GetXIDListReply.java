@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -17,7 +17,7 @@ public class GetXIDListReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> ids;
+  private ImmutableIntList ids;
 
   public static GetXIDListReply readGetXIDListReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -25,7 +25,7 @@ public class GetXIDListReply implements XReply {
     int length = in.readCard32();
     int idsLen = in.readCard32();
     byte[] pad5 = in.readPad(20);
-    List<Integer> ids = in.readCard32((int) (Integer.toUnsignedLong(idsLen)));
+    ImmutableIntList ids = in.readCard32((int) (Integer.toUnsignedLong(idsLen)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.ids(ids);
     if(javaBuilder.getSize() < 32) {

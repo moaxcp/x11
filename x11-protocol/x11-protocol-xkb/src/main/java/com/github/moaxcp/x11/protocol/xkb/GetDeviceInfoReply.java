@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -43,7 +44,7 @@ public class GetDeviceInfoReply implements XReply {
   private int devType;
 
   @NonNull
-  private List<Byte> name;
+  private ImmutableByteList name;
 
   @NonNull
   private List<ActionUnion> btnActions;
@@ -70,7 +71,7 @@ public class GetDeviceInfoReply implements XReply {
     byte[] pad16 = in.readPad(2);
     int devType = in.readCard32();
     short nameLen = in.readCard16();
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ImmutableByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     in.readPadAlign(Short.toUnsignedInt(nameLen));
     List<ActionUnion> btnActions = new ArrayList<>(Byte.toUnsignedInt(nBtnsRtrn));
     for(int i = 0; i < Byte.toUnsignedInt(nBtnsRtrn); i++) {

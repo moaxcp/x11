@@ -2,10 +2,16 @@ package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.xcbparser.expression.EmptyExpression
 import com.squareup.javapoet.*
+import org.eclipse.collections.api.list.primitive.ImmutableBooleanList
+import org.eclipse.collections.api.list.primitive.ImmutableByteList
+import org.eclipse.collections.api.list.primitive.ImmutableCharList
+import org.eclipse.collections.api.list.primitive.ImmutableDoubleList
+import org.eclipse.collections.api.list.primitive.ImmutableFloatList
+import org.eclipse.collections.api.list.primitive.ImmutableIntList
+import org.eclipse.collections.api.list.primitive.ImmutableLongList
+import org.eclipse.collections.api.list.primitive.ImmutableShortList
 
-import static com.github.moaxcp.x11protocol.generator.Conventions.fromUpperUnderscoreToUpperCamel
-import static com.github.moaxcp.x11protocol.generator.Conventions.getEnumClassName
-import static com.github.moaxcp.x11protocol.generator.Conventions.x11PrimativeToBoxedType
+import static com.github.moaxcp.x11protocol.generator.Conventions.*
 
 class JavaPrimativeListProperty extends JavaListProperty {
 
@@ -20,7 +26,31 @@ class JavaPrimativeListProperty extends JavaListProperty {
 
     @Override
     TypeName getTypeName() {
-        return ParameterizedTypeName.get(ClassName.get(List.class), baseTypeName)
+        def x11Type = x11Field.resolvedType.name
+        if(x11Type == 'void') {
+            return ClassName.get(ImmutableByteList.class)
+        }
+        String primative = x11PrimativeToStorageTypeName(x11Type)
+        switch(primative) {
+            case 'boolean':
+                return TypeName.get(ImmutableBooleanList.class)
+            case 'byte':
+                return TypeName.get(ImmutableByteList.class)
+            case 'short':
+                return TypeName.get(ImmutableShortList.class)
+            case 'char':
+                return TypeName.get(ImmutableCharList.class)
+            case 'int':
+                return TypeName.get(ImmutableIntList.class)
+            case 'long':
+                return TypeName.get(ImmutableLongList.class)
+            case 'float':
+                return TypeName.get(ImmutableFloatList.class)
+            case 'double':
+                return TypeName.get(ImmutableDoubleList.class)
+            default:
+                throw new IllegalArgumentException(primative)
+        }
     }
 
     static JavaPrimativeListProperty javaPrimativeListProperty(JavaType javaType, XUnitListField field) {

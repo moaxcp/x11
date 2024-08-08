@@ -6,7 +6,7 @@ module com.github.moaxcp.x11.protocol.shape {
     exports com.github.moaxcp.x11.protocol.shape;
 
     requires static lombok;
-    requires com.github.moaxcp.x11.protocol.core;
+    requires transitive com.github.moaxcp.x11.protocol.core;
     requires com.github.moaxcp.x11.protocol.xproto;
     provides XProtocolPlugin with ShapePlugin;
 }

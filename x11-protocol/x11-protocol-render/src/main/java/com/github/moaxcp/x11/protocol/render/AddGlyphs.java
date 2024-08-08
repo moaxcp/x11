@@ -10,6 +10,8 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -21,13 +23,13 @@ public class AddGlyphs implements OneWayRequest {
   private int glyphset;
 
   @NonNull
-  private List<Integer> glyphids;
+  private ImmutableIntList glyphids;
 
   @NonNull
   private List<Glyphinfo> glyphs;
 
   @NonNull
-  private List<Byte> data;
+  private ImmutableByteList data;
 
   public byte getOpCode() {
     return OPCODE;
@@ -44,14 +46,14 @@ public class AddGlyphs implements OneWayRequest {
     javaStart += 4;
     int glyphsLen = in.readCard32();
     javaStart += 4;
-    List<Integer> glyphids = in.readCard32((int) (Integer.toUnsignedLong(glyphsLen)));
+    ImmutableIntList glyphids = in.readCard32((int) (Integer.toUnsignedLong(glyphsLen)));
     javaStart += 4 * glyphids.size();
     List<Glyphinfo> glyphs = new ArrayList<>((int) (Integer.toUnsignedLong(glyphsLen)));
     for(int i = 0; i < Integer.toUnsignedLong(glyphsLen); i++) {
       glyphs.add(Glyphinfo.readGlyphinfo(in));
     }
     javaStart += XObject.sizeOf(glyphs);
-    List<Byte> data = in.readByte(Short.toUnsignedInt(length) - javaStart);
+    ImmutableByteList data = in.readByte(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.glyphset(glyphset);
     javaBuilder.glyphids(glyphids);
     javaBuilder.glyphs(glyphs);

@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -47,7 +48,7 @@ public class Setup implements XStruct {
   private byte maxKeycode;
 
   @NonNull
-  private List<Byte> vendor;
+  private ImmutableByteList vendor;
 
   @NonNull
   private List<Format> pixmapFormats;
@@ -77,7 +78,7 @@ public class Setup implements XStruct {
     byte minKeycode = in.readCard8();
     byte maxKeycode = in.readCard8();
     byte[] pad19 = in.readPad(4);
-    List<Byte> vendor = in.readChar(Short.toUnsignedInt(vendorLen));
+    ImmutableByteList vendor = in.readChar(Short.toUnsignedInt(vendorLen));
     in.readPadAlign(Short.toUnsignedInt(vendorLen));
     List<Format> pixmapFormats = new ArrayList<>(Byte.toUnsignedInt(pixmapFormatsLen));
     for(int i = 0; i < Byte.toUnsignedInt(pixmapFormatsLen); i++) {

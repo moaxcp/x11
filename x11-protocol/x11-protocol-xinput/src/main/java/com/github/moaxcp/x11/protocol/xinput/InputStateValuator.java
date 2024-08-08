@@ -3,10 +3,10 @@ package com.github.moaxcp.x11.protocol.xinput;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -20,14 +20,14 @@ public class InputStateValuator implements InputState {
   private byte mode;
 
   @NonNull
-  private List<Integer> valuators;
+  private ImmutableIntList valuators;
 
   public static InputStateValuator readInputStateValuator(byte classId, byte len, X11Input in)
       throws IOException {
     InputStateValuator.InputStateValuatorBuilder javaBuilder = InputStateValuator.builder();
     byte numValuators = in.readCard8();
     byte mode = in.readCard8();
-    List<Integer> valuators = in.readInt32(Byte.toUnsignedInt(numValuators));
+    ImmutableIntList valuators = in.readInt32(Byte.toUnsignedInt(numValuators));
     javaBuilder.classId(classId);
     javaBuilder.len(len);
     javaBuilder.mode(mode);

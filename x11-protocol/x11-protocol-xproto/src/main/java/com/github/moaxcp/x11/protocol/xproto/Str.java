@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -15,12 +15,12 @@ public class Str implements XStruct {
   public static final String PLUGIN_NAME = "xproto";
 
   @NonNull
-  private List<Byte> name;
+  private ImmutableByteList name;
 
   public static Str readStr(X11Input in) throws IOException {
     Str.StrBuilder javaBuilder = Str.builder();
     byte nameLen = in.readCard8();
-    List<Byte> name = in.readChar(Byte.toUnsignedInt(nameLen));
+    ImmutableByteList name = in.readChar(Byte.toUnsignedInt(nameLen));
     javaBuilder.name(name);
     return javaBuilder.build();
   }

@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -23,7 +24,7 @@ public class AdaptorInfo implements XStruct {
   private byte type;
 
   @NonNull
-  private List<Byte> name;
+  private ImmutableByteList name;
 
   @NonNull
   private List<Format> formats;
@@ -36,7 +37,7 @@ public class AdaptorInfo implements XStruct {
     short numFormats = in.readCard16();
     byte type = in.readCard8();
     byte[] pad5 = in.readPad(1);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameSize));
+    ImmutableByteList name = in.readChar(Short.toUnsignedInt(nameSize));
     in.readPadAlign(Short.toUnsignedInt(nameSize));
     List<Format> formats = new ArrayList<>(Short.toUnsignedInt(numFormats));
     for(int i = 0; i < Short.toUnsignedInt(numFormats); i++) {

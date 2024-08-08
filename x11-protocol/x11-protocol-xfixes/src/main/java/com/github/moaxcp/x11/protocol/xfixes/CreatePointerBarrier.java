@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableShortList;
 
 @Value
 @Builder
@@ -31,7 +31,7 @@ public class CreatePointerBarrier implements OneWayRequest {
   private int directions;
 
   @NonNull
-  private List<Short> devices;
+  private ImmutableShortList devices;
 
   public byte getOpCode() {
     return OPCODE;
@@ -50,7 +50,7 @@ public class CreatePointerBarrier implements OneWayRequest {
     int directions = in.readCard32();
     byte[] pad10 = in.readPad(2);
     short numDevices = in.readCard16();
-    List<Short> devices = in.readCard16(Short.toUnsignedInt(numDevices));
+    ImmutableShortList devices = in.readCard16(Short.toUnsignedInt(numDevices));
     javaBuilder.barrier(barrier);
     javaBuilder.window(window);
     javaBuilder.x1(x1);

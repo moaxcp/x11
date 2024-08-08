@@ -10,6 +10,8 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -45,22 +47,22 @@ public class SetNames implements OneWayRequest {
   private int compatName;
 
   @NonNull
-  private List<Integer> typeNames;
+  private ImmutableIntList typeNames;
 
   @NonNull
-  private List<Byte> nLevelsPerType;
+  private ImmutableByteList nLevelsPerType;
 
   @NonNull
-  private List<Integer> ktLevelNames;
+  private ImmutableIntList ktLevelNames;
 
   @NonNull
-  private List<Integer> indicatorNames;
+  private ImmutableIntList indicatorNames;
 
   @NonNull
-  private List<Integer> virtualModNames;
+  private ImmutableIntList virtualModNames;
 
   @NonNull
-  private List<Integer> groups;
+  private ImmutableIntList groups;
 
   @NonNull
   private List<KeyName> keyNames;
@@ -69,7 +71,7 @@ public class SetNames implements OneWayRequest {
   private List<KeyAlias> keyAliases;
 
   @NonNull
-  private List<Integer> radioGroupNames;
+  private ImmutableIntList radioGroupNames;
 
   public byte getOpCode() {
     return OPCODE;
@@ -100,16 +102,16 @@ public class SetNames implements OneWayRequest {
     int physSymbolsName = 0;
     int typesName = 0;
     int compatName = 0;
-    List<Integer> typeNames = null;
-    List<Byte> nLevelsPerType = null;
+    ImmutableIntList typeNames = null;
+    ImmutableByteList nLevelsPerType = null;
     in.readPadAlign(Byte.toUnsignedInt(nTypes));
-    List<Integer> ktLevelNames = null;
-    List<Integer> indicatorNames = null;
-    List<Integer> virtualModNames = null;
-    List<Integer> groups = null;
+    ImmutableIntList ktLevelNames = null;
+    ImmutableIntList indicatorNames = null;
+    ImmutableIntList virtualModNames = null;
+    ImmutableIntList groups = null;
     List<KeyName> keyNames = null;
     List<KeyAlias> keyAliases = null;
-    List<Integer> radioGroupNames = null;
+    ImmutableIntList radioGroupNames = null;
     javaBuilder.deviceSpec(deviceSpec);
     javaBuilder.which(which);
     javaBuilder.firstType(firstType);
@@ -339,37 +341,37 @@ public class SetNames implements OneWayRequest {
       return this;
     }
 
-    public SetNames.SetNamesBuilder typeNames(List<Integer> typeNames) {
+    public SetNames.SetNamesBuilder typeNames(ImmutableIntList typeNames) {
       this.typeNames = typeNames;
       whichEnable(NameDetail.KEY_TYPE_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder nLevelsPerType(List<Byte> nLevelsPerType) {
+    public SetNames.SetNamesBuilder nLevelsPerType(ImmutableByteList nLevelsPerType) {
       this.nLevelsPerType = nLevelsPerType;
       whichEnable(NameDetail.K_T_LEVEL_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder ktLevelNames(List<Integer> ktLevelNames) {
+    public SetNames.SetNamesBuilder ktLevelNames(ImmutableIntList ktLevelNames) {
       this.ktLevelNames = ktLevelNames;
       whichEnable(NameDetail.K_T_LEVEL_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder indicatorNames(List<Integer> indicatorNames) {
+    public SetNames.SetNamesBuilder indicatorNames(ImmutableIntList indicatorNames) {
       this.indicatorNames = indicatorNames;
       whichEnable(NameDetail.INDICATOR_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder virtualModNames(List<Integer> virtualModNames) {
+    public SetNames.SetNamesBuilder virtualModNames(ImmutableIntList virtualModNames) {
       this.virtualModNames = virtualModNames;
       whichEnable(NameDetail.VIRTUAL_MOD_NAMES);
       return this;
     }
 
-    public SetNames.SetNamesBuilder groups(List<Integer> groups) {
+    public SetNames.SetNamesBuilder groups(ImmutableIntList groups) {
       this.groups = groups;
       whichEnable(NameDetail.GROUP_NAMES);
       return this;
@@ -387,7 +389,7 @@ public class SetNames implements OneWayRequest {
       return this;
     }
 
-    public SetNames.SetNamesBuilder radioGroupNames(List<Integer> radioGroupNames) {
+    public SetNames.SetNamesBuilder radioGroupNames(ImmutableIntList radioGroupNames) {
       this.radioGroupNames = radioGroupNames;
       whichEnable(NameDetail.R_G_NAMES);
       return this;

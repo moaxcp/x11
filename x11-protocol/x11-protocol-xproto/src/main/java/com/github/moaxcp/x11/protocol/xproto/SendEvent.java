@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -23,7 +23,7 @@ public class SendEvent implements OneWayRequest {
   private int eventMask;
 
   @NonNull
-  private List<Byte> event;
+  private ImmutableByteList event;
 
   public byte getOpCode() {
     return OPCODE;
@@ -35,7 +35,7 @@ public class SendEvent implements OneWayRequest {
     short length = in.readCard16();
     int destination = in.readCard32();
     int eventMask = in.readCard32();
-    List<Byte> event = in.readChar(32);
+    ImmutableByteList event = in.readChar(32);
     javaBuilder.propagate(propagate);
     javaBuilder.destination(destination);
     javaBuilder.eventMask(eventMask);

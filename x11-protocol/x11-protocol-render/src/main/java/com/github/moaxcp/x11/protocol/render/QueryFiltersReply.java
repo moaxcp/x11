@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableShortList;
 
 @Value
 @Builder
@@ -20,7 +21,7 @@ public class QueryFiltersReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Short> aliases;
+  private ImmutableShortList aliases;
 
   @NonNull
   private List<Str> filters;
@@ -32,7 +33,7 @@ public class QueryFiltersReply implements XReply {
     int numAliases = in.readCard32();
     int numFilters = in.readCard32();
     byte[] pad6 = in.readPad(16);
-    List<Short> aliases = in.readCard16((int) (Integer.toUnsignedLong(numAliases)));
+    ImmutableShortList aliases = in.readCard16((int) (Integer.toUnsignedLong(numAliases)));
     List<Str> filters = new ArrayList<>((int) (Integer.toUnsignedLong(numFilters)));
     for(int i = 0; i < Integer.toUnsignedLong(numFilters); i++) {
       filters.add(Str.readStr(in));

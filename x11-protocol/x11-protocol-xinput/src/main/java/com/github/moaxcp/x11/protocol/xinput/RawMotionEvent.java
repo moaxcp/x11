@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -39,7 +40,7 @@ public class RawMotionEvent implements XGenericEvent {
   private int flags;
 
   @NonNull
-  private List<Integer> valuatorMask;
+  private ImmutableIntList valuatorMask;
 
   @NonNull
   private List<Fp3232> axisvalues;
@@ -68,7 +69,7 @@ public class RawMotionEvent implements XGenericEvent {
     short valuatorsLen = in.readCard16();
     int flags = in.readCard32();
     byte[] pad11 = in.readPad(4);
-    List<Integer> valuatorMask = in.readCard32(Short.toUnsignedInt(valuatorsLen));
+    ImmutableIntList valuatorMask = in.readCard32(Short.toUnsignedInt(valuatorsLen));
     List<Fp3232> axisvalues = new ArrayList<>(valuatorMask.stream().mapToInt(mapToInt -> mapToInt).sum());
     for(int i = 0; i < valuatorMask.stream().mapToInt(mapToInt -> mapToInt).sum(); i++) {
       axisvalues.add(Fp3232.readFp3232(in));

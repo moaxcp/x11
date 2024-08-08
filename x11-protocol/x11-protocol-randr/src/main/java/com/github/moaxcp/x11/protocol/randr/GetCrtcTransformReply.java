@@ -6,10 +6,11 @@ import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XReply;
 import com.github.moaxcp.x11.protocol.render.Transform;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -27,16 +28,16 @@ public class GetCrtcTransformReply implements XReply {
   private Transform currentTransform;
 
   @NonNull
-  private List<Byte> pendingFilterName;
+  private ImmutableByteList pendingFilterName;
 
   @NonNull
-  private List<Integer> pendingParams;
+  private ImmutableIntList pendingParams;
 
   @NonNull
-  private List<Byte> currentFilterName;
+  private ImmutableByteList currentFilterName;
 
   @NonNull
-  private List<Integer> currentParams;
+  private ImmutableIntList currentParams;
 
   public static GetCrtcTransformReply readGetCrtcTransformReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -51,12 +52,12 @@ public class GetCrtcTransformReply implements XReply {
     short pendingNparams = in.readCard16();
     short currentLen = in.readCard16();
     short currentNparams = in.readCard16();
-    List<Byte> pendingFilterName = in.readChar(Short.toUnsignedInt(pendingLen));
+    ImmutableByteList pendingFilterName = in.readChar(Short.toUnsignedInt(pendingLen));
     in.readPadAlign(Short.toUnsignedInt(pendingLen));
-    List<Integer> pendingParams = in.readInt32(Short.toUnsignedInt(pendingNparams));
-    List<Byte> currentFilterName = in.readChar(Short.toUnsignedInt(currentLen));
+    ImmutableIntList pendingParams = in.readInt32(Short.toUnsignedInt(pendingNparams));
+    ImmutableByteList currentFilterName = in.readChar(Short.toUnsignedInt(currentLen));
     in.readPadAlign(Short.toUnsignedInt(currentLen));
-    List<Integer> currentParams = in.readInt32(Short.toUnsignedInt(currentNparams));
+    ImmutableIntList currentParams = in.readInt32(Short.toUnsignedInt(currentNparams));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.pendingTransform(pendingTransform);
     javaBuilder.hasTransforms(hasTransforms);

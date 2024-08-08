@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -25,7 +25,7 @@ public class PolyText8 implements OneWayRequest {
   private short y;
 
   @NonNull
-  private List<Byte> items;
+  private ImmutableByteList items;
 
   public byte getOpCode() {
     return OPCODE;
@@ -46,7 +46,7 @@ public class PolyText8 implements OneWayRequest {
     javaStart += 2;
     short y = in.readInt16();
     javaStart += 2;
-    List<Byte> items = in.readByte(Short.toUnsignedInt(length) - javaStart);
+    ImmutableByteList items = in.readByte(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.drawable(drawable);
     javaBuilder.gc(gc);
     javaBuilder.x(x);

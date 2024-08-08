@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -15,16 +15,16 @@ public class CountedString16 implements XStruct {
   public static final String PLUGIN_NAME = "xkb";
 
   @NonNull
-  private List<Byte> string;
+  private ImmutableByteList string;
 
   @NonNull
-  private List<Byte> alignmentPad;
+  private ImmutableByteList alignmentPad;
 
   public static CountedString16 readCountedString16(X11Input in) throws IOException {
     CountedString16.CountedString16Builder javaBuilder = CountedString16.builder();
     short length = in.readCard16();
-    List<Byte> string = in.readChar(Short.toUnsignedInt(length));
-    List<Byte> alignmentPad = in.readVoid((Short.toUnsignedInt(length) + 5) & (~ (3)) - Short.toUnsignedInt(length) + 2);
+    ImmutableByteList string = in.readChar(Short.toUnsignedInt(length));
+    ImmutableByteList alignmentPad = in.readVoid((Short.toUnsignedInt(length) + 5) & (~ (3)) - Short.toUnsignedInt(length) + 2);
     javaBuilder.string(string);
     javaBuilder.alignmentPad(alignmentPad);
     return javaBuilder.build();

@@ -3,10 +3,10 @@ package com.github.moaxcp.x11.protocol.xinput;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -20,17 +20,17 @@ public class DeviceClassButton implements DeviceClass {
   private short sourceid;
 
   @NonNull
-  private List<Integer> state;
+  private ImmutableIntList state;
 
   @NonNull
-  private List<Integer> labels;
+  private ImmutableIntList labels;
 
   public static DeviceClassButton readDeviceClassButton(short type, short len, short sourceid,
       X11Input in) throws IOException {
     DeviceClassButton.DeviceClassButtonBuilder javaBuilder = DeviceClassButton.builder();
     short numButtons = in.readCard16();
-    List<Integer> state = in.readCard32((Short.toUnsignedInt(numButtons) + 31) / 32);
-    List<Integer> labels = in.readCard32(Short.toUnsignedInt(numButtons));
+    ImmutableIntList state = in.readCard32((Short.toUnsignedInt(numButtons) + 31) / 32);
+    ImmutableIntList labels = in.readCard32(Short.toUnsignedInt(numButtons));
     javaBuilder.type(type);
     javaBuilder.len(len);
     javaBuilder.sourceid(sourceid);

@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -63,7 +63,7 @@ public class AddModeLine implements OneWayRequest {
   private int afterFlags;
 
   @NonNull
-  private List<Byte> xPrivate;
+  private ImmutableByteList xPrivate;
 
   public byte getOpCode() {
     return OPCODE;
@@ -101,7 +101,7 @@ public class AddModeLine implements OneWayRequest {
     byte[] pad28 = in.readPad(2);
     int afterFlags = in.readCard32();
     byte[] pad30 = in.readPad(12);
-    List<Byte> xPrivate = in.readCard8((int) (Integer.toUnsignedLong(privsize)));
+    ImmutableByteList xPrivate = in.readCard8((int) (Integer.toUnsignedLong(privsize)));
     javaBuilder.screen(screen);
     javaBuilder.dotclock(dotclock);
     javaBuilder.hdisplay(hdisplay);

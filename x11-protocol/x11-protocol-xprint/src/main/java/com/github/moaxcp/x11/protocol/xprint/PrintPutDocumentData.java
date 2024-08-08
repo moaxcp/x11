@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -19,13 +19,13 @@ public class PrintPutDocumentData implements OneWayRequest {
   private int drawable;
 
   @NonNull
-  private List<Byte> data;
+  private ImmutableByteList data;
 
   @NonNull
-  private List<Byte> docFormat;
+  private ImmutableByteList docFormat;
 
   @NonNull
-  private List<Byte> options;
+  private ImmutableByteList options;
 
   public byte getOpCode() {
     return OPCODE;
@@ -39,9 +39,9 @@ public class PrintPutDocumentData implements OneWayRequest {
     int lenData = in.readCard32();
     short lenFmt = in.readCard16();
     short lenOptions = in.readCard16();
-    List<Byte> data = in.readByte((int) (Integer.toUnsignedLong(lenData)));
-    List<Byte> docFormat = in.readChar(Short.toUnsignedInt(lenFmt));
-    List<Byte> options = in.readChar(Short.toUnsignedInt(lenOptions));
+    ImmutableByteList data = in.readByte((int) (Integer.toUnsignedLong(lenData)));
+    ImmutableByteList docFormat = in.readChar(Short.toUnsignedInt(lenFmt));
+    ImmutableByteList options = in.readChar(Short.toUnsignedInt(lenOptions));
     javaBuilder.drawable(drawable);
     javaBuilder.data(data);
     javaBuilder.docFormat(docFormat);

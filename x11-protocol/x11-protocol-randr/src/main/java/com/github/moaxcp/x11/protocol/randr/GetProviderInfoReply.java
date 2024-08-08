@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -23,19 +24,19 @@ public class GetProviderInfoReply implements XReply {
   private int capabilities;
 
   @NonNull
-  private List<Integer> crtcs;
+  private ImmutableIntList crtcs;
 
   @NonNull
-  private List<Integer> outputs;
+  private ImmutableIntList outputs;
 
   @NonNull
-  private List<Integer> associatedProviders;
+  private ImmutableIntList associatedProviders;
 
   @NonNull
-  private List<Integer> associatedCapability;
+  private ImmutableIntList associatedCapability;
 
   @NonNull
-  private List<Byte> name;
+  private ImmutableByteList name;
 
   public static GetProviderInfoReply readGetProviderInfoReply(byte status, short sequenceNumber,
       X11Input in) throws IOException {
@@ -48,11 +49,11 @@ public class GetProviderInfoReply implements XReply {
     short numAssociatedProviders = in.readCard16();
     short nameLen = in.readCard16();
     byte[] pad10 = in.readPad(8);
-    List<Integer> crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
-    List<Integer> outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
-    List<Integer> associatedProviders = in.readCard32(Short.toUnsignedInt(numAssociatedProviders));
-    List<Integer> associatedCapability = in.readCard32(Short.toUnsignedInt(numAssociatedProviders));
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ImmutableIntList crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
+    ImmutableIntList outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
+    ImmutableIntList associatedProviders = in.readCard32(Short.toUnsignedInt(numAssociatedProviders));
+    ImmutableIntList associatedCapability = in.readCard32(Short.toUnsignedInt(numAssociatedProviders));
+    ImmutableByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     javaBuilder.status(status);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.timestamp(timestamp);

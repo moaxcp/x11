@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -27,7 +27,7 @@ public class GetDeviceInfoReply implements XReply {
   private int framebufferStride;
 
   @NonNull
-  private List<Integer> devicePrivate;
+  private ImmutableIntList devicePrivate;
 
   public static GetDeviceInfoReply readGetDeviceInfoReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -39,7 +39,7 @@ public class GetDeviceInfoReply implements XReply {
     int framebufferSize = in.readCard32();
     int framebufferStride = in.readCard32();
     int devicePrivateSize = in.readCard32();
-    List<Integer> devicePrivate = in.readCard32((int) (Integer.toUnsignedLong(devicePrivateSize)));
+    ImmutableIntList devicePrivate = in.readCard32((int) (Integer.toUnsignedLong(devicePrivateSize)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.framebufferHandleLow(framebufferHandleLow);
     javaBuilder.framebufferHandleHigh(framebufferHandleHigh);

@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableShortList;
 
 @Value
 @Builder
@@ -15,12 +15,12 @@ public class RefreshRates implements XStruct {
   public static final String PLUGIN_NAME = "randr";
 
   @NonNull
-  private List<Short> rates;
+  private ImmutableShortList rates;
 
   public static RefreshRates readRefreshRates(X11Input in) throws IOException {
     RefreshRates.RefreshRatesBuilder javaBuilder = RefreshRates.builder();
     short nRates = in.readCard16();
-    List<Short> rates = in.readCard16(Short.toUnsignedInt(nRates));
+    ImmutableShortList rates = in.readCard16(Short.toUnsignedInt(nRates));
     javaBuilder.rates(rates);
     return javaBuilder.build();
   }

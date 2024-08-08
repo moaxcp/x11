@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class PrintGetDocumentDataReply implements XReply {
   private int finishedFlag;
 
   @NonNull
-  private List<Byte> data;
+  private ImmutableByteList data;
 
   public static PrintGetDocumentDataReply readPrintGetDocumentDataReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -31,7 +31,7 @@ public class PrintGetDocumentDataReply implements XReply {
     int finishedFlag = in.readCard32();
     int dataLen = in.readCard32();
     byte[] pad7 = in.readPad(12);
-    List<Byte> data = in.readByte((int) (Integer.toUnsignedLong(dataLen)));
+    ImmutableByteList data = in.readByte((int) (Integer.toUnsignedLong(dataLen)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.statusCode(statusCode);
     javaBuilder.finishedFlag(finishedFlag);

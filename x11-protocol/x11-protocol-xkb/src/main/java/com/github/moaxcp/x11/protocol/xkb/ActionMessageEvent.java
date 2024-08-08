@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XEvent;
 import com.github.moaxcp.x11.protocol.xproto.ModMask;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -40,7 +40,7 @@ public class ActionMessageEvent implements XEvent {
   private byte group;
 
   @NonNull
-  private List<Byte> message;
+  private ImmutableByteList message;
 
   @Override
   public byte getResponseCode() {
@@ -64,7 +64,7 @@ public class ActionMessageEvent implements XEvent {
     boolean keyEventFollows = in.readBool();
     byte mods = in.readCard8();
     byte group = in.readCard8();
-    List<Byte> message = in.readChar(8);
+    ImmutableByteList message = in.readChar(8);
     byte[] pad11 = in.readPad(10);
     javaBuilder.xkbType(xkbType);
     javaBuilder.sequenceNumber(sequenceNumber);

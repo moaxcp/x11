@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -25,7 +25,7 @@ public class XIPassiveUngrabDevice implements OneWayRequest {
   private byte grabType;
 
   @NonNull
-  private List<Integer> modifiers;
+  private ImmutableIntList modifiers;
 
   public byte getOpCode() {
     return OPCODE;
@@ -41,7 +41,7 @@ public class XIPassiveUngrabDevice implements OneWayRequest {
     short numModifiers = in.readCard16();
     byte grabType = in.readCard8();
     byte[] pad8 = in.readPad(3);
-    List<Integer> modifiers = in.readCard32(Short.toUnsignedInt(numModifiers));
+    ImmutableIntList modifiers = in.readCard32(Short.toUnsignedInt(numModifiers));
     javaBuilder.grabWindow(grabWindow);
     javaBuilder.detail(detail);
     javaBuilder.deviceid(deviceid);

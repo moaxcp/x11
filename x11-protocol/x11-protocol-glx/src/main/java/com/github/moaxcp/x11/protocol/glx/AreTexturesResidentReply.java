@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableBooleanList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class AreTexturesResidentReply implements XReply {
   private int retVal;
 
   @NonNull
-  private List<Boolean> data;
+  private ImmutableBooleanList data;
 
   public static AreTexturesResidentReply readAreTexturesResidentReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -27,7 +27,7 @@ public class AreTexturesResidentReply implements XReply {
     int length = in.readCard32();
     int retVal = in.readCard32();
     byte[] pad5 = in.readPad(20);
-    List<Boolean> data = in.readBool((int) (Integer.toUnsignedLong(length) * 4));
+    ImmutableBooleanList data = in.readBool((int) (Integer.toUnsignedLong(length) * 4));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.retVal(retVal);
     javaBuilder.data(data);

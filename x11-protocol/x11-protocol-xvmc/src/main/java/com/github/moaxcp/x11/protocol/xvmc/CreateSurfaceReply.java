@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -17,14 +17,14 @@ public class CreateSurfaceReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> privData;
+  private ImmutableIntList privData;
 
   public static CreateSurfaceReply readCreateSurfaceReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
     CreateSurfaceReply.CreateSurfaceReplyBuilder javaBuilder = CreateSurfaceReply.builder();
     int length = in.readCard32();
     byte[] pad4 = in.readPad(24);
-    List<Integer> privData = in.readCard32((int) (Integer.toUnsignedLong(length)));
+    ImmutableIntList privData = in.readCard32((int) (Integer.toUnsignedLong(length)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.privData(privData);
     if(javaBuilder.getSize() < 32) {

@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -25,7 +26,7 @@ public class XIDeviceInfo implements XStruct {
   private boolean enabled;
 
   @NonNull
-  private List<Byte> name;
+  private ImmutableByteList name;
 
   @NonNull
   private List<DeviceClass> classes;
@@ -39,7 +40,7 @@ public class XIDeviceInfo implements XStruct {
     short nameLen = in.readCard16();
     boolean enabled = in.readBool();
     byte[] pad6 = in.readPad(1);
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nameLen));
+    ImmutableByteList name = in.readChar(Short.toUnsignedInt(nameLen));
     in.readPadAlign(Short.toUnsignedInt(nameLen));
     List<DeviceClass> classes = new ArrayList<>(Short.toUnsignedInt(numClasses));
     for(int i = 0; i < Short.toUnsignedInt(numClasses); i++) {

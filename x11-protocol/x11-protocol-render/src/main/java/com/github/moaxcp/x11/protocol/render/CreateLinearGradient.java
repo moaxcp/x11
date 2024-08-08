@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -27,7 +28,7 @@ public class CreateLinearGradient implements OneWayRequest {
   private Pointfix p2;
 
   @NonNull
-  private List<Integer> stops;
+  private ImmutableIntList stops;
 
   @NonNull
   private List<Color> colors;
@@ -44,7 +45,7 @@ public class CreateLinearGradient implements OneWayRequest {
     Pointfix p1 = Pointfix.readPointfix(in);
     Pointfix p2 = Pointfix.readPointfix(in);
     int numStops = in.readCard32();
-    List<Integer> stops = in.readInt32((int) (Integer.toUnsignedLong(numStops)));
+    ImmutableIntList stops = in.readInt32((int) (Integer.toUnsignedLong(numStops)));
     List<Color> colors = new ArrayList<>((int) (Integer.toUnsignedLong(numStops)));
     for(int i = 0; i < Integer.toUnsignedLong(numStops); i++) {
       colors.add(Color.readColor(in));

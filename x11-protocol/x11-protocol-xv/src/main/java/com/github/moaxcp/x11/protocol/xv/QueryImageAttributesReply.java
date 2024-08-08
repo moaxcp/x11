@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -23,10 +23,10 @@ public class QueryImageAttributesReply implements XReply {
   private short height;
 
   @NonNull
-  private List<Integer> pitches;
+  private ImmutableIntList pitches;
 
   @NonNull
-  private List<Integer> offsets;
+  private ImmutableIntList offsets;
 
   public static QueryImageAttributesReply readQueryImageAttributesReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -37,8 +37,8 @@ public class QueryImageAttributesReply implements XReply {
     short width = in.readCard16();
     short height = in.readCard16();
     byte[] pad8 = in.readPad(12);
-    List<Integer> pitches = in.readCard32((int) (Integer.toUnsignedLong(numPlanes)));
-    List<Integer> offsets = in.readCard32((int) (Integer.toUnsignedLong(numPlanes)));
+    ImmutableIntList pitches = in.readCard32((int) (Integer.toUnsignedLong(numPlanes)));
+    ImmutableIntList offsets = in.readCard32((int) (Integer.toUnsignedLong(numPlanes)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.dataSize(dataSize);
     javaBuilder.width(width);

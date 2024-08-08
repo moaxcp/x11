@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -22,7 +22,7 @@ public class VendorPrivateWithReply implements TwoWayRequest<VendorPrivateWithRe
   private int contextTag;
 
   @NonNull
-  private List<Byte> data;
+  private ImmutableByteList data;
 
   public XReplyFunction<VendorPrivateWithReplyReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> VendorPrivateWithReplyReply.readVendorPrivateWithReplyReply(field, sequenceNumber, in);
@@ -43,7 +43,7 @@ public class VendorPrivateWithReply implements TwoWayRequest<VendorPrivateWithRe
     javaStart += 4;
     int contextTag = in.readCard32();
     javaStart += 4;
-    List<Byte> data = in.readByte(Short.toUnsignedInt(length) - javaStart);
+    ImmutableByteList data = in.readByte(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.vendorCode(vendorCode);
     javaBuilder.contextTag(contextTag);
     javaBuilder.data(data);

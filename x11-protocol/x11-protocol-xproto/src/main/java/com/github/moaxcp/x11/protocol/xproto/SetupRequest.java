@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XObject;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -22,10 +22,10 @@ public class SetupRequest implements XStruct {
   private short protocolMinorVersion;
 
   @NonNull
-  private List<Byte> authorizationProtocolName;
+  private ImmutableByteList authorizationProtocolName;
 
   @NonNull
-  private List<Byte> authorizationProtocolData;
+  private ImmutableByteList authorizationProtocolData;
 
   public static SetupRequest readSetupRequest(X11Input in) throws IOException {
     SetupRequest.SetupRequestBuilder javaBuilder = SetupRequest.builder();
@@ -36,9 +36,9 @@ public class SetupRequest implements XStruct {
     short authorizationProtocolNameLen = in.readCard16();
     short authorizationProtocolDataLen = in.readCard16();
     byte[] pad6 = in.readPad(2);
-    List<Byte> authorizationProtocolName = in.readChar(Short.toUnsignedInt(authorizationProtocolNameLen));
+    ImmutableByteList authorizationProtocolName = in.readChar(Short.toUnsignedInt(authorizationProtocolNameLen));
     in.readPadAlign(Short.toUnsignedInt(authorizationProtocolNameLen));
-    List<Byte> authorizationProtocolData = in.readChar(Short.toUnsignedInt(authorizationProtocolDataLen));
+    ImmutableByteList authorizationProtocolData = in.readChar(Short.toUnsignedInt(authorizationProtocolDataLen));
     in.readPadAlign(Short.toUnsignedInt(authorizationProtocolDataLen));
     javaBuilder.byteOrder(byteOrder);
     javaBuilder.protocolMajorVersion(protocolMajorVersion);

@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -17,14 +17,14 @@ public class GetMinmaxReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Byte> data;
+  private ImmutableByteList data;
 
   public static GetMinmaxReply readGetMinmaxReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
     GetMinmaxReply.GetMinmaxReplyBuilder javaBuilder = GetMinmaxReply.builder();
     int length = in.readCard32();
     byte[] pad4 = in.readPad(24);
-    List<Byte> data = in.readByte((int) (Integer.toUnsignedLong(length) * 4));
+    ImmutableByteList data = in.readByte((int) (Integer.toUnsignedLong(length) * 4));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.data(data);
     if(javaBuilder.getSize() < 32) {

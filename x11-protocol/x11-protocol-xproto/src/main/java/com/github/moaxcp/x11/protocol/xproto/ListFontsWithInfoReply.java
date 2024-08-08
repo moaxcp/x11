@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -48,7 +49,7 @@ public class ListFontsWithInfoReply implements XReply {
   private List<Fontprop> properties;
 
   @NonNull
-  private List<Byte> name;
+  private ImmutableByteList name;
 
   public static ListFontsWithInfoReply readListFontsWithInfoReply(byte nameLen,
       short sequenceNumber, X11Input in) throws IOException {
@@ -73,7 +74,7 @@ public class ListFontsWithInfoReply implements XReply {
     for(int i = 0; i < Short.toUnsignedInt(propertiesLen); i++) {
       properties.add(Fontprop.readFontprop(in));
     }
-    List<Byte> name = in.readChar(Byte.toUnsignedInt(nameLen));
+    ImmutableByteList name = in.readChar(Byte.toUnsignedInt(nameLen));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.minBounds(minBounds);
     javaBuilder.maxBounds(maxBounds);

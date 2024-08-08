@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -21,13 +22,13 @@ public class SetClientInfo2ARB implements OneWayRequest {
   private int minorVersion;
 
   @NonNull
-  private List<Integer> glVersions;
+  private ImmutableIntList glVersions;
 
   @NonNull
-  private List<Byte> glExtensionString;
+  private ImmutableByteList glExtensionString;
 
   @NonNull
-  private List<Byte> glxExtensionString;
+  private ImmutableByteList glxExtensionString;
 
   public byte getOpCode() {
     return OPCODE;
@@ -42,9 +43,9 @@ public class SetClientInfo2ARB implements OneWayRequest {
     int numVersions = in.readCard32();
     int glStrLen = in.readCard32();
     int glxStrLen = in.readCard32();
-    List<Integer> glVersions = in.readCard32((int) (Integer.toUnsignedLong(numVersions) * 3));
-    List<Byte> glExtensionString = in.readChar((int) (Integer.toUnsignedLong(glStrLen)));
-    List<Byte> glxExtensionString = in.readChar((int) (Integer.toUnsignedLong(glxStrLen)));
+    ImmutableIntList glVersions = in.readCard32((int) (Integer.toUnsignedLong(numVersions) * 3));
+    ImmutableByteList glExtensionString = in.readChar((int) (Integer.toUnsignedLong(glStrLen)));
+    ImmutableByteList glxExtensionString = in.readChar((int) (Integer.toUnsignedLong(glxStrLen)));
     javaBuilder.majorVersion(majorVersion);
     javaBuilder.minorVersion(minorVersion);
     javaBuilder.glVersions(glVersions);

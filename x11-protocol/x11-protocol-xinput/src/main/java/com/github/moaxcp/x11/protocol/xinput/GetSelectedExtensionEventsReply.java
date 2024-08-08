@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -19,10 +19,10 @@ public class GetSelectedExtensionEventsReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> thisClasses;
+  private ImmutableIntList thisClasses;
 
   @NonNull
-  private List<Integer> allClasses;
+  private ImmutableIntList allClasses;
 
   public static GetSelectedExtensionEventsReply readGetSelectedExtensionEventsReply(
       byte xiReplyType, short sequenceNumber, X11Input in) throws IOException {
@@ -31,8 +31,8 @@ public class GetSelectedExtensionEventsReply implements XReply {
     short numThisClasses = in.readCard16();
     short numAllClasses = in.readCard16();
     byte[] pad6 = in.readPad(20);
-    List<Integer> thisClasses = in.readCard32(Short.toUnsignedInt(numThisClasses));
-    List<Integer> allClasses = in.readCard32(Short.toUnsignedInt(numAllClasses));
+    ImmutableIntList thisClasses = in.readCard32(Short.toUnsignedInt(numThisClasses));
+    ImmutableIntList allClasses = in.readCard32(Short.toUnsignedInt(numAllClasses));
     javaBuilder.xiReplyType(xiReplyType);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.thisClasses(thisClasses);

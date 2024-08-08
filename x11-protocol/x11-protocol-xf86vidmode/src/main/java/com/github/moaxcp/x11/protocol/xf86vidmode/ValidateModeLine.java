@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -42,7 +42,7 @@ public class ValidateModeLine implements TwoWayRequest<ValidateModeLineReply> {
   private int flags;
 
   @NonNull
-  private List<Byte> xPrivate;
+  private ImmutableByteList xPrivate;
 
   public XReplyFunction<ValidateModeLineReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> ValidateModeLineReply.readValidateModeLineReply(field, sequenceNumber, in);
@@ -71,7 +71,7 @@ public class ValidateModeLine implements TwoWayRequest<ValidateModeLineReply> {
     int flags = in.readCard32();
     byte[] pad16 = in.readPad(12);
     int privsize = in.readCard32();
-    List<Byte> xPrivate = in.readCard8((int) (Integer.toUnsignedLong(privsize)));
+    ImmutableByteList xPrivate = in.readCard8((int) (Integer.toUnsignedLong(privsize)));
     javaBuilder.screen(screen);
     javaBuilder.dotclock(dotclock);
     javaBuilder.hdisplay(hdisplay);

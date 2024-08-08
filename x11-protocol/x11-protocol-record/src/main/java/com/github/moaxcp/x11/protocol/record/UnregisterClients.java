@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class UnregisterClients implements OneWayRequest {
   private int context;
 
   @NonNull
-  private List<Integer> clientSpecs;
+  private ImmutableIntList clientSpecs;
 
   public byte getOpCode() {
     return OPCODE;
@@ -31,7 +31,7 @@ public class UnregisterClients implements OneWayRequest {
     short length = in.readCard16();
     int context = in.readCard32();
     int numClientSpecs = in.readCard32();
-    List<Integer> clientSpecs = in.readCard32((int) (Integer.toUnsignedLong(numClientSpecs)));
+    ImmutableIntList clientSpecs = in.readCard32((int) (Integer.toUnsignedLong(numClientSpecs)));
     javaBuilder.context(context);
     javaBuilder.clientSpecs(clientSpecs);
     in.readPadAlign(javaBuilder.getSize());

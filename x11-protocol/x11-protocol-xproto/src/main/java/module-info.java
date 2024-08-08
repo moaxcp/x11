@@ -5,7 +5,8 @@ import com.github.moaxcp.x11.protocol.xproto.XprotoPlugin;
 module com.github.moaxcp.x11.protocol.xproto {
     exports com.github.moaxcp.x11.protocol.xproto;
 
-    requires com.github.moaxcp.x11.protocol.core;
+    requires transitive com.github.moaxcp.x11.protocol.core;
     requires static lombok;
+    requires org.eclipse.collections.api;
     provides XProtocolPlugin with XprotoPlugin;
 }

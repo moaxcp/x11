@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -20,7 +20,7 @@ public class SetDeviceButtonMapping implements TwoWayRequest<SetDeviceButtonMapp
   private byte deviceId;
 
   @NonNull
-  private List<Byte> map;
+  private ImmutableByteList map;
 
   public XReplyFunction<SetDeviceButtonMappingReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> SetDeviceButtonMappingReply.readSetDeviceButtonMappingReply(field, sequenceNumber, in);
@@ -37,7 +37,7 @@ public class SetDeviceButtonMapping implements TwoWayRequest<SetDeviceButtonMapp
     byte deviceId = in.readCard8();
     byte mapSize = in.readCard8();
     byte[] pad5 = in.readPad(2);
-    List<Byte> map = in.readCard8(Byte.toUnsignedInt(mapSize));
+    ImmutableByteList map = in.readCard8(Byte.toUnsignedInt(mapSize));
     javaBuilder.deviceId(deviceId);
     javaBuilder.map(map);
     in.readPadAlign(javaBuilder.getSize());
