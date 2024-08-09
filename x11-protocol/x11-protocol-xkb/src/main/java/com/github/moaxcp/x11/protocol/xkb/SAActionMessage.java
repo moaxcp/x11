@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -19,13 +19,13 @@ public class SAActionMessage implements ActionUnion, XStruct {
   private byte flags;
 
   @NonNull
-  private List<Byte> message;
+  private ImmutableByteList message;
 
   public static SAActionMessage readSAActionMessage(X11Input in) throws IOException {
     SAActionMessage.SAActionMessageBuilder javaBuilder = SAActionMessage.builder();
     byte type = in.readCard8();
     byte flags = in.readCard8();
-    List<Byte> message = in.readCard8(6);
+    ImmutableByteList message = in.readCard8(6);
     javaBuilder.type(type);
     javaBuilder.flags(flags);
     javaBuilder.message(message);

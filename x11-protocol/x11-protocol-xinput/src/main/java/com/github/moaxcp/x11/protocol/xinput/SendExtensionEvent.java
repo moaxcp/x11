@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -28,7 +29,7 @@ public class SendExtensionEvent implements OneWayRequest {
   private List<EventForSendEventStruct> events;
 
   @NonNull
-  private List<Integer> classes;
+  private ImmutableIntList classes;
 
   public byte getOpCode() {
     return OPCODE;
@@ -48,7 +49,7 @@ public class SendExtensionEvent implements OneWayRequest {
     for(int i = 0; i < Byte.toUnsignedInt(numEvents); i++) {
       events.add(EventForSendEventStruct.readEventForSendEventStruct(in));
     }
-    List<Integer> classes = in.readCard32(Short.toUnsignedInt(numClasses));
+    ImmutableIntList classes = in.readCard32(Short.toUnsignedInt(numClasses));
     javaBuilder.destination(destination);
     javaBuilder.deviceId(deviceId);
     javaBuilder.propagate(propagate);

@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -59,7 +60,7 @@ public class GetMapReply implements XReply {
   private List<KeySymMap> symsRtrn;
 
   @NonNull
-  private List<Byte> actsRtrnCount;
+  private ImmutableByteList actsRtrnCount;
 
   @NonNull
   private List<ActionUnion> actsRtrnActs;
@@ -68,7 +69,7 @@ public class GetMapReply implements XReply {
   private List<SetBehavior> behaviorsRtrn;
 
   @NonNull
-  private List<Byte> vmodsRtrn;
+  private ImmutableByteList vmodsRtrn;
 
   @NonNull
   private List<SetExplicit> explicitRtrn;
@@ -112,11 +113,11 @@ public class GetMapReply implements XReply {
     short virtualMods = in.readCard16();
     List<KeyType> typesRtrn = null;
     List<KeySymMap> symsRtrn = null;
-    List<Byte> actsRtrnCount = null;
+    ImmutableByteList actsRtrnCount = null;
     in.readPadAlign(Byte.toUnsignedInt(nKeyActions));
     List<ActionUnion> actsRtrnActs = null;
     List<SetBehavior> behaviorsRtrn = null;
-    List<Byte> vmodsRtrn = null;
+    ImmutableByteList vmodsRtrn = null;
     in.readPadAlign(com.github.moaxcp.x11.protocol.Popcount.popcount(Short.toUnsignedInt(virtualMods)));
     List<SetExplicit> explicitRtrn = null;
     in.readPadAlign(Byte.toUnsignedInt(totalKeyExplicit));
@@ -327,7 +328,7 @@ public class GetMapReply implements XReply {
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder actsRtrnCount(List<Byte> actsRtrnCount) {
+    public GetMapReply.GetMapReplyBuilder actsRtrnCount(ImmutableByteList actsRtrnCount) {
       this.actsRtrnCount = actsRtrnCount;
       presentEnable(MapPart.KEY_ACTIONS);
       return this;
@@ -345,7 +346,7 @@ public class GetMapReply implements XReply {
       return this;
     }
 
-    public GetMapReply.GetMapReplyBuilder vmodsRtrn(List<Byte> vmodsRtrn) {
+    public GetMapReply.GetMapReplyBuilder vmodsRtrn(ImmutableByteList vmodsRtrn) {
       this.vmodsRtrn = vmodsRtrn;
       presentEnable(MapPart.VIRTUAL_MODS);
       return this;

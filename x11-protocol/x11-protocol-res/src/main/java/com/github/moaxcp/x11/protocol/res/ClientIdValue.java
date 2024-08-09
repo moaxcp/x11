@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -18,13 +18,13 @@ public class ClientIdValue implements XStruct {
   private ClientIdSpec spec;
 
   @NonNull
-  private List<Integer> value;
+  private ImmutableIntList value;
 
   public static ClientIdValue readClientIdValue(X11Input in) throws IOException {
     ClientIdValue.ClientIdValueBuilder javaBuilder = ClientIdValue.builder();
     ClientIdSpec spec = ClientIdSpec.readClientIdSpec(in);
     int length = in.readCard32();
-    List<Integer> value = in.readCard32((int) (Integer.toUnsignedLong(length) / 4));
+    ImmutableIntList value = in.readCard32((int) (Integer.toUnsignedLong(length) / 4));
     javaBuilder.spec(spec);
     javaBuilder.value(value);
     return javaBuilder.build();

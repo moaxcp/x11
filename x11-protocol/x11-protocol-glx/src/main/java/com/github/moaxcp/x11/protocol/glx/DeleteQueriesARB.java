@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class DeleteQueriesARB implements OneWayRequest {
   private int contextTag;
 
   @NonNull
-  private List<Integer> ids;
+  private ImmutableIntList ids;
 
   public byte getOpCode() {
     return OPCODE;
@@ -31,7 +31,7 @@ public class DeleteQueriesARB implements OneWayRequest {
     short length = in.readCard16();
     int contextTag = in.readCard32();
     int n = in.readInt32();
-    List<Integer> ids = in.readCard32(n);
+    ImmutableIntList ids = in.readCard32(n);
     javaBuilder.contextTag(contextTag);
     javaBuilder.ids(ids);
     in.readPadAlign(javaBuilder.getSize());

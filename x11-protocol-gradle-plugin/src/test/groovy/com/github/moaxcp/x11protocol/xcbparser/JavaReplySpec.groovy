@@ -1,9 +1,6 @@
 package com.github.moaxcp.x11protocol.xcbparser
 
 import com.github.moaxcp.x11protocol.XmlSpec
-import com.github.moaxcp.x11protocol.xcbparser.JavaReply
-import com.github.moaxcp.x11protocol.xcbparser.JavaRequest
-import com.github.moaxcp.x11protocol.xcbparser.XTypeRequest
 
 class JavaReplySpec extends XmlSpec {
     def queryTree() {
@@ -101,7 +98,7 @@ class JavaReplySpec extends XmlSpec {
               private int parent;
             
               @lombok.NonNull
-              private java.util.List<java.lang.Integer> children;
+              private org.eclipse.collections.api.list.primitive.ImmutableIntList children;
             
               public static com.github.moaxcp.x11client.protocol.xproto.QueryTreeReply readQueryTreeReply(
                   byte pad1, short sequenceNumber, com.github.moaxcp.x11client.protocol.X11Input in) throws
@@ -112,7 +109,7 @@ class JavaReplySpec extends XmlSpec {
                 int parent = in.readCard32();
                 short childrenLen = in.readCard16();
                 byte[] pad7 = in.readPad(14);
-                java.util.List<java.lang.Integer> children = in.readCard32(Short.toUnsignedInt(childrenLen));
+                org.eclipse.collections.api.list.primitive.ImmutableIntList children = in.readCard32(Short.toUnsignedInt(childrenLen));
                 javaBuilder.sequenceNumber(sequenceNumber);
                 javaBuilder.root(root);
                 javaBuilder.parent(parent);

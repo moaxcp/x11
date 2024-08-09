@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -17,19 +18,19 @@ public class GetMonitorReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Integer> hsync;
+  private ImmutableIntList hsync;
 
   @NonNull
-  private List<Integer> vsync;
+  private ImmutableIntList vsync;
 
   @NonNull
-  private List<Byte> vendor;
+  private ImmutableByteList vendor;
 
   @NonNull
-  private List<Byte> alignmentPad;
+  private ImmutableByteList alignmentPad;
 
   @NonNull
-  private List<Byte> model;
+  private ImmutableByteList model;
 
   public static GetMonitorReply readGetMonitorReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -40,11 +41,11 @@ public class GetMonitorReply implements XReply {
     byte numHsync = in.readCard8();
     byte numVsync = in.readCard8();
     byte[] pad8 = in.readPad(20);
-    List<Integer> hsync = in.readCard32(Byte.toUnsignedInt(numHsync));
-    List<Integer> vsync = in.readCard32(Byte.toUnsignedInt(numVsync));
-    List<Byte> vendor = in.readChar(Byte.toUnsignedInt(vendorLength));
-    List<Byte> alignmentPad = in.readVoid((Byte.toUnsignedInt(vendorLength) + 3) & (~ (3)) - Byte.toUnsignedInt(vendorLength));
-    List<Byte> model = in.readChar(Byte.toUnsignedInt(modelLength));
+    ImmutableIntList hsync = in.readCard32(Byte.toUnsignedInt(numHsync));
+    ImmutableIntList vsync = in.readCard32(Byte.toUnsignedInt(numVsync));
+    ImmutableByteList vendor = in.readChar(Byte.toUnsignedInt(vendorLength));
+    ImmutableByteList alignmentPad = in.readVoid((Byte.toUnsignedInt(vendorLength) + 3) & (~ (3)) - Byte.toUnsignedInt(vendorLength));
+    ImmutableByteList model = in.readChar(Byte.toUnsignedInt(modelLength));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.hsync(hsync);
     javaBuilder.vsync(vsync);

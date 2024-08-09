@@ -10,6 +10,8 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -23,16 +25,16 @@ public class GetScreenResourcesReply implements XReply {
   private int configTimestamp;
 
   @NonNull
-  private List<Integer> crtcs;
+  private ImmutableIntList crtcs;
 
   @NonNull
-  private List<Integer> outputs;
+  private ImmutableIntList outputs;
 
   @NonNull
   private List<ModeInfo> modes;
 
   @NonNull
-  private List<Byte> names;
+  private ImmutableByteList names;
 
   public static GetScreenResourcesReply readGetScreenResourcesReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -45,13 +47,13 @@ public class GetScreenResourcesReply implements XReply {
     short numModes = in.readCard16();
     short namesLen = in.readCard16();
     byte[] pad10 = in.readPad(8);
-    List<Integer> crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
-    List<Integer> outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
+    ImmutableIntList crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
+    ImmutableIntList outputs = in.readCard32(Short.toUnsignedInt(numOutputs));
     List<ModeInfo> modes = new ArrayList<>(Short.toUnsignedInt(numModes));
     for(int i = 0; i < Short.toUnsignedInt(numModes); i++) {
       modes.add(ModeInfo.readModeInfo(in));
     }
-    List<Byte> names = in.readByte(Short.toUnsignedInt(namesLen));
+    ImmutableByteList names = in.readByte(Short.toUnsignedInt(namesLen));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.timestamp(timestamp);
     javaBuilder.configTimestamp(configTimestamp);

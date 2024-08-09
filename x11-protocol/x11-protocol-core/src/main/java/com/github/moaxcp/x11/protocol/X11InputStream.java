@@ -1,5 +1,8 @@
 package com.github.moaxcp.x11.protocol;
 
+import org.eclipse.collections.api.factory.primitive.*;
+import org.eclipse.collections.api.list.primitive.*;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +23,12 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
-  public List<Boolean> readBool(int length) throws IOException {
-    return readList(length, this::readBool);
+  public ImmutableBooleanList readBool(int length) throws IOException {
+    var result = BooleanLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add(this.readBool());
+    }
+    return result.toImmutable();
   }
 
   @Override
@@ -53,8 +60,12 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
-  public List<Integer> readInt32(int length) throws IOException {
-    return readList(length, this::readInt32);
+  public ImmutableIntList readInt32(int length) throws IOException {
+    var result = IntLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add(this.readInt32());
+    }
+    return result.toImmutable();
   }
 
   private interface IOSupplier<T> {
@@ -80,8 +91,12 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
-  public List<Byte> readCard8(int length) throws IOException {
-    return readList(length, this::readCard8);
+  public ImmutableByteList readCard8(int length) throws IOException {
+    var result = ByteLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add(this.readCard8());
+    }
+    return result.toImmutable();
   }
 
   @Override
@@ -90,8 +105,12 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
-  public List<Short> readCard16(int length) throws IOException {
-    return readList(length, this::readCard16);
+  public ImmutableShortList readCard16(int length) throws IOException {
+    var result = ShortLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add(this.readCard16());
+    }
+    return result.toImmutable();
   }
 
   @Override
@@ -100,8 +119,12 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
-  public List<Integer> readCard32(int length) throws IOException {
-    return readList(length, this::readCard32);
+  public ImmutableIntList readCard32(int length) throws IOException {
+    var result = IntLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add(this.readCard32());
+    }
+    return result.toImmutable();
   }
 
   @Override
@@ -110,8 +133,12 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
-  public List<Long> readCard64(int length) throws IOException {
-    return readList(length, this::readCard64);
+  public ImmutableLongList readCard64(int length) throws IOException {
+    var result = LongLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add(this.readCard64());
+    }
+    return result.toImmutable();
   }
 
   @Override
@@ -120,8 +147,12 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
-  public List<Float> readFloat(int length) throws IOException {
-    return readList(length, this::readFloat);
+  public ImmutableFloatList readFloat(int length) throws IOException {
+    var result = FloatLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add(this.readFloat());
+    }
+    return result.toImmutable();
   }
 
   @Override
@@ -130,13 +161,21 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
-  public List<Double> readDouble(int length) throws IOException {
-    return readList(length, this::readDouble);
+  public ImmutableDoubleList readDouble(int length) throws IOException {
+    var result = DoubleLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add(this.readDouble());
+    }
+    return result.toImmutable();
   }
 
   @Override
-  public List<Byte> readChar(int length) throws IOException {
-    return readList(length, this::readByte);
+  public ImmutableByteList readChar(int length) throws IOException {
+    var result = ByteLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add(this.readByte());
+    }
+    return result.toImmutable();
   }
 
   @Override
@@ -150,24 +189,24 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
-  public List<Byte> readByte(int length) throws IOException {
+  public ImmutableByteList readByte(int length) throws IOException {
     if(length == 0) {
-      return new ArrayList<>();
+      return ByteLists.immutable.empty();
     }
     byte[] bytes = new byte[length];
     int read = in.read(bytes);
     if(read != bytes.length) {
       throw new IllegalStateException("could not read all bytes for length: \"" + bytes.length + "\"");
     }
-    List<Byte> result = new ArrayList<>(length);
+    var result = ByteLists.mutable.withInitialCapacity(length);
     for(byte b : bytes) {
       result.add(b);
     }
-    return result;
+    return result.toImmutable();
   }
 
   @Override
-  public List<Byte> readVoid(int length) throws IOException {
+  public ImmutableByteList readVoid(int length) throws IOException {
     return readByte(length);
   }
 
@@ -177,7 +216,7 @@ public class X11InputStream implements X11Input, AutoCloseable {
   }
 
   @Override
-  public List<Integer> readFd(int length) throws IOException {
+  public ImmutableIntList readFd(int length) throws IOException {
     return readInt32(length);
   }
 

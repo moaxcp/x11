@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -59,7 +60,7 @@ public class SetMap implements OneWayRequest {
   private List<KeySymMap> syms;
 
   @NonNull
-  private List<Byte> actionsCount;
+  private ImmutableByteList actionsCount;
 
   @NonNull
   private List<ActionUnion> actions;
@@ -68,7 +69,7 @@ public class SetMap implements OneWayRequest {
   private List<SetBehavior> behaviors;
 
   @NonNull
-  private List<Byte> vmods;
+  private ImmutableByteList vmods;
 
   @NonNull
   private List<SetExplicit> explicit;
@@ -115,11 +116,11 @@ public class SetMap implements OneWayRequest {
     short virtualMods = in.readCard16();
     List<SetKeyType> types = null;
     List<KeySymMap> syms = null;
-    List<Byte> actionsCount = null;
+    ImmutableByteList actionsCount = null;
     in.readPadAlign(Byte.toUnsignedInt(nKeyActions));
     List<ActionUnion> actions = null;
     List<SetBehavior> behaviors = null;
-    List<Byte> vmods = null;
+    ImmutableByteList vmods = null;
     in.readPadAlign(com.github.moaxcp.x11.protocol.Popcount.popcount(Short.toUnsignedInt(virtualMods)));
     List<SetExplicit> explicit = null;
     List<KeyModMap> modmap = null;
@@ -353,7 +354,7 @@ public class SetMap implements OneWayRequest {
       return this;
     }
 
-    public SetMap.SetMapBuilder actionsCount(List<Byte> actionsCount) {
+    public SetMap.SetMapBuilder actionsCount(ImmutableByteList actionsCount) {
       this.actionsCount = actionsCount;
       presentEnable(MapPart.KEY_ACTIONS);
       return this;
@@ -371,7 +372,7 @@ public class SetMap implements OneWayRequest {
       return this;
     }
 
-    public SetMap.SetMapBuilder vmods(List<Byte> vmods) {
+    public SetMap.SetMapBuilder vmods(ImmutableByteList vmods) {
       this.vmods = vmods;
       presentEnable(MapPart.VIRTUAL_MODS);
       return this;

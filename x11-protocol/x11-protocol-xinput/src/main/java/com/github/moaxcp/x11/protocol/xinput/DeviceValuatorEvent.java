@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XEvent;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -31,7 +31,7 @@ public class DeviceValuatorEvent implements XEvent {
   private byte firstValuator;
 
   @NonNull
-  private List<Integer> valuators;
+  private ImmutableIntList valuators;
 
   @Override
   public byte getResponseCode() {
@@ -51,7 +51,7 @@ public class DeviceValuatorEvent implements XEvent {
     short deviceState = in.readCard16();
     byte numValuators = in.readCard8();
     byte firstValuator = in.readCard8();
-    List<Integer> valuators = in.readInt32(6);
+    ImmutableIntList valuators = in.readInt32(6);
     javaBuilder.deviceId(deviceId);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.deviceState(deviceState);

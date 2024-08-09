@@ -6,7 +6,7 @@ module com.github.moaxcp.x11.protocol.xkb {
     exports com.github.moaxcp.x11.protocol.xkb;
 
     requires static lombok;
-    requires com.github.moaxcp.x11.protocol.core;
+    requires transitive com.github.moaxcp.x11.protocol.core;
     requires com.github.moaxcp.x11.protocol.xproto;
     provides XProtocolPlugin with XkbPlugin;
 }

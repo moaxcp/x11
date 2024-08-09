@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -25,7 +25,7 @@ public class GetPropertyReply implements XReply {
   private int valueLen;
 
   @NonNull
-  private List<Byte> value;
+  private ImmutableByteList value;
 
   public static GetPropertyReply readGetPropertyReply(byte format, short sequenceNumber,
       X11Input in) throws IOException {
@@ -35,7 +35,7 @@ public class GetPropertyReply implements XReply {
     int bytesAfter = in.readCard32();
     int valueLen = in.readCard32();
     byte[] pad7 = in.readPad(12);
-    List<Byte> value = in.readVoid((int) (Integer.toUnsignedLong(valueLen) * (Byte.toUnsignedInt(format) / 8)));
+    ImmutableByteList value = in.readVoid((int) (Integer.toUnsignedLong(valueLen) * (Byte.toUnsignedInt(format) / 8)));
     javaBuilder.format(format);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.type(type);

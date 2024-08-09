@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -18,7 +18,7 @@ public class SetModifierMapping implements TwoWayRequest<SetModifierMappingReply
   public static final byte OPCODE = 118;
 
   @NonNull
-  private List<Byte> keycodes;
+  private ImmutableByteList keycodes;
 
   public XReplyFunction<SetModifierMappingReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> SetModifierMappingReply.readSetModifierMappingReply(field, sequenceNumber, in);
@@ -32,7 +32,7 @@ public class SetModifierMapping implements TwoWayRequest<SetModifierMappingReply
     SetModifierMapping.SetModifierMappingBuilder javaBuilder = SetModifierMapping.builder();
     byte keycodesPerModifier = in.readCard8();
     short length = in.readCard16();
-    List<Byte> keycodes = in.readCard8(Byte.toUnsignedInt(keycodesPerModifier) * 8);
+    ImmutableByteList keycodes = in.readCard8(Byte.toUnsignedInt(keycodesPerModifier) * 8);
     javaBuilder.keycodes(keycodes);
     in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();

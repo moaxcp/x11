@@ -5,10 +5,11 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import com.github.moaxcp.x11.protocol.render.SubPixel;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -34,16 +35,16 @@ public class GetOutputInfoReply implements XReply {
   private short numPreferred;
 
   @NonNull
-  private List<Integer> crtcs;
+  private ImmutableIntList crtcs;
 
   @NonNull
-  private List<Integer> modes;
+  private ImmutableIntList modes;
 
   @NonNull
-  private List<Integer> clones;
+  private ImmutableIntList clones;
 
   @NonNull
-  private List<Byte> name;
+  private ImmutableByteList name;
 
   public static GetOutputInfoReply readGetOutputInfoReply(byte status, short sequenceNumber,
       X11Input in) throws IOException {
@@ -60,10 +61,10 @@ public class GetOutputInfoReply implements XReply {
     short numPreferred = in.readCard16();
     short numClones = in.readCard16();
     short nameLen = in.readCard16();
-    List<Integer> crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
-    List<Integer> modes = in.readCard32(Short.toUnsignedInt(numModes));
-    List<Integer> clones = in.readCard32(Short.toUnsignedInt(numClones));
-    List<Byte> name = in.readByte(Short.toUnsignedInt(nameLen));
+    ImmutableIntList crtcs = in.readCard32(Short.toUnsignedInt(numCrtcs));
+    ImmutableIntList modes = in.readCard32(Short.toUnsignedInt(numModes));
+    ImmutableIntList clones = in.readCard32(Short.toUnsignedInt(numClones));
+    ImmutableByteList name = in.readByte(Short.toUnsignedInt(nameLen));
     javaBuilder.status(status);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.timestamp(timestamp);

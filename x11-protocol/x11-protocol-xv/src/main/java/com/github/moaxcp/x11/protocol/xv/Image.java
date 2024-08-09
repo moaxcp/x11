@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -21,13 +22,13 @@ public class Image implements XStruct {
   private short height;
 
   @NonNull
-  private List<Integer> pitches;
+  private ImmutableIntList pitches;
 
   @NonNull
-  private List<Integer> offsets;
+  private ImmutableIntList offsets;
 
   @NonNull
-  private List<Byte> data;
+  private ImmutableByteList data;
 
   public static Image readImage(X11Input in) throws IOException {
     Image.ImageBuilder javaBuilder = Image.builder();
@@ -36,9 +37,9 @@ public class Image implements XStruct {
     short height = in.readCard16();
     int dataSize = in.readCard32();
     int numPlanes = in.readCard32();
-    List<Integer> pitches = in.readCard32((int) (Integer.toUnsignedLong(numPlanes)));
-    List<Integer> offsets = in.readCard32((int) (Integer.toUnsignedLong(numPlanes)));
-    List<Byte> data = in.readCard8((int) (Integer.toUnsignedLong(dataSize)));
+    ImmutableIntList pitches = in.readCard32((int) (Integer.toUnsignedLong(numPlanes)));
+    ImmutableIntList offsets = in.readCard32((int) (Integer.toUnsignedLong(numPlanes)));
+    ImmutableByteList data = in.readCard8((int) (Integer.toUnsignedLong(dataSize)));
     javaBuilder.id(id);
     javaBuilder.width(width);
     javaBuilder.height(height);

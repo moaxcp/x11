@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -26,7 +26,7 @@ public class SetDebuggingFlags implements TwoWayRequest<SetDebuggingFlagsReply> 
   private int ctrls;
 
   @NonNull
-  private List<Byte> message;
+  private ImmutableByteList message;
 
   public XReplyFunction<SetDebuggingFlagsReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> SetDebuggingFlagsReply.readSetDebuggingFlagsReply(field, sequenceNumber, in);
@@ -46,7 +46,7 @@ public class SetDebuggingFlags implements TwoWayRequest<SetDebuggingFlagsReply> 
     int flags = in.readCard32();
     int affectCtrls = in.readCard32();
     int ctrls = in.readCard32();
-    List<Byte> message = in.readChar(Short.toUnsignedInt(msgLength));
+    ImmutableByteList message = in.readChar(Short.toUnsignedInt(msgLength));
     javaBuilder.affectFlags(affectFlags);
     javaBuilder.flags(flags);
     javaBuilder.affectCtrls(affectCtrls);

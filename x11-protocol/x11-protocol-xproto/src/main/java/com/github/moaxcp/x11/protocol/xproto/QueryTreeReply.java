@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class QueryTreeReply implements XReply {
   private int parent;
 
   @NonNull
-  private List<Integer> children;
+  private ImmutableIntList children;
 
   public static QueryTreeReply readQueryTreeReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -31,7 +31,7 @@ public class QueryTreeReply implements XReply {
     int parent = in.readCard32();
     short childrenLen = in.readCard16();
     byte[] pad7 = in.readPad(14);
-    List<Integer> children = in.readCard32(Short.toUnsignedInt(childrenLen));
+    ImmutableIntList children = in.readCard32(Short.toUnsignedInt(childrenLen));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.root(root);
     javaBuilder.parent(parent);

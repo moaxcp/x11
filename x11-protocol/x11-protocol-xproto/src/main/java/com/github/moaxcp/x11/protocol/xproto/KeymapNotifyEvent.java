@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XEvent;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class KeymapNotifyEvent implements XEvent {
   private boolean sentEvent;
 
   @NonNull
-  private List<Byte> keys;
+  private ImmutableByteList keys;
 
   private short sequenceNumber;
 
@@ -38,7 +38,7 @@ public class KeymapNotifyEvent implements XEvent {
   public static KeymapNotifyEvent readKeymapNotifyEvent(byte firstEventOffset, boolean sentEvent,
       X11Input in) throws IOException {
     KeymapNotifyEvent.KeymapNotifyEventBuilder javaBuilder = KeymapNotifyEvent.builder();
-    List<Byte> keys = in.readCard8(31);
+    ImmutableByteList keys = in.readCard8(31);
     short sequenceNumber = in.readCard16();
     javaBuilder.keys(keys);
     javaBuilder.sequenceNumber(sequenceNumber);

@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -39,7 +39,7 @@ public class GetModeLineReply implements XReply {
   private int flags;
 
   @NonNull
-  private List<Byte> xPrivate;
+  private ImmutableByteList xPrivate;
 
   public static GetModeLineReply readGetModeLineReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
@@ -59,7 +59,7 @@ public class GetModeLineReply implements XReply {
     int flags = in.readCard32();
     byte[] pad16 = in.readPad(12);
     int privsize = in.readCard32();
-    List<Byte> xPrivate = in.readCard8((int) (Integer.toUnsignedLong(privsize)));
+    ImmutableByteList xPrivate = in.readCard8((int) (Integer.toUnsignedLong(privsize)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.dotclock(dotclock);
     javaBuilder.hdisplay(hdisplay);

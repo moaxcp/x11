@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -29,7 +30,7 @@ public class QueryPictFormatsReply implements XReply {
   private List<Pictscreen> screens;
 
   @NonNull
-  private List<Integer> subpixels;
+  private ImmutableIntList subpixels;
 
   public static QueryPictFormatsReply readQueryPictFormatsReply(byte pad1, short sequenceNumber,
       X11Input in) throws IOException {
@@ -49,7 +50,7 @@ public class QueryPictFormatsReply implements XReply {
     for(int i = 0; i < Integer.toUnsignedLong(numScreens); i++) {
       screens.add(Pictscreen.readPictscreen(in));
     }
-    List<Integer> subpixels = in.readCard32((int) (Integer.toUnsignedLong(numSubpixel)));
+    ImmutableIntList subpixels = in.readCard32((int) (Integer.toUnsignedLong(numSubpixel)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.numDepths(numDepths);
     javaBuilder.numVisuals(numVisuals);

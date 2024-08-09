@@ -6,10 +6,10 @@ import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import com.github.moaxcp.x11.protocol.xproto.GrabMode;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -37,10 +37,10 @@ public class XIPassiveGrabDevice implements TwoWayRequest<XIPassiveGrabDeviceRep
   private boolean ownerEvents;
 
   @NonNull
-  private List<Integer> mask;
+  private ImmutableIntList mask;
 
   @NonNull
-  private List<Integer> modifiers;
+  private ImmutableIntList modifiers;
 
   public XReplyFunction<XIPassiveGrabDeviceReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> XIPassiveGrabDeviceReply.readXIPassiveGrabDeviceReply(field, sequenceNumber, in);
@@ -66,8 +66,8 @@ public class XIPassiveGrabDevice implements TwoWayRequest<XIPassiveGrabDeviceRep
     byte pairedDeviceMode = in.readCard8();
     boolean ownerEvents = in.readBool();
     byte[] pad14 = in.readPad(2);
-    List<Integer> mask = in.readCard32(Short.toUnsignedInt(maskLen));
-    List<Integer> modifiers = in.readCard32(Short.toUnsignedInt(numModifiers));
+    ImmutableIntList mask = in.readCard32(Short.toUnsignedInt(maskLen));
+    ImmutableIntList modifiers = in.readCard32(Short.toUnsignedInt(numModifiers));
     javaBuilder.time(time);
     javaBuilder.grabWindow(grabWindow);
     javaBuilder.cursor(cursor);

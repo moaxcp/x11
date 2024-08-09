@@ -1,15 +1,14 @@
 package com.github.moaxcp.x11.protocol;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.IntStream;
+import org.eclipse.collections.api.list.primitive.*;
+import org.eclipse.collections.impl.factory.primitive.ByteLists;
 
-import static java.util.stream.Collectors.toList;
+import java.io.IOException;
 
 public interface X11Output {
   void writeBool(boolean bool) throws IOException;
 
-  void writeBool(List<Boolean> bool) throws IOException;
+  void writeBool(ImmutableBooleanList bool) throws IOException;
 
   void writeByte(byte b) throws IOException;
 
@@ -19,48 +18,52 @@ public interface X11Output {
 
   void writeInt32(int int32) throws IOException;
 
-  void writeInt32(List<Integer> int32) throws IOException;
+  void writeInt32(ImmutableIntList int32) throws IOException;
 
   void writeInt64(long int64) throws IOException;
 
   void writeCard8(byte card8) throws IOException;
 
-  void writeCard8(List<Byte> card8) throws IOException;
+  void writeCard8(ImmutableByteList card8) throws IOException;
 
   void writeCard16(short card16) throws IOException;
 
-  void writeCard16(List<Short> card16) throws IOException;
+  void writeCard16(ImmutableShortList card16) throws IOException;
 
   void writeCard32(int card32) throws IOException;
 
-  void writeCard32(List<Integer> card32) throws IOException;
+  void writeCard32(ImmutableIntList card32) throws IOException;
 
   void writeCard64(long card64) throws IOException;
 
-  void writeCard64(List<Long> card64) throws IOException;
+  void writeCard64(ImmutableLongList card64) throws IOException;
 
   void writeFloat(float f) throws IOException;
 
-  void writeFloat(List<Float> f) throws IOException;
+  void writeFloat(ImmutableFloatList f) throws IOException;
 
   void writeDouble(double d) throws IOException;
 
-  void writeDouble(List<Double> d) throws IOException;
+  void writeDouble(ImmutableDoubleList d) throws IOException;
 
-  void writeChar(List<Byte> string) throws IOException;
+  void writeChar(ImmutableByteList string) throws IOException;
 
   void writeString8(String string) throws IOException;
 
-  void writeByte(List<Byte> bytes) throws IOException;
+  void writeByte(ImmutableByteList bytes) throws IOException;
 
-  void writeVoid(List<Byte> bytes) throws IOException;
+  void writeVoid(ImmutableByteList bytes) throws IOException;
 
   void writeFd(int fd) throws IOException;
 
-  void writeFd(List<Integer> fd) throws IOException;
+  void writeFd(ImmutableIntList fd) throws IOException;
 
   default void writePad(int length) throws IOException {
-    writeByte(IntStream.range(0, length).mapToObj(i -> (byte) 0).collect(toList()));
+    var result = ByteLists.mutable.withInitialCapacity(length);
+    for (int i = 0; i < length; i++) {
+      result.add((byte) 0);
+    }
+    writeByte(result.toImmutable());
   }
 
   default void writePadAlign(int forLength) throws IOException {

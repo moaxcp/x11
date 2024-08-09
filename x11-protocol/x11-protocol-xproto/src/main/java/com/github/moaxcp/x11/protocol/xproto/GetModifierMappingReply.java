@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -17,14 +17,14 @@ public class GetModifierMappingReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Byte> keycodes;
+  private ImmutableByteList keycodes;
 
   public static GetModifierMappingReply readGetModifierMappingReply(byte keycodesPerModifier,
       short sequenceNumber, X11Input in) throws IOException {
     GetModifierMappingReply.GetModifierMappingReplyBuilder javaBuilder = GetModifierMappingReply.builder();
     int length = in.readCard32();
     byte[] pad4 = in.readPad(24);
-    List<Byte> keycodes = in.readCard8(Byte.toUnsignedInt(keycodesPerModifier) * 8);
+    ImmutableByteList keycodes = in.readCard8(Byte.toUnsignedInt(keycodesPerModifier) * 8);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.keycodes(keycodes);
     if(javaBuilder.getSize() < 32) {

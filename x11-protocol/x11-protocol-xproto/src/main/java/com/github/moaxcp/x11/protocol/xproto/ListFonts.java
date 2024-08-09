@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -20,7 +20,7 @@ public class ListFonts implements TwoWayRequest<ListFontsReply> {
   private short maxNames;
 
   @NonNull
-  private List<Byte> pattern;
+  private ImmutableByteList pattern;
 
   public XReplyFunction<ListFontsReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> ListFontsReply.readListFontsReply(field, sequenceNumber, in);
@@ -36,7 +36,7 @@ public class ListFonts implements TwoWayRequest<ListFontsReply> {
     short length = in.readCard16();
     short maxNames = in.readCard16();
     short patternLen = in.readCard16();
-    List<Byte> pattern = in.readChar(Short.toUnsignedInt(patternLen));
+    ImmutableByteList pattern = in.readChar(Short.toUnsignedInt(patternLen));
     javaBuilder.maxNames(maxNames);
     javaBuilder.pattern(pattern);
     in.readPadAlign(javaBuilder.getSize());

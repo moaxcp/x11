@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -23,7 +23,7 @@ public class SetupFailed implements XStruct {
   private short length;
 
   @NonNull
-  private List<Byte> reason;
+  private ImmutableByteList reason;
 
   public static SetupFailed readSetupFailed(X11Input in) throws IOException {
     SetupFailed.SetupFailedBuilder javaBuilder = SetupFailed.builder();
@@ -32,7 +32,7 @@ public class SetupFailed implements XStruct {
     short protocolMajorVersion = in.readCard16();
     short protocolMinorVersion = in.readCard16();
     short length = in.readCard16();
-    List<Byte> reason = in.readChar(Byte.toUnsignedInt(reasonLen));
+    ImmutableByteList reason = in.readChar(Byte.toUnsignedInt(reasonLen));
     javaBuilder.status(status);
     javaBuilder.protocolMajorVersion(protocolMajorVersion);
     javaBuilder.protocolMinorVersion(protocolMinorVersion);

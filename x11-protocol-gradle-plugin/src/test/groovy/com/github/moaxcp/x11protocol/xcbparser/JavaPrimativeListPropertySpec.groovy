@@ -27,13 +27,13 @@ class JavaPrimativeListPropertySpec extends XmlSpec {
               public static final java.lang.String PLUGIN_NAME = "xproto";
             
               @lombok.NonNull
-              private java.util.List<java.lang.Long> windowModifiers;
+              private org.eclipse.collections.api.list.primitive.ImmutableLongList windowModifiers;
             
               public static com.github.moaxcp.x11client.protocol.xproto.Window readWindow(
                   com.github.moaxcp.x11client.protocol.X11Input in) throws java.io.IOException {
                 com.github.moaxcp.x11client.protocol.xproto.Window.WindowBuilder javaBuilder = com.github.moaxcp.x11client.protocol.xproto.Window.builder();
                 int numWindowModifiers = in.readCard32();
-                java.util.List<java.lang.Long> windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));
+                org.eclipse.collections.api.list.primitive.ImmutableLongList windowModifiers = in.readCard64((int) (Integer.toUnsignedLong(numWindowModifiers)));
                 javaBuilder.windowModifiers(windowModifiers);
                 return javaBuilder.build();
               }

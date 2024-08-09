@@ -1,5 +1,7 @@
 package com.github.moaxcp.x11.protocol;
 
+import org.eclipse.collections.api.list.primitive.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.List;
 public interface X11Input {
   boolean readBool() throws IOException;
 
-  List<Boolean> readBool(int length) throws IOException;
+  ImmutableBooleanList readBool(int length) throws IOException;
 
   byte readByte() throws IOException;
 
@@ -19,45 +21,45 @@ public interface X11Input {
 
   int readInt32() throws IOException;
 
-  List<Integer> readInt32(int length) throws IOException;
+  ImmutableIntList readInt32(int length) throws IOException;
 
   long readInt64() throws IOException;
 
   byte readCard8() throws IOException;
 
-  List<Byte> readCard8(int length) throws IOException;
+  ImmutableByteList readCard8(int length) throws IOException;
 
   short readCard16() throws IOException;
 
-  List<Short> readCard16(int length) throws IOException;
+  ImmutableShortList readCard16(int length) throws IOException;
 
   int readCard32() throws IOException;
 
-  List<Integer> readCard32(int length) throws IOException;
+  ImmutableIntList readCard32(int length) throws IOException;
 
   long readCard64() throws IOException;
 
-  List<Long> readCard64(int length) throws IOException;
+  ImmutableLongList readCard64(int length) throws IOException;
 
   float readFloat() throws IOException;
 
-  List<Float> readFloat(int length) throws IOException;
+  ImmutableFloatList readFloat(int length) throws IOException;
 
   double readDouble() throws IOException;
 
-  List<Double> readDouble(int length) throws IOException;
+  ImmutableDoubleList readDouble(int length) throws IOException;
 
-  List<Byte> readChar(int length) throws IOException;
+  ImmutableByteList readChar(int length) throws IOException;
 
   String readString8(int length) throws IOException;
 
-  List<Byte> readByte(int length) throws IOException;
+  ImmutableByteList readByte(int length) throws IOException;
 
-  List<Byte> readVoid(int length) throws IOException;
+  ImmutableByteList readVoid(int length) throws IOException;
 
   int readFd() throws IOException;
 
-  List<Integer> readFd(int length) throws IOException;
+  ImmutableIntList readFd(int length) throws IOException;
 
   byte[] readPad(int length) throws IOException;
 

@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -26,7 +27,7 @@ public class DeviceLedInfo implements XStruct {
   private int state;
 
   @NonNull
-  private List<Integer> names;
+  private ImmutableIntList names;
 
   @NonNull
   private List<IndicatorMap> maps;
@@ -39,7 +40,7 @@ public class DeviceLedInfo implements XStruct {
     int mapsPresent = in.readCard32();
     int physIndicators = in.readCard32();
     int state = in.readCard32();
-    List<Integer> names = in.readCard32(Popcount.popcount(Integer.toUnsignedLong(namesPresent)));
+    ImmutableIntList names = in.readCard32(Popcount.popcount(Integer.toUnsignedLong(namesPresent)));
     List<IndicatorMap> maps = new ArrayList<>(Popcount.popcount(Integer.toUnsignedLong(mapsPresent)));
     for(int i = 0; i < Popcount.popcount(Integer.toUnsignedLong(mapsPresent)); i++) {
       maps.add(IndicatorMap.readIndicatorMap(in));

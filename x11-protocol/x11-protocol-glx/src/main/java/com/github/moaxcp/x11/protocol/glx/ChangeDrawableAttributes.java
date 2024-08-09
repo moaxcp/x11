@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class ChangeDrawableAttributes implements OneWayRequest {
   private int drawable;
 
   @NonNull
-  private List<Integer> attribs;
+  private ImmutableIntList attribs;
 
   public byte getOpCode() {
     return OPCODE;
@@ -32,7 +32,7 @@ public class ChangeDrawableAttributes implements OneWayRequest {
     short length = in.readCard16();
     int drawable = in.readCard32();
     int numAttribs = in.readCard32();
-    List<Integer> attribs = in.readCard32((int) (Integer.toUnsignedLong(numAttribs) * 2));
+    ImmutableIntList attribs = in.readCard32((int) (Integer.toUnsignedLong(numAttribs) * 2));
     javaBuilder.drawable(drawable);
     javaBuilder.attribs(attribs);
     in.readPadAlign(javaBuilder.getSize());

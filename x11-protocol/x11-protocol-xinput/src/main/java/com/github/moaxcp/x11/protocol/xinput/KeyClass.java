@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class KeyClass implements XStruct {
   private short sourceid;
 
   @NonNull
-  private List<Integer> keys;
+  private ImmutableIntList keys;
 
   public static KeyClass readKeyClass(X11Input in) throws IOException {
     KeyClass.KeyClassBuilder javaBuilder = KeyClass.builder();
@@ -29,7 +29,7 @@ public class KeyClass implements XStruct {
     short len = in.readCard16();
     short sourceid = in.readCard16();
     short numKeys = in.readCard16();
-    List<Integer> keys = in.readCard32(Short.toUnsignedInt(numKeys));
+    ImmutableIntList keys = in.readCard32(Short.toUnsignedInt(numKeys));
     javaBuilder.type(type);
     javaBuilder.len(len);
     javaBuilder.sourceid(sourceid);

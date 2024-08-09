@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -23,7 +23,7 @@ public class GetClientDriverNameReply implements XReply {
   private int clientDriverPatchVersion;
 
   @NonNull
-  private List<Byte> clientDriverName;
+  private ImmutableByteList clientDriverName;
 
   public static GetClientDriverNameReply readGetClientDriverNameReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -34,7 +34,7 @@ public class GetClientDriverNameReply implements XReply {
     int clientDriverPatchVersion = in.readCard32();
     int clientDriverNameLen = in.readCard32();
     byte[] pad8 = in.readPad(8);
-    List<Byte> clientDriverName = in.readChar((int) (Integer.toUnsignedLong(clientDriverNameLen)));
+    ImmutableByteList clientDriverName = in.readChar((int) (Integer.toUnsignedLong(clientDriverNameLen)));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.clientDriverMajorVersion(clientDriverMajorVersion);
     javaBuilder.clientDriverMinorVersion(clientDriverMinorVersion);

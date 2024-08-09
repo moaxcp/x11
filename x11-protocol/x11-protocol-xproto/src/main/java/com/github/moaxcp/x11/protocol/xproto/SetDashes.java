@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.OneWayRequest;
 import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class SetDashes implements OneWayRequest {
   private short dashOffset;
 
   @NonNull
-  private List<Byte> dashes;
+  private ImmutableByteList dashes;
 
   public byte getOpCode() {
     return OPCODE;
@@ -34,7 +34,7 @@ public class SetDashes implements OneWayRequest {
     int gc = in.readCard32();
     short dashOffset = in.readCard16();
     short dashesLen = in.readCard16();
-    List<Byte> dashes = in.readCard8(Short.toUnsignedInt(dashesLen));
+    ImmutableByteList dashes = in.readCard8(Short.toUnsignedInt(dashesLen));
     javaBuilder.gc(gc);
     javaBuilder.dashOffset(dashOffset);
     javaBuilder.dashes(dashes);

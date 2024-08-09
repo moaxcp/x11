@@ -4,10 +4,11 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -33,10 +34,10 @@ public class GetCursorImageAndNameReply implements XReply {
   private int cursorAtom;
 
   @NonNull
-  private List<Integer> cursorImage;
+  private ImmutableIntList cursorImage;
 
   @NonNull
-  private List<Byte> name;
+  private ImmutableByteList name;
 
   public static GetCursorImageAndNameReply readGetCursorImageAndNameReply(byte pad1,
       short sequenceNumber, X11Input in) throws IOException {
@@ -52,8 +53,8 @@ public class GetCursorImageAndNameReply implements XReply {
     int cursorAtom = in.readCard32();
     short nbytes = in.readCard16();
     byte[] pad13 = in.readPad(2);
-    List<Integer> cursorImage = in.readCard32(Short.toUnsignedInt(width) * Short.toUnsignedInt(height));
-    List<Byte> name = in.readChar(Short.toUnsignedInt(nbytes));
+    ImmutableIntList cursorImage = in.readCard32(Short.toUnsignedInt(width) * Short.toUnsignedInt(height));
+    ImmutableByteList name = in.readChar(Short.toUnsignedInt(nbytes));
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.x(x);
     javaBuilder.y(y);

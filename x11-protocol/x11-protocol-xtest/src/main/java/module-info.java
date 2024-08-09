@@ -5,7 +5,7 @@ import com.github.moaxcp.x11.protocol.xtest.XtestPlugin;
 module com.github.moaxcp.x11.protocol.xtest {
     exports com.github.moaxcp.x11.protocol.xtest;
 
-    requires com.github.moaxcp.x11.protocol.core;
+    requires transitive com.github.moaxcp.x11.protocol.core;
     requires static lombok;
     provides XProtocolPlugin with XtestPlugin;
 }

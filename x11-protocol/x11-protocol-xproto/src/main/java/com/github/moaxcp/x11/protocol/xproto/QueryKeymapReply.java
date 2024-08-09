@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReply;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -17,13 +17,13 @@ public class QueryKeymapReply implements XReply {
   private short sequenceNumber;
 
   @NonNull
-  private List<Byte> keys;
+  private ImmutableByteList keys;
 
   public static QueryKeymapReply readQueryKeymapReply(byte pad1, short sequenceNumber, X11Input in)
       throws IOException {
     QueryKeymapReply.QueryKeymapReplyBuilder javaBuilder = QueryKeymapReply.builder();
     int length = in.readCard32();
-    List<Byte> keys = in.readCard8(32);
+    ImmutableByteList keys = in.readCard8(32);
     javaBuilder.sequenceNumber(sequenceNumber);
     javaBuilder.keys(keys);
     if(javaBuilder.getSize() < 32) {

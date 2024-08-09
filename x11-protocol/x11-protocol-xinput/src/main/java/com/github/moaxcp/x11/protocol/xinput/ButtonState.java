@@ -4,10 +4,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XStruct;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableByteList;
 
 @Value
 @Builder
@@ -21,7 +21,7 @@ public class ButtonState implements XStruct {
   private byte numButtons;
 
   @NonNull
-  private List<Byte> buttons;
+  private ImmutableByteList buttons;
 
   public static ButtonState readButtonState(X11Input in) throws IOException {
     ButtonState.ButtonStateBuilder javaBuilder = ButtonState.builder();
@@ -29,7 +29,7 @@ public class ButtonState implements XStruct {
     byte len = in.readCard8();
     byte numButtons = in.readCard8();
     byte[] pad3 = in.readPad(1);
-    List<Byte> buttons = in.readCard8(32);
+    ImmutableByteList buttons = in.readCard8(32);
     javaBuilder.classId(classId);
     javaBuilder.len(len);
     javaBuilder.numButtons(numButtons);

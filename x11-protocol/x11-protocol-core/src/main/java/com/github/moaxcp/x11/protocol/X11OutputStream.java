@@ -1,9 +1,10 @@
 package com.github.moaxcp.x11.protocol;
 
+import org.eclipse.collections.api.list.primitive.*;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 
 public class X11OutputStream implements X11Output, AutoCloseable {
   private final DataOutputStream out;
@@ -18,9 +19,9 @@ public class X11OutputStream implements X11Output, AutoCloseable {
   }
 
   @Override
-  public void writeBool(List<Boolean> bool) throws IOException {
-    for(boolean b : bool) {
-      writeBool(b);
+  public void writeBool(ImmutableBooleanList bool) throws IOException {
+    for (int i = 0; i < bool.size(); i++) {
+      writeBool(bool.get(i));
     }
   }
 
@@ -45,9 +46,9 @@ public class X11OutputStream implements X11Output, AutoCloseable {
   }
 
   @Override
-  public void writeInt32(List<Integer> int32) throws IOException {
-    for(int i : int32) {
-      writeInt32(i);
+  public void writeInt32(ImmutableIntList int32) throws IOException {
+    for (int i = 0; i < int32.size(); i++) {
+      writeInt32(int32.get(i));
     }
   }
 
@@ -62,9 +63,9 @@ public class X11OutputStream implements X11Output, AutoCloseable {
   }
 
   @Override
-  public void writeCard8(List<Byte> card8) throws IOException {
-    for(byte i : card8) {
-      writeCard8(i);
+  public void writeCard8(ImmutableByteList card8) throws IOException {
+    for (int i = 0; i < card8.size(); i++) {
+      writeCard8(card8.get(i));
     }
   }
 
@@ -74,9 +75,9 @@ public class X11OutputStream implements X11Output, AutoCloseable {
   }
 
   @Override
-  public void writeCard16(List<Short> card16) throws IOException {
-    for(short i : card16) {
-      writeCard16(i);
+  public void writeCard16(ImmutableShortList card16) throws IOException {
+    for (int i = 0; i < card16.size(); i++) {
+      writeCard16(card16.get(i));
     }
   }
 
@@ -86,9 +87,9 @@ public class X11OutputStream implements X11Output, AutoCloseable {
   }
 
   @Override
-  public void writeCard32(List<Integer> card32) throws IOException {
-    for(int i : card32) {
-      writeCard32(i);
+  public void writeCard32(ImmutableIntList card32) throws IOException {
+    for (int i = 0; i < card32.size(); i++) {
+      writeCard32(card32.get(i));
     }
   }
 
@@ -98,14 +99,14 @@ public class X11OutputStream implements X11Output, AutoCloseable {
   }
 
   @Override
-  public void writeCard64(List<Long> card64) throws IOException {
-    for(long l : card64) {
-      writeCard64(l);
+  public void writeCard64(ImmutableLongList card64) throws IOException {
+    for (int i = 0; i < card64.size(); i++) {
+      writeCard64(card64.get(i));
     }
   }
 
   @Override
-  public void writeChar(List<Byte> string) throws IOException {
+  public void writeChar(ImmutableByteList string) throws IOException {
     writeByte(string);
   }
 
@@ -115,14 +116,14 @@ public class X11OutputStream implements X11Output, AutoCloseable {
   }
 
   @Override
-  public void writeByte(List<Byte> bytes) throws IOException {
-    for(byte i : bytes) {
-      writeByte(i);
+  public void writeByte(ImmutableByteList bytes) throws IOException {
+    for (int i = 0; i < bytes.size(); i++) {
+      writeByte(bytes.get(i));
     }
   }
 
   @Override
-  public void writeVoid(List<Byte> bytes) throws IOException {
+  public void writeVoid(ImmutableByteList bytes) throws IOException {
     writeByte(bytes);
   }
 
@@ -132,7 +133,7 @@ public class X11OutputStream implements X11Output, AutoCloseable {
   }
 
   @Override
-  public void writeFd(List<Integer> fd) throws IOException {
+  public void writeFd(ImmutableIntList fd) throws IOException {
     writeInt32(fd);
   }
 
@@ -142,9 +143,9 @@ public class X11OutputStream implements X11Output, AutoCloseable {
   }
 
   @Override
-  public void writeFloat(List<Float> f) throws IOException {
-    for(float fl : f) {
-      writeFloat(f);
+  public void writeFloat(ImmutableFloatList f) throws IOException {
+    for (int i = 0; i < f.size(); i++) {
+      writeFloat(f.get(i));
     }
   }
 
@@ -154,9 +155,9 @@ public class X11OutputStream implements X11Output, AutoCloseable {
   }
 
   @Override
-  public void writeDouble(List<Double> d) throws IOException {
-    for(double db : d) {
-      writeDouble(db);
+  public void writeDouble(ImmutableDoubleList d) throws IOException {
+    for (int i = 0; i < d.size(); i++) {
+      writeDouble(d.get(i));
     }
   }
 

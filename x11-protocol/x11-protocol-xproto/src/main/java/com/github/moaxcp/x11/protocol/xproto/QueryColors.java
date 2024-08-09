@@ -5,10 +5,10 @@ import com.github.moaxcp.x11.protocol.X11Input;
 import com.github.moaxcp.x11.protocol.X11Output;
 import com.github.moaxcp.x11.protocol.XReplyFunction;
 import java.io.IOException;
-import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 
 @Value
 @Builder
@@ -20,7 +20,7 @@ public class QueryColors implements TwoWayRequest<QueryColorsReply> {
   private int cmap;
 
   @NonNull
-  private List<Integer> pixels;
+  private ImmutableIntList pixels;
 
   public XReplyFunction<QueryColorsReply> getReplyFunction() {
     return (field, sequenceNumber, in) -> QueryColorsReply.readQueryColorsReply(field, sequenceNumber, in);
@@ -39,7 +39,7 @@ public class QueryColors implements TwoWayRequest<QueryColorsReply> {
     javaStart += 2;
     int cmap = in.readCard32();
     javaStart += 4;
-    List<Integer> pixels = in.readCard32(Short.toUnsignedInt(length) - javaStart);
+    ImmutableIntList pixels = in.readCard32(Short.toUnsignedInt(length) - javaStart);
     javaBuilder.cmap(cmap);
     javaBuilder.pixels(pixels);
     in.readPadAlign(javaBuilder.getSize());
