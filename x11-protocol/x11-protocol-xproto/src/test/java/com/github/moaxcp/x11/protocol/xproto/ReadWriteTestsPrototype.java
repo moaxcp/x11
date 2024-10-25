@@ -14,12 +14,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReadWriteTestsPrototype {
   ByteArrayOutputStream outBytes = new ByteArrayOutputStream();
-  X11Output out = new X11OutputStream(outBytes);
+  X11Output out = new X11BigEndianOutputStream(outBytes);
   X11Input in;
 
   private void convertToInput() {
     ByteArrayInputStream inBytes = new ByteArrayInputStream(outBytes.toByteArray());
-    in = new X11InputStream(inBytes);
+    in = new X11BigEndianInputStream(inBytes);
   }
 
   private void assertWriteObjectEqualsReadObject(ClientMessageDataUnion message, ThrowingBiFunction<X11Input, Byte, ClientMessageDataUnion, IOException> readFunction) throws IOException {

@@ -1,13 +1,14 @@
 package com.github.moaxcp.x11.examples;
 
 import com.github.moaxcp.x11.keysym.KeySym;
+import com.github.moaxcp.x11.protocol.BigEndian;
+import com.github.moaxcp.x11.protocol.LittleEndian;
 import com.github.moaxcp.x11.protocol.Utilities;
 import com.github.moaxcp.x11.protocol.XEvent;
 import com.github.moaxcp.x11.protocol.xproto.*;
 import com.github.moaxcp.x11.x11client.X11Client;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +46,20 @@ public class SimpleHelloWorldMouse {
             //XSetWMProtocols for adding delete atom
             InternAtomReply wmProtocols = client.send(InternAtom.builder().name(Utilities.toByteList("WM_PROTOCOLS")).build());
             InternAtomReply deleteAtom = client.send(InternAtom.builder().name(Utilities.toByteList("WM_DELETE_WINDOW")).build());
+
+            List<Byte> write;
+            if (client.getBigEndian()) {
+                write = BigEndian.writeList(deleteAtom.getAtom());
+            } else {
+                write = LittleEndian.writeList(deleteAtom.getAtom());
+            }
             client.send(ChangeProperty.builder()
                     .window(window.getWid())
                     .property(wmProtocols.getAtom())
                     .type(Atom.ATOM.getValue())
                     .format((byte) 32)
                     .mode(PropMode.REPLACE)
-                    .data(Utilities.toList(ByteBuffer.allocate(4).putInt(deleteAtom.getAtom()).array()))
+                    .data(write)
                     .dataLen(1)
                     .build());
 

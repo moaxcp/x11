@@ -1,13 +1,11 @@
 package com.github.moaxcp.x11.protocol;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.*;
 
 @UtilityClass
 public class Utilities {
@@ -16,20 +14,39 @@ public class Utilities {
     for(byte b : bytes) {
       list.add(b);
     }
-    return Collections.unmodifiableList(list);
+    return list;
   }
 
   public static X11Input toX11Input(@NonNull List<Byte> bytes) {
-    return new X11InputStream(new BufferedInputStream(new InputStream() {
-      private Iterator<Byte> iterator = bytes.iterator();
-      @Override
-      public int read() throws IOException {
-        if (iterator.hasNext()) {
-          return Byte.toUnsignedInt(iterator.next());
+    return toX11Input(true, bytes);
+  }
+
+  public static X11Input toX11Input(boolean bigEndian, @NonNull List<Byte> bytes) {
+    if (bigEndian) {
+      return new X11BigEndianInputStream(new BufferedInputStream(new InputStream() {
+        private Iterator<Byte> iterator = bytes.iterator();
+
+        @Override
+        public int read() throws IOException {
+          if (iterator.hasNext()) {
+            return Byte.toUnsignedInt(iterator.next());
+          }
+          return -1;
         }
-        return -1;
-      }
-    }));
+      }));
+    } else {
+      return new X11LittleEndianInputStream(new BufferedInputStream(new InputStream() {
+        private Iterator<Byte> iterator = bytes.iterator();
+
+        @Override
+        public int read() throws IOException {
+          if (iterator.hasNext()) {
+            return Byte.toUnsignedInt(iterator.next());
+          }
+          return -1;
+        }
+      }));
+    }
   }
 
   public static String toString(@NonNull List<Byte> byteList, @NonNull Charset charset) {
@@ -50,7 +67,7 @@ public class Utilities {
 
   public static List<Byte> toByteList(XEvent event) {
     ByteArrayOutputStream saved = new ByteArrayOutputStream();
-    X11Output out = new X11OutputStream(saved);
+    X11Output out = new X11BigEndianOutputStream(saved);
     try {
       event.write(out);
     } catch (IOException e) {
@@ -61,7 +78,7 @@ public class Utilities {
 
   public static List<Byte> toByteList(byte majorOpcode, XRequest request) {
     ByteArrayOutputStream saved = new ByteArrayOutputStream();
-    X11Output out = new X11OutputStream(saved);
+    X11Output out = new X11BigEndianOutputStream(saved);
     try {
       request.write(majorOpcode, out);
     } catch (IOException e) {

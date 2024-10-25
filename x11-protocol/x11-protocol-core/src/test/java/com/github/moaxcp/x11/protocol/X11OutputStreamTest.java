@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class X11OutputStreamTest {
   private ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-  private X11OutputStream out = new X11OutputStream(byteOut);
+  private X11BigEndianOutputStream out = new X11BigEndianOutputStream(byteOut);
   @Test
   void writeByte() throws IOException {
     out.writeByte(Byte.MAX_VALUE);
@@ -96,7 +96,7 @@ public class X11OutputStreamTest {
   @Test
   void flush() throws IOException {
     OutputStream origin = Mockito.mock(OutputStream.class);
-    X11OutputStream out = new X11OutputStream(origin);
+    X11BigEndianOutputStream out = new X11BigEndianOutputStream(origin);
     out.flush();
     BDDMockito.then(origin).should().flush();
   }
@@ -104,7 +104,7 @@ public class X11OutputStreamTest {
   @Test
   void close() throws IOException {
     OutputStream origin = Mockito.mock(OutputStream.class);
-    X11OutputStream out = new X11OutputStream(origin);
+    X11BigEndianOutputStream out = new X11BigEndianOutputStream(origin);
     out.close();
     BDDMockito.then(origin).should().close();
   }

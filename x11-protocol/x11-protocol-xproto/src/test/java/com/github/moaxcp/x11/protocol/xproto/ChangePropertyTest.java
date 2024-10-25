@@ -1,9 +1,9 @@
 package com.github.moaxcp.x11.protocol.xproto;
 
 import com.github.moaxcp.x11.protocol.Utilities;
-import com.github.moaxcp.x11.protocol.X11InputStream;
+import com.github.moaxcp.x11.protocol.X11BigEndianInputStream;
 import com.github.moaxcp.x11.protocol.X11Output;
-import com.github.moaxcp.x11.protocol.X11OutputStream;
+import com.github.moaxcp.x11.protocol.X11BigEndianOutputStream;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangePropertyTest {
   ByteArrayOutputStream outBytes = new ByteArrayOutputStream();
-  X11Output out = new X11OutputStream(outBytes);
+  X11Output out = new X11BigEndianOutputStream(outBytes);
 
   @Test
   void writeAndRead() throws IOException {
@@ -29,7 +29,7 @@ public class ChangePropertyTest {
 
     expected.write((byte) 0, out);
 
-    X11InputStream in = new X11InputStream(new ByteArrayInputStream(outBytes.toByteArray()));
+    X11BigEndianInputStream in = new X11BigEndianInputStream(new ByteArrayInputStream(outBytes.toByteArray()));
     byte opCode = in.readCard8();
     assertThat(opCode).isEqualTo(ChangeProperty.OPCODE);
     ChangeProperty result = ChangeProperty.readChangeProperty(in);

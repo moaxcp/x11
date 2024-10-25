@@ -22,6 +22,7 @@ public class X11Connection implements AutoCloseable {
   private final DisplayName displayName;
   private final XAuthority xAuthority;
   private final Setup setup;
+  private final boolean bigEndian;
   private final Socket socket;
   private final X11InputStream in;
   private final X11OutputStream out;
@@ -36,14 +37,20 @@ public class X11Connection implements AutoCloseable {
    * @throws NullPointerException          if any parameter is null
    * @throws UnsupportedOperationException if the connection code is authenticate or any other result
    */
-  X11Connection(DisplayName displayName, XAuthority xAuthority, Socket socket) throws IOException {
+  X11Connection(boolean bigEndian, DisplayName displayName, XAuthority xAuthority, Socket socket) throws IOException {
     this.displayName = requireNonNull(displayName, "displayName");
     this.xAuthority = requireNonNull(xAuthority, "xAuthority");
     this.socket = requireNonNull(socket, "socket");
+    this.bigEndian = bigEndian;
     //using BufferedInputStream to support mark/reset
-    in = new X11InputStream(new BufferedInputStream(socket.getInputStream(), 128));
-    out = new X11OutputStream(socket.getOutputStream());
-    sendConnectionSetup();
+    if (bigEndian) {
+      in = new X11BigEndianInputStream(new BufferedInputStream(socket.getInputStream(), 128));
+      out = new X11BigEndianOutputStream(socket.getOutputStream());
+    } else {
+      in = new X11LittleEndianInputStream(new BufferedInputStream(socket.getInputStream(), 128));
+      out = new X11LittleEndianOutputStream(socket.getOutputStream());
+    }
+    sendConnectionSetup(bigEndian);
     in.mark(1);
     byte result = in.readInt8();
     in.reset();
@@ -74,6 +81,10 @@ public class X11Connection implements AutoCloseable {
     return this.setup;
   }
 
+  public boolean getBigEndian() {
+    return bigEndian;
+  }
+
   public X11Input getX11Input() {
     return in;
   }
@@ -98,9 +109,9 @@ public class X11Connection implements AutoCloseable {
     return socket.getPort();
   }
 
-  private void sendConnectionSetup() throws IOException {
+  private void sendConnectionSetup(boolean bigEndian) throws IOException {
     SetupRequest setup = SetupRequest.builder()
-            .byteOrder((byte) 'B')
+            .byteOrder(bigEndian ? (byte) 'B' : (byte) 'l')
             .protocolMajorVersion((short) 11)
             .protocolMinorVersion((short) 0)
             .authorizationProtocolName(xAuthority.getProtocolName())
@@ -117,7 +128,7 @@ public class X11Connection implements AutoCloseable {
    * @return
    * @throws NullPointerException if displayName is null.
    */
-  public static X11Connection connect(DisplayName displayName, XAuthority xAuthority) throws IOException {
+  public static X11Connection connect(boolean bigEndian, DisplayName displayName, XAuthority xAuthority) throws IOException {
     requireNonNull(xAuthority, "xAuthority");
     Socket socket;
 
@@ -129,26 +140,26 @@ public class X11Connection implements AutoCloseable {
       socket = new Socket(address, displayName.getPort());
     }
 
-    return new X11Connection(displayName, xAuthority, socket);
+    return new X11Connection(bigEndian, displayName, xAuthority, socket);
   }
 
-  public static X11Connection connect() throws IOException {
+  public static X11Connection connect(boolean bigEndian) throws IOException {
     DisplayName name = DisplayName.standard();
     List<XAuthority> authorities = XAuthority.getAuthorities(XAuthority.getXAuthorityFile());
     Optional<XAuthority> authority = XAuthority.getAuthority(authorities, name);
     if (!authority.isPresent()) {
       throw new IllegalStateException("could not find authority for environment");
     }
-    return connect(name, authority.get());
+    return connect(bigEndian, name, authority.get());
   }
 
-  public static X11Connection connect(DisplayName name) throws IOException {
+  public static X11Connection connect(boolean bigEndian, DisplayName name) throws IOException {
     List<XAuthority> authorities = XAuthority.getAuthorities(XAuthority.getXAuthorityFile());
     Optional<XAuthority> authority = XAuthority.getAuthority(authorities, name);
     if (!authority.isPresent()) {
       throw new IllegalStateException("could not find authority for environment");
     }
-    return connect(name, authority.get());
+    return connect(bigEndian, name, authority.get());
   }
 
   @Override

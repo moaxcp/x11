@@ -23,31 +23,31 @@ public class X11ConnectionTest {
 
   @Test
   void constructor_fails_on_null_displayName() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> new X11Connection(null, xAuthority, socket));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> new X11Connection(false, null, xAuthority, socket));
     assertThat(exception).hasMessage("displayName");
   }
 
   @Test
   void constructor_fails_on_null_xAuthority() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> new X11Connection(new DisplayName(":0"), null, socket));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> new X11Connection(false, new DisplayName(":0"), null, socket));
     assertThat(exception).hasMessage("xAuthority");
   }
 
   @Test
   void constructor_fails_on_null_socket() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> new X11Connection(new DisplayName(":0"), xAuthority, null));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> new X11Connection(false, new DisplayName(":0"), xAuthority, null));
     assertThat(exception).hasMessage("socket");
   }
 
   @Test
   void connect_fails_on_null_displayName() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> X11Connection.connect(null, xAuthority));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> X11Connection.connect(false, null, xAuthority));
     assertThat(exception).hasMessage("Cannot invoke \"com.github.moaxcp.x11.protocol.DisplayName.isForUnixSocket()\" because \"displayName\" is null");
   }
 
   @Test
   void connect_fails_on_null_xAuthority() {
-    NullPointerException exception = assertThrows(NullPointerException.class, () -> X11Connection.connect(new DisplayName((":0")), null));
+    NullPointerException exception = assertThrows(NullPointerException.class, () -> X11Connection.connect(false, new DisplayName((":0")), null));
     assertThat(exception).hasMessage("xAuthority");
   }
 }
