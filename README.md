@@ -435,6 +435,10 @@ https://www.x.org/releases/X11R7.6/doc/libXtst/recordlib.html
 
 # versions
 
+## 0.19.0
+
+* Added support for little-endian and made it default to match the server default.
+
 ## 0.18.2
 
 * Fixing XAuthority when parsing number

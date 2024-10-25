@@ -65,7 +65,7 @@ public class Record {
                 while (true) {
                     EnableContextReply reply = data.getNextReply(enableContext.getReplyFunction());
                     log.info(String.format("Next reply: %s", reply));
-                    XEvent replyData = data.readEvent(toX11Input(reply.getData()));
+                    XEvent replyData = data.readEvent(toX11Input(data.getBigEndian(), reply.getData()));
                     log.info(String.format("reply data: %s", replyData));
 
                     if (replyData instanceof KeyPressEvent) {

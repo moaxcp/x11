@@ -25,7 +25,7 @@ class RecordDataParser {
     this.client = client;
     this.reply = reply;
     this.tracker = tracker;
-    data = toX11Input(reply.getData());
+    data = toX11Input(client.getBigEndian(), reply.getData());
   }
 
   public RecordReply parse() {

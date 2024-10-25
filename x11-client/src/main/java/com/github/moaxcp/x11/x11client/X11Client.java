@@ -6,14 +6,12 @@ import com.github.moaxcp.x11.protocol.xproto.*;
 import com.github.moaxcp.x11.x11client.api.record.RecordApi;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.github.moaxcp.x11.protocol.Utilities.toIntegers;
-import static com.github.moaxcp.x11.protocol.Utilities.toList;
 
 /**
  * An x11 client. The client handles two types of requests: {@link OneWayRequest} and {@link TwoWayRequest}.
@@ -50,8 +48,12 @@ public class X11Client implements AutoCloseable {
    * @throws X11ClientException If connection to server could not be established
    */
   public static X11Client connect(DisplayName displayName, XAuthority xAuthority) {
+    return connect(false, displayName, xAuthority);
+  }
+
+  public static X11Client connect(boolean bigEndian, DisplayName displayName, XAuthority xAuthority) {
     try {
-      return new X11Client(X11Connection.connect(displayName, xAuthority));
+      return new X11Client(X11Connection.connect(bigEndian, displayName, xAuthority));
     } catch (IOException e) {
       throw new X11ClientException("Could not connect with " + displayName, e);
     }
@@ -64,8 +66,12 @@ public class X11Client implements AutoCloseable {
    * @throws X11ClientException If connection to server could not be established
    */
   public static X11Client connect() {
+    return connect(false);
+  }
+
+  public static X11Client connect(boolean bigEndian) {
     try {
-      return new X11Client(X11Connection.connect());
+      return new X11Client(X11Connection.connect(bigEndian));
     } catch (IOException e) {
       throw new X11ClientException("Could not connect", e);
     }
@@ -78,8 +84,12 @@ public class X11Client implements AutoCloseable {
    * @throws X11ClientException If connection to server could not be established
    */
   public static X11Client connect(DisplayName name) {
+    return connect(false, name);
+  }
+
+  public static X11Client connect(boolean bigEndian, DisplayName name) {
     try {
-      return new X11Client(X11Connection.connect(name));
+      return new X11Client(X11Connection.connect(bigEndian, name));
     } catch (IOException e) {
       throw new X11ClientException("Could not connect with " + name, e);
     }
@@ -109,6 +119,10 @@ public class X11Client implements AutoCloseable {
    */
   public Setup getSetup() {
     return connection.getSetup();
+  }
+
+  public boolean getBigEndian() {
+    return connection.getBigEndian();
   }
 
   /**
@@ -444,6 +458,12 @@ public class X11Client implements AutoCloseable {
   }
 
   public void setWMProtocols(int wid, int atom) {
+    List<Byte> bytes;
+    if (connection.getBigEndian()) {
+      bytes = BigEndian.writeList(atom);
+    } else {
+      bytes = LittleEndian.writeList(atom);
+    }
     send(ChangeProperty.builder()
       .window(wid)
       .property(getAtom("WM_PROTOCOLS").getId())
@@ -451,7 +471,7 @@ public class X11Client implements AutoCloseable {
       .format((byte) 32)
       .mode(PropMode.REPLACE)
       .dataLen(1)
-      .data(toList(ByteBuffer.allocate(4).putInt(atom).array()))
+      .data(bytes)
       .build());
   }
 

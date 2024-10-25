@@ -13,10 +13,12 @@ public class KeySymMain {
 
   public static void main(String... args) throws IOException {
     try (X11Client client = X11Client.connect()) {
-      List<Byte> keyCodes = client.keySymToKeyCodes(KeySym.XK_Escape);
-      for (byte keyCode : keyCodes) {
-        KeySym keySym = client.keyCodeToKeySym(keyCode, (short) 0);
-        log.info(keySym.toString());
+      for (var keySym : KeySym.values()) {
+        List<Byte> keyCodes = client.keySymToKeyCodes(keySym);
+        for (byte keyCode : keyCodes) {
+          KeySym result = client.keyCodeToKeySym(keyCode, (short) 0);
+          log.info(keySym + ": " + result);
+        }
       }
     }
   }
