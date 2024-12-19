@@ -121,15 +121,19 @@ public class PresentPlugin implements XProtocolPlugin {
   }
 
   @Override
-  public XGenericEvent readGenericEvent(boolean sentEvent, byte extension, short sequenceNumber,
-      int length, short eventType, X11Input in) throws IOException {
+  public XGenericEvent readGenericEvent(byte firstEventOffset, boolean sentEvent, byte extension,
+      short sequenceNumber, int length, short eventType, X11Input in) throws IOException {
     if(eventType == 0) {
+      return ConfigureNotifyEvent.readConfigureNotifyEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 1) {
+      return CompleteNotifyEvent.readCompleteNotifyEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 2) {
+      return IdleNotifyEvent.readIdleNotifyEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 3) {
+      return RedirectNotifyEvent.readRedirectNotifyEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     throw new IllegalArgumentException("eventType " + eventType + " is not supported");
   }

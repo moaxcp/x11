@@ -2,16 +2,18 @@ package com.github.moaxcp.x11.x11client;
 
 import com.github.moaxcp.x11.keysym.KeySym;
 import com.github.moaxcp.x11.protocol.*;
-import com.github.moaxcp.x11.protocol.xproto.*;
+import com.github.moaxcp.x11.protocol.xproto.FreeGC;
+import com.github.moaxcp.x11.protocol.xproto.KeyPressEvent;
+import com.github.moaxcp.x11.protocol.xproto.KeyReleaseEvent;
+import com.github.moaxcp.x11.protocol.xproto.Setup;
+import com.github.moaxcp.x11.x11client.api.XprotoApi;
 import com.github.moaxcp.x11.x11client.api.record.RecordApi;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.github.moaxcp.x11.protocol.Utilities.toIntegers;
+import java.util.Optional;
 
 /**
  * An x11 client. The client handles two types of requests: {@link OneWayRequest} and {@link TwoWayRequest}.
@@ -31,7 +33,7 @@ import static com.github.moaxcp.x11.protocol.Utilities.toIntegers;
  *   {@link #getNextEvent()} read from this queue until it is empty before reading events from the server.
  * </p>
  */
-public class X11Client implements AutoCloseable {
+public class X11Client implements AutoCloseable, RecordApi, XprotoApi {
   private final X11Connection connection;
   private final XProtocolService protocolService;
   private final ResourceIdService resourceIdService;
@@ -117,10 +119,12 @@ public class X11Client implements AutoCloseable {
    * Returns the connection setup.
    * @return setup created by x11 server
    */
+  @Override
   public Setup getSetup() {
     return connection.getSetup();
   }
 
+  @Override
   public boolean getBigEndian() {
     return connection.getBigEndian();
   }
@@ -128,104 +132,12 @@ public class X11Client implements AutoCloseable {
   /**
    * Returns the default screen number.
    */
+  @Override
   public int getDefaultScreenNumber() {
     return connection.getDisplayName().getScreenNumber();
   }
 
-  /**
-   * Returns the sceen for the number provided.
-   * @param screen number
-   */
-  public Screen getScreen(int screen) {
-    return getSetup().getRoots().get(screen);
-  }
-
-  /**
-   * Returns the default {@link Screen} object.
-   */
-  public Screen getDefaultScreen() {
-    return getScreen(getDefaultScreenNumber());
-  }
-
-  /**
-   * Returns the root for the provided screen.
-   * @param screen number
-   */
-  public int getRoot(int screen) {
-    return getScreen(screen).getRoot();
-  }
-
-  /**
-   * Returns the default root.
-   */
-  public int getDefaultRoot() {
-    return getRoot(getDefaultScreenNumber());
-  }
-
-  /**
-   * Returns the white pixel for the provided screen.
-   * @param screen number
-   */
-  public int getWhitePixel(int screen) {
-    return getScreen(screen).getWhitePixel();
-  }
-
-  /**
-   * Returns the default white pixel.
-   */
-  public int getDefaultWhitePixel() {
-    return getWhitePixel(getDefaultScreenNumber());
-  }
-
-  /**
-   * Returns the black pixel for the provided screen.
-   * @param screen number
-   */
-  public int getBlackPixel(int screen) {
-    return getScreen(screen).getBlackPixel();
-  }
-
-  /**
-   * Returns the default black pixel.
-   */
-  public int getDefaultBlackPixel() {
-    return getBlackPixel(getDefaultScreenNumber());
-  }
-
-  /**
-   * Returns the depth for the provided screen.
-   * @param screen number
-   */
-  public byte getDepth(int screen) {
-    return getScreen(screen).getRootDepth();
-  }
-
-  /**
-   * Returns the default depth.
-   */
-  public byte getDefaultDepth() {
-    return getDepth(getDefaultScreenNumber());
-  }
-
-  /**
-   * Returns the visualId for the provided screen.
-   * @param screen number
-   */
-  public int getVisualId(int screen) {
-    return getScreen(screen).getRootVisual();
-  }
-
-  /**
-   * Returns the default visualId.
-   */
-  public int getDefaultVisualId() {
-    return getVisualId(getDefaultScreenNumber());
-  }
-
-  /**
-   * Adds a {@link OneWayRequest} request to the request queue.
-   * @param request for server to execute
-   */
+  @Override
   public void send(OneWayRequest request) {
     protocolService.send(request);
   }
@@ -239,6 +151,7 @@ public class X11Client implements AutoCloseable {
    * @throws X11ErrorException if the server had an error with any of the requests sent.
    * @throws X11ClientException for any {@link IOException} encountered while processing the requests.
    */
+  @Override
   public <T extends XReply> T send(TwoWayRequest<T> request) {
     return protocolService.send(request);
   }
@@ -256,20 +169,12 @@ public class X11Client implements AutoCloseable {
     return protocolService.getNextEvent();
   }
 
-  /**
-   * Returns the next reply from the server using the given replyFunction to read it. If there are any events sent by
-   * the server the events are added to the event queue.
-   * @param replyFunction used to read the reply from the server
-   * @return The reply from the server
-   * @param <T> type of reply
-   * @throws X11ClientException if there is an IOException when reading from the server or if there is an error reading
-   * any available events from the server.
-   * @throws X11ErrorException if the server returns an x11 error.
-   */
+  @Override
   public <T extends XReply> T getNextReply(XReplyFunction<T> replyFunction) {
     return protocolService.readReply(replyFunction);
   }
 
+  @Override
   public <T extends XRequest> T readRequest(X11Input in) throws IOException {
       return protocolService.readRequest(in);
   }
@@ -278,6 +183,7 @@ public class X11Client implements AutoCloseable {
     return protocolService.getMajorOpcode(request);
   }
 
+  @Override
   public <T extends XReply> T readReply(X11Input in, XReplyFunction<T> replyFunction) {
     return protocolService.readReply(in, replyFunction);
   }
@@ -287,10 +193,17 @@ public class X11Client implements AutoCloseable {
    * @param in input for the event
    * @return the event
    */
+  @Override
   public <T extends XEvent> T readEvent(X11Input in) {
     return protocolService.readEvent(in);
   }
 
+  @Override
+  public Optional<Byte> getFirstEvent(String pluginName) {
+    return protocolService.getFirstEvent(pluginName);
+  }
+
+  @Override
   public <T extends XError> T readError(X11Input in) {
     return protocolService.readError(in);
   }
@@ -307,15 +220,6 @@ public class X11Client implements AutoCloseable {
    */
   public void flush() {
     protocolService.flush();
-  }
-
-  /**
-   * Sends a {@link GetInputFocus} to the server. This is a {@link TwoWayRequest} which causes a {@link #flush()} and
-   * all events to be read from the server and added to the event queue.
-   * See <a href="https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/Sync.c">...</a>
-   */
-  public void sync() {
-    GetInputFocusReply reply = send(GetInputFocus.builder().build());
   }
 
   /**
@@ -380,6 +284,7 @@ public class X11Client implements AutoCloseable {
   /**
    * Returns the next resource id. The client will use the Xcmisc extension to get the id range if the plugin is loaded.
    */
+  @Override
   public int nextResourceId() {
     return resourceIdService.nextResourceId();
   }
@@ -388,172 +293,8 @@ public class X11Client implements AutoCloseable {
    * Returns the {@link AtomValue} of the named Atom. If the atom does not exist on the x11 server an InternAtom request is made.
    * @param name of atom
    */
+  @Override
   public AtomValue getAtom(String name) {
     return atomService.getAtom(name);
-  }
-
-  /**
-   * Creates a simple window on the default screen.
-   * @param x coordinate
-   * @param y coordinate
-   * @param width of window
-   * @param height of window
-   * @param events events to receive
-   * @return the resource id for the window
-   */
-  public int createSimpleWindow(int x, int y, int width, int height, EventMask... events) {
-    int wid = nextResourceId();
-    send(CreateWindow.builder()
-      .depth(getDefaultDepth())
-      .wid(wid)
-      .parent(getDefaultRoot())
-      .x((short) x)
-      .y((short) y)
-      .width((short) width)
-      .height((short) height)
-      .borderWidth((short) 0)
-      .clazz(WindowClass.COPY_FROM_PARENT)
-      .visual(getDefaultVisualId())
-      .backgroundPixel(getDefaultWhitePixel())
-      .borderPixel(getDefaultBlackPixel())
-      .eventMaskEnable(events)
-      .build());
-    return wid;
-  }
-
-  //XRaiseWindow https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/RaiseWin.c
-  public void raiseWindow(int wid) {
-    send(ConfigureWindow.builder()
-        .window(wid)
-        .stackMode(StackMode.ABOVE)
-        .build());
-  }
-
-  public void storeName(int wid, String name) {
-    send(ChangeProperty.builder()
-      .window(wid)
-      .property(Atom.WM_NAME.getValue())
-      .type(Atom.STRING.getValue())
-      .format((byte) 8)
-      .dataLen(name.length())
-      .data(Utilities.toByteList(name))
-      .build());
-  }
-
-  public List<Integer> getWMProtocols(int wid) {
-    GetPropertyReply property = send(GetProperty.builder()
-      .window(wid)
-      .property(getAtom("WM_PROTOCOLS").getId())
-      .longOffset(0)
-      .longLength(1000000)
-      .delete(false)
-      .build());
-    if(property.getFormat() != 32) {
-      throw new X11ClientException("expected format for property \"WM_PROTOCOLS\" to be 32 but was \"" + property.getFormat() + "\"");
-    }
-    if(property.getType() != Atom.ATOM.getValue()) {
-      throw new X11ClientException("expected type for property \"WM_PROTOCOLS\" to be \"" + Atom.ATOM.getValue() + "\" but was \"" + property.getType() + "\"");
-    }
-    return toIntegers(property.getValue());
-  }
-
-  public void setWMProtocols(int wid, int atom) {
-    List<Byte> bytes;
-    if (connection.getBigEndian()) {
-      bytes = BigEndian.writeList(atom);
-    } else {
-      bytes = LittleEndian.writeList(atom);
-    }
-    send(ChangeProperty.builder()
-      .window(wid)
-      .property(getAtom("WM_PROTOCOLS").getId())
-      .type(Atom.ATOM.getValue())
-      .format((byte) 32)
-      .mode(PropMode.REPLACE)
-      .dataLen(1)
-      .data(bytes)
-      .build());
-  }
-
-  public void mapWindow(int wid) {
-    send(MapWindow.builder()
-      .window(wid)
-      .build());
-  }
-
-  public int createGC(int screen, int wid) {
-    int gc = nextResourceId();
-    send(CreateGC.builder()
-      .cid(gc)
-      .drawable(wid)
-      .background(getWhitePixel(screen))
-      .foreground(getBlackPixel(screen))
-      .build());
-    return gc;
-  }
-
-  public int defaultGC(int screen) {
-    int root = getRoot(screen);
-    if(defaultGCs.containsKey(root)) {
-      return defaultGCs.get(root);
-    }
-    int gc = createGC(screen, root);
-    defaultGCs.put(root, gc);
-    return gc;
-  }
-
-  public int defaultGC() {
-    return defaultGC(getDefaultScreenNumber());
-  }
-
-  /**
-   * see https://github.com/mirror/libX11/blob/master/src/Text.c
-   * @param drawable
-   * @param gc
-   * @param x
-   * @param y
-   * @param string
-   */
-  public void imageText8(int drawable, int gc, short x, short y, String string) {
-    send(ImageText8.builder()
-      .drawable(drawable)
-      .gc(gc)
-      .x(x)
-      .y(y)
-      .string(Utilities.toByteList(string))
-      .build());
-  }
-
-  public void fillRectangle(int drawable, int gc, short x, short y, short width, short height) {
-    send(PolyFillRectangle.builder()
-      .drawable(drawable)
-      .gc(gc)
-      .rectangles(Collections.singletonList(Rectangle.builder()
-        .x(x)
-        .y(y)
-        .width(width)
-        .height(height)
-        .build()))
-      .build());
-  }
-
-  public void killClient(int resource) {
-    send(KillClient.builder()
-      .resource(resource)
-      .build());
-  }
-
-  public void inputFocus(int wid) {
-    send(SetInputFocus.builder()
-      .focus(wid)
-      .revertTo(InputFocus.POINTER_ROOT)
-      .build());
-  }
-
-  public RecordApi record() {
-    if (recordApi == null) {
-      recordApi = new RecordApi(this);
-    }
-    return recordApi;
   }
 }

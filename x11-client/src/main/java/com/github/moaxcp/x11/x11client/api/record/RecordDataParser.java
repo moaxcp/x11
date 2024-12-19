@@ -4,7 +4,6 @@ import com.github.moaxcp.x11.protocol.*;
 import com.github.moaxcp.x11.protocol.record.Category;
 import com.github.moaxcp.x11.protocol.record.EnableContextReply;
 import com.github.moaxcp.x11.protocol.record.HType;
-import com.github.moaxcp.x11.x11client.X11Client;
 import com.github.moaxcp.x11.x11client.api.record.RecordData.RecordDataBuilder;
 import com.github.moaxcp.x11.x11client.api.record.RecordReply.RecordReplyBuilder;
 
@@ -16,22 +15,19 @@ import java.util.List;
 import static com.github.moaxcp.x11.protocol.Utilities.toX11Input;
 
 class RecordDataParser {
-  private final X11Client client;
+  private final RecordApi api;
   private final EnableContextReply reply;
   private final ReplySequenceTracker tracker;
   private final X11Input data;
 
-  public RecordDataParser(X11Client client, EnableContextReply reply, ReplySequenceTracker tracker) {
-    this.client = client;
+  public RecordDataParser(RecordApi api, EnableContextReply reply, ReplySequenceTracker tracker) {
+    this.api = api;
     this.reply = reply;
     this.tracker = tracker;
-    data = toX11Input(client.getBigEndian(), reply.getData());
+    data = toX11Input(api.getBigEndian(), reply.getData());
   }
 
   public RecordReply parse() {
-    if (reply.isClientSwapped()) {
-      //throw new UnsupportedOperationException("client swapped is not supported " + reply);
-    }
     RecordReplyBuilder builder = RecordReply.builder()
         .category(Category.getByCode(reply.getCategory()))
         .sequenceNumber(reply.getSequenceNumber())
@@ -76,7 +72,7 @@ class RecordDataParser {
         startSequence++;
         RecordDataBuilder builder = RecordData.builder();
         addHeader(data, fromServerTime, fromClientTime, fromClientSequence, builder);
-        XRequest xRequest = client.readRequest(data);
+        XRequest xRequest = api.readRequest(data);
         if (xRequest instanceof TwoWayRequest) {
           TwoWayRequest<XReply> twoWay = (TwoWayRequest<XReply>) xRequest;
 
@@ -103,7 +99,7 @@ class RecordDataParser {
         byte responseCode = data.peekByte();
         if (responseCode == 0) {
           data.readByte();
-          builder.xObject(client.readError(data));
+          builder.xObject(api.readError(data));
         } else if (responseCode == 1) {
           class ReplyHeader implements X11InputConsumer {
             byte data;
@@ -162,9 +158,9 @@ class RecordDataParser {
           }
           ReplyHeader replyHeader = new ReplyHeader();
           data.peekWith(replyHeader);
-          builder.xObject(client.readReply(data, tracker.use(reply.getXidBase(), replyHeader.sequence)));
+          builder.xObject(api.readReply(data, tracker.use(reply.getXidBase(), replyHeader.sequence)));
         } else {
-          builder.xObject(client.readEvent(data));
+          builder.xObject(api.readEvent(data));
         }
         result.add(builder.build());
       }

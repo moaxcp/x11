@@ -1104,9 +1104,10 @@ public class XprotoPlugin implements XProtocolPlugin {
   }
 
   @Override
-  public XGenericEvent readGenericEvent(boolean sentEvent, byte extension, short sequenceNumber,
-      int length, short eventType, X11Input in) throws IOException {
+  public XGenericEvent readGenericEvent(byte firstEventOffset, boolean sentEvent, byte extension,
+      short sequenceNumber, int length, short eventType, X11Input in) throws IOException {
     if(eventType == 35) {
+      return GeGenericEvent.readGeGenericEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     throw new IllegalArgumentException("eventType " + eventType + " is not supported");
   }

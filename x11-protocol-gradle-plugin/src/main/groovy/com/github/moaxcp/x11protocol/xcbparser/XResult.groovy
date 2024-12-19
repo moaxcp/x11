@@ -243,7 +243,8 @@ class XResult {
             .addModifiers(Modifier.PUBLIC)
             .addAnnotation(Override.class)
             .returns(ClassName.get(basePackage, 'XGenericEvent'))
-                .addParameter(boolean.class, 'sentEvent')
+            .addParameter(byte.class, "firstEventOffset")
+            .addParameter(boolean.class, 'sentEvent')
             .addParameter(byte.class, 'extension')
             .addParameter(short.class, 'sequenceNumber')
             .addParameter(int.class, 'length')
@@ -254,7 +255,7 @@ class XResult {
         for(XTypeEvent event : events.values()) {
             if(event.number == 35) {
                 readGenericEvent.beginControlFlow('if(eventType == $L)', event.genericEventNumber)
-                readError.addStatement('return $T.read$L(sentEvent, extension, sequenceNumber, length, eventType, in)', event.javaType.className, event.javaType.className.simpleName())
+                readGenericEvent.addStatement('return $T.read$L(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in)', event.javaType.className, event.javaType.className.simpleName())
                 readGenericEvent.endControlFlow()
             }
         }

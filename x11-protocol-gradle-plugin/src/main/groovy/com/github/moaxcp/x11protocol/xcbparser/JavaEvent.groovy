@@ -12,12 +12,14 @@ class JavaEvent extends JavaClass {
     int number
     boolean genericEvent
     int genericEventNumber
+    boolean noSequenceNumber
 
     JavaEvent(Map map) {
         super(map)
         number = map.number
         genericEvent = map.genericEvent
         genericEventNumber = map.genericEventNumber ?: -1
+        noSequenceNumber = map.noSequenceNumber ?: false
     }
 
     static JavaEvent javaEvent(XTypeEvent event) {
@@ -31,7 +33,8 @@ class JavaEvent extends JavaClass {
             basePackage: event.basePackage,
             javaPackage: event.javaPackage,
             className:getEventTypeName(event.javaPackage, event.name),
-            number: event.number
+            number: event.number,
+            noSequenceNumber: event.noSequenceNumber
         )
         return setProtocol(event, javaEvent)
     }
@@ -102,6 +105,15 @@ class JavaEvent extends JavaClass {
                 .addModifiers(Modifier.PUBLIC)
                 .addStatement('return NUMBER')
                 .build())
+
+        if (noSequenceNumber) {
+            typeBuilder.addMethod(MethodSpec.methodBuilder('getSequenceNumber')
+                    .addAnnotation(Override)
+                    .returns(TypeName.SHORT)
+                    .addModifiers(Modifier.PUBLIC)
+                    .addStatement('throw new UnsupportedOperationException("noSequenceNumber")')
+                    .build())
+        }
 
         super.addMethods(typeBuilder)
     }

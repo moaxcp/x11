@@ -9,17 +9,19 @@ class XTypeEvent extends XTypeObject {
     int number
     boolean genericEvent
     int genericEventNumber
+    boolean noSequenceNumber
 
     XTypeEvent(Map map) {
         super(map)
         number = map.number ?: 0
         genericEvent = map.genericEvent ?: false
         genericEventNumber = map.genericEventNumber ?: -1
+        noSequenceNumber = map.noSequenceNumber ?: false
     }
 
     static XTypeEvent xTypeEvent(XResult result, Node node) {
         int number = Integer.valueOf((String) node.attributes().get('number'))
-        XTypeEvent event = new XTypeEvent(result: result, number: number, name: node.attributes().get('name'), genericEvent: node.attributes().get('xge'), basePackage: result.basePackage, javaPackage: result.javaPackage)
+        XTypeEvent event = new XTypeEvent(result: result, number: number, noSequenceNumber: node.attributes().get('no-sequence-number'), name: node.attributes().get('name'), genericEvent: node.attributes().get('xge'), basePackage: result.basePackage, javaPackage: result.javaPackage)
         event.addUnits(result, node)
         if(event.genericEvent) {
             event.number = 35
@@ -32,7 +34,9 @@ class XTypeEvent extends XTypeObject {
 
         } else {
             event.protocol.add(0, new XUnitField(result: result, name: 'NUMBER', type: 'CARD8', constantValue: number))
-            event.protocol.add(2, new XUnitField(result: result, name: 'sequence_number', type: 'CARD16'))
+            if (!event.noSequenceNumber) {
+                event.protocol.add(2, new XUnitField(result: result, name: 'sequence_number', type: 'CARD16'))
+            }
         }
 
         return event
@@ -40,11 +44,12 @@ class XTypeEvent extends XTypeObject {
     
     static XTypeEvent xTypeEventCopy(XResult result, Node node) {
         int number = Integer.valueOf((String) node.attributes().get('number'))
+        boolean noSequenceNumber = node.attributes().get('no-sequence-number')
         XTypeEvent ref = result.resolveXType((String) node.attributes().get('ref'))
         if(ref.genericEvent) {
             number = 35
         }
-        XTypeEvent event = new XTypeEvent(result: result, number: number, name: node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
+        XTypeEvent event = new XTypeEvent(result: result, number: number, noSequenceNumber: noSequenceNumber, name: node.attributes().get('name'), basePackage: result.basePackage, javaPackage: result.javaPackage)
         event.superTypes = ref.superTypes
         event.protocol = ref.protocol
         if(ref.genericEvent) {

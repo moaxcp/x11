@@ -109,8 +109,8 @@ public class XtestPlugin implements XProtocolPlugin {
   }
 
   @Override
-  public XGenericEvent readGenericEvent(boolean sentEvent, byte extension, short sequenceNumber,
-      int length, short eventType, X11Input in) throws IOException {
+  public XGenericEvent readGenericEvent(byte firstEventOffset, boolean sentEvent, byte extension,
+      short sequenceNumber, int length, short eventType, X11Input in) throws IOException {
     throw new IllegalArgumentException("eventType " + eventType + " is not supported");
   }
 }
