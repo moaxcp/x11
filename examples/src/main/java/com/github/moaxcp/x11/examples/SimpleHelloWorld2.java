@@ -12,7 +12,7 @@ public class SimpleHelloWorld2 {
   public static void main(String... args) throws IOException {
     try(X11Client client = X11Client.connect()) {
       int wid = client.createSimpleWindow((short) 10, (short) 10, (short) 600, (short) 480, EventMask.EXPOSURE, EventMask.KEY_PRESS);
-      client.storeName(wid, "Hello World!");
+      client.setWindowName(wid, "Hello World!");
       int deleteAtom = client.getAtom("WM_DELETE_WINDOW").getId();
       client.setWMProtocols(wid, deleteAtom);
       client.mapWindow(wid);

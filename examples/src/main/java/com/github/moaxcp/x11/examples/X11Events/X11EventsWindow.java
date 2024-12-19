@@ -45,7 +45,7 @@ public class X11EventsWindow {
     try (X11Client client = X11Client.connect(DisplayName.displayName(display))) {
       this.client = client;
       windowId = client.createSimpleWindow((short) 10, (short) 10, (short) 1000, (short) 1000, EventMask.EXPOSURE, EventMask.KEY_PRESS, EventMask.KEY_RELEASE, EventMask.BUTTON_PRESS, EventMask.BUTTON_RELEASE);
-      client.storeName(windowId, "Hello World!");
+      client.setWindowName(windowId, "Hello World!");
       int deleteAtom = client.getAtom("WM_DELETE_WINDOW").getId();
       client.setWMProtocols(windowId, deleteAtom);
       client.mapWindow(windowId);

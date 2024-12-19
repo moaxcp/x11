@@ -23,6 +23,6 @@ public interface XProtocolPlugin {
   <T extends XRequest> T readRequest(byte majorOpcode, byte minorOpcode, X11Input in) throws IOException;
   <T extends XEvent> T readEvent(byte number, boolean sentEvent, X11Input in) throws IOException;
   <T extends XError> T readError(byte code, X11Input in) throws IOException;
-  <T extends XGenericEvent> T readGenericEvent(boolean sentEvent, byte extension, short sequenceNumber, int length, short eventType, X11Input in) throws IOException;
+  <T extends XGenericEvent> T readGenericEvent(byte firstEventOffset, boolean sentEvent, byte extension, short sequenceNumber, int length, short eventType, X11Input in) throws IOException;
 
 }

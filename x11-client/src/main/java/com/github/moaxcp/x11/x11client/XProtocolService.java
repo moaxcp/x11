@@ -159,7 +159,7 @@ public class XProtocolService {
       short sequenceNumber = in.readCard16();
       int length = in.readCard32();
       short eventType = in.readCard16();
-      return plugin.readGenericEvent(sentEvent, extension, sequenceNumber, length, eventType, in);
+      return plugin.readGenericEvent(plugin.getFirstEvent(), sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     XProtocolPlugin plugin = pluginService.activePluginForEvent(number)
             .orElseThrow(() -> new IllegalStateException(XProtocolPlugin.class.getSimpleName() + " not found for number " + number));
@@ -215,6 +215,11 @@ public class XProtocolService {
     } catch (IOException e) {
       throw new X11ProtocolException("exception when reading event", e);
     }
+  }
+
+  public Optional<Byte> getFirstEvent(String pluginName) {
+    return pluginService.loadedPlugin(pluginName)
+      .map(XProtocolPlugin::getFirstEvent);
   }
 
   public <T extends XError> T readError(List<Byte> bytes) {

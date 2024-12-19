@@ -49,6 +49,14 @@ public class Utilities {
     }
   }
 
+  public static String toString(@NonNull List<Byte> byteList) {
+    byte[] bytes = new byte[byteList.size()];
+    for(int i = 0; i < bytes.length; i++) {
+      bytes[i] = byteList.get(i);
+    }
+    return new String(bytes);
+  }
+
   public static String toString(@NonNull List<Byte> byteList, @NonNull Charset charset) {
     byte[] bytes = new byte[byteList.size()];
     for(int i = 0; i < bytes.length; i++) {

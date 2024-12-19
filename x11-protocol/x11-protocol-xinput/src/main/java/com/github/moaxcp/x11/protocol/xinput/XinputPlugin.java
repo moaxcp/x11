@@ -583,59 +583,85 @@ public class XinputPlugin implements XProtocolPlugin {
   }
 
   @Override
-  public XGenericEvent readGenericEvent(boolean sentEvent, byte extension, short sequenceNumber,
-      int length, short eventType, X11Input in) throws IOException {
+  public XGenericEvent readGenericEvent(byte firstEventOffset, boolean sentEvent, byte extension,
+      short sequenceNumber, int length, short eventType, X11Input in) throws IOException {
     if(eventType == 1) {
+      return DeviceChangedEvent.readDeviceChangedEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 2) {
+      return KeyPressEvent.readKeyPressEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 2) {
+      return KeyReleaseEvent.readKeyReleaseEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 4) {
+      return ButtonPressEvent.readButtonPressEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 4) {
+      return ButtonReleaseEvent.readButtonReleaseEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 4) {
+      return MotionEvent.readMotionEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 7) {
+      return EnterEvent.readEnterEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 7) {
+      return LeaveEvent.readLeaveEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 7) {
+      return FocusInEvent.readFocusInEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 7) {
+      return FocusOutEvent.readFocusOutEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 11) {
+      return HierarchyEvent.readHierarchyEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 12) {
+      return PropertyEvent.readPropertyEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 13) {
+      return RawKeyPressEvent.readRawKeyPressEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 13) {
+      return RawKeyReleaseEvent.readRawKeyReleaseEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 15) {
+      return RawButtonPressEvent.readRawButtonPressEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 15) {
+      return RawButtonReleaseEvent.readRawButtonReleaseEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 15) {
+      return RawMotionEvent.readRawMotionEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 18) {
+      return TouchBeginEvent.readTouchBeginEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 18) {
+      return TouchUpdateEvent.readTouchUpdateEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 18) {
+      return TouchEndEvent.readTouchEndEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 21) {
+      return TouchOwnershipEvent.readTouchOwnershipEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 22) {
+      return RawTouchBeginEvent.readRawTouchBeginEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 22) {
+      return RawTouchUpdateEvent.readRawTouchUpdateEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 22) {
+      return RawTouchEndEvent.readRawTouchEndEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 25) {
+      return BarrierHitEvent.readBarrierHitEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     if(eventType == 25) {
+      return BarrierLeaveEvent.readBarrierLeaveEvent(firstEventOffset, sentEvent, extension, sequenceNumber, length, eventType, in);
     }
     throw new IllegalArgumentException("eventType " + eventType + " is not supported");
   }
