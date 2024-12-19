@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11.examples;
+package com.github.moaxcp.x11.examples.record;
 
 import com.github.moaxcp.x11.keysym.KeySym;
 import com.github.moaxcp.x11.protocol.XEvent;

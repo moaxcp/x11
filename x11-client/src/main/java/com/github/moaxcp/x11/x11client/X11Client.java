@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.moaxcp.x11.protocol.Utilities.toIntegers;
+import static com.github.moaxcp.x11.protocol.xproto.XprotoUtilities.toChar2bString;
 
 /**
  * An x11 client. The client handles two types of requests: {@link OneWayRequest} and {@link TwoWayRequest}.
@@ -421,6 +422,13 @@ public class X11Client implements AutoCloseable {
     return wid;
   }
 
+  public void changeWindowEvents(int wid, EventMask... events) {
+    send(ChangeWindowAttributes.builder()
+      .window(wid)
+      .eventMaskEnable(events)
+      .build());
+  }
+
   //XRaiseWindow https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/RaiseWin.c
   public void raiseWindow(int wid) {
     send(ConfigureWindow.builder()
@@ -506,6 +514,74 @@ public class X11Client implements AutoCloseable {
     return defaultGC(getDefaultScreenNumber());
   }
 
+  public void polyPoint(int drawable, int gc, CoordMode mode, List<Point> points) {
+    send(PolyPoint.builder()
+      .drawable(drawable)
+      .gc(gc)
+      .coordinateMode(mode)
+      .points(points)
+      .build());
+  }
+
+  public void polyLine(int drawable, int gc, CoordMode mode, List<Point> points) {
+    send(PolyLine.builder()
+      .drawable(drawable)
+      .gc(gc)
+      .coordinateMode(mode)
+      .points(points)
+      .build());
+  }
+
+  public void polySegment(int drawable, int gc, List<Segment> segments) {
+    send(PolySegment.builder()
+      .drawable(drawable)
+      .gc(gc)
+      .segments(segments)
+      .build());
+  }
+
+  public void polyRectangle(int drawable, int gc, List<Rectangle> rectangles) {
+    send(PolyRectangle.builder()
+      .drawable(drawable)
+      .gc(gc)
+      .rectangles(rectangles)
+      .build());
+  }
+
+  public void polyArc(int drawable, int gc, List<Arc> arcs) {
+    send(PolyArc.builder()
+      .drawable(drawable)
+      .gc(gc)
+      .arcs(arcs)
+      .build());
+  }
+
+  public void fillPoly(int drawable, int gc, PolyShape shape, CoordMode mode, List<Point> points) {
+    send(FillPoly.builder()
+      .drawable(drawable)
+      .gc(gc)
+      .shape(shape)
+      .coordinateMode(mode)
+      .points(points)
+      .build());
+  }
+
+  public void polyFillRectangle(int drawable, int gc, List<Rectangle> rectangles) {
+    send(PolyFillRectangle.builder()
+      .drawable(drawable)
+      .gc(gc)
+      .rectangles(rectangles)
+      .build());
+  }
+
+  public void polyFillArc(int drawable, int gc, List<Arc> arcs) {
+    send(PolyFillArc.builder()
+      .drawable(drawable)
+      .gc(gc)
+      .arcs(arcs)
+      .build());
+  }
+
   /**
    * see https://github.com/mirror/libX11/blob/master/src/Text.c
    * @param drawable
@@ -521,6 +597,16 @@ public class X11Client implements AutoCloseable {
       .x(x)
       .y(y)
       .string(Utilities.toByteList(string))
+      .build());
+  }
+
+  public void imageText16(int drawable, int gc, short x, short y, String string) {
+    send(ImageText16.builder()
+      .drawable(drawable)
+      .gc(gc)
+      .x(x)
+      .y(y)
+      .string(toChar2bString(string))
       .build());
   }
 
