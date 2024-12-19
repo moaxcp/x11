@@ -11,7 +11,7 @@ public class X11ClientException extends RuntimeException {
    * Creates an exception.
    * @param message of exception. non-null
    */
-  X11ClientException(String message) {
+  public X11ClientException(String message) {
     super(requireNonNull(message, "message"));
   }
 

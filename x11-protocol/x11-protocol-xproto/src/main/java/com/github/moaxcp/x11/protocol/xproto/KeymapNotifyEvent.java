@@ -23,8 +23,6 @@ public class KeymapNotifyEvent implements XEvent {
   @NonNull
   private List<Byte> keys;
 
-  private short sequenceNumber;
-
   @Override
   public byte getResponseCode() {
     return (byte) (firstEventOffset + NUMBER);
@@ -35,13 +33,16 @@ public class KeymapNotifyEvent implements XEvent {
     return NUMBER;
   }
 
+  @Override
+  public short getSequenceNumber() {
+    throw new UnsupportedOperationException("noSequenceNumber");
+  }
+
   public static KeymapNotifyEvent readKeymapNotifyEvent(byte firstEventOffset, boolean sentEvent,
       X11Input in) throws IOException {
     KeymapNotifyEvent.KeymapNotifyEventBuilder javaBuilder = KeymapNotifyEvent.builder();
     List<Byte> keys = in.readCard8(31);
-    short sequenceNumber = in.readCard16();
     javaBuilder.keys(keys);
-    javaBuilder.sequenceNumber(sequenceNumber);
 
     javaBuilder.sentEvent(sentEvent);
     javaBuilder.firstEventOffset(firstEventOffset);
@@ -55,13 +56,12 @@ public class KeymapNotifyEvent implements XEvent {
   public void write(X11Output out) throws IOException {
     out.writeCard8(sentEvent ? (byte) (0b10000000 | getResponseCode()) : getResponseCode());
     out.writeCard8(keys);
-    out.writeCard16(sequenceNumber);
     out.writePadAlign(getSize());
   }
 
   @Override
   public int getSize() {
-    return 3 + 1 * keys.size();
+    return 1 + 1 * keys.size();
   }
 
   public String getPluginName() {
@@ -70,7 +70,7 @@ public class KeymapNotifyEvent implements XEvent {
 
   public static class KeymapNotifyEventBuilder {
     public int getSize() {
-      return 3 + 1 * keys.size();
+      return 1 + 1 * keys.size();
     }
   }
 }
