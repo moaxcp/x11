@@ -1,19 +1,18 @@
 package com.github.moaxcp.x11.x11client.api.record;
 
 import com.github.moaxcp.x11.protocol.record.EnableContextReply;
-import com.github.moaxcp.x11.x11client.X11Client;
+import com.github.moaxcp.x11.x11client.api.XApi;
 
-public class RecordApi {
-  private final X11Client client;
-  private final ReplySequenceTracker tracker = new ReplySequenceTracker();
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-  public RecordApi(X11Client client) {
-    this.client = client;
-  }
+public interface RecordApi extends XApi {
+  Map<RecordApi, ReplySequenceTracker> trackers = new ConcurrentHashMap<>();
 
-  public RecordReply readNextRecord() {
-    EnableContextReply reply = client.getNextReply(EnableContextReply::readEnableContextReply);
-    RecordDataParser parser = new RecordDataParser(client, reply, tracker);
+  default RecordReply readNextRecord() {
+    var tracker = trackers.computeIfAbsent(this, key -> new ReplySequenceTracker());
+    EnableContextReply reply = getNextReply(EnableContextReply::readEnableContextReply);
+    RecordDataParser parser = new RecordDataParser(this, reply, tracker);
     return parser.parse();
   }
 }

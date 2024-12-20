@@ -435,9 +435,17 @@ https://www.x.org/releases/X11R7.6/doc/libXtst/recordlib.html
 
 # versions
 
+## 0.20.0
+
+* Added support for no-sequence-number events which is only used in KeymapNotifyEvent
+  * This fixed part of the RecordApiExample
+* Adding XApi interfaces to cleanup client
+* Added examples and api to run examples
+
 ## 0.19.0
 
-* Added support for little-endian and made it default to match the server default.
+* Added support for little-endian and made it default to match the new server default (see 
+[blog post](https://who-t.blogspot.com/2023/01/x-servers-no-longer-allow-byte-swapped.html)).
 
 ## 0.18.2
 

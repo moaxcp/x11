@@ -217,6 +217,11 @@ public class XProtocolService {
     }
   }
 
+  public Optional<Byte> getFirstEvent(String pluginName) {
+    return pluginService.loadedPlugin(pluginName)
+      .map(XProtocolPlugin::getFirstEvent);
+  }
+
   public <T extends XError> T readError(List<Byte> bytes) {
     X11Input in = toX11Input(bytes);
     try {

@@ -1,11 +1,9 @@
-package com.github.moaxcp.x11.examples;
+package com.github.moaxcp.x11.examples.record;
 
 import com.github.moaxcp.x11.keysym.KeySym;
 import com.github.moaxcp.x11.protocol.record.*;
-import com.github.moaxcp.x11.protocol.xproto.CreateWindow;
 import com.github.moaxcp.x11.protocol.xproto.GeGenericEvent;
 import com.github.moaxcp.x11.protocol.xproto.KeyPressEvent;
-import com.github.moaxcp.x11.protocol.xproto.NoOperation;
 import com.github.moaxcp.x11.x11client.X11Client;
 import com.github.moaxcp.x11.x11client.api.record.RecordData;
 import com.github.moaxcp.x11.x11client.api.record.RecordReply;
@@ -15,13 +13,12 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+public class RecordApiExample {
 
-public class RecordApiClientTracker {
-
-    private static final Logger log = Logger.getLogger(RecordApiClientTracker.class.getName());
+    private static final Logger log = Logger.getLogger(RecordApiExample.class.getName());
 
     /**
-     * Attempts to read requests and replies but fails
+     * Tests all xproto events including generic events. Also tests errors.
      *
      * @throws IOException
      */
@@ -35,9 +32,9 @@ public class RecordApiClientTracker {
                     .build();
             Range range = Range.builder()
                     .deviceEvents(Range8.builder().first(KeyPressEvent.NUMBER).last(GeGenericEvent.NUMBER).build())
-                    //.coreRequests(empty)
+                    .coreRequests(empty)
                     //requests partially work except there are errors PutImage and a majorOpcode of -1
-                    .coreRequests(Range8.builder().first(CreateWindow.OPCODE).last(NoOperation.OPCODE).build())
+                    //.coreRequests(Range8.builder().first(CreateWindow.OPCODE).last(NoOperation.OPCODE).build())
                     .coreReplies(empty)
                     //replies do not work. There is an issue with matching a sequence number with the sequence number of the reply
                     //.coreReplies(Range8.builder().first(CreateWindow.OPCODE).last(NoOperation.OPCODE).build())
@@ -57,7 +54,6 @@ public class RecordApiClientTracker {
             CreateContext createContext = CreateContext.builder()
                     .context(rc)
                     .clientSpecs(Collections.singletonList(Cs.ALL_CLIENTS.getValue()))
-                    .elementHeaderEnable(HType.FROM_CLIENT_SEQUENCE)
                     .ranges(Collections.singletonList(range))
                     .build();
 
@@ -72,7 +68,7 @@ public class RecordApiClientTracker {
                         .build();
                 data.send(enableContext);
                 while (true) {
-                    RecordReply recordReply = data.record().readNextRecord();
+                    RecordReply recordReply = data.readNextRecord();
                     log.info(String.format("%s", recordReply));
                     Optional<KeySym> first = recordReply.getData().stream()
                             .map(RecordData::getXObject)
