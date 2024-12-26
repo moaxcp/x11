@@ -1,5 +1,9 @@
 package com.github.moaxcp.x11.protocol;
 
+import lombok.NonNull;
+import lombok.ToString;
+import lombok.Value;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -7,9 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import lombok.NonNull;
-import lombok.ToString;
-import lombok.Value;
 
 import static com.github.moaxcp.x11.protocol.ParametersCheck.requireNonEmpty;
 import static com.github.moaxcp.x11.protocol.Utilities.toList;
@@ -96,20 +97,30 @@ public class XAuthority {
   public static Optional<XAuthority> read(DataInput in) {
     try {
       Family family = Family.getByCode(in.readUnsignedShort());
-      int dataLength = in.readUnsignedShort();
-      List<Byte> address = readBytes(in, dataLength);
-      int number = Integer.parseInt(in.readUTF());
-      dataLength = in.readUnsignedShort();
-      List<Byte> name = readBytes(in, dataLength);
-      dataLength = in.readUnsignedShort();
-      List<Byte> data = readBytes(in, dataLength);
+      int length = in.readUnsignedShort();
+      List<Byte> address = readBytesList(in, length);
+      length = in.readUnsignedShort();
+      int number = 0;
+      if (length != 0) {
+        number = Integer.parseInt(new String(readBytes(in, length)));
+      }
+      length = in.readUnsignedShort();
+      List<Byte> name = readBytesList(in, length);
+      length = in.readUnsignedShort();
+      List<Byte> data = readBytesList(in, length);
       return Optional.of(new XAuthority(family, address, number, name, data));
     } catch (IOException ex) {
       return Optional.empty();
     }
   }
 
-  private static List<Byte> readBytes(DataInput in, int length) throws IOException {
+  private static byte[] readBytes(DataInput in, int length) throws IOException {
+    byte[] bytes = new byte[length];
+    in.readFully(bytes);
+    return bytes;
+  }
+
+  private static List<Byte> readBytesList(DataInput in, int length) throws IOException {
     byte[] bytes = new byte[length];
     in.readFully(bytes);
     return toList(bytes);

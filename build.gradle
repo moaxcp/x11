@@ -5,7 +5,7 @@ plugins {
 }
 
 allprojects {
-  version = '0.19.0'
+  version = '0.20.0'
   group = 'com.github.moaxcp.x11'
   repositories {
     mavenCentral()
