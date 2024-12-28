@@ -68,6 +68,7 @@ public class GetCursorImageAndNameReply implements XReply {
     if(javaBuilder.getSize() < 32) {
       in.readPad(32 - javaBuilder.getSize());
     }
+    in.readPadAlign(javaBuilder.getSize());
     return javaBuilder.build();
   }
 

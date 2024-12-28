@@ -25,7 +25,9 @@ public class ListFontsWindow {
         .build();
       var fonts = client.send(listFontsRequest);
 
-      fonts.getNames().forEach(str -> System.out.println(Utilities.toString(str.getName()).indent(4)));
+      fonts.getNames().forEach(str -> System.out.println("    " + Utilities.toString(str.getName())));
+
+      client.sync();
 
       System.out.println("Fonts with info:");
 
@@ -36,7 +38,7 @@ public class ListFontsWindow {
       var fontsWithInfo = client.send(listFontsWithInfoRequest);
 
       while (!fontsWithInfo.getName().isEmpty()) {
-        System.out.println("%s %d".formatted(Utilities.toString(fontsWithInfo.getName()), fontsWithInfo.getRepliesHint()).indent(4));
+        System.out.println("    %s %d".formatted(Utilities.toString(fontsWithInfo.getName()), fontsWithInfo.getRepliesHint()));
         fontsWithInfo = client.getNextReply(listFontsWithInfoRequest.getReplyFunction());
       }
     }

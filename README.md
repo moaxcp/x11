@@ -435,13 +435,15 @@ https://www.x.org/releases/X11R7.6/doc/libXtst/recordlib.html
 
 # versions
 
-## 0.20.0
+## 0.21.0
 
 * Added support for no-sequence-number events which is only used in KeymapNotifyEvent
     * This fixed part of the RecordApiExample
-* Fixing bug in generating code to read generic events
+* Fixed bug where generated code for reading generic events was missing from protocol plugins
+* Fixed bug in generated code for replies where reading pad align was missing
 * Adding XApi interfaces to cleanup client
 * Added examples and api to run examples
+* Fixed bug where new resource ids are not requested by the client when they run out
 
 ## 0.20.0
 

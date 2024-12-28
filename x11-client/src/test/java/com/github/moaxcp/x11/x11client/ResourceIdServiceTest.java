@@ -43,20 +43,20 @@ public class ResourceIdServiceTest {
   void switchToXCMISCNotActivated() {
     service = new ResourceIdService(protocolService, 0b01, 0b10);
     service.nextResourceId();
-    given(protocolService.activatedPlugin("XC-MISC")).willReturn(false);
+    given(protocolService.activatedPlugin("xc_misc")).willReturn(false);
     IllegalStateException exception = assertThrows(IllegalStateException.class, () -> service.nextResourceId());
     assertThat(exception).hasMessage("Core protocol is out of ids and XC-MISC is not activated.");
-    then(protocolService).should().activatedPlugin("XC-MISC");
+    then(protocolService).should().activatedPlugin("xc_misc");
   }
 
   @Test
   void switchToXCMISC() {
     service = new ResourceIdService(protocolService, 0b01, 0b10);
     service.nextResourceId();
-    given(protocolService.activatedPlugin("XC-MISC")).willReturn(true);
+    given(protocolService.activatedPlugin("xc_misc")).willReturn(true);
     given(protocolService.send(any(GetXIDRange.class))).willReturn(GetXIDRangeReply.builder().startId(0b100).count(2).build());
     int id = service.nextResourceId();
-    then(protocolService).should().activatedPlugin("XC-MISC");
+    then(protocolService).should().activatedPlugin("xc_misc");
     assertThat(id).isEqualTo(4);
     id = service.nextResourceId();
     assertThat(id).isEqualTo(5);

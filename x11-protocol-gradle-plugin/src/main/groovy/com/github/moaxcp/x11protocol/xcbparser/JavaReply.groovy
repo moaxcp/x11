@@ -88,7 +88,6 @@ class JavaReply extends JavaClass {
             methodBuilder.beginControlFlow('if(javaBuilder.getSize() < 32)')
             methodBuilder.addStatement('in.readPad(32 - javaBuilder.getSize())')
             methodBuilder.endControlFlow()
-            return
         }
 
         if(fixedSize && fixedSize.get() % 4 == 0) {
