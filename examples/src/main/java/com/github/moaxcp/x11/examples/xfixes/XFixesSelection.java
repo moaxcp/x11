@@ -1,4 +1,4 @@
-package com.github.moaxcp.x11.examples;
+package com.github.moaxcp.x11.examples.xfixes;
 
 import com.github.moaxcp.x11.protocol.xfixes.QueryVersion;
 import com.github.moaxcp.x11.protocol.xfixes.SelectSelectionInput;

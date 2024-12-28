@@ -14,12 +14,12 @@ import static com.github.moaxcp.x11.protocol.xproto.XprotoUtilities.toChar2bStri
 public interface XprotoApi extends XApi {
 
     /**
-     * Sends a {@link GetInputFocus} to the server. This is a {@link TwoWayRequest} which causes a {@link #flush()} and
+     * Sends a {@link GetInputFocus} to the server. This is a {@link TwoWayRequest} which causes a {@link com.github.moaxcp.x11.x11client.X11Client#flush()} and
      * all events to be read from the server and added to the event queue.
      * See <a href="https://github.com/mirror/libX11/blob/caa71668af7fd3ebdd56353c8f0ab90824773969/src/Sync.c">...</a>
      */
     default void sync() {
-        GetInputFocusReply reply = send(GetInputFocus.builder().build());
+        send(GetInputFocus.builder().build());
     }
 
     int nextResourceId();

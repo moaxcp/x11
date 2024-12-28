@@ -25,6 +25,8 @@ public class GenericEventsExample {
           .y(500)
           .build());
 
+      client.sync();
+
       System.out.println(client.getNextEvent());
     }
   }

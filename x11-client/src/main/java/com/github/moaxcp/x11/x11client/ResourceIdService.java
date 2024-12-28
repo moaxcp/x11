@@ -38,7 +38,7 @@ public class ResourceIdService {
     if(nextResourceId >= xcmiscStartId && nextResourceId < xcmiscStartId + xcmiscCount) {
       return nextResourceId++;
     }
-    if(!protocolService.activatedPlugin("XC-MISC")) {
+    if(!protocolService.activatedPlugin("xc_misc")) {
       throw new IllegalStateException("Core protocol is out of ids and XC-MISC is not activated.");
     }
     GetXIDRangeReply range = protocolService.send(GetXIDRange.builder().build());

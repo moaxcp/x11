@@ -2,6 +2,7 @@
 module com.github.moaxcp.x11.examples {
     exports com.github.moaxcp.x11.examples;
   exports com.github.moaxcp.x11.examples.record;
+  exports com.github.moaxcp.x11.examples.xfixes;
 
   requires transitive com.github.moaxcp.x11.client;
     requires transitive com.github.moaxcp.x11.xephyr;

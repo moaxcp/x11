@@ -42,7 +42,7 @@ public class RecordApiExample {
                     .extReplies(emptyExtRange)
                     .deliveredEvents(empty)
                     //doesn't accept any value?
-                    //.deliveredEvents(Range8.builder().first((byte) 0).last((byte) 1).build())
+                    .deliveredEvents(Range8.builder().first((byte) 2).last((byte) 22).build())
                     .clientStarted(true)
                     .errors(Range8.builder()
                             .first((byte) 1)
