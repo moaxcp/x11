@@ -79,9 +79,19 @@ class XUnitField implements XUnit {
         return result.resolveXTypeEnum(enumType)
     }
 
+    XTypeEnum getResolvedAltEnumType() {
+        requireNonNull(altEnumType, "altEnumType must not be null")
+        return result.resolveXTypeEnum(altEnumType)
+    }
+
     XType getResolvedMaskType() {
         requireNonNull(maskType, "maskType must not be null")
         return result.resolveXType(maskType)
+    }
+
+    XType getResolvedAltMaskType() {
+        requireNonNull(altMaskType, "altMaskType must not be null")
+        return result.resolveXType(altMaskType)
     }
 
     @Override

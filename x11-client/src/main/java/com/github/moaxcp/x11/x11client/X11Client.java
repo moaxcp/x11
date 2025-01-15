@@ -7,6 +7,7 @@ import com.github.moaxcp.x11.protocol.xproto.KeyPressEvent;
 import com.github.moaxcp.x11.protocol.xproto.KeyReleaseEvent;
 import com.github.moaxcp.x11.protocol.xproto.Setup;
 import com.github.moaxcp.x11.x11client.api.XprotoApi;
+import com.github.moaxcp.x11.x11client.api.image.BitmapInfo;
 import com.github.moaxcp.x11.x11client.api.record.RecordApi;
 
 import java.io.IOException;
@@ -40,7 +41,6 @@ public class X11Client implements AutoCloseable, RecordApi, XprotoApi {
   private final AtomService atomService;
   private final KeyboardService keyboardService;
   private final Map<Integer, Integer> defaultGCs = new HashMap<>();
-  private RecordApi recordApi;
 
   /**
    * Creates a client for the given {@link DisplayName} and {@link XAuthority}.
@@ -296,5 +296,10 @@ public class X11Client implements AutoCloseable, RecordApi, XprotoApi {
   @Override
   public AtomValue getAtom(String name) {
     return atomService.getAtom(name);
+  }
+
+  @Override
+  public BitmapInfo getBitmapInfo() {
+    return new BitmapInfo(getSetup().getPixmapFormats().detect(f ->f.getDepth() == 1), getSetup().getBitmapFormatBitOrder(), getSetup().getBitmapFormatScanlineUnit(), getSetup().getBitmapFormatScanlinePad());
   }
 }

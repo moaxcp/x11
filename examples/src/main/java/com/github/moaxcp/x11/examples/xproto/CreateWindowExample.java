@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import static java.lang.Thread.sleep;
 
-public class CreateWindow {
+public class CreateWindowExample {
   public static void main(String... args) throws IOException, InterruptedException {
     try (var client = X11Client.connect()) {
       var wid = client.createSimpleWindow(0, 0, 150, 150);

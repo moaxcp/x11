@@ -3,10 +3,14 @@ package com.github.moaxcp.x11.x11client.api;
 import com.github.moaxcp.x11.protocol.*;
 import com.github.moaxcp.x11.protocol.xproto.*;
 import com.github.moaxcp.x11.x11client.X11ClientException;
+import com.github.moaxcp.x11.x11client.api.image.Bitmap;
+import com.github.moaxcp.x11.x11client.api.image.BitmapInfo;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.primitive.ByteList;
 import org.eclipse.collections.api.list.primitive.IntList;
 import org.eclipse.collections.impl.factory.Lists;
+
+import java.util.List;
 
 import static com.github.moaxcp.x11.protocol.Utilities.*;
 import static com.github.moaxcp.x11.protocol.xproto.EventMask.EXPOSURE;
@@ -287,6 +291,15 @@ public interface XprotoApi extends XApi {
             .build());
     }
 
+    default List<String> listFonts(String pattern) {
+        return send(ListFonts.builder()
+            .maxNames(Short.MAX_VALUE)
+            .pattern(toByteList(pattern))
+            .build()).getNames().stream()
+            .map(s -> Utilities.toString(s.getName()))
+            .toList();
+    }
+
     default void killClient(int resource) {
         send(KillClient.builder()
                 .resource(resource)
@@ -298,5 +311,26 @@ public interface XprotoApi extends XApi {
                 .focus(wid)
                 .revertTo(InputFocus.POINTER_ROOT)
                 .build());
+    }
+
+    BitmapInfo getBitmapInfo();
+
+    default Bitmap createBitmap(short width, short height) {
+        return new Bitmap(getBitmapInfo(), width, height);
+    }
+
+    default void putImage(int drawable, int gc, short x, short y, Bitmap bitmap) {
+        send(PutImage.builder()
+            .format(bitmap.getFormat())
+            .drawable(drawable)
+            .gc(gc)
+            .dstX(x)
+            .dstY(y)
+            .width(bitmap.getWidth())
+            .height(bitmap.getHeight())
+            .leftPad(bitmap.getLeftPad())
+            .depth(bitmap.getInfo().getPixmapFormat().getDepth())
+            .data(bitmap.getData())
+            .build());
     }
 }
