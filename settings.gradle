@@ -38,3 +38,5 @@ include 'x11-toolkit'
 include 'xephyr-runner'
 include 'examples'
 
+
+include 'struct'

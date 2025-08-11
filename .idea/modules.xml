@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/struct.iml" filepath="$PROJECT_DIR$/struct.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.integrationTest.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-client/x11.x11-client.integrationTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-bigreq/x11.x11-protocol.x11-protocol-bigreq.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-bigreq/x11.x11-protocol.x11-protocol-bigreq.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-composite/x11.x11-protocol.x11-protocol-composite.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-composite/x11.x11-protocol.x11-protocol-composite.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-core/x11.x11-protocol.x11-protocol-core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/x11-protocol/x11-protocol-core/x11.x11-protocol.x11-protocol-core.main.iml" />

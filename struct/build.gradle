@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.github.moaxcp.x11'
+version = '0.22.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.assertj:assertj-core:3.16.0'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
