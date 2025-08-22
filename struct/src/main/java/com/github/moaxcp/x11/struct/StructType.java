@@ -2,129 +2,122 @@ package com.github.moaxcp.x11.struct;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class StructType implements Type<Struct>, StructMember<Struct>, ElementType<Struct> {
-  private int position;
-  private final List<StructMember<?>> schemas;
-  
-  public StructType() {
-    this(-1);
+public class StructType extends Type<Struct> {
+
+  protected final List<Type<?>> fields;
+
+  protected StructType(int position, List<Type<?>> fields) {
+    super(position);
+    this.fields = fields;
   }
 
-  public StructType(int position) {
-    this.position = position;
-    schemas = new ArrayList<>();
+  private StructType(int position, StructType structType) {
+    super(position);
+    fields = new ArrayList<>(structType.fields);
   }
 
-  public StructType(StructType schema) {
-    this(schema.getPosition());
-    for(StructMember<?> type : schema.schemas) {
-      withType(type.copy());
+  StructType(int position, Expression lengthExpression, Assignment assignment, List<Type<?>> fields) {
+    super(position, null, lengthExpression, assignment);
+    this.fields = fields;
+  }
+
+  @Override
+  public StructType copy(int position) {
+    return new StructType(position, this);
+  }
+
+  public <V extends Type<?>> V getType(int position) {
+    return (V) fields.get(position);
+  }
+
+  @Override
+  public long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index) {
+    var struct = get(pointer, index);
+    return struct.getByteLength();
+  }
+
+  @Override
+  public boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
+    for (int i = 0; i < fields.size(); i++) {
+      var type = fields.get(i);
+      if(!type.isFixedLength(pointer)) {
+        return false;
+      }
+    }
+    return lengthExpression == null || lengthExpression.isConstant(pointer);
+  }
+
+  @Override
+  public Struct get(Pointer<?, ? extends Type<?>> pointer, long index) {
+    var offset = getOffset(pointer, index);
+    return new Struct(offset, this, pointer.getByteArray());
+  }
+
+  @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
+    var struct = get(pointer, index);
+    for (int i = 0; i < fields.size(); i++) {
+      var pointerField = ((Type) fields.get(i));
+      var structField = struct.getType(i);
+      for (int j = 0; j < structField.getArrayLength(struct); j++) {
+        pointerField.set(pointer, j, structField.get(struct, j));
+      }
     }
   }
 
-  public StructType copy() {
-    return new StructType(this);
-  }
-
   @Override
-  public int getPosition() {
-    return position;
-  }
-
-  @Override
-  public void setPosition(int position) {
-    this.position = position;
-  }
-
-  public <T> StructMember<T> getType(int position) {
-    return (StructMember<T>) schemas.get(position);
-  }
-
-  @Override
-  public int getByteLength(Struct struct) {
-    var size = 0;
-    for(StructMember<?> type : schemas) {
-      size += type.getByteLength(struct);
+  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
+    var struct = get(pointer, index);
+    for (int i = 0; i < fields.size(); i++) {
+      struct.getType(i).allocate(pointer);
     }
-    return size;
   }
 
-  @Override
-  public void set(Struct struct, Struct data) {
-    struct.getByteArray().setBytes(data.getByteArray(), data.getOffset(), getOffset(struct), data.getByteLength());
+  public long getByte(Struct struct, int position) {
+    return ((NumberType) fields.get(position)).get(struct);
   }
 
-  @Override
-  public Struct get(Struct struct) {
-    return new Struct(getOffset(struct), this, struct.getByteArray());
+  public long getByte(Struct struct, int position, long index) {
+    return ((NumberType) fields.get(position)).get(struct, index);
   }
 
-  public byte getByte(Struct struct, int position) {
-    return ((ByteType) schemas.get(position)).getByte(struct);
+  public void setByte(Struct struct, int position, long b) {
+    ((NumberType) fields.get(position)).set(struct, b);
   }
 
-  public void setByte(Struct struct, int position, byte b) {
-    ((ByteType) schemas.get(position)).setByte(struct, b);
+  public long getShort(Struct struct, int position) {
+    return ((NumberType) fields.get(position)).get(struct);
   }
 
-  public short getShort(Struct struct, int position) {
-    return ((ShortType) schemas.get(position)).getShort(struct);
+  public long getShort(Struct struct, int position, long index) {
+    return ((NumberType) fields.get(position)).get(struct, index);
   }
 
-  public void setShort(Struct struct, int position, short s) {
-    ((ShortType) schemas.get(position)).setShort(struct, s);
+  public void setShort(Struct struct, int position, long s) {
+    ((NumberType) fields.get(position)).set(struct, s);
   }
 
   public Struct getStruct(Struct struct, int position) {
-    return ((StructType) schemas.get(position)).get(struct);
+    return ((StructType) fields.get(position)).get(struct);
   }
 
   public void setStruct(Struct struct, int position, Struct other) {
-    ((StructType) schemas.get(position)).set(struct, other);
-  }
-
-  public StructType withType(StructMember<?> type) {
-    if (type.getPosition() >= 0) {
-      schemas.set(type.getPosition(), type);
-    } else {
-      type.setPosition(schemas.size());
-      schemas.add(type);
-    }
-    return this;
-  }
-
-  public <L extends Number, E> void setList(Struct struct, int position, LengthList<L, E> list) {
-    ((LengthListType<L, E>) schemas.get(position)).set(struct, list);
+    ((StructType) fields.get(position)).set(struct, other);
   }
 
   @Override
-  public <L extends Number> int getElementOffset(LengthList<L, Struct> list, int index) {
-    var offset = list.getOffset() + list.getType().getLengthType().getLength(list).intValue();
-    for(int i = 0; i < index; i++) {
-      offset += list.getElementByteLength(i);
-    }
-    return offset;
+  public final boolean equals(Object o) {
+    if (!(o instanceof StructType that)) return false;
+
+    return position == that.position && Objects.equals(fields, that.fields);
   }
 
   @Override
-  public <L extends Number> Struct getElement(LengthList<L, Struct> list, int index) {
-    return null;
-  }
-
-  @Override
-  public <L extends Number> void setElement(LengthList<L, Struct> list, int index, Struct data) {
-
-  }
-
-  @Override
-  public <L extends Number> int getByteLength(LengthList<L, Struct> list, int index) {
-    var length = 0;
-    for ( int i = 0; i < index; i++ ) {
-      var offset = getElementOffset(list, i);
-        var struct = new Struct(offset, this);
-        length += struct.getByteLength();
-    }
-    return length;
+  public int hashCode() {
+    int result = position;
+    result = 31 * result + Objects.hashCode(fields);
+    return result;
   }
 }

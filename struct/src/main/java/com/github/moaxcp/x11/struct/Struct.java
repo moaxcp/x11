@@ -1,16 +1,13 @@
 package com.github.moaxcp.x11.struct;
 
-public class Struct implements Pointer<Struct> {
-  private int offset;
+public class Struct implements Pointer<Struct, StructType> {
+  private boolean allocated = false;
+  private long offset;
   private StructType structType;
-  private final ByteArray byteArray;
-
-  public Struct() {
-     this(0);
-   }
+  private ByteArray byteArray;
 
    public Struct(Struct struct) {
-    this(struct.offset, struct.structType.copy(), struct.byteArray.copy());
+    this(struct.allocated, struct.offset, struct.structType.copy(-1), struct.byteArray.copy());
    }
 
   public Struct(StructType structType) {
@@ -18,22 +15,25 @@ public class Struct implements Pointer<Struct> {
   }
 
   public Struct(StructType structType, ByteArray byteArray) {
-    this(0, structType, byteArray);
-  }
-
-  public Struct(int offset) {
-    this(offset, new StructType());
+    this(true, 0, structType, byteArray);
   }
 
   public Struct(int offset, StructType structType) {
-    this(offset, structType, new ByteArray());
+    this(false, offset, structType, new ByteArray());
   }
 
-  public Struct(int offset, StructType structType, ByteArray byteArray) {
+  public Struct(long offset, StructType structType, ByteArray byteArray) {
+    this(true, offset, structType, byteArray);
+  }
+
+  public Struct(boolean allocated, long offset, StructType structType, ByteArray byteArray) {
+     this.allocated = allocated;
     this.offset = offset;
     this.structType = structType;
     this.byteArray = byteArray;
-    byteArray.ensureSizeFor(offset, structType.getByteLength(this));
+    if (!this.allocated) {
+      structType.allocate(this);
+    }
     byteArray.addListener(this);
   }
 
@@ -42,46 +42,86 @@ public class Struct implements Pointer<Struct> {
     return new Struct(this);
   }
 
-  public int getOffset() {
+  @Override
+  public long getOffset() {
     return offset;
   }
 
-  public Struct setOffset(int offset) {
+  @Override
+  public Struct setOffset(long offset) {
     this.offset = offset;
     return this;
   }
 
+  @Override
   public StructType getType() {
     return structType;
   }
 
-  public void setType(StructType structType) {
-    this.structType = structType;
+  @Override
+  public <V extends Type<?>> V getType(int position) {
+    return structType.getType(position);
   }
 
+  @Override
   public ByteArray getByteArray() {
     return byteArray;
   }
 
-  public int getByteLength() {
+  @Override
+  public void setByteArray(ByteArray byteArray) {
+    byteArray.removeListener(this);
+    this.byteArray = byteArray;
+    byteArray.addListener(this);
+  }
+
+  public long getByteLength() {
     return structType.getByteLength(this);
   }
 
-  public byte getByte(int position) {
+  public long getByte(int position) {
     return structType.getByte(this, position);
   }
 
-  public Struct setByte(int position, byte b) {
+  public long getByte(int position, long index) {
+     return structType.getByte(this, position, index);
+  }
+
+  public Struct setByte(int position, long b) {
     structType.setByte(this, position, b);
     return this;
   }
 
-  public short getShort(int position) {
+  public Struct addByte(int position, long b) {
+    ((NumberType) structType.getType(position)).add(this, b);
+    return this;
+  }
+
+  public Struct removeByte(int position, long index) {
+    structType.getType(position).remove(this, index);
+    return this;
+  }
+
+  public long getShort(int position) {
     return structType.getShort(this, position);
   }
 
-  public Struct setShort(int position, short s) {
+  public long getShort(int position, long index) {
+    return structType.getShort(this, position, index);
+  }
+
+  public Struct setShort(int position, long s) {
     structType.setShort(this, position, s);
+    return this;
+  }
+
+  public Struct addShort(int position, long index) {
+    ((NumberType) structType.getType(position)).add(this, index);
+    return this;
+  }
+
+  public Struct removeShort(int position, long index) {
+    structType.getType(position).remove(this, index);
     return this;
   }
 
@@ -94,10 +134,6 @@ public class Struct implements Pointer<Struct> {
     return this;
   }
 
-  public void setList(int position, LengthList<?, ?> list) {
-    structType.setList(this, position, list);
-  }
-
   @Override
   public final boolean equals(Object o) {
     if (!(o instanceof Struct struct)) return false;
@@ -107,10 +143,10 @@ public class Struct implements Pointer<Struct> {
 
   @Override
   public int hashCode() {
-    int result = offset;
+    int result = Math.toIntExact(offset);
     result = 31 * result + structType.hashCode();
     for (int i = 0; i < getByteLength(); i++) {
-      result = 31 * result + byteArray.getByte(getOffset() + i);
+      result = Math.toIntExact(31 * result + byteArray.getByte(getOffset() + i));
     }
     return result;
   }

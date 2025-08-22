@@ -1,81 +1,85 @@
 package com.github.moaxcp.x11.struct;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StructBuilder {
-  private final StructType structType;
-  private Struct struct;
 
   public static StructBuilder struct() {
     return new StructBuilder();
   }
 
-  public StructBuilder() {
-    structType = new StructType();
-    struct = new Struct(structType);
+  private boolean allocated = false;
+  private long offset = 0;
+  private ByteArray byteArray = new ByteArray();
+  private int position = -1;
+  private final List<Type<?>> fields = new ArrayList<>();
+
+  public int position() {
+    return position;
   }
 
-  public StructBuilder withType(StructMember<?> type) {
-    structType.withType(type);
-    struct.setType(structType);
+  public List<Type<?>> fields() {
+    return fields;
+  }
+
+  public StructBuilder allocated() {
+    allocated = true;
     return this;
   }
 
-  public StructBuilder withByte() {
-    return withByte(new ByteType());
-  }
-
-  public StructBuilder withByte(ByteType type) {
-    withType(type);
+  public StructBuilder offset(long offset) {
+    this.offset = offset;
     return this;
   }
 
-  public StructBuilder withByte(int b) {
-    var type = new ByteType();
-    withType(type);
-    struct.setByte(type.getPosition(), (byte) b);
-    return this;
-  }
-  
-  public StructBuilder withShort() {
-    return withShort(new ShortType());
-  }
-
-  public StructBuilder withShort(ShortType type) {
-    withType(type);
+  public StructBuilder fromBytes(ByteArray byteArray) {
+    this.byteArray = byteArray;
+    this.allocated = true;
     return this;
   }
 
-  public StructBuilder withShort(int s) {
-    var type = new ShortType();
-    withType(type);
-    struct.setShort(type.getPosition(), (byte) s);
+  public StructBuilder fromBytes(byte[] bytes) {
+    this.byteArray = new ByteArray(bytes);
+    this.allocated = true;
     return this;
   }
 
-  public StructBuilder withStruct(StructType type) {
-    withType(type);
+  public StructBuilder position(int position) {
+    this.position = position;
     return this;
   }
 
-  public StructBuilder withStruct(Struct struct) {
-    var type = struct.getType();
-    withType(type);
-    struct.setStruct(type.getPosition(), struct);
+  public StructBuilder byteType() {
+    fields.add(NumberType.byteType(fields.size()));
     return this;
   }
 
-  public StructBuilder withList(LengthListType<?, ?> type) {
-    withType(type);
+  public StructBuilder byteArray(int lengthPosition) {
+    fields.add(NumberType.byteArray(fields.size(), lengthPosition));
     return this;
   }
 
-  public StructBuilder withList(LengthList<?, ?> list) {
-    var type = list.getType();
-    withType(type);
-    struct.setList(type.getPosition(), list);
+  public StructBuilder shortType() {
+    fields.add(NumberType.shortType(fields.size()));
     return this;
+  }
+
+  public StructBuilder shortArray(int lengthPosition) {
+    fields.add(NumberType.shortArray(fields.size(), lengthPosition));
+    return this;
+  }
+
+  public StructBuilder structType(StructType structType) {
+    fields.add(structType.copy(fields.size()));
+    return this;
+  }
+
+  public StructBuilder structArray(int length, StructType structType) {
+    return null;
   }
 
   public Struct build() {
-    return struct;
+    return new Struct(allocated, offset, new StructType(position, fields), byteArray);
   }
 }

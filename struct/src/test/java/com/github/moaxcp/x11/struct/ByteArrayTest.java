@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static com.github.moaxcp.x11.struct.ByteArray.shift;
+import static com.github.moaxcp.x11.struct.ByteArray.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ByteArrayTest {
@@ -49,12 +49,45 @@ public class ByteArrayTest {
   @Test
   void addByte() {
     var bytes = new ByteArray();
-    var events = new ArrayList<ByteArray.ByteShift>();
-    bytes.addListener(events::add);
     for (int i = 0; i < 10; i++) {
       bytes.addByte(0, (byte) i);
     }
-    assertThat(events).containsExactly(shift(0, 1), shift(0, 1), shift(0, 1), shift(0, 1), shift(0, 1), shift(0, 1), shift(0, 1), shift(0, 1), shift(0, 1), shift(0, 1));
+    assertThat(bytes.getBytes()).isEqualTo(new byte[] {9, 8, 7, 6, 5, 4, 3, 2, 1, 0});
+  }
+
+  @Test
+  void addByteEvents() {
+    var bytes = new ByteArray();
+    var events = new ArrayList<ByteArray.ShiftBytes>();
+    bytes.addListener(events::add);
+    for (int i = 0; i < 10; i++) {
+      bytes.addByte(0, (byte) i);
+      byte[] newBytes = new byte[bytes.getBytes().length];
+      for (int j = 0; j <= i; j++) {
+        newBytes[j] = (byte) (newBytes.length - 1 - j);
+      }
+      assertThat(bytes.getBytes()).isEqualTo(newBytes);
+    }
+    assertThat(events).containsExactly(shiftBytes(0, 1), shiftBytes(0, 1), shiftBytes(0, 1), shiftBytes(0, 1), shiftBytes(0, 1), shiftBytes(0, 1), shiftBytes(0, 1), shiftBytes(0, 1), shiftBytes(0, 1), shiftBytes(0, 1));
+  }
+
+  @Test
+  void removeByteEvents() {
+    var bytes = new ByteArray();
+    for (int i = 0; i < 10; i++) {
+      bytes.addByte(0, (byte) i);
+    }
+    var events = new ArrayList<ByteArray.ShiftBytes>();
+    bytes.addListener(events::add);
+    for (int i = 0; i < 10; i++) {
+      bytes.removeByte(0);
+      byte[] newBytes = new byte[bytes.getBytes().length];
+      for (int j = 0; j < newBytes.length; j++) {
+        newBytes[j] = (byte) (newBytes.length - 1 - j);
+      }
+      assertThat(bytes.getBytes()).isEqualTo(newBytes);
+    }
+    assertThat(events).containsExactly(shiftBytes(0, -1), shiftBytes(0, -1), shiftBytes(0, -1), shiftBytes(0, -1), shiftBytes(0, -1), shiftBytes(0, -1), shiftBytes(0, -1), shiftBytes(0, -1), shiftBytes(0, -1), shiftBytes(0, -1));
   }
 
   @Test
@@ -72,12 +105,44 @@ public class ByteArrayTest {
   @Test
   void addShort() {
     var bytes = new ByteArray();
-    var events = new ArrayList<ByteArray.ByteShift>();
+    for (int i = 0; i < 10; i++) {
+      bytes.addShort(0, (short) i);
+      byte[] newBytes = new byte[bytes.getBytes().length];
+      for (int j = 0; j <= i; j++) {
+        newBytes[j * 2 + 1] = (byte) (i - j);
+      }
+    }
+    assertThat(bytes.getBytes()).isEqualTo(new byte[] {0, 9, 0, 8, 0, 7, 0, 6, 0, 5, 0, 4, 0, 3, 0, 2, 0, 1, 0, 0});
+  }
+
+  @Test
+  void addShortEvents() {
+    var bytes = new ByteArray();
+    var events = new ArrayList<ByteArray.ShiftBytes>();
     bytes.addListener(events::add);
     for (int i = 0; i < 10; i++) {
       bytes.addShort(0, (short) i);
     }
-    assertThat(events).containsExactly(shift(0, 2), shift(0, 2), shift(0, 2), shift(0, 2), shift(0, 2), shift(0, 2), shift(0, 2), shift(0, 2), shift(0, 2), shift(0, 2));
+    assertThat(events).containsExactly(shiftBytes(0, 2), shiftBytes(0, 2), shiftBytes(0, 2), shiftBytes(0, 2), shiftBytes(0, 2), shiftBytes(0, 2), shiftBytes(0, 2), shiftBytes(0, 2), shiftBytes(0, 2), shiftBytes(0, 2));
+  }
+
+  @Test
+  void removeShortEvents() {
+    var bytes = new ByteArray();
+    for (int i = 0; i < 10; i++) {
+      bytes.addShort(0, i);
+    }
+    var events = new ArrayList<ByteArray.ShiftBytes>();
+    bytes.addListener(events::add);
+    for (int i = 0; i < 10; i++) {
+      bytes.removeShort(0);
+      byte[] newBytes = new byte[bytes.getBytes().length];
+      for (int j = 0; j < 10 - 2 - i; j++) {
+        newBytes[j * 2 + 1] = (byte) (10 - 2 - i - j);
+      }
+      assertThat(bytes.getBytes()).isEqualTo(newBytes);
+    }
+    assertThat(events).containsExactly(shiftBytes(0, -2), shiftBytes(0, -2), shiftBytes(0, -2), shiftBytes(0, -2), shiftBytes(0, -2), shiftBytes(0, -2), shiftBytes(0, -2), shiftBytes(0, -2), shiftBytes(0, -2), shiftBytes(0, -2));
   }
 
   @Test

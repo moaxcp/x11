@@ -1,21 +1,26 @@
 package com.github.moaxcp.x11.struct;
 
-public interface Pointer<SELF extends Pointer<SELF>> extends ByteArray.Listener {
+public interface Pointer<SELF extends Pointer<SELF, T>, T extends Type<SELF>> extends ByteArray.Listener {
   SELF copy();
 
-  int getOffset();
+  long getOffset();
 
-  SELF setOffset(int offset);
+  SELF setOffset(long offset);
 
-  int getByteLength();
+  long getByteLength();
 
-  Type<SELF> getType();
+  T getType();
+
+  <V extends Type<?>> V getType(int position);
 
   ByteArray getByteArray();
 
-  default void event(ByteArray.ByteShift event) {
-    if (getOffset() >= event.offset()) {
-      setOffset(getOffset() + event.size());
+  void setByteArray(ByteArray byteArray);
+
+  default void shift(ByteArray.ShiftBytes shift) {
+    if (getOffset() >= shift.offset()) {
+      var offset = getOffset() + shift.size();
+      setOffset(offset);
     }
   }
 }

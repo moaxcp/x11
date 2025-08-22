@@ -4,17 +4,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.github.moaxcp.x11.struct.NumberType.Size.BYTE;
+import static com.github.moaxcp.x11.struct.NumberType.Size.SHORT;
+
 public class ByteArray {
 
-  public record ByteShift(int offset, int size) { }
+  public record ShiftBytes(long offset, long size) { }
 
-  @FunctionalInterface
   public interface Listener {
-    void event(ByteShift shift);
+    void shift(ShiftBytes shift);
   }
 
-  public static ByteShift shift(int offset, int size) {
-    return new ByteShift(offset, size);
+  public static ShiftBytes shiftBytes(long offset, long size) {
+    return new ShiftBytes(offset, size);
   }
 
   private byte[] bytes;
@@ -46,75 +48,91 @@ public class ByteArray {
     listeners.remove(listener);
   }
 
-  public void notifyListeners(ByteShift shift) {
-    listeners.forEach(l -> l.event(shift));
+  public void notifyListeners(ShiftBytes shift) {
+    listeners.forEach(l -> l.shift(shift));
   }
 
-  public byte[] getBytes() {
+  byte[] getBytes() {
     return bytes;
   }
 
-  public void setBytes(ByteArray source, int sourceOffset, int offset, int length) {
+  public void setBytes(ByteArray source, long sourceOffset, long offset, long length) {
     ensureSizeFor(0, offset + length);
-    System.arraycopy(source.getBytes(), sourceOffset, bytes, offset, length);
+    System.arraycopy(source.getBytes(), Math.toIntExact(sourceOffset), bytes, Math.toIntExact(offset), Math.toIntExact(length));
   }
 
-  public void ensureSizeFor(int offset, int size) {
+  public void ensureSizeFor(long offset, long size) {
     if(bytes.length <= offset + size) {
-      byte[] newBytes = new byte[offset + size];
+      byte[] newBytes = new byte[Math.toIntExact(offset + size)];
       System.arraycopy(bytes, 0, newBytes, 0, bytes.length);
       bytes = newBytes;
     }
   }
 
-  public byte getByte(int offset) {
-    return bytes[offset];
+  public long getByte(long offset) {
+    return bytes[Math.toIntExact(offset)];
   }
 
-  public ByteArray setByte(int offset, byte b) {
-    ensureSizeFor(offset, ByteType.SIZE);
-    bytes[offset] = b;
-    return this;
+  public void setByte(long offset, long b) {
+    ensureSizeFor(offset, BYTE.size());
+    bytes[Math.toIntExact(offset)] = (byte) b;
   }
 
-  public ByteArray addByte(int offset, byte b) {
-    shiftBytesFor(offset, ByteType.SIZE);
+  public void addByte(long offset, long b) {
+    shiftBytesFor(offset, BYTE.size());
     setByte(offset, b);
-    notifyListeners(new ByteShift(offset, ByteType.SIZE));
-    return this;
   }
 
-  private void shiftBytesFor(int offset, int size) {
-    byte[] newBytes = new byte[bytes.length + size];
-    System.arraycopy(bytes, 0, newBytes, 0, offset);
-    System.arraycopy(bytes, offset, newBytes, offset + size, bytes.length - offset);
+  public void removeByte(long offset) {
+    shiftBytesFor(offset, -BYTE.size());
+  }
+
+  public void remove(long offset, long byteLength) {
+    shiftBytesFor(offset, -byteLength);
+  }
+
+  private void shiftBytesFor(long offset, long size) {
+    byte[] newBytes = new byte[Math.toIntExact(bytes.length + size)];
+    if (newBytes.length != 0) {
+      System.arraycopy(bytes, 0, newBytes, 0, Math.toIntExact(offset));
+      if (size > 0) {
+        System.arraycopy(bytes, Math.toIntExact(offset), newBytes, Math.toIntExact(offset + size), bytes.length - Math.toIntExact(offset));
+      } else {
+        System.arraycopy(bytes, Math.toIntExact(offset - size), newBytes, Math.toIntExact(offset), bytes.length - Math.toIntExact(offset - size));
+      }
+    }
+    notifyListeners(shiftBytes(offset, size));
     bytes = newBytes;
   }
 
-  public short getShort(int offset) {
-    return (short) (((bytes[offset] & 0xFF) << 8) | (bytes[offset + 1] & 0xFF));
+  public long getShort(long offset) {
+    return (short) (((bytes[Math.toIntExact(offset)] & 0xFF) << 8) | (bytes[Math.toIntExact(offset + 1)] & 0xFF));
   }
 
-  public ByteArray setShort(int offset, short s) {
-    ensureSizeFor(offset, ShortType.SIZE);
-    bytes[offset] = (byte) (s >> 8);
-    bytes[offset + 1] = (byte) s;
+  public ByteArray setShort(long offset, long s) {
+    ensureSizeFor(offset, SHORT.size());
+    bytes[Math.toIntExact(offset)] = (byte) (s >> 8);
+    bytes[Math.toIntExact(offset + 1)] = (byte) s;
     return this;
   }
 
-  public ByteArray addShort(int offset, short s) {
-    shiftBytesFor(offset, ShortType.SIZE);
+  public ByteArray addShort(long offset, long s) {
+    shiftBytesFor(offset, SHORT.size());
     setShort(offset, s);
-    notifyListeners(new ByteShift(offset, ShortType.SIZE));
     return this;
   }
 
-  public boolean compareBytes(int offset, ByteArray other, int otherOffset, int length) {
+  public ByteArray removeShort(long offset) {
+    shiftBytesFor(offset, -SHORT.size());
+    return this;
+  }
+
+  public boolean compareBytes(long offset, ByteArray other, long otherOffset, long length) {
     if(bytes.length < offset + length || other.bytes.length < otherOffset + length) {
       return false;
     }
     for(int i = 0; i < length; i++) {
-      if(bytes[offset + i] != other.bytes[otherOffset + i]) {
+      if(bytes[Math.toIntExact(offset + i)] != other.bytes[Math.toIntExact(otherOffset + i)]) {
         return false;
       }
     }
