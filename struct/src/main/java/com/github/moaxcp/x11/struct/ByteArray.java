@@ -251,21 +251,21 @@ public class ByteArray {
     shiftBytesFor(index, -FLOAT32.size());
   }
 
-  public double double64(long index) {
+  public double float64(long index) {
     return serializer.readDouble(bytes, Math.toIntExact(index));
   }
 
-  public void double64(long index, double value) {
+  public void float64(long index, double value) {
     ensureSizeFor(index, FLOAT64.size());
     serializer.writeDouble(bytes, Math.toIntExact(index), value);
   }
 
-  public void addDouble64(long index, double value) {
+  public void addFloat64(long index, double value) {
     shiftBytesFor(index, FLOAT64.size());
-    double64(index, value);
+    float64(index, value);
   }
 
-  public void removeDouble64(long index) {
+  public void removeFloat64(long index) {
     shiftBytesFor(index, -FLOAT64.size());
   }
 

@@ -32,8 +32,24 @@ public final class Int8Type extends NumberType<Byte> {
     return pointer.getByteArray().int8(getOffset(pointer, index));
   }
 
+  public byte getInt8(Pointer<?, ? extends Type<?>> pointer) {
+    return pointer.getByteArray().int8(getOffset(pointer));
+  }
+
+  public byte getInt8(Pointer<?, ? extends Type<?>> pointer, long index) {
+    return pointer.getByteArray().int8(getOffset(pointer, index));
+  }
+
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Byte value) {
+    pointer.getByteArray().int8(getOffset(pointer, index), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, byte value) {
+    pointer.getByteArray().int8(getOffset(pointer), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
     pointer.getByteArray().int8(getOffset(pointer, index), value);
   }
 

@@ -77,7 +77,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public byte getInt8(Struct struct, int position) {
-    return ((Int8Type) fields.get(position)).get(struct);
+    return ((Int8Type) fields.get(position)).getInt8(struct);
   }
 
   public void setInt8(Struct struct, int position, byte b) {
@@ -85,7 +85,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public byte getInt8(Struct struct, int position, long index) {
-    return ((Int8Type) fields.get(position)).get(struct, index);
+    return ((Int8Type) fields.get(position)).getInt8(struct, index);
   }
 
   public void setInt8(Struct struct, int position, long index, byte b) {
@@ -93,7 +93,7 @@ public final class StructType extends Type<Struct> {
   }
   
   public short getUint8(Struct struct, int position) {
-    return ((Uint8Type) fields.get(position)).get(struct);
+    return ((Uint8Type) fields.get(position)).getUint8(struct);
   }
 
   public void setUint8(Struct struct, int position, short s) {
@@ -101,7 +101,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public short getUint8(Struct struct, int position, long index) {
-    return ((Uint8Type) fields.get(position)).get(struct, index);
+    return ((Uint8Type) fields.get(position)).getUint8(struct, index);
   }
 
   public void setUint8(Struct struct, int position, long index, short s) {
@@ -109,7 +109,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public short getInt16(Struct struct, int position) {
-    return ((Int16Type) fields.get(position)).get(struct);
+    return ((Int16Type) fields.get(position)).getInt16(struct);
   }
 
   public void setInt16(Struct struct, int position, short s) {
@@ -117,7 +117,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public short getInt16(Struct struct, int position, long index) {
-    return ((Int16Type) fields.get(position)).get(struct, index);
+    return ((Int16Type) fields.get(position)).getInt16(struct, index);
   }
 
   public void setInt16(Struct struct, int position, long index, short s) {
@@ -125,7 +125,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public int getUint16(Struct struct, int position) {
-    return ((Uint16Type) fields.get(position)).get(struct);
+    return ((Uint16Type) fields.get(position)).getUint16(struct);
   }
 
   public void setUint16(Struct struct, int position, int i) {
@@ -133,7 +133,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public int getUint16(Struct struct, int position, long index) {
-    return ((Uint16Type) fields.get(position)).get(struct, index);
+    return ((Uint16Type) fields.get(position)).getUint16(struct, index);
   }
 
   public void setUint16(Struct struct, int position, long index, int i) {
@@ -141,7 +141,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public int getInt32(Struct struct, int position) {
-    return ((Int32Type) fields.get(position)).get(struct);
+    return ((Int32Type) fields.get(position)).getInt32(struct);
   }
 
   public void setInt32(Struct struct, int position, int i) {
@@ -149,7 +149,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public int getInt32(Struct struct, int position, long index) {
-    return ((Int32Type) fields.get(position)).get(struct, index);
+    return ((Int32Type) fields.get(position)).getInt32(struct, index);
   }
 
   public void setInt32(Struct struct, int position, long index, int i) {
@@ -157,7 +157,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public long getUint32(Struct struct, int position) {
-    return ((Uint32Type) fields.get(position)).get(struct);
+    return ((Uint32Type) fields.get(position)).getUint32(struct);
   }
 
   public void setUint32(Struct struct, int position, long l) {
@@ -165,7 +165,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public long getUint32(Struct struct, int position, long index) {
-    return ((Uint32Type) fields.get(position)).get(struct, index);
+    return ((Uint32Type) fields.get(position)).getUint32(struct, index);
   }
 
   public void setUint32(Struct struct, int position, long index, long l) {
@@ -181,7 +181,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public long getInt64(Struct struct, int position, long index) {
-    return ((Int64Type) fields.get(position)).get(struct, index);
+    return ((Int64Type) fields.get(position)).getInt64(struct, index);
   }
 
   public void setInt64(Struct struct, int position, long index, long l) {
@@ -213,7 +213,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public float getFloat32(Struct struct, int position, long index) {
-    return ((Float32Type) fields.get(position)).get(struct, index);
+    return ((Float32Type) fields.get(position)).getFloat32(struct, index);
   }
 
   public void setFloat32(Struct struct, int position, long index, float f) {
@@ -221,7 +221,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public double getFloat64(Struct struct, int position) {
-    return ((Float64Type) fields.get(position)).get(struct);
+    return ((Float64Type) fields.get(position)).getFloat64(struct);
   }
 
   public void setFloat64(Struct struct, int position, double d) {
@@ -229,7 +229,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public double getFloat64(Struct struct, int position, long index) {
-    return ((Float64Type) fields.get(position)).get(struct, index);
+    return ((Float64Type) fields.get(position)).getFloat64(struct, index);
   }
 
   public void setFloat64(Struct struct, int position, long index, double d) {

@@ -32,8 +32,24 @@ public final class Float32Type extends NumberType<Float> {
     return pointer.getByteArray().float32(getOffset(pointer, index));
   }
 
+  public float getFloat32(Pointer<?, ? extends Type<?>> pointer) {
+    return pointer.getByteArray().float32(getOffset(pointer));
+  }
+
+  public float getFloat32(Pointer<?, ? extends Type<?>> pointer, long index) {
+    return pointer.getByteArray().float32(getOffset(pointer, index));
+  }
+
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Float value) {
+    pointer.getByteArray().float32(getOffset(pointer, index), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, float value) {
+    pointer.getByteArray().float32(getOffset(pointer), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     pointer.getByteArray().float32(getOffset(pointer, index), value);
   }
 

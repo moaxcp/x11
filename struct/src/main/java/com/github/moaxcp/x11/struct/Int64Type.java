@@ -32,8 +32,24 @@ public final class Int64Type extends NumberType<Long> {
     return pointer.getByteArray().int64(getOffset(pointer, index));
   }
 
+  public long getInt64(Pointer<?, ? extends Type<?>> pointer) {
+    return pointer.getByteArray().int64(getOffset(pointer));
+  }
+
+  public long getInt64(Pointer<?, ? extends Type<?>> pointer, long index) {
+    return pointer.getByteArray().int64(getOffset(pointer, index));
+  }
+
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Long value) {
+    pointer.getByteArray().int64(getOffset(pointer, index), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, long value) {
+    pointer.getByteArray().int64(getOffset(pointer), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, long value) {
     pointer.getByteArray().int64(getOffset(pointer, index), value);
   }
 

@@ -32,8 +32,24 @@ public final class Uint32Type extends NumberType<Long> {
     return pointer.getByteArray().uint32(getOffset(pointer, index));
   }
 
+  public long getUint32(Pointer<?, ? extends Type<?>> pointer) {
+    return pointer.getByteArray().uint32(getOffset(pointer));
+  }
+
+  public long getUint32(Pointer<?, ? extends Type<?>> pointer, long index) {
+    return pointer.getByteArray().uint32(getOffset(pointer, index));
+  }
+
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Long value) {
+    pointer.getByteArray().uint32(getOffset(pointer, index), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, long value) {
+    pointer.getByteArray().uint32(getOffset(pointer), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, long value) {
     pointer.getByteArray().uint32(getOffset(pointer, index), value);
   }
 

@@ -32,8 +32,24 @@ public final class Int32Type extends NumberType<Integer> {
     return pointer.getByteArray().int32(getOffset(pointer, index));
   }
 
+  public int getInt32(Pointer<?, ? extends Type<?>> pointer) {
+    return pointer.getByteArray().int32(getOffset(pointer));
+  }
+
+  public int getInt32(Pointer<?, ? extends Type<?>> pointer, long index) {
+    return pointer.getByteArray().int32(getOffset(pointer, index));
+  }
+
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Integer value) {
+    pointer.getByteArray().int32(getOffset(pointer, index), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, int value) {
+    pointer.getByteArray().int32(getOffset(pointer), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, int value) {
     pointer.getByteArray().int32(getOffset(pointer, index), value);
   }
 

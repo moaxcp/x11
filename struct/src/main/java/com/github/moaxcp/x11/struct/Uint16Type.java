@@ -32,8 +32,24 @@ public final class Uint16Type extends NumberType<Integer> {
     return pointer.getByteArray().uint16(getOffset(pointer, index));
   }
 
+  public int getUint16(Pointer<?, ? extends Type<?>> pointer) {
+    return pointer.getByteArray().uint16(getOffset(pointer));
+  }
+
+  public int getUint16(Pointer<?, ? extends Type<?>> pointer, long index) {
+    return pointer.getByteArray().uint16(getOffset(pointer, index));
+  }
+
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Integer value) {
+    pointer.getByteArray().uint16(getOffset(pointer, index), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, int value) {
+    pointer.getByteArray().uint16(getOffset(pointer), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, int value) {
     pointer.getByteArray().uint16(getOffset(pointer, index), value);
   }
 

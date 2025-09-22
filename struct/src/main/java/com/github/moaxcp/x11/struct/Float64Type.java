@@ -29,16 +29,32 @@ public final class Float64Type extends NumberType<Double> {
 
   @Override
   public Double get(Pointer<?, ? extends Type<?>> pointer, long index) {
-    return pointer.getByteArray().double64(getOffset(pointer, index));
+    return pointer.getByteArray().float64(getOffset(pointer, index));
+  }
+
+  public double getFloat64(Pointer<?, ? extends Type<?>> pointer) {
+    return pointer.getByteArray().float64(getOffset(pointer));
+  }
+
+  public double getFloat64(Pointer<?, ? extends Type<?>> pointer, long index) {
+    return pointer.getByteArray().float64(getOffset(pointer, index));
   }
 
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Double value) {
-    pointer.getByteArray().double64(getOffset(pointer, index), value);
+    pointer.getByteArray().float64(getOffset(pointer, index), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, double value) {
+    pointer.getByteArray().float64(getOffset(pointer), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, double value) {
+    pointer.getByteArray().float64(getOffset(pointer, index), value);
   }
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    pointer.getByteArray().addDouble64(getOffset(pointer, index), constantValue != null ? constantValue : 0.0d);
+    pointer.getByteArray().addFloat64(getOffset(pointer, index), constantValue != null ? constantValue : 0.0d);
   }
 }

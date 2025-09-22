@@ -32,8 +32,24 @@ public final class Uint8Type extends NumberType<Short> {
     return pointer.getByteArray().uint8(getOffset(pointer, index));
   }
 
+  public short getUint8(Pointer<?, ? extends Type<?>> pointer) {
+    return pointer.getByteArray().uint8(getOffset(pointer));
+  }
+
+  public short getUint8(Pointer<?, ? extends Type<?>> pointer, long index) {
+    return pointer.getByteArray().uint8(getOffset(pointer, index));
+  }
+
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Short value) {
+    pointer.getByteArray().uint8(getOffset(pointer, index), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, short value) {
+    pointer.getByteArray().uint8(getOffset(pointer), value);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
     pointer.getByteArray().uint8(getOffset(pointer, index), value);
   }
 
