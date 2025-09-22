@@ -4,13 +4,16 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Expression.*;
 import static com.github.moaxcp.x11.struct.StructBuilder.struct;
+import static com.github.moaxcp.x11.struct.StructTypeBuilder.structType;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExpressionTest {
   @Test
   void constant_expression() {
     var expression = constant(5);
-    var struct = struct().build();
+    var struct = struct()
+        .structType(structType().build())
+        .build();
     assertThat(expression.evaluate(struct)).isEqualTo(5);
   }
 
@@ -18,10 +21,12 @@ public class ExpressionTest {
   void valueOf_expression() {
     var expression = valueOf(0);
     var struct = struct()
-        .byteType()
+        .structType(structType()
+            .int8()
+            .build())
         .build();
 
-    struct.setByte(0, 2);
+    struct.setInt8(0, (byte) 2);
 
     assertThat(expression.evaluate(struct)).isEqualTo(2);
   }
@@ -30,12 +35,14 @@ public class ExpressionTest {
   void sum_expression() {
     var expression = sum(valueOf(0), valueOf(1), constant(1));
     var struct = struct()
-        .byteType()
-        .byteType()
+        .structType(structType()
+            .int8()
+            .int8()
+            .build())
         .build();
 
-    struct.setByte(0, 2);
-    struct.setByte(1, 3);
+    struct.setInt8(0, (byte) 2);
+    struct.setInt8(1, (byte) 3);
 
     assertThat(expression.evaluate(struct)).isEqualTo(6);
   }

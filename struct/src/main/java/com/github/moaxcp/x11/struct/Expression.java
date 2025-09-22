@@ -38,7 +38,7 @@ public interface Expression {
 
     @Override
     public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
-      return ((NumberType) pointer.getType(position)).get(pointer);
+      return ((NumberType<?>) pointer.getType(position)).get(pointer).longValue();
     }
   }
 

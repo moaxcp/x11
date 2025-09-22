@@ -1,10 +1,11 @@
 package com.github.moaxcp.x11.struct;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class StructType extends Type<Struct> {
+public final class StructType extends Type<Struct> {
 
   protected final List<Type<?>> fields;
 
@@ -75,28 +76,164 @@ public class StructType extends Type<Struct> {
     }
   }
 
-  public long getByte(Struct struct, int position) {
-    return ((NumberType) fields.get(position)).get(struct);
+  public byte getInt8(Struct struct, int position) {
+    return ((Int8Type) fields.get(position)).get(struct);
   }
 
-  public long getByte(Struct struct, int position, long index) {
-    return ((NumberType) fields.get(position)).get(struct, index);
+  public void setInt8(Struct struct, int position, byte b) {
+    ((Int8Type) fields.get(position)).set(struct, b);
   }
 
-  public void setByte(Struct struct, int position, long b) {
-    ((NumberType) fields.get(position)).set(struct, b);
+  public byte getInt8(Struct struct, int position, long index) {
+    return ((Int8Type) fields.get(position)).get(struct, index);
   }
 
-  public long getShort(Struct struct, int position) {
-    return ((NumberType) fields.get(position)).get(struct);
+  public void setInt8(Struct struct, int position, long index, byte b) {
+    ((Int8Type) fields.get(position)).set(struct, index, b);
+  }
+  
+  public short getUint8(Struct struct, int position) {
+    return ((Uint8Type) fields.get(position)).get(struct);
   }
 
-  public long getShort(Struct struct, int position, long index) {
-    return ((NumberType) fields.get(position)).get(struct, index);
+  public void setUint8(Struct struct, int position, short s) {
+    ((Uint8Type) fields.get(position)).set(struct, s);
   }
 
-  public void setShort(Struct struct, int position, long s) {
-    ((NumberType) fields.get(position)).set(struct, s);
+  public short getUint8(Struct struct, int position, long index) {
+    return ((Uint8Type) fields.get(position)).get(struct, index);
+  }
+
+  public void setUint8(Struct struct, int position, long index, short s) {
+    ((Uint8Type) fields.get(position)).set(struct, index, s);
+  }
+
+  public short getInt16(Struct struct, int position) {
+    return ((Int16Type) fields.get(position)).get(struct);
+  }
+
+  public void setInt16(Struct struct, int position, short s) {
+    ((Int16Type) fields.get(position)).set(struct, s);
+  }
+
+  public short getInt16(Struct struct, int position, long index) {
+    return ((Int16Type) fields.get(position)).get(struct, index);
+  }
+
+  public void setInt16(Struct struct, int position, long index, short s) {
+    ((Int16Type) fields.get(position)).set(struct, index, s);
+  }
+
+  public int getUint16(Struct struct, int position) {
+    return ((Uint16Type) fields.get(position)).get(struct);
+  }
+
+  public void setUint16(Struct struct, int position, int i) {
+    ((Uint16Type) fields.get(position)).set(struct, i);
+  }
+
+  public int getUint16(Struct struct, int position, long index) {
+    return ((Uint16Type) fields.get(position)).get(struct, index);
+  }
+
+  public void setUint16(Struct struct, int position, long index, int i) {
+    ((Uint16Type) fields.get(position)).set(struct, index, i);
+  }
+
+  public int getInt32(Struct struct, int position) {
+    return ((Int32Type) fields.get(position)).get(struct);
+  }
+
+  public void setInt32(Struct struct, int position, int i) {
+    ((Int32Type) fields.get(position)).set(struct, i);
+  }
+
+  public int getInt32(Struct struct, int position, long index) {
+    return ((Int32Type) fields.get(position)).get(struct, index);
+  }
+
+  public void setInt32(Struct struct, int position, long index, int i) {
+    ((Int32Type) fields.get(position)).set(struct, index, i);
+  }
+
+  public long getUint32(Struct struct, int position) {
+    return ((Uint32Type) fields.get(position)).get(struct);
+  }
+
+  public void setUint32(Struct struct, int position, long l) {
+    ((Uint32Type) fields.get(position)).set(struct, l);
+  }
+
+  public long getUint32(Struct struct, int position, long index) {
+    return ((Uint32Type) fields.get(position)).get(struct, index);
+  }
+
+  public void setUint32(Struct struct, int position, long index, long l) {
+    ((Uint32Type) fields.get(position)).set(struct, index, l);
+  }
+
+  public long getInt64(Struct struct, int position) {
+    return ((Int64Type) fields.get(position)).get(struct);
+  }
+
+  public void setInt64(Struct struct, int position, long l) {
+    ((Int64Type) fields.get(position)).set(struct, l);
+  }
+
+  public long getInt64(Struct struct, int position, long index) {
+    return ((Int64Type) fields.get(position)).get(struct, index);
+  }
+
+  public void setInt64(Struct struct, int position, long index, long l) {
+    ((Int64Type) fields.get(position)).set(struct, index, l);
+  }
+
+  public BigInteger getUint64(Struct struct, int position) {
+    return ((Uint64Type) fields.get(position)).get(struct);
+  }
+
+  public void setUint64(Struct struct, int position, BigInteger bi) {
+    ((Uint64Type) fields.get(position)).set(struct, bi);
+  }
+
+  public BigInteger getUint64(Struct struct, int position, long index) {
+    return ((Uint64Type) fields.get(position)).get(struct, index);
+  }
+
+  public void setUint64(Struct struct, int position, long index, BigInteger bi) {
+    ((Uint64Type) fields.get(position)).set(struct, index, bi);
+  }
+
+  public float getFloat32(Struct struct, int position) {
+    return ((Float32Type) fields.get(position)).get(struct);
+  }
+
+  public void setFloat32(Struct struct, int position, float f) {
+    ((Float32Type) fields.get(position)).set(struct, f);
+  }
+
+  public float getFloat32(Struct struct, int position, long index) {
+    return ((Float32Type) fields.get(position)).get(struct, index);
+  }
+
+  public void setFloat32(Struct struct, int position, long index, float f) {
+    ((Float32Type) fields.get(position)).set(struct, index, f);
+  }
+
+  public double getFloat64(Struct struct, int position) {
+    return ((Float64Type) fields.get(position)).get(struct);
+  }
+
+  public void setFloat64(Struct struct, int position, double d) {
+    ((Float64Type) fields.get(position)).set(struct, d);
+  }
+
+  public double getFloat64(Struct struct, int position, long index) {
+    return ((Float64Type) fields.get(position)).get(struct, index);
+  }
+
+  public void setFloat64(Struct struct, int position, long index, double d) {
+    ((Float64Type) fields.get(position)).set(struct, index, d);
   }
 
   public Struct getStruct(Struct struct, int position) {

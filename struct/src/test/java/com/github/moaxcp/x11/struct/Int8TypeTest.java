@@ -2,13 +2,14 @@ package com.github.moaxcp.x11.struct;
 
 import org.junit.jupiter.api.Test;
 
+import static com.github.moaxcp.x11.struct.Int8Type.byteType;
 import static com.github.moaxcp.x11.struct.StructBuilder.struct;
-import static com.github.moaxcp.x11.struct.NumberType.Size.BYTE;
-import static com.github.moaxcp.x11.struct.NumberType.byteType;
+import static com.github.moaxcp.x11.struct.Size.INT8;
+import static com.github.moaxcp.x11.struct.StructTypeBuilder.structType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class ByteTypeTest {
+public class Int8TypeTest {
 
   @Test
   void constructor() {
@@ -32,18 +33,22 @@ public class ByteTypeTest {
   @Test
   void getByteLength() {
     var struct = struct()
-        .byteType()
+        .structType(structType()
+            .int8()
+            .build())
         .build();
-    assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(BYTE.size());
+    assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(INT8.size());
   }
 
   @Test
   void setByte() {
     var struct = struct()
-        .byteType()
+        .structType(structType()
+            .int8()
+            .build())
         .build();
 
-    struct.setByte(0, 2L);
+    struct.setInt8(0, (byte) 2);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {2});
   }
@@ -51,20 +56,24 @@ public class ByteTypeTest {
   @Test
   void getByte() {
     var struct = struct()
-        .byteType()
+        .structType(structType()
+            .int8()
+            .build())
         .build();
-    struct.setByte(0, 2L);
+    struct.setInt8(0, (byte) 2);
 
-    assertThat(struct.getByte(0)).isEqualTo(2L);
+    assertThat(struct.getInt8(0)).isEqualTo((byte) 2);
   }
 
   @Test
   void getByteNotSet() {
     var struct = struct()
-        .byteType()
+        .structType(structType()
+            .int8()
+            .build())
         .build();
 
-    assertThat(struct.getByte(0)).isEqualTo(0L);
+    assertThat(struct.getInt8(0)).isEqualTo((byte) 0);
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
   }
 
@@ -72,24 +81,28 @@ public class ByteTypeTest {
   void getByteNotAllocated() {
     var struct = struct()
         .allocated()
-        .byteType()
+        .structType(structType()
+            .int8()
+            .build())
         .build();
 
-    assertThatThrownBy(() -> struct.getByte(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+    assertThatThrownBy(() -> struct.getInt8(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
   }
 
   @Test
   void getByteIndexed() {
     var struct = struct()
-        .byteType()
-        .byteArray(0)
+        .structType(structType()
+            .int8()
+            .int8Array(0)
+            .build())
         .build();
 
-    struct.addByte(1, 1);
-    struct.addByte(1, 2);
+    struct.addInt8(1, (byte) 1);
+    struct.addInt8(1, (byte) 2);
 
-    assertThat(struct.getByte(1, 0)).isEqualTo(1L);
-    assertThat(struct.getByte(1, 1)).isEqualTo(2L);
+    assertThat(struct.getInt8(1, 0)).isEqualTo((byte) 1);
+    assertThat(struct.getInt8(1, 1)).isEqualTo((byte) 2);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {2, 1, 2} );
   }
@@ -97,15 +110,17 @@ public class ByteTypeTest {
   @Test
   void removeByteIndexed() {
     var struct = struct()
-        .byteType()
-        .byteArray(0)
+        .structType(structType()
+            .int8()
+            .int8Array(0)
+            .build())
         .build();
 
-    struct.addByte(1, 1);
-    struct.addByte(1, 2);
-    struct.removeByte(1, 0);
+    struct.addInt8(1, (byte) 1);
+    struct.addInt8(1, (byte) 2);
+    struct.removeInt8(1, 0);
 
-    assertThat(((NumberType) struct.getType(1)).get(struct, 0)).isEqualTo(2L);
+    assertThat(((NumberType) struct.getType(1)).get(struct, 0)).isEqualTo((byte) 2);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1, 2} );
   }

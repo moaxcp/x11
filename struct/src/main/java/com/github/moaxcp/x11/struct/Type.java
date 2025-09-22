@@ -10,7 +10,7 @@ import org.jspecify.annotations.Nullable;
  * the type must have a lengthExpression. An Assignment is required for variable length arrays.
  * @param <T>
  */
-public abstract class Type<T> {
+public abstract sealed class Type<T> permits NumberType, StructType {
   protected final int position;
   @Nullable
   protected final Expression lengthExpression;
@@ -109,10 +109,12 @@ public abstract class Type<T> {
   }
 
   public final void add(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
-    var length = getArrayLength(pointer);
+    if (assignment == null ) {
+      throw new IllegalArgumentException("assignment is required for variable length arrays");
+    }
     allocate(pointer, index);
     set(pointer, index, value);
-    assignment.assign(pointer, length, 1);
+    assignment.assign(pointer, 1);
   }
 
   public final void allocate(Pointer<?, ? extends Type<?>> pointer) {
@@ -140,8 +142,10 @@ public abstract class Type<T> {
   }
   
   public final void remove(Pointer<?, ? extends Type<?>> pointer, long index) {
-    long length = getArrayLength(pointer);
+    if(assignment == null) {
+      throw new IllegalArgumentException("assignment is required for variable length arrays");
+    }
     pointer.getByteArray().remove(getOffset(pointer, index), getByteLength(pointer, index));
-    assignment.assign(pointer, length, -1);
+    assignment.assign(pointer, -1);
   }
 }
