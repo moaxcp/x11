@@ -11,7 +11,12 @@ public class StructTypeBuilder {
   private int position;
   private Expression lengthExpression;
   private Assignment assignment;
+  private Struct constant;
   private List<Type<?>> fields = new ArrayList<>();
+
+  public int fields() {
+    return fields.size();
+  }
 
   public StructTypeBuilder position(int position) {
     this.position = position;
@@ -28,204 +33,98 @@ public class StructTypeBuilder {
     return this;
   }
 
-  public StructTypeBuilder int8() {
-    fields.add(new Int8Type(fields.size()));
+  public StructTypeNumberBuilder number() {
+    return new StructTypeNumberBuilder(this, fields.size());
+  }
+
+  StructTypeBuilder field(Type<?> type) {
+    fields.add(type);
     return this;
   }
 
-  public StructTypeBuilder int8(long constantValue) {
-    fields.add(new Int8Type(fields.size(), (byte) constantValue, null, null));
-    return this;
+  public StructTypeBuilder int8() {
+    return number().int8();
   }
 
   public StructTypeBuilder int8Array(int lengthPosition) {
-    fields.add(new Int8Type(fields.size(), null, Expression.valueOf(lengthPosition), Assignment.add(lengthPosition)));
-    return this;
-  }
-
-  public StructTypeBuilder int8Array(int length, long constantValue) {
-    fields.add(new Int8Type(fields.size(), (byte) constantValue, Expression.constant(length), null));
-    return this;
+    return number().lengthField(lengthPosition).int8();
   }
 
   public StructTypeBuilder uint8() {
-    fields.add(new Uint8Type(fields.size()));
-    return this;
+    return number().uint8();
   }
-
-  public StructTypeBuilder uint8(long constantValue) {
-    fields.add(new Uint8Type(fields.size(), (short) constantValue, null, null));
-    return this;
-  }
-
   public StructTypeBuilder uint8Array(int lengthPosition) {
-    fields.add(new Uint8Type(fields.size(), null, Expression.valueOf(lengthPosition), Assignment.add(lengthPosition)));
-    return this;
-  }
-
-  public StructTypeBuilder uint8Array(int length, long constantValue) {
-    fields.add(new Uint8Type(fields.size(), (short) constantValue, Expression.constant(length), null));
-    return this;
+    return number().lengthField(lengthPosition).uint8();
   }
 
   public StructTypeBuilder int16() {
-    fields.add(new Int16Type(fields.size()));
-    return this;
-  }
-
-  public StructTypeBuilder int16(long constantValue) {
-    fields.add(new Int16Type(fields.size(), (short) constantValue, null, null));
-    return this;
+    return number().int16();
   }
 
   public StructTypeBuilder int16Array(int lengthPosition) {
-    fields.add(new Int16Type(fields.size(), null, Expression.valueOf(lengthPosition), Assignment.add(lengthPosition)));
-    return this;
-  }
-
-  public StructTypeBuilder int16Array(int length, long constantValue) {
-    fields.add(new Int16Type(fields.size(), (short) constantValue, Expression.constant(length), null));
-    return this;
+    return number().lengthField(lengthPosition).int16();
   }
 
   public StructTypeBuilder uint16() {
-    fields.add(new Uint16Type(fields.size()));
-    return this;
-  }
-
-  public StructTypeBuilder uint16(long constantValue) {
-    fields.add(new Uint16Type(fields.size(), (int) constantValue, null, null));
-    return this;
+    return number().uint16();
   }
 
   public StructTypeBuilder uint16Array(int lengthPosition) {
-    fields.add(new Uint16Type(fields.size(), null, Expression.valueOf(lengthPosition), Assignment.add(lengthPosition)));
-    return this;
-  }
-
-  public StructTypeBuilder uint16Array(int length, long constantValue) {
-    fields.add(new Uint16Type(fields.size(), (int) constantValue, Expression.constant(length), null));
-    return this;
+    return number().lengthField(lengthPosition).uint16();
   }
 
   public StructTypeBuilder int32() {
-    fields.add(new Int32Type(fields.size()));
-    return this;
-  }
-
-  public StructTypeBuilder int32(long constantValue) {
-    fields.add(new Int32Type(fields.size(), (int) constantValue, null, null));
-    return this;
+    return number().int32();
   }
 
   public StructTypeBuilder int32Array(int lengthPosition) {
-    fields.add(new Int32Type(fields.size(), null, Expression.valueOf(lengthPosition), Assignment.add(lengthPosition)));
-    return this;
+    return number().lengthField(lengthPosition).int32();
   }
-
-  public StructTypeBuilder int32Array(int length, long constantValue) {
-    fields.add(new Int32Type(fields.size(), (int) constantValue, Expression.constant(length), null));
-    return this;
-  }
-
   public StructTypeBuilder uint32() {
-    fields.add(new Uint32Type(fields.size()));
-    return this;
-  }
-
-  public StructTypeBuilder uint32(long constantValue) {
-    fields.add(new Uint32Type(fields.size(), (long) constantValue, null, null));
-    return this;
+    return number().uint32();
   }
 
   public StructTypeBuilder uint32Array(int lengthPosition) {
-    fields.add(new Uint32Type(fields.size(), null, Expression.valueOf(lengthPosition), Assignment.add(lengthPosition)));
-    return this;
-  }
-
-  public StructTypeBuilder uint32Array(int length, long constantValue) {
-    fields.add(new Uint32Type(fields.size(), (long) constantValue, Expression.constant(length), null));
-    return this;
+    return number().lengthField(lengthPosition).uint32();
   }
 
   public StructTypeBuilder int64() {
-    fields.add(new Int64Type(fields.size()));
-    return this;
-  }
-
-  public StructTypeBuilder int64(long constantValue) {
-    fields.add(new Int64Type(fields.size(), (long) constantValue, null, null));
-    return this;
+    return number().int64();
   }
 
   public StructTypeBuilder int64Array(int lengthPosition) {
-    fields.add(new Int64Type(fields.size(), null, Expression.valueOf(lengthPosition), Assignment.add(lengthPosition)));
-    return this;
-  }
-
-  public StructTypeBuilder int64Array(int length, long constantValue) {
-    fields.add(new Int64Type(fields.size(), (long) constantValue, Expression.constant(length), null));
-    return this;
+    return number().lengthField(lengthPosition).int64();
   }
 
   public StructTypeBuilder uint64() {
-    fields.add(new Uint64Type(fields.size()));
-    return this;
+    return number().uint64();
   }
-
-  public StructTypeBuilder uint64(java.math.BigInteger constantValue) {
-    fields.add(new Uint64Type(fields.size(), constantValue, null, null));
-    return this;
-  }
-
   public StructTypeBuilder uint64Array(int lengthPosition) {
-    fields.add(new Uint64Type(fields.size(), null, Expression.valueOf(lengthPosition), Assignment.add(lengthPosition)));
-    return this;
-  }
-
-  public StructTypeBuilder uint64Array(int length, java.math.BigInteger constantValue) {
-    fields.add(new Uint64Type(fields.size(), constantValue, Expression.constant(length), null));
-    return this;
+    return number().lengthField(lengthPosition).uint64();
   }
 
   public StructTypeBuilder float32() {
-    fields.add(new Float32Type(fields.size()));
-    return this;
-  }
-
-  public StructTypeBuilder float32(float constantValue) {
-    fields.add(new Float32Type(fields.size(), constantValue, null, null));
-    return this;
+    return number().float32();
   }
 
   public StructTypeBuilder float32Array(int lengthPosition) {
-    fields.add(new Float32Type(fields.size(), null, Expression.valueOf(lengthPosition), Assignment.add(lengthPosition)));
-    return this;
-  }
-
-  public StructTypeBuilder float32Array(int length, float constantValue) {
-    fields.add(new Float32Type(fields.size(), constantValue, Expression.constant(length), null));
-    return this;
+    return number().lengthField(lengthPosition).float32();
   }
 
   public StructTypeBuilder float64() {
-    fields.add(new Float64Type(fields.size()));
-    return this;
-  }
-
-  public StructTypeBuilder float64(double constantValue) {
-    fields.add(new Float64Type(fields.size(), constantValue, null, null));
-    return this;
+    return number().float64();
   }
 
   public StructTypeBuilder float64Array(int lengthPosition) {
-    fields.add(new Float64Type(fields.size(), null, Expression.valueOf(lengthPosition), Assignment.add(lengthPosition)));
-    return this;
+    return number().lengthField(lengthPosition).float64();
   }
 
-  public StructTypeBuilder float64Array(int length, double constantValue) {
-    fields.add(new Float64Type(fields.size(), constantValue, Expression.constant(length), null));
-    return this;
+  public StructTypeStructTypeBuilder struct() {
+    return new StructTypeStructTypeBuilder(this, fields.size());
+  }
+
+  public StructTypeStructTypeBuilder structArray(int lengthPosition) {
+    return new StructTypeStructTypeBuilder(this, fields.size()).lengthField(lengthPosition);
   }
 
   public StructTypeBuilder struct(StructType structType) {
@@ -233,8 +132,13 @@ public class StructTypeBuilder {
     return this;
   }
 
+  public StructTypeBuilder constant(Struct constant) {
+    this.constant = constant;
+    return this;
+  }
+
   public StructType build() {
-    return new StructType(position, lengthExpression, assignment, fields);
+    return new StructType(position, constant, lengthExpression, assignment, fields);
   }
 
   public Struct toStruct() {

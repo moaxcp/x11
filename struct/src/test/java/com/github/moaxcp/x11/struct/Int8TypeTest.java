@@ -2,7 +2,7 @@ package com.github.moaxcp.x11.struct;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.x11.struct.Int8Type.byteType;
+import static com.github.moaxcp.x11.struct.Int8Type.int8;
 import static com.github.moaxcp.x11.struct.StructBuilder.struct;
 import static com.github.moaxcp.x11.struct.Size.INT8;
 import static com.github.moaxcp.x11.struct.StructTypeBuilder.structType;
@@ -13,19 +13,19 @@ public class Int8TypeTest {
 
   @Test
   void constructor() {
-    var type = byteType();
+    var type = Int8Type.int8();
     assertThat(type.getPosition()).isEqualTo(-1);
   }
 
   @Test
   void constructorPosition() {
-    var type = byteType(15);
+    var type = int8(15);
     assertThat(type.getPosition()).isEqualTo(15);
   }
 
   @Test
   void copy() {
-    var type = byteType();
+    var type = Int8Type.int8();
     var copy = type.copy(15);
     assertThat(copy.getPosition()).isEqualTo(15);
   }

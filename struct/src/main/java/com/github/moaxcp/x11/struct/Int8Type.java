@@ -6,11 +6,11 @@ import static com.github.moaxcp.x11.struct.Size.INT8;
 
 public final class Int8Type extends NumberType<Byte> {
 
-  public static Int8Type byteType() {
-    return byteType(-1);
+  public static Int8Type int8() {
+    return int8(-1);
   }
 
-  public static Int8Type byteType(int position) {
+  public static Int8Type int8(int position) {
     return new Int8Type(position);
   }
 

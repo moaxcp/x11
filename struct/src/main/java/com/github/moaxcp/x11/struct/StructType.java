@@ -19,8 +19,8 @@ public final class StructType extends Type<Struct> {
     fields = new ArrayList<>(structType.fields);
   }
 
-  StructType(int position, Expression lengthExpression, Assignment assignment, List<Type<?>> fields) {
-    super(position, null, lengthExpression, assignment);
+  StructType(int position, Struct constant, Expression lengthExpression, Assignment assignment, List<Type<?>> fields) {
+    super(position, constant, lengthExpression, assignment);
     this.fields = fields;
   }
 
