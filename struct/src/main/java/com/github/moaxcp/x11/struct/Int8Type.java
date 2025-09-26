@@ -28,8 +28,13 @@ public final class Int8Type extends NumberType<Byte> {
   }
 
   @Override
+  public Byte get(Pointer<?, ? extends Type<?>> pointer) {
+    throw new UnsupportedOperationException("get(Pointer) not supported for Int8Type. Use getInt8(Pointer) instead.");
+  }
+
+  @Override
   public Byte get(Pointer<?, ? extends Type<?>> pointer, long index) {
-    return pointer.getByteArray().int8(getOffset(pointer, index));
+    throw new UnsupportedOperationException("get(Pointer, long) not supported for Int8Type. Use getInt8(Pointer, long) instead.");
   }
 
   public byte getInt8(Pointer<?, ? extends Type<?>> pointer) {
@@ -41,8 +46,13 @@ public final class Int8Type extends NumberType<Byte> {
   }
 
   @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, Byte value) {
+    throw new UnsupportedOperationException("set(Pointer, Byte) not supported for Int8Type. Use set(Pointer, byte) instead.");
+  }
+
+  @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Byte value) {
-    pointer.getByteArray().int8(getOffset(pointer, index), value);
+    throw new UnsupportedOperationException("set(Pointer, long, Byte) not supported for Int8Type. Use set(Pointer, long, byte) instead.");
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, byte value) {
@@ -51,6 +61,24 @@ public final class Int8Type extends NumberType<Byte> {
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
     pointer.getByteArray().int8(getOffset(pointer, index), value);
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, Byte value) {
+    throw new UnsupportedOperationException("add(Pointer, Byte) not supported for Int8Type. Use add(Pointer, byte) instead.");
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, Byte value) {
+    throw new UnsupportedOperationException("add(Pointer, long, Byte) not supported for Int8Type. Use add(Pointer, long, byte) instead.");
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, byte value) {
+    add(pointer, getArrayLength(pointer), value);
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
+    allocate(pointer, index);
+    set(pointer, index, value);
+    assignment.assign(pointer, 1);
   }
 
   @Override

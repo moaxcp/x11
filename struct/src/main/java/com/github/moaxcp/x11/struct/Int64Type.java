@@ -28,8 +28,13 @@ public final class Int64Type extends NumberType<Long> {
   }
 
   @Override
+  public Long get(Pointer<?, ? extends Type<?>> pointer) {
+    throw new UnsupportedOperationException("get(Pointer) not supported for Int64Type. Use getInt64(Pointer) instead.");
+  }
+
+  @Override
   public Long get(Pointer<?, ? extends Type<?>> pointer, long index) {
-    return pointer.getByteArray().int64(getOffset(pointer, index));
+    throw new UnsupportedOperationException("get(Pointer, long) not supported for Int64Type. Use getInt64(Pointer, long) instead.");
   }
 
   public long getInt64(Pointer<?, ? extends Type<?>> pointer) {
@@ -41,8 +46,13 @@ public final class Int64Type extends NumberType<Long> {
   }
 
   @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, Long value) {
+    throw new UnsupportedOperationException("set(Pointer, Long) not supported for Int64Type. Use setInt64(Pointer, long) instead.");
+  }
+
+  @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Long value) {
-    pointer.getByteArray().int64(getOffset(pointer, index), value);
+    throw new UnsupportedOperationException("set(Pointer, long, Long) not supported for Int64Type. Use setInt64(Pointer, long, long) instead.");
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long value) {

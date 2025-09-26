@@ -173,7 +173,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public long getInt64(Struct struct, int position) {
-    return ((Int64Type) fields.get(position)).get(struct);
+    return ((Int64Type) fields.get(position)).getInt64(struct);
   }
 
   public void setInt64(Struct struct, int position, long l) {
@@ -205,7 +205,7 @@ public final class StructType extends Type<Struct> {
   }
 
   public float getFloat32(Struct struct, int position) {
-    return ((Float32Type) fields.get(position)).get(struct);
+    return ((Float32Type) fields.get(position)).getFloat32(struct);
   }
 
   public void setFloat32(Struct struct, int position, float f) {

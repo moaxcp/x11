@@ -28,8 +28,13 @@ public final class Float32Type extends NumberType<Float> {
   }
 
   @Override
+  public Float get(Pointer<?, ? extends Type<?>> pointer) {
+    throw new UnsupportedOperationException("get(Pointer) not supported for Float32Type. Use getFloat32(Pointer) instead.");
+  }
+
+  @Override
   public Float get(Pointer<?, ? extends Type<?>> pointer, long index) {
-    return pointer.getByteArray().float32(getOffset(pointer, index));
+    throw new UnsupportedOperationException("get(Pointer, long) not supported for Float32Type. Use getFloat32(Pointer, long) instead.");
   }
 
   public float getFloat32(Pointer<?, ? extends Type<?>> pointer) {
@@ -41,8 +46,13 @@ public final class Float32Type extends NumberType<Float> {
   }
 
   @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, Float value) {
+    throw new UnsupportedOperationException("set(Pointer, Float) not supported for Float32Type. Use set(Pointer, float) instead.");
+  }
+
+  @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Float value) {
-    pointer.getByteArray().float32(getOffset(pointer, index), value);
+    throw new UnsupportedOperationException("set(Pointer, long, Float) not supported for Float32Type. Use set(Pointer, long, float) instead.");
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, float value) {

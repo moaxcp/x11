@@ -1,72 +1,74 @@
 package com.github.moaxcp.x11.struct;
 
-public class StructTypeNumberBuilder {
-  private final StructTypeBuilder structTypeBuilder;
+import static com.github.moaxcp.x11.struct.NumberTypeBuilder.number;
+
+public class NumberTypeSubBuilder<PARENT extends StructTypeBuilder<PARENT>> {
+  private final PARENT structTypeBuilder;
   private final NumberTypeBuilder numberTypeBuilder;
 
-  StructTypeNumberBuilder(StructTypeBuilder structTypeBuilder, int position) {
+  NumberTypeSubBuilder(PARENT structTypeBuilder, int position) {
     this.structTypeBuilder = structTypeBuilder;
-    numberTypeBuilder = NumberTypeBuilder.number().position(position);
+    numberTypeBuilder = number().position(position);
   }
 
-  public StructTypeNumberBuilder constant(Number constantValue) {
+  public NumberTypeSubBuilder<PARENT> constant(Number constantValue) {
     numberTypeBuilder.constant(constantValue);
     return this;
   }
 
-  public StructTypeNumberBuilder lengthField(int lengthFieldPosition) {
+  public NumberTypeSubBuilder<PARENT> lengthField(int lengthFieldPosition) {
     numberTypeBuilder.lengthExpression(Expression.valueOf(lengthFieldPosition));
     numberTypeBuilder.assignment(Assignment.add(lengthFieldPosition));
     return this;
   }
 
-  public StructTypeNumberBuilder lengthExpression(Expression lengthExpression) {
+  public NumberTypeSubBuilder<PARENT> lengthExpression(Expression lengthExpression) {
     numberTypeBuilder.lengthExpression(lengthExpression);
     return this;
   }
 
-  public StructTypeNumberBuilder assignment(Assignment assignment) {
+  public NumberTypeSubBuilder<PARENT> assignment(Assignment assignment) {
     numberTypeBuilder.assignment(assignment);
     return this;
   }
 
-  public StructTypeBuilder int8() {
+  public PARENT int8() {
     return structTypeBuilder.field(numberTypeBuilder.int8());
   }
 
-  public StructTypeBuilder uint8() {
+  public PARENT uint8() {
     return structTypeBuilder.field(numberTypeBuilder.uint8());
   }
 
-  public StructTypeBuilder int16() {
+  public PARENT int16() {
     return structTypeBuilder.field(numberTypeBuilder.int16());
   }
 
-  public StructTypeBuilder uint16() {
+  public PARENT uint16() {
     return structTypeBuilder.field(numberTypeBuilder.uint16());
   }
 
-  public StructTypeBuilder int32() {
+  public PARENT int32() {
     return structTypeBuilder.field(numberTypeBuilder.int32());
   }
 
-  public StructTypeBuilder uint32() {
+  public PARENT uint32() {
     return structTypeBuilder.field(numberTypeBuilder.uint32());
   }
 
-  public StructTypeBuilder int64() {
+  public PARENT int64() {
     return structTypeBuilder.field(numberTypeBuilder.int64());
   }
 
-  public StructTypeBuilder uint64() {
+  public PARENT uint64() {
     return structTypeBuilder.field(numberTypeBuilder.uint64());
   }
 
-  public StructTypeBuilder float32() {
+  public PARENT float32() {
     return structTypeBuilder.field(numberTypeBuilder.float32());
   }
 
-  public StructTypeBuilder float64() {
+  public PARENT float64() {
     return structTypeBuilder.field(numberTypeBuilder.float64());
   }
 }

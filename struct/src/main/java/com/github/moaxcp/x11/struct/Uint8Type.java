@@ -26,10 +26,17 @@ public final class Uint8Type extends NumberType<Short> {
   protected Uint8Type copy(int position) {
     return new Uint8Type(position, constantValue, lengthExpression, assignment);
   }
+  
+  
+
+  @Override
+  public Short get(Pointer<?, ? extends Type<?>> pointer) {
+    throw new UnsupportedOperationException("get(Pointer) not supported for Uint8Type. Use getUint8(Pointer) instead.");
+  }
 
   @Override
   public Short get(Pointer<?, ? extends Type<?>> pointer, long index) {
-    return pointer.getByteArray().uint8(getOffset(pointer, index));
+    throw new UnsupportedOperationException("get(Pointer, long) not supported for Uint8Type. Use getUint8(Pointer, long) instead.");
   }
 
   public short getUint8(Pointer<?, ? extends Type<?>> pointer) {
@@ -41,8 +48,13 @@ public final class Uint8Type extends NumberType<Short> {
   }
 
   @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, Short value) {
+    throw new UnsupportedOperationException("set(Pointer, Short) not supported for Uint8Type. Use set(Pointer, short) instead.");
+  }
+
+  @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Short value) {
-    pointer.getByteArray().uint8(getOffset(pointer, index), value);
+    throw new UnsupportedOperationException("set(Pointer, long, Short) not supported for Uint8Type. Use set(Pointer, long, short) instead.");
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, short value) {

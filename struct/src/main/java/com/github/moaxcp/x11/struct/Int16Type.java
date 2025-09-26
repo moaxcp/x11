@@ -28,8 +28,13 @@ public final class Int16Type extends NumberType<Short> {
   }
 
   @Override
+  public Short get(Pointer<?, ? extends Type<?>> pointer) {
+    throw new UnsupportedOperationException("get(Pointer) not supported for Int16Type. Use getInt16(Pointer) instead.");
+  }
+
+  @Override
   public Short get(Pointer<?, ? extends Type<?>> pointer, long index) {
-    return pointer.getByteArray().int16(getOffset(pointer, index));
+    throw new UnsupportedOperationException("get(Pointer, long) not supported for Int16Type. Use getInt16(Pointer, long) instead.");
   }
 
   public short getInt16(Pointer<?, ? extends Type<?>> pointer) {
@@ -41,8 +46,13 @@ public final class Int16Type extends NumberType<Short> {
   }
 
   @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, Short value) {
+    throw new UnsupportedOperationException("set(Pointer, Short) not supported for Int16Type. Use set(Pointer, short) instead.");
+  }
+
+  @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Short value) {
-    pointer.getByteArray().int16(getOffset(pointer, index), value);
+    throw new UnsupportedOperationException("set(Pointer, long, Short) not supported for Int16Type. Use set(Pointer, long, short) instead.");
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, short value) {

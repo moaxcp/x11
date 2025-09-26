@@ -92,26 +92,23 @@ public abstract sealed class Type<T> permits NumberType, StructType {
     return constantValue != null;
   }
 
-  public final T get(Pointer<?, ? extends Type<?>> pointer) {
+  public T get(Pointer<?, ? extends Type<?>> pointer) {
     return get(pointer, 0);
   }
   
   public abstract T get(Pointer<?, ? extends Type<?>> pointer, long index);
 
-  public final void set(Pointer<?, ? extends Type<?>> pointer, T value) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, T value) {
     set(pointer, 0, value);
   }
   
   public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, T value);
 
-  public final void add(Pointer<?, ? extends Type<?>> pointer, T value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, T value) {
     add(pointer, getArrayLength(pointer), value);
   }
 
-  public final void add(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
-    if (assignment == null ) {
-      throw new IllegalArgumentException("assignment is required for variable length arrays");
-    }
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
     allocate(pointer, index);
     set(pointer, index, value);
     assignment.assign(pointer, 1);
@@ -142,9 +139,6 @@ public abstract sealed class Type<T> permits NumberType, StructType {
   }
   
   public final void remove(Pointer<?, ? extends Type<?>> pointer, long index) {
-    if(assignment == null) {
-      throw new IllegalArgumentException("assignment is required for variable length arrays");
-    }
     pointer.getByteArray().remove(getOffset(pointer, index), getByteLength(pointer, index));
     assignment.assign(pointer, -1);
   }

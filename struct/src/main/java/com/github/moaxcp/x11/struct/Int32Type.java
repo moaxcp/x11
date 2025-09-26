@@ -28,8 +28,13 @@ public final class Int32Type extends NumberType<Integer> {
   }
 
   @Override
+  public Integer get(Pointer<?, ? extends Type<?>> pointer) {
+    throw new UnsupportedOperationException("get(Pointer) not supported for Int32Type. Use getInt32(Pointer) instead.");
+  }
+
+  @Override
   public Integer get(Pointer<?, ? extends Type<?>> pointer, long index) {
-    return pointer.getByteArray().int32(getOffset(pointer, index));
+    throw new UnsupportedOperationException("get(Pointer, long) not supported for Int32Type. Use getInt32(Pointer, long) instead.");
   }
 
   public int getInt32(Pointer<?, ? extends Type<?>> pointer) {
@@ -41,8 +46,13 @@ public final class Int32Type extends NumberType<Integer> {
   }
 
   @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, Integer value) {
+    throw new UnsupportedOperationException("set(Pointer, Integer) not supported for Int32Type. Use set(Pointer, int) instead.");
+  }
+
+  @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Integer value) {
-    pointer.getByteArray().int32(getOffset(pointer, index), value);
+    throw new UnsupportedOperationException("set(Pointer, long, Integer) not supported for Int32Type. Use set(Pointer, long, int) instead.");
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, int value) {

@@ -3,8 +3,7 @@ package com.github.moaxcp.x11.struct;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Expression.*;
-import static com.github.moaxcp.x11.struct.StructBuilder.struct;
-import static com.github.moaxcp.x11.struct.StructTypeBuilder.structType;
+import static com.github.moaxcp.x11.struct.Builders.struct;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExpressionTest {
@@ -12,7 +11,6 @@ public class ExpressionTest {
   void constant_expression() {
     var expression = constant(5);
     var struct = struct()
-        .structType(structType().build())
         .build();
     assertThat(expression.evaluate(struct)).isEqualTo(5);
   }
@@ -21,9 +19,7 @@ public class ExpressionTest {
   void valueOf_expression() {
     var expression = valueOf(0);
     var struct = struct()
-        .structType(structType()
-            .int8()
-            .build())
+        .int8()
         .build();
 
     struct.setInt8(0, (byte) 2);
@@ -35,10 +31,8 @@ public class ExpressionTest {
   void sum_expression() {
     var expression = sum(valueOf(0), valueOf(1), constant(1));
     var struct = struct()
-        .structType(structType()
-            .int8()
-            .int8()
-            .build())
+        .int8()
+        .int8()
         .build();
 
     struct.setInt8(0, (byte) 2);

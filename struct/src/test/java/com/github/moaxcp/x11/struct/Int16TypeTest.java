@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Int16Type.int16Type;
 import static com.github.moaxcp.x11.struct.Size.INT16;
-import static com.github.moaxcp.x11.struct.StructBuilder.struct;
-import static com.github.moaxcp.x11.struct.StructTypeBuilder.structType;
+import static com.github.moaxcp.x11.struct.Builders.struct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -33,9 +32,7 @@ public class Int16TypeTest {
   @Test
   void getByteLength() {
     var struct = struct()
-        .structType(structType()
-            .int16()
-            .build())
+        .int16()
         .build();
     assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(INT16.size());
   }
@@ -43,9 +40,7 @@ public class Int16TypeTest {
   @Test
   void setShort() {
     var struct = struct()
-        .structType(structType()
-            .int16()
-            .build())
+        .int16()
         .build();
 
     struct.setInt16(0, (short) 2);
@@ -56,9 +51,7 @@ public class Int16TypeTest {
   @Test
   void getShort() {
     var struct = struct()
-        .structType(structType()
-            .int16()
-            .build())
+        .int16()
         .build();
 
     struct.setInt16(0, (short) 2);
@@ -69,9 +62,7 @@ public class Int16TypeTest {
   @Test
   void getShortNotSet() {
     var struct = struct()
-        .structType(structType()
-            .int16()
-            .build())
+        .int16()
         .build();
 
     assertThat(struct.getInt16(0)).isEqualTo((short) 0);
@@ -82,9 +73,7 @@ public class Int16TypeTest {
   void getShortNotAllocated() {
     var struct = struct()
         .allocated()
-        .structType(structType()
-            .int16()
-            .build())
+        .int16()
         .build();
 
     assertThatThrownBy(() -> struct.getInt16(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
@@ -93,10 +82,8 @@ public class Int16TypeTest {
   @Test
   void getShortIndexed() {
     var struct = struct()
-        .structType(structType()
-            .int16()
-            .int16Array(0)
-            .build())
+        .int16()
+        .int16Array(0)
         .build();
 
     struct.addInt16(1, (short) 1);
@@ -111,10 +98,8 @@ public class Int16TypeTest {
   @Test
   void removeShortIndexed() {
     var struct = struct()
-        .structType(structType()
-            .int16()
-            .int16Array(0)
-            .build())
+        .int16()
+        .int16Array(0)
         .build();
 
     struct.addInt16(1, (short) 1);
