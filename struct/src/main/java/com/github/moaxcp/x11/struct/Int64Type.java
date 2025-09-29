@@ -63,6 +63,24 @@ public final class Int64Type extends NumberType<Long> {
     pointer.getByteArray().int64(getOffset(pointer, index), value);
   }
 
+  public void add(Pointer<?, ? extends Type<?>> pointer, Long value) {
+    throw new UnsupportedOperationException("add(Pointer, Long) not supported for Int64Type. Use add(Pointer, long) instead.");
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, Long value) {
+    throw new UnsupportedOperationException("add(Pointer, long, Long) not supported for Int64Type. Use add(Pointer, long, long) instead.");
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long value) {
+    add(pointer, getArrayLength(pointer), value);
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, long value) {
+    allocate(pointer, index);
+    set(pointer, index, value);
+    assignment.assign(pointer, 1);
+  }
+
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
     pointer.getByteArray().addInt64(getOffset(pointer, index), constantValue != null ? constantValue : 0L);

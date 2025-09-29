@@ -106,7 +106,7 @@ public class Int16TypeTest {
     struct.addInt16(1, (short) 2);
     struct.removeInt16(1, 0);
 
-    assertThat(((Int16Type) struct.getType(1)).get(struct, 0)).isEqualTo((short) 2);
+    assertThat(((Int16Type) struct.getType(1)).getInt16(struct, 0)).isEqualTo((short) 2);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0, 1, 0, 2} );
   }

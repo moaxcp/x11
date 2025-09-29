@@ -63,6 +63,24 @@ public final class Float64Type extends NumberType<Double> {
     pointer.getByteArray().float64(getOffset(pointer, index), value);
   }
 
+  public void add(Pointer<?, ? extends Type<?>> pointer, Double value) {
+    throw new UnsupportedOperationException("add(Pointer, Double) not supported for Float64Type. Use add(Pointer, double) instead.");
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, Double value) {
+    throw new UnsupportedOperationException("add(Pointer, long, Double) not supported for Float64Type. Use add(Pointer, long, double) instead.");
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, double value) {
+    add(pointer, getArrayLength(pointer), value);
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, double value) {
+    allocate(pointer, index);
+    set(pointer, index, value);
+    assignment.assign(pointer, 1);
+  }
+
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
     pointer.getByteArray().addFloat64(getOffset(pointer, index), constantValue != null ? constantValue : 0.0d);

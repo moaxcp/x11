@@ -63,6 +63,24 @@ public final class Int16Type extends NumberType<Short> {
     pointer.getByteArray().int16(getOffset(pointer, index), value);
   }
 
+  public void add(Pointer<?, ? extends Type<?>> pointer, Short value) {
+    throw new UnsupportedOperationException("add(Pointer, Short) not supported for Int16Type. Use add(Pointer, short) instead.");
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, Short value) {
+    throw new UnsupportedOperationException("add(Pointer, long, Short) not supported for Int16Type. Use add(Pointer, long, short) instead.");
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, short value) {
+    add(pointer, getArrayLength(pointer), value);
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
+    allocate(pointer, index);
+    set(pointer, index, value);
+    assignment.assign(pointer, 1);
+  }
+
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
     pointer.getByteArray().addInt16(getOffset(pointer, index), constantValue != null ? constantValue : 0);

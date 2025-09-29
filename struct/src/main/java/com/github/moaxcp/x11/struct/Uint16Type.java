@@ -63,6 +63,24 @@ public final class Uint16Type extends NumberType<Integer> {
     pointer.getByteArray().uint16(getOffset(pointer, index), value);
   }
 
+  public void add(Pointer<?, ? extends Type<?>> pointer, Integer value) {
+    throw new UnsupportedOperationException("add(Pointer, Integer) not supported for Uint16Type. Use add(Pointer, int) instead.");
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, Integer value) {
+    throw new UnsupportedOperationException("add(Pointer, long, Integer) not supported for Uint16Type. Use add(Pointer, long, int) instead.");
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, int value) {
+    add(pointer, getArrayLength(pointer), value);
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, int value) {
+    allocate(pointer, index);
+    set(pointer, index, value);
+    assignment.assign(pointer, 1);
+  }
+
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
     pointer.getByteArray().addUint16(getOffset(pointer, index), constantValue != null ? constantValue : 0);

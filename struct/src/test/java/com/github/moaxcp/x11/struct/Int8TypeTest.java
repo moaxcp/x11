@@ -160,7 +160,7 @@ public class Int8TypeTest {
     struct.addInt8(1, (byte) 2);
     struct.removeInt8(1, 0);
 
-    assertThat(((NumberType) struct.getType(1)).get(struct, 0)).isEqualTo((byte) 2);
+    assertThat(((Int8Type) struct.getType(1)).getInt8(struct, 0)).isEqualTo((byte) 2);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1, 2} );
   }
