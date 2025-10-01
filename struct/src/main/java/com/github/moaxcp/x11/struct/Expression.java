@@ -34,7 +34,7 @@ public interface Expression {
 
     @Override
     public boolean isConstant(Pointer<?, ? extends Type<?>> pointer) {
-      return pointer.getType(position).isConstant();
+      return pointer.getType(position).isConstant(pointer);
     }
 
     @Override

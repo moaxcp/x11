@@ -10,18 +10,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ByteArrayUInt16Test {
 
   @Test
-  void uint16_expand_array() {
-    var bytes = new ByteArray();
-    for (int i = 0; i < 10; i++) {
-      bytes.uint16(i * 2, 65535 - i);
-    }
-    assertThat(bytes.getBytes()).isEqualTo(new byte[] {-1, -1, -1, -2, -1, -3, -1, -4, -1, -5, -1, -6, -1, -7, -1, -8, -1, -9, -1, -10});
-    for (int i = 0; i < 10; i++) {
-      assertThat(bytes.uint16(i * 2)).isEqualTo(65535 - i);
-    }
-  }
-
-  @Test
   void uint16_overwrite() {
     var bytes = new ByteArray(new byte[] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < 10; i++) {

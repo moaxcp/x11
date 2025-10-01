@@ -4,25 +4,24 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Assignment.add;
+import static com.github.moaxcp.x11.struct.Builders.struct;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
-import static com.github.moaxcp.x11.struct.Int8Type.int8;
-import static com.github.moaxcp.x11.struct.Size.INT8;
-import static com.github.moaxcp.x11.struct.Builders.struct;
+import static com.github.moaxcp.x11.struct.Size.UINT8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class Int8TypeTest {
+public class Uint8TypeTest {
 
   @Test
   void constructor() {
-    var type = Int8Type.int8();
+    var type = new Uint8Type(-1);
     assertThat(type.getPosition()).isEqualTo(-1);
   }
 
   @Test
   void constructorPosition() {
-    var type = int8(15);
+    var type = new Uint8Type(15);
     assertThat(type.getPosition()).isEqualTo(15);
   }
 
@@ -31,19 +30,19 @@ public class Int8TypeTest {
     var add = add(0);
     var expression = valueOf(0);
     var struct = struct()
-        .int8()
-        .number().constant((byte) 5).lengthExpression(expression).assignment(add).int8()
+        .uint8()
+        .number().constant((short) 5).lengthExpression(expression).assignment(add).uint8()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
     assertThat(struct.getType(1).getLengthExpression()).isEqualTo(expression);
     assertThat(struct.getType(1).getAssingment()).isEqualTo(add);
-    assertThat(struct.getType(1).getConstantValue()).isEqualTo((byte) 5);
+    assertThat(struct.getType(1).getConstantValue()).isEqualTo((short) 5);
   }
 
   @Test
   void copy() {
-    var type = Int8Type.int8();
+    var type = new Uint8Type(-1);
     var copy = type.copy(15);
     assertThat(copy.getPosition()).isEqualTo(15);
   }
@@ -51,16 +50,16 @@ public class Int8TypeTest {
   @Test
   void getByteLength() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(INT8.size());
+    assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(UINT8.size());
   }
 
   @Test
   void isFixedLength() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
     assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
@@ -70,7 +69,7 @@ public class Int8TypeTest {
   @Test
   void isFixedLengthArray() {
     var struct = struct()
-        .int8Array(constant(5))
+        .uint8Array(constant(5))
         .build();
 
     assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
@@ -80,7 +79,7 @@ public class Int8TypeTest {
   @Test
   void allocate() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
@@ -89,7 +88,7 @@ public class Int8TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .number().constant((byte) 5).int8()
+        .number().constant((short) 5).uint8()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {5});
@@ -98,8 +97,8 @@ public class Int8TypeTest {
   @Test
   void allocate_empty_array() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
@@ -108,592 +107,582 @@ public class Int8TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .number().constant((byte) 5).int8()
-        .int8Array(0)
+        .number().constant((short) 5).uint8()
+        .uint8Array(0)
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {5, 0, 0, 0, 0, 0});
   }
 
   @Test
-  void allocate_array_length_and_array_with_constant() {
-    var struct = struct()
-        .number().constant((byte) 5).int8()
-        .number().constant((byte) 6).lengthField(0).int8()
-        .build();
-
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {5, 6, 6, 6, 6, 6});
-  }
-
-  @Test
   void setWrapper() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    assertThatThrownBy(() -> ((Int8Type) struct.getType(0)).set(struct, Byte.valueOf((byte) 2)))
+    assertThatThrownBy(() -> ((Uint8Type) struct.getType(0)).set(struct, Short.valueOf((short) 2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, Byte) not supported for Int8Type. Use set(Pointer, byte) instead.");
+        .hasMessage("set(Pointer, Short) not supported for Uint8Type. Use set(Pointer, short) instead.");
   }
 
   @Test
-  void setInt8() {
+  void setUint8() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    struct.setInt8(0, (byte) 2);
+    struct.setUint8(0, (byte) 2);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {2});
   }
 
   @Test
-  void setInt8_position_negative() {
+  void setUint8_position_negative() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(-1, (byte) 2))
+    assertThatThrownBy(() -> struct.setUint8(-1, (byte) 2))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 1");
   }
 
   @Test
-  void setInt8_position_greater_than_length() {
+  void setUint8_position_greater_than_length() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(2, (byte) 2))
+    assertThatThrownBy(() -> struct.setUint8(2, (byte) 2))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 2 out of bounds for length 1");
   }
 
   @Test
-  void setInt8_not_allocated() {
+  void setUint8_not_allocated() {
     var struct = struct()
         .allocated()
-        .int8()
+        .uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(0, (byte) 2))
+    assertThatThrownBy(() -> struct.setUint8(0, (byte) 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Index 0 out of bounds for length 0");
   }
 
   @Test
-  void setInt8_constant() {
+  void setUint8_constant() {
     var struct = struct()
-        .number().constant((byte) 5).int8()
+        .number().constant((short) 5).uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(0, (byte) 2))
+    assertThatThrownBy(() -> struct.setUint8(0, (short) 2))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Int8Type at position 0 is constant index: 0 value: 2 constant: 5");
+        .hasMessage("Uint8Type at position 0 is constant index: 0 value: 2 constant: 5");
   }
 
   @Test
   void setArrayWrapper() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int8Type) struct.getType(1)).set(struct, 0, Byte.valueOf((byte) 2)))
+    assertThatThrownBy(() -> ((Uint8Type) struct.getType(1)).set(struct, 0, Short.valueOf((short) 2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Byte) not supported for Int8Type. Use set(Pointer, long, byte) instead.");
+        .hasMessage("set(Pointer, long, Short) not supported for Uint8Type. Use set(Pointer, long, short) instead.");
   }
 
   @Test
-  void setInt8Array() {
+  void setUint8Array() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
-        .int8()
+        .uint8()
+        .uint8Array(0)
+        .uint8()
         .fromBytes(new byte[] {1, 2, 3})
         .build();
 
-    struct.setInt8(1, 0, (byte) 5);
+    struct.setUint8(1, 0, (byte) 5);
 
-    assertThat(struct.getInt8(0)).isEqualTo((byte) 1);
-    assertThat(struct.getInt8(1, 0)).isEqualTo((byte) 5);
+    assertThat(struct.getUint8(0)).isEqualTo((byte) 1);
+    assertThat(struct.getUint8(1, 0)).isEqualTo((byte) 5);
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1, 5, 3});
   }
 
   @Test
-  void setInt8Array_negative() {
+  void setUint8Array_negative() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
-        .int8()
+        .uint8()
+        .uint8Array(0)
+        .uint8()
         .fromBytes(new byte[] {1, 2, 3})
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(1, -1, (byte) 5))
+    assertThatThrownBy(() -> struct.setUint8(1, -1, (byte) 5))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: -1 length: 1");
+        .hasMessage("Uint8Type at position 1 index: -1 length: 1");
   }
 
   @Test
-  void setInt8Array_greater_than_length() {
+  void setUint8Array_greater_than_length() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
-        .int8()
+        .uint8()
+        .uint8Array(0)
+        .uint8()
         .fromBytes(new byte[] {1, 2, 3})
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(1, 2, (byte) 5))
+    assertThatThrownBy(() -> struct.setUint8(1, 2, (byte) 5))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: 2 length: 1");
+        .hasMessage("Uint8Type at position 1 index: 2 length: 1");
 
-    assertThat(struct.getInt8(0)).isEqualTo((byte) 1);
-    assertThat(struct.getInt8(1, 0)).isEqualTo((byte) 2);
+    assertThat(struct.getUint8(0)).isEqualTo((byte) 1);
+    assertThat(struct.getUint8(1, 0)).isEqualTo((byte) 2);
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1, 2, 3});
   }
 
   @Test
-  void setInt8Array_not_allocated() {
+  void setUint8Array_not_allocated() {
     var struct = struct()
         .allocated()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(1, 0, (byte) 2))
+    assertThatThrownBy(() -> struct.setUint8(1, 0, (byte) 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Index 0 out of bounds for length 0");
   }
 
   @Test
-  void setInt8Array_index_0_not_array() {
+  void setUint8Array_index_0_not_array() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    struct.setInt8(0, 0, (byte) 2);
+    struct.setUint8(0, 0, (byte) 2);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {2});
   }
 
   @Test
-  void setInt8Array_index_1_not_array() {
+  void setUint8Array_index_1_not_array() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(0, 1, (byte) 2))
+    assertThatThrownBy(() -> struct.setUint8(0, 1, (byte) 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 0 index: 1 length: 1");
+        .hasMessage("Uint8Type at position 0 index: 1 length: 1");
   }
 
   @Test
-  void setInt8Array_constant_value_and_length() {
+  void setUint8Array_constant_value_and_length() {
     var struct = struct()
-        .number().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .number().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(0, 3, (byte) 2))
+    assertThatThrownBy(() -> struct.setUint8(0, 3, (short) 2))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Int8Type at position 0 is constant index: 3 value: 2 constant: 5");
+        .hasMessage("Uint8Type at position 0 is constant index: 3 value: 2 constant: 5");
   }
 
   @Test
-  void setInt8Array_constant_value() {
+  void setUint8Array_constant_value() {
     var struct = struct()
-        .int8()
-        .number().constant((byte) 5).lengthField(0).int8()
+        .uint8()
+        .number().constant((short) 5).lengthField(0).uint8()
         .fromBytes(new byte[] {2, 5, 5})
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(1, 1, (byte) 2))
+    assertThatThrownBy(() -> struct.setUint8(1, 1, (byte) 2))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Int8Type at position 1 is constant index: 1 value: 2 constant: 5");
+        .hasMessage("Uint8Type at position 1 is constant index: 1 value: 2 constant: 5");
   }
 
   @Test
-  void setInt8Array_constant_value_same() {
+  void setUint8Array_constant_value_same() {
     var struct = struct()
-        .int8()
-        .number().constant((byte) 5).lengthField(0).int8()
+        .uint8()
+        .number().constant((short) 5).lengthField(0).uint8()
         .fromBytes(new byte[] {2, 5, 5})
         .build();
 
-    struct.setInt8(1, 1, (byte) 5);
+    struct.setUint8(1, 1, (short) 5);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {2, 5, 5});
   }
 
   @Test
   @Disabled
-  void setInt8Array_set_length_field_without_adding_to_array() {
+  void setUint8Array_set_length_field_without_adding_to_array() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(0, (byte) 2))
+    assertThatThrownBy(() -> struct.setUint8(0, (short) 2))
         .isInstanceOf(AssertionError.class)
-        .hasMessage("Int8Type at position 0 is being set and will not match the array it is used as a length for.");
+        .hasMessage("Uint8Type at position 0 is being set and will not match the array it is used as a length for.");
   }
 
   @Test
   void getWrapper() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    assertThatThrownBy(() -> ((Int8Type) struct.getType(0)).get(struct))
+    assertThatThrownBy(() -> ((Uint8Type) struct.getType(0)).get(struct))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer) not supported for Int8Type. Use getInt8(Pointer) instead.");
+        .hasMessage("get(Pointer) not supported for Uint8Type. Use getUint8(Pointer) instead.");
   }
 
   @Test
-  void getInt8() {
+  void getUint8() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    struct.setInt8(0, (byte) 2);
+    struct.setUint8(0, (byte) 2);
 
-    assertThat(struct.getInt8(0)).isEqualTo((byte) 2);
+    assertThat(struct.getUint8(0)).isEqualTo((byte) 2);
   }
 
   @Test
-  void getInt8_position_negative() {
+  void getUint8_position_negative() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.getInt8(-1))
+    assertThatThrownBy(() -> struct.getUint8(-1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 1");
   }
 
   @Test
-  void getInt8_position_greater_than_length() {
+  void getUint8_position_greater_than_length() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.getInt8(2))
+    assertThatThrownBy(() -> struct.getUint8(2))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 2 out of bounds for length 1");
   }
 
   @Test
-  void getInt8Allocated() {
+  void getUint8Allocated() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
-    assertThat(struct.getInt8(0)).isEqualTo((byte) 0);
+    assertThat(struct.getUint8(0)).isEqualTo((byte) 0);
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
   }
 
   @Test
-  void getInt8NotAllocated() {
+  void getUint8NotAllocated() {
     var struct = struct()
         .allocated()
-        .int8()
+        .uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.getInt8(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+    assertThatThrownBy(() -> struct.getUint8(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
   }
 
   @Test
-  void getInt8_constant() {
+  void getUint8_constant() {
     var struct = struct()
-        .number().constant((byte) 5).int8()
+        .number().constant((short) 5).uint8()
         .build();
 
-    assertThat(struct.getInt8(0)).isEqualTo((byte) 5);
+    assertThat(struct.getUint8(0)).isEqualTo((short) 5);
   }
 
   @Test
-  void getInt8_index_0_not_array() {
+  void getUint8_index_0_not_array() {
     var struct = struct()
-        .int8()
+        .uint8()
         .fromBytes(new byte[] {1})
         .build();
 
-    assertThat(struct.getInt8(0, 0)).isEqualTo((byte) 1);
+    assertThat(struct.getUint8(0, 0)).isEqualTo((byte) 1);
   }
 
   @Test
-  void getInt8_index_1_not_array() {
+  void getUint8_index_1_not_array() {
     var struct = struct()
-        .int8()
+        .uint8()
         .fromBytes(new byte[] {1})
         .build();
 
-    assertThatThrownBy(() -> struct.getInt8(0, 1))
+    assertThatThrownBy(() -> struct.getUint8(0, 1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 0 index: 1 length: 1");
+        .hasMessage("Uint8Type at position 0 index: 1 length: 1");
   }
 
   @Test
   void getArrayWrapper() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int8Type) struct.getType(1)).get(struct, 0))
+    assertThatThrownBy(() -> ((Uint8Type) struct.getType(1)).get(struct, 0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer, long) not supported for Int8Type. Use getInt8(Pointer, long) instead.");
+        .hasMessage("get(Pointer, long) not supported for Uint8Type. Use getUint8(Pointer, long) instead.");
   }
 
   @Test
-  void getInt8Array() {
+  void getUint8Array() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
-    assertThat(struct.getInt8(1, 0)).isEqualTo((byte) 1);
-    assertThat(struct.getInt8(1, 1)).isEqualTo((byte) 2);
+    assertThat(struct.getUint8(1, 0)).isEqualTo((byte) 1);
+    assertThat(struct.getUint8(1, 1)).isEqualTo((byte) 2);
   }
 
   @Test
-  void getInt8Array_negative() {
+  void getUint8Array_negative() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.getInt8(1, -1))
+    assertThatThrownBy(() -> struct.getUint8(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: -1 length: 0");
+        .hasMessage("Uint8Type at position 1 index: -1 length: 0");
   }
 
   @Test
-  void getInt8Array_greater_than_length() {
+  void getUint8Array_greater_than_length() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
-    assertThatThrownBy(() -> struct.getInt8(1, 2))
+    assertThatThrownBy(() -> struct.getUint8(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: 2 length: 2");
+        .hasMessage("Uint8Type at position 1 index: 2 length: 2");
   }
 
   @Test
-  void getInt8Array_not_allocated() {
+  void getUint8Array_not_allocated() {
     var struct = struct()
         .allocated()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.getInt8(1, 0))
+    assertThatThrownBy(() -> struct.getUint8(1, 0))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 0 out of bounds for length 0");
   }
 
   @Test
-  void getInt8Array_constant() {
+  void getUint8Array_constant() {
     var struct = struct()
-        .number().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .number().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
-    assertThat(struct.getInt8(0, 3)).isEqualTo((byte) 5);
+    assertThat(struct.getUint8(0, 3)).isEqualTo((byte) 5);
   }
 
   @Test
-  void addInt8Wrapper() {
+  void addUint8Wrapper() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int8Type) struct.getType(1)).add(struct, Byte.valueOf((byte) 1)))
+    assertThatThrownBy(() -> ((Uint8Type) struct.getType(1)).add(struct, Short.valueOf((short) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Byte) not supported for Int8Type. Use add(Pointer, byte) instead.");
+        .hasMessage("add(Pointer, Short) not supported for Uint8Type. Use add(Pointer, short) instead.");
   }
 
   @Test
-  void addInt8Wrapper_with_index() {
+  void addUint8Wrapper_with_index() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int8Type) struct.getType(1)).add(struct, 0, Byte.valueOf((byte) 1)))
+    assertThatThrownBy(() -> ((Uint8Type) struct.getType(1)).add(struct, 0, Short.valueOf((short) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Byte) not supported for Int8Type. Use add(Pointer, long, byte) instead.");
+        .hasMessage("add(Pointer, long, Short) not supported for Uint8Type. Use add(Pointer, long, short) instead.");
   }
 
   @Test
-  void addInt8() {
+  void addUint8() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
-    struct.addInt8(1, (byte) 3);
-    struct.addInt8(1, (byte) 4);
+    struct.addUint8(1, (byte) 3);
+    struct.addUint8(1, (byte) 4);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {4, 1, 2, 3, 4} );
   }
 
   @Test
-  void addInt8_position_negative() {
+  void addUint8_position_negative() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
-    assertThatThrownBy(() -> struct.addInt8(-1, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(-1, (byte) 3))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 2");
   }
 
   @Test
-  void addInt8_position_greater_than_length() {
+  void addUint8_position_greater_than_length() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
-    assertThatThrownBy(() -> struct.addInt8(3, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(3, (byte) 3))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 3 out of bounds for length 2");
   }
 
   @Test
-  void addInt8_not_allocated() {
+  void addUint8_not_allocated() {
     var struct = struct()
         .allocated()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
-    assertThatThrownBy(() -> struct.addInt8(1, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(1, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Index 0 out of bounds for length 0");
   }
 
   @Test
-  void addInt8Array_constant() {
+  void addUint8Array_constant() {
     var struct = struct()
-        .number().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .number().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.addInt8(0, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(0, (byte) 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Int8Type at position 0 is constant index: 5 value: 3 constant: 5");
+        .hasMessage("Uint8Type at position 0 is constant index: 5 value: 3 constant: 5");
   }
 
   @Test
-  void addInt8_not_array() {
+  void addUint8_not_array() {
     var struct = struct()
-        .int8()
+        .uint8()
         .fromBytes(new byte[] {1})
         .build();
-    assertThatThrownBy(() -> struct.addInt8(0, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(0, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Uint8Type cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
-  void addInt8_with_index() {
+  void addUint8_with_index() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
-    struct.addInt8(1, 0, (byte) 3);
-    struct.addInt8(1, 1, (byte) 4);
+    struct.addUint8(1, 0, (byte) 3);
+    struct.addUint8(1, 1, (byte) 4);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {4, 3, 4, 1, 2} );
   }
 
   @Test
-  void addInt8_with_index_negative() {
+  void addUint8_with_index_negative() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
-    assertThatThrownBy(() -> struct.addInt8(1, -1, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(1, -1, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: -1 new length: 3");
+        .hasMessage("Uint8Type at position 1 index: -1 new length: 3");
   }
 
   @Test
-  void addInt8_with_index_greater_than_length() {
+  void addUint8_with_index_greater_than_length() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
-    assertThatThrownBy(() -> struct.addInt8(1, 3, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(1, 3, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: 3 new length: 3");
+        .hasMessage("Uint8Type at position 1 index: 3 new length: 3");
   }
 
   @Test
-  void addInt8_with_index_not_allocated() {
+  void addUint8_with_index_not_allocated() {
     var struct = struct()
         .allocated()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.addInt8(1, 0, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(1, 0, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Index 0 out of bounds for length 0");
   }
 
   @Test
-  void addInt8_with_index_0_not_array() {
+  void addUint8_with_index_0_not_array() {
     var struct = struct()
-        .int8()
+        .uint8()
         .fromBytes(new byte[] {1})
         .build();
 
-    assertThatThrownBy(() -> struct.addInt8(0, 0, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(0, 0, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type cannot add to non-array type at position 0 index: 0 length: 1");
+        .hasMessage("Uint8Type cannot add to non-array type at position 0 index: 0 length: 1");
   }
 
   @Test
-  void addInt8_with_index_1_not_array() {
+  void addUint8_with_index_1_not_array() {
     var struct = struct()
-        .int8()
+        .uint8()
         .fromBytes(new byte[] {1})
         .build();
 
-    assertThatThrownBy(() -> struct.addInt8(0, 1, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(0, 1, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Uint8Type cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
-  void addInt8Array_with_index_constant() {
+  void addUint8Array_with_index_constant() {
     var struct = struct()
-        .number().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .number().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
-    assertThatThrownBy(() -> struct.addInt8(0, 3, (byte) 3))
+    assertThatThrownBy(() -> struct.addUint8(0, 3, (short) 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Int8Type at position 0 is constant index: 3 value: 3 constant: 5");
+        .hasMessage("Uint8Type at position 0 is constant index: 3 value: 3 constant: 5");
   }
 
   @Test
-  void removeInt8() {
+  void removeUint8() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
@@ -703,10 +692,10 @@ public class Int8TypeTest {
   }
 
   @Test
-  void removeInt8_position_negative() {
+  void removeUint8_position_negative() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(-1))
@@ -715,10 +704,10 @@ public class Int8TypeTest {
   }
 
   @Test
-  void removeInt8_position_greater_than_length() {
+  void removeUint8_position_greater_than_length() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(2))
@@ -727,11 +716,11 @@ public class Int8TypeTest {
   }
 
   @Test
-  void removeInt8_not_allocated() {
+  void removeUint8_not_allocated() {
     var struct = struct()
         .allocated()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(1))
@@ -740,40 +729,40 @@ public class Int8TypeTest {
   }
 
   @Test
-  void removeInt8_not_array() {
+  void removeUint8_not_array() {
     var struct = struct()
-        .int8()
+        .uint8()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type cannot remove from non-array type at position 0");
+        .hasMessage("Uint8Type cannot remove from non-array type at position 0");
   }
 
   @Test
-  void removeInt8_with_index_0() {
+  void removeUint8_with_index_0() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
 
-    struct.addInt8(1, (byte) 1);
-    struct.addInt8(1, (byte) 2);
+    struct.addUint8(1, (byte) 1);
+    struct.addUint8(1, (byte) 2);
     struct.remove(1, 0);
 
-    assertThat(((Int8Type) struct.getType(1)).getInt8(struct, 0)).isEqualTo((byte) 2);
+    assertThat(((Uint8Type) struct.getType(1)).getUint8(struct, 0)).isEqualTo((byte) 2);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1, 2} );
   }
 
   @Test
-  void removeInt8_with_index_1() {
+  void removeUint8_with_index_1() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .build();
-    struct.addInt8(1, (byte) 1);
-    struct.addInt8(1, (byte) 2);
+    struct.addUint8(1, (byte) 1);
+    struct.addUint8(1, (byte) 2);
 
     struct.remove(1, 1);
 
@@ -781,62 +770,62 @@ public class Int8TypeTest {
   }
 
   @Test
-  void removeInt8_with_index_negative() {
+  void removeUint8_with_index_negative() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: -1 length: 2");
+        .hasMessage("Uint8Type at position 1 index: -1 length: 2");
   }
 
   @Test
-  void removeInt8_with_index_greater_than_length() {
+  void removeUint8_with_index_greater_than_length() {
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .uint8()
+        .uint8Array(0)
         .fromBytes(new byte[] {2, 1, 2})
         .build();
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: 2 length: 2");
+        .hasMessage("Uint8Type at position 1 index: 2 length: 2");
   }
 
   @Test
-  void removeInt8_with_index_not_array() {
+  void removeUint8_with_index_not_array() {
     var struct = struct()
-        .int8()
+        .uint8()
         .fromBytes(new byte[] {1})
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type cannot remove from non-array type at position 0");
+        .hasMessage("Uint8Type cannot remove from non-array type at position 0");
   }
 
   @Test
-  void removeInt8Array_fixed_length() {
+  void removeUint8Array_fixed_length() {
     var struct = struct()
-        .number().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .number().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array Int8Type at position 0");
+        .hasMessage("Cannot remove fixed length array Uint8Type at position 0");
   }
 
   @Test
-  void removeInt8Array_fixed_length_with_index() {
+  void removeUint8Array_fixed_length_with_index() {
     var struct = struct()
-        .number().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .number().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Int8Type at position 0 index: 3");
+        .hasMessage("Cannot remove element from fixed length array Uint8Type at position 0 index: 3");
   }
 }

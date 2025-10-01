@@ -7,12 +7,7 @@ import java.util.Objects;
 
 public final class StructType extends Type<Struct> {
 
-  protected final List<Type<?>> fields;
-
-  protected StructType(int position, List<Type<?>> fields) {
-    super(position);
-    this.fields = fields;
-  }
+  private final List<Type<?>> fields;
 
   private StructType(int position, StructType structType) {
     super(position);
@@ -31,6 +26,10 @@ public final class StructType extends Type<Struct> {
 
   public <V extends Type<?>> V getType(int position) {
     return (V) fields.get(position);
+  }
+
+  public int getPositions() {
+    return fields.size();
   }
 
   @Override

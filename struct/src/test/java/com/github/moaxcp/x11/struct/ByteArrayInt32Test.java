@@ -10,29 +10,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ByteArrayInt32Test {
 
   @Test
-  void int32_expand_array() {
-    var bytes = new ByteArray();
-    for (int i = 0; i < 10; i++) {
-      bytes.int32(i * 4, -i);
-    }
-    assertThat(bytes.getBytes()).isEqualTo(new byte[] {
-        0, 0, 0, 0,
-        -1, -1, -1, -1,
-        -1, -1, -1, -2,
-        -1, -1, -1, -3,
-        -1, -1, -1, -4,
-        -1, -1, -1, -5,
-        -1, -1, -1, -6,
-        -1, -1, -1, -7,
-        -1, -1, -1, -8,
-        -1, -1, -1, -9
-    });
-    for (int i = 0; i < 10; i++) {
-      assertThat(bytes.int32(i * 4)).isEqualTo(-i);
-    }
-  }
-
-  @Test
   void int32_overwrite() {
     var bytes = new ByteArray(new byte[] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < 10; i++) {

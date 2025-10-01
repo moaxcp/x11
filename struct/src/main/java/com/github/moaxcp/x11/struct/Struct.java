@@ -66,6 +66,11 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   @Override
+  public int getPositions() {
+    return structType.getPositions();
+  }
+
+  @Override
   public ByteArray getByteArray() {
     return bytes;
   }
@@ -109,11 +114,6 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
-  public Struct removeInt8(int position, long index) {
-    structType.getType(position).remove(this, index);
-    return this;
-  }
-
   public short getUint8(int position) {
     return structType.getUint8(this, position);
   }
@@ -139,11 +139,6 @@ public class Struct implements Pointer<Struct, StructType> {
 
   public Struct addUint8(int position, long index, short s) {
     ((Uint8Type) structType.getType(position)).add(this, index, s);
-    return this;
-  }
-
-  public Struct removeUint8(int position, long index) {
-    structType.getType(position).remove(this, index);
     return this;
   }
 
@@ -175,11 +170,6 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
-  public Struct removeInt16(int position, long index) {
-    structType.getType(position).remove(this, index);
-    return this;
-  }
-
   public int getUint16(int position) {
     return structType.getUint16(this, position);
   }
@@ -205,11 +195,6 @@ public class Struct implements Pointer<Struct, StructType> {
 
   public Struct addUint16(int position, long index, int i) {
     ((Uint16Type) structType.getType(position)).add(this, index, i);
-    return this;
-  }
-
-  public Struct removeUint16(int position, long index) {
-    structType.getType(position).remove(this, index);
     return this;
   }
 
@@ -241,11 +226,6 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
-  public Struct removeInt32(int position, long index) {
-    structType.getType(position).remove(this, index);
-    return this;
-  }
-
   public long getUint32(int position) {
     return structType.getUint32(this, position);
   }
@@ -271,11 +251,6 @@ public class Struct implements Pointer<Struct, StructType> {
 
   public Struct addUint32(int position, long index, long l) {
     ((Uint32Type) structType.getType(position)).add(this, index, l);
-    return this;
-  }
-
-  public Struct removeUint32(int position, long index) {
-    structType.getType(position).remove(this, index);
     return this;
   }
 
@@ -307,11 +282,6 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
-  public Struct removeInt64(int position, long index) {
-    structType.getType(position).remove(this, index);
-    return this;
-  }
-
   public BigInteger getUint64(int position) {
     return structType.getUint64(this, position);
   }
@@ -337,11 +307,6 @@ public class Struct implements Pointer<Struct, StructType> {
 
   public Struct addUint64(int position, long index, BigInteger bi) {
     ((Uint64Type) structType.getType(position)).add(this, index, bi);
-    return this;
-  }
-
-  public Struct removeUint64(int position, long index) {
-    structType.getType(position).remove(this, index);
     return this;
   }
 
@@ -373,11 +338,6 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
-  public Struct removeFloat32(int position, long index) {
-    structType.getType(position).remove(this, index);
-    return this;
-  }
-
   public double getFloat64(int position) {
     return structType.getFloat64(this, position);
   }
@@ -406,9 +366,12 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
-  public Struct removeFloat64(int position, long index) {
-    structType.getType(position).remove(this, index);
-    return this;
+  public void removeAll(int position) {
+     structType.getType(position).removeAll(this);
+  }
+
+  public void remove(int position, long index) {
+     structType.getType(position).remove(this, index);
   }
 
   public Struct getStruct(int position) {

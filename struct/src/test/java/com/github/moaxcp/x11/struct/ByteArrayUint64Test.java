@@ -11,29 +11,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ByteArrayUint64Test {
 
   @Test
-  void uint64_expand_array() {
-    var bytes = new ByteArray();
-    for (int i = 0; i < 10; i++) {
-      bytes.uint64(i * 8, new BigInteger("18446744073709551615").subtract(BigInteger.valueOf(i)));
-    }
-    assertThat(bytes.getBytes()).isEqualTo(new byte[] {
-        -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -2,
-        -1, -1, -1, -1, -1, -1, -1, -3,
-        -1, -1, -1, -1, -1, -1, -1, -4,
-        -1, -1, -1, -1, -1, -1, -1, -5,
-        -1, -1, -1, -1, -1, -1, -1, -6,
-        -1, -1, -1, -1, -1, -1, -1, -7,
-        -1, -1, -1, -1, -1, -1, -1, -8,
-        -1, -1, -1, -1, -1, -1, -1, -9,
-        -1, -1, -1, -1, -1, -1, -1, -10
-    });
-    for (int i = 0; i < 10; i++) {
-      assertThat(bytes.uint64(i * 8)).isEqualTo(new BigInteger("18446744073709551615").subtract(BigInteger.valueOf(i)));
-    }
-  }
-
-  @Test
   void uint64_overwrite() {
     var bytes = new ByteArray(new byte[] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < 10; i++) {

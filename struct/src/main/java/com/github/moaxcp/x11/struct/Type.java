@@ -2,6 +2,8 @@ package com.github.moaxcp.x11.struct;
 
 import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * Base class for all types in a struct. A type can be a simple primitive such as byte, short, double or it can also be
  * a struct.
@@ -34,6 +36,10 @@ public abstract sealed class Type<T> permits NumberType, StructType {
 
   public final int getPosition() {
     return position;
+  }
+
+  public final @Nullable T getConstantValue() {
+    return constantValue;
   }
 
   public final @Nullable Expression getLengthExpression() {
@@ -88,8 +94,8 @@ public abstract sealed class Type<T> permits NumberType, StructType {
 
   public abstract boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer);
 
-  public final boolean isConstant() {
-    return constantValue != null;
+  public final boolean isConstant(Pointer<?, ? extends Type<?>> pointer) {
+    return constantValue != null || (lengthExpression != null && lengthExpression.isConstant(pointer));
   }
 
   public T get(Pointer<?, ? extends Type<?>> pointer) {
@@ -98,23 +104,46 @@ public abstract sealed class Type<T> permits NumberType, StructType {
   
   public abstract T get(Pointer<?, ? extends Type<?>> pointer, long index);
 
+  protected void checkIndex(Pointer<?, ? extends Type<?>> pointer, long index) {
+    var length = getArrayLength(pointer);
+    if (index >= length || index < 0) {
+      throw new ArrayIndexOutOfBoundsException(this.getClass().getSimpleName() + " at position " + getPosition() + " index: " + index + " length: " + length);
+    }
+  }
+
   public void set(Pointer<?, ? extends Type<?>> pointer, T value) {
     set(pointer, 0, value);
   }
   
   public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, T value);
 
+  protected void checkConstant(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
+    if (isConstant(pointer) && !Objects.equals(constantValue, value)) {
+      throw new UnsupportedOperationException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
+    }
+  }
+  
   public void add(Pointer<?, ? extends Type<?>> pointer, T value) {
     add(pointer, getArrayLength(pointer), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
+    if (!isArray()) {
+      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
+    }
     allocate(pointer, index);
     set(pointer, index, value);
     assignment.assign(pointer, 1);
   }
 
-  public final void allocate(Pointer<?, ? extends Type<?>> pointer) {
+  void checkIndexAllocate(Pointer<?, ? extends Type<?>> pointer, long index) {
+    var newLength = getArrayLength(pointer) + 1;
+    if (index >= newLength || index < 0) {
+      throw new ArrayIndexOutOfBoundsException(this.getClass().getSimpleName() + " at position " + getPosition() + " index: " + index + " new length: " + newLength);
+    }
+  }
+
+  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     if(isArray()) {
       long length = getArrayLength(pointer);
       for (int i = 0; i < length; i++) {
@@ -127,19 +156,31 @@ public abstract sealed class Type<T> permits NumberType, StructType {
 
   public abstract void allocate(Pointer<?, ? extends Type<?>> pointer, long index);
 
-  public final void remove(Pointer<?, ? extends Type<?>> pointer) {
-    if(isArray()) {
-      long length = getArrayLength(pointer);
-      for (int i = 0; i < length; i++) {
-        remove(pointer, i);
-      }
-    } else {
-      remove(pointer, 0);
+  public final void removeAll(Pointer<?, ? extends Type<?>> pointer) {
+    if (!isArray()) {
+      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot remove from non-array type at position " + getPosition());
+    }
+    if (isFixedLength(pointer)) {
+      throw new UnsupportedOperationException("Cannot remove fixed length array " + getClass().getSimpleName() + " at position " + getPosition());
+    }
+    var length = getArrayLength(pointer);
+    pointer.getByteArray().remove(getOffset(pointer), getByteLength(pointer));
+    if (assignment != null) {
+      assignment.assign(pointer, -length);
     }
   }
   
   public final void remove(Pointer<?, ? extends Type<?>> pointer, long index) {
+    if (!isArray()) {
+      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot remove from non-array type at position " + getPosition());
+    }
+    if (isFixedLength(pointer)) {
+      throw new UnsupportedOperationException("Cannot remove element from fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
+    }
+    checkIndex(pointer, index);
     pointer.getByteArray().remove(getOffset(pointer, index), getByteLength(pointer, index));
-    assignment.assign(pointer, -1);
+    if (assignment != null) {
+      assignment.assign(pointer, -1);
+    }
   }
 }

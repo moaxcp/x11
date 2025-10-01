@@ -13,6 +13,8 @@ public interface Pointer<SELF extends Pointer<SELF, T>, T extends Type<SELF>> ex
 
   <V extends Type<?>> V getType(int position);
 
+  int getPositions();
+
   ByteArray getByteArray();
 
   void setByteArray(ByteArray memory);
@@ -22,5 +24,9 @@ public interface Pointer<SELF extends Pointer<SELF, T>, T extends Type<SELF>> ex
       var offset = getOffset() + shift.size();
       setOffset(offset);
     }
+  }
+
+  default boolean isFixedLength() {
+    return getType().isFixedLength(this);
   }
 }

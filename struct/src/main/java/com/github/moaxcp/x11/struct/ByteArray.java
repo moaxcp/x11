@@ -94,7 +94,6 @@ public class ByteArray {
   }
 
   public void int8(long index, byte b) {
-    ensureSizeFor(index, INT8.size());
     serializer.writeInt8(bytes, Math.toIntExact(index), b);
   }
 
@@ -112,7 +111,6 @@ public class ByteArray {
   }
 
   public void uint8(long index, short value) {
-    ensureSizeFor(index, UINT8.size());
     serializer.writeUint8(bytes, Math.toIntExact(index), value);
   }
 
@@ -130,7 +128,6 @@ public class ByteArray {
   }
 
   public void int16(long index, short s) {
-    ensureSizeFor(index, INT16.size());
     serializer.writeInt16(bytes, Math.toIntExact(index), s);
   }
 
@@ -148,7 +145,6 @@ public class ByteArray {
   }
 
   public void uint16(long index, int value) {
-    ensureSizeFor(index, UINT16.size());
     serializer.writeUint16(bytes, Math.toIntExact(index), value);
   }
 
@@ -166,7 +162,6 @@ public class ByteArray {
   }
 
   public void int32(long index, int value) {
-    ensureSizeFor(index, INT32.size());
     serializer.writeInt32(bytes, Math.toIntExact(index), value);
   }
 
@@ -184,7 +179,6 @@ public class ByteArray {
   }
 
   public void uint32(long index, long value) {
-    ensureSizeFor(index, UINT32.size());
     serializer.writeUint32(bytes, Math.toIntExact(index), value);
   }
 
@@ -202,7 +196,6 @@ public class ByteArray {
   }
 
   public void int64(long index, long value) {
-    ensureSizeFor(index, INT64.size());
     serializer.writeInt64(bytes, Math.toIntExact(index), value);
   }
 
@@ -220,7 +213,6 @@ public class ByteArray {
   }
 
   public void uint64(long index, BigInteger value) {
-    ensureSizeFor(index, UINT64.size());
     serializer.writeUint64(bytes, Math.toIntExact(index), value);
   }
 
@@ -238,7 +230,6 @@ public class ByteArray {
   }
 
   public void float32(long index, float value) {
-    ensureSizeFor(index, FLOAT32.size());
     serializer.writeFloat(bytes, Math.toIntExact(index), value);
   }
 
@@ -256,7 +247,6 @@ public class ByteArray {
   }
 
   public void float64(long index, double value) {
-    ensureSizeFor(index, FLOAT64.size());
     serializer.writeDouble(bytes, Math.toIntExact(index), value);
   }
 
@@ -276,7 +266,6 @@ public class ByteArray {
   }
 
   public void set(long index, byte[] value) {
-    ensureSizeFor(index, value.length);
     System.arraycopy(value, 0, bytes, Math.toIntExact(index), Math.toIntExact(value.length));
   }
 

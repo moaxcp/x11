@@ -4,14 +4,36 @@ import java.math.BigInteger;
 
 public interface Assignment {
 
-  static Assignment noop() {
-    return (pointer, added) -> {};
+  class Noop implements Assignment {
+
+    @Override
+    public boolean positionUsed(Pointer<?, ? extends Type<?>> pointer, int position) {
+      return false;
+    }
+
+    @Override
+    public void assign(Pointer<?, ? extends Type<?>> pointer, long added) {
+
+    }
   }
 
-  static Assignment add(int position) {
-    return (pointer, added) -> {
+  static class Add implements Assignment {
+
+    private int position;
+
+    public Add(int position) {
+      this.position = position;
+    }
+
+    @Override
+    public boolean positionUsed(Pointer<?, ? extends Type<?>> pointer, int position) {
+      return this.position == position;
+    }
+
+    @Override
+    public void assign(Pointer<?, ? extends Type<?>> pointer, long added) {
       var type = pointer.getType(position);
-      if (type.isConstant()) {
+      if (type.isConstant(pointer)) {
         throw new IllegalStateException("cannot add to constant in Assignment.add");
       }
       switch (type) {
@@ -58,8 +80,20 @@ public interface Assignment {
         case StructType s -> throw new IllegalArgumentException("cannot add to non-integer type in Assignment.add");
         case null -> throw new IllegalArgumentException("cannot add to null type in Assignment.add");
       }
-    };
+    }
   }
 
+  static Assignment noop() {
+    return new Noop();
+  }
+
+  static Assignment add(int position) {
+    return new Add(position);
+  }
+
+  boolean positionUsed(Pointer<?, ? extends Type<?>> pointer, int position);
+
   void assign(Pointer<?, ? extends Type<?>> pointer, long added);
+
+  //todo add direct assignment of length for allocation
 }
