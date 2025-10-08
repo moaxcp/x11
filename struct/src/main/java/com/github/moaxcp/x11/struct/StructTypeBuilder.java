@@ -99,12 +99,20 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   public SELF int32Array(int lengthPosition) {
     return number().lengthField(lengthPosition).int32();
   }
+
+  public SELF int32Array(Expression expression) {
+    return number().lengthExpression(expression).int32();
+  }
   public SELF uint32() {
     return number().uint32();
   }
 
   public SELF uint32Array(int lengthPosition) {
     return number().lengthField(lengthPosition).uint32();
+  }
+
+  public SELF uint32Array(Expression expression) {
+    return number().lengthExpression(expression).uint32();
   }
 
   public SELF int64() {
@@ -115,11 +123,19 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return number().lengthField(lengthPosition).int64();
   }
 
+  public SELF int64Array(Expression expression) {
+    return number().lengthExpression(expression).int64();
+  }
+
   public SELF uint64() {
     return number().uint64();
   }
   public SELF uint64Array(int lengthPosition) {
     return number().lengthField(lengthPosition).uint64();
+  }
+
+  public SELF uint64Array(Expression expression) {
+    return number().lengthExpression(expression).uint64();
   }
 
   public SELF float32() {
@@ -130,12 +146,20 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return number().lengthField(lengthPosition).float32();
   }
 
+  public SELF float32Array(Expression expression) {
+    return number().lengthExpression(expression).float32();
+  }
+
   public SELF float64() {
     return number().float64();
   }
 
   public SELF float64Array(int lengthPosition) {
     return number().lengthField(lengthPosition).float64();
+  }
+
+  public SELF float64Array(Expression expression) {
+    return number().lengthExpression(expression).float64();
   }
 
   public ChildStructTypeBuilder<SELF> struct() {
