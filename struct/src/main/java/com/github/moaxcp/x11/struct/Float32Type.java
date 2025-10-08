@@ -42,6 +42,7 @@ public final class Float32Type extends NumberType<Float> {
   }
 
   public float getFloat32(Pointer<?, ? extends Type<?>> pointer, long index) {
+    checkIndex(pointer, index);
     return pointer.getByteArray().float32(getOffset(pointer, index));
   }
 
@@ -56,10 +57,16 @@ public final class Float32Type extends NumberType<Float> {
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, float value) {
-    pointer.getByteArray().float32(getOffset(pointer), value);
+    setUnchecked(pointer, 0, value);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
+    checkIndex(pointer, index);
+    setUnchecked(pointer, index, value);
+  }
+
+  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
+    checkConstant(pointer, index, value);
     pointer.getByteArray().float32(getOffset(pointer, index), value);
   }
 
@@ -76,13 +83,30 @@ public final class Float32Type extends NumberType<Float> {
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
+    if (!isArray()) {
+      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition() + " index: " + index + " length: " + 1);
+    }
     allocate(pointer, index);
-    set(pointer, index, value);
-    assignment.assign(pointer, 1);
+    setUnchecked(pointer, index, value);
+  }
+
+  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
+    if (isArray()) {
+      long length = getArrayLength(pointer);
+      for (int i = 0; i < length; i++) {
+        pointer.getByteArray().addFloat32(getOffset(pointer, i), constantValue != null ? constantValue : 0.0f);
+      }
+    } else {
+      pointer.getByteArray().addFloat32(getOffset(pointer, 0), constantValue != null ? constantValue : 0.0f);
+    }
   }
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
+    checkIndexAllocate(pointer, index);
     pointer.getByteArray().addFloat32(getOffset(pointer, index), constantValue != null ? constantValue : 0.0f);
+    if (assignment != null) {
+      assignment.assign(pointer, 1);
+    }
   }
 }
