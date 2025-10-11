@@ -4,6 +4,14 @@ import java.math.BigInteger;
 
 public class BigEndianSerializer implements Serializer {
 
+  public boolean readBoolean(byte[] bytes, int index) {
+    return (bytes[index] & 0xFF) != 0;
+  }
+
+  public void writeBoolean(byte[] bytes, int index, boolean value) {
+    bytes[index] = (byte) (value ? 1 : 0);
+  }
+
   public byte readInt8(byte[] bytes, int index) {
     return bytes[index];
   }

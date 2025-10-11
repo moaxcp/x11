@@ -34,7 +34,7 @@ public class Uint64TypeTest {
     var expression = valueOf(0);
     var struct = struct()
         .uint64()
-        .number().constant(BigInteger.valueOf(5)).lengthExpression(expression).assignment(add).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(expression).assignment(add).uint64()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
@@ -91,7 +91,7 @@ public class Uint64TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).uint64()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0,0,0,0,0,0,0,5});
@@ -110,7 +110,7 @@ public class Uint64TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).uint64()
         .uint64Array(0)
         .build();
 
@@ -127,8 +127,8 @@ public class Uint64TypeTest {
   @Test
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).uint64()
-        .number().constant(BigInteger.valueOf(6)).lengthField(0).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(6)).lengthField(0).uint64()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
@@ -189,7 +189,7 @@ public class Uint64TypeTest {
   @Test
   void setUint64_constant() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.setUint64(0, BigInteger.valueOf(2)))
@@ -303,7 +303,7 @@ public class Uint64TypeTest {
   @Test
   void setUint64Array_constant_value_and_length() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.setUint64(0, 3, BigInteger.valueOf(2)))
@@ -315,7 +315,7 @@ public class Uint64TypeTest {
   void setUint64Array_constant_value() {
     var struct = struct()
         .uint64()
-        .number().constant(BigInteger.valueOf(5)).lengthField(0).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthField(0).uint64()
         .fromBytes(new byte[] {
             0,0,0,0,0,0,0,2,
             0,0,0,0,0,0,0,5,
@@ -332,7 +332,7 @@ public class Uint64TypeTest {
   void setUint64Array_constant_value_same() {
     var struct = struct()
         .uint64()
-        .number().constant(BigInteger.valueOf(5)).lengthField(0).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthField(0).uint64()
         .fromBytes(new byte[] {
             0,0,0,0,0,0,0,2,
             0,0,0,0,0,0,0,5,
@@ -418,7 +418,7 @@ public class Uint64TypeTest {
   @Test
   void getUint64_constant() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).uint64()
         .build();
 
     assertThat(struct.getUint64(0)).isEqualTo(BigInteger.valueOf(5));
@@ -507,7 +507,7 @@ public class Uint64TypeTest {
   @Test
   void getUint64Array_constant() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
         .build();
 
     assertThat(struct.getUint64(0, 3)).isEqualTo(BigInteger.valueOf(5));
@@ -586,7 +586,7 @@ public class Uint64TypeTest {
   @Test
   void addUint64Array_constant() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(0, BigInteger.valueOf(3)))
@@ -703,7 +703,7 @@ public class Uint64TypeTest {
   @Test
   void addUint64Array_with_index_constant() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(0, 3, BigInteger.valueOf(3)))
@@ -855,7 +855,7 @@ public class Uint64TypeTest {
   @Test
   void removeUint64Array_fixed_length() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
@@ -866,7 +866,7 @@ public class Uint64TypeTest {
   @Test
   void removeUint64Array_fixed_length_with_index() {
     var struct = struct()
-        .number().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

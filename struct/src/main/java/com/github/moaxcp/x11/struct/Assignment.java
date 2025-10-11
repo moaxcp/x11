@@ -77,7 +77,8 @@ public interface Assignment {
           double previous = f64.getFloat64(pointer);
           f64.set(pointer, previous + added);
         }
-        case StructType s -> throw new IllegalArgumentException("cannot add to non-integer type in Assignment.add");
+        case BoolType ignored -> throw new IllegalArgumentException("cannot add to boolean type in Assignment.add");
+        case StructType ignored -> throw new IllegalArgumentException("cannot add to non-integer type in Assignment.add");
         case null -> throw new IllegalArgumentException("cannot add to null type in Assignment.add");
       }
     }

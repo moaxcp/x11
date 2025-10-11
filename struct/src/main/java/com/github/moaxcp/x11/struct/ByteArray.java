@@ -6,16 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.github.moaxcp.x11.struct.ShiftBytes.shiftBytes;
-import static com.github.moaxcp.x11.struct.Size.INT8;
-import static com.github.moaxcp.x11.struct.Size.INT16;
-import static com.github.moaxcp.x11.struct.Size.UINT16;
-import static com.github.moaxcp.x11.struct.Size.INT32;
-import static com.github.moaxcp.x11.struct.Size.UINT32;
-import static com.github.moaxcp.x11.struct.Size.INT64;
-import static com.github.moaxcp.x11.struct.Size.UINT64;
-import static com.github.moaxcp.x11.struct.Size.FLOAT32;
-import static com.github.moaxcp.x11.struct.Size.FLOAT64;
-import static com.github.moaxcp.x11.struct.Size.UINT8;
+import static com.github.moaxcp.x11.struct.Size.*;
 
 /**
  * A byte array that can grow beyond the max size of a java array.
@@ -87,6 +78,23 @@ public class ByteArray {
       System.arraycopy(bytes, 0, newBytes, 0, bytes.length);
       bytes = newBytes;
     }
+  }
+
+  public boolean bool(long index) {
+    return serializer.readBoolean(bytes, Math.toIntExact(index));
+  }
+
+  public void bool(long index, boolean value) {
+    serializer.writeBoolean(bytes, Math.toIntExact(index), value);
+  }
+
+  public void addBool(long index, boolean value) {
+    shiftBytesFor(index, BOOL.size());
+    bool(index, value);
+  }
+
+  public void removeBool(long index) {
+    shiftBytesFor(index, -BOOL.size());
   }
 
   public byte int8(long index) {

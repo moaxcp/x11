@@ -86,6 +86,34 @@ public class Struct implements Pointer<Struct, StructType> {
     return structType.getByteLength(this);
   }
 
+  public boolean getBool(int position) {
+    return structType.getBool(this, position);
+  }
+
+  public boolean getBool(int position, long index) {
+    return structType.getBool(this, position, index);
+  }
+
+  public Struct setBool(int position, boolean b) {
+    structType.setBool(this, position, b);
+    return this;
+  }
+
+  public Struct setBool(int position, long index, boolean b) {
+    structType.setBool(this, position, index, b);
+    return this;
+  }
+
+  public Struct addBool(int position, boolean b) {
+    ((BoolType) structType.getType(position)).add(this, b);
+    return this;
+  }
+
+  public Struct addBool(int position, long index, boolean b) {
+    ((BoolType) structType.getType(position)).add(this, index, b);
+    return this;
+  }
+
   public byte getInt8(int position) {
     return structType.getInt8(this, position);
   }

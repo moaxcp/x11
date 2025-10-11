@@ -12,7 +12,7 @@ import java.util.Objects;
  * the type must have a lengthExpression. An Assignment is required for variable length arrays.
  * @param <T>
  */
-public abstract sealed class Type<T> permits NumberType, StructType {
+public abstract sealed class Type<T> permits PrimitiveType, StructType {
   protected final int position;
   @Nullable
   protected final Expression lengthExpression;

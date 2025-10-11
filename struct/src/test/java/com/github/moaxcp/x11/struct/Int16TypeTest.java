@@ -32,7 +32,7 @@ public class Int16TypeTest {
     var expression = valueOf(0);
     var struct = struct()
         .int16()
-        .number().constant((short) 5).lengthExpression(expression).assignment(add).int16()
+        .primitive().constant((short) 5).lengthExpression(expression).assignment(add).int16()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
@@ -89,7 +89,7 @@ public class Int16TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .number().constant((short) 5).int16()
+        .primitive().constant((short) 5).int16()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0, 5});
@@ -108,7 +108,7 @@ public class Int16TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .number().constant((short) 5).int16()
+        .primitive().constant((short) 5).int16()
         .int16Array(0)
         .build();
 
@@ -118,8 +118,8 @@ public class Int16TypeTest {
   @Test
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
-        .number().constant((short) 5).int16()
-        .number().constant((short) 6).lengthField(0).int16()
+        .primitive().constant((short) 5).int16()
+        .primitive().constant((short) 6).lengthField(0).int16()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0, 5, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6});
@@ -184,7 +184,7 @@ public class Int16TypeTest {
   @Test
   void setInt16_constant() {
     var struct = struct()
-        .number().constant((short) 5).int16()
+        .primitive().constant((short) 5).int16()
         .build();
 
     assertThatThrownBy(() -> struct.setInt16(0, (short) 2))
@@ -290,7 +290,7 @@ public class Int16TypeTest {
   @Test
   void setInt16Array_constant_value_and_length() {
     var struct = struct()
-        .number().constant((short) 5).lengthExpression(constant(5)).int16()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).int16()
         .build();
 
     assertThatThrownBy(() -> struct.setInt16(0, 3, (short) 2))
@@ -302,7 +302,7 @@ public class Int16TypeTest {
   void setInt16Array_constant_value() {
     var struct = struct()
         .int16()
-        .number().constant((short) 5).lengthField(0).int16()
+        .primitive().constant((short) 5).lengthField(0).int16()
         .fromBytes(new byte[] {2, 5, 5})
         .build();
 
@@ -315,7 +315,7 @@ public class Int16TypeTest {
   void setInt16Array_constant_value_same() {
     var struct = struct()
         .int16()
-        .number().constant((short) 5).lengthField(0).int16()
+        .primitive().constant((short) 5).lengthField(0).int16()
         .fromBytes(new byte[] {0, 2, 0, 5, 0, 5})
         .build();
 
@@ -404,7 +404,7 @@ public class Int16TypeTest {
   @Test
   void getInt16_constant() {
     var struct = struct()
-        .number().constant((short) 5).int16()
+        .primitive().constant((short) 5).int16()
         .build();
 
     assertThat(struct.getInt16(0)).isEqualTo((short) 5);
@@ -497,7 +497,7 @@ public class Int16TypeTest {
   @Test
   void getInt16Array_constant() {
     var struct = struct()
-        .number().constant((short) 5).lengthExpression(constant(5)).int16()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).int16()
         .build();
 
     assertThat(struct.getInt16(0, 3)).isEqualTo((short) 5);
@@ -582,7 +582,7 @@ public class Int16TypeTest {
   @Test
   void addInt16Array_constant() {
     var struct = struct()
-        .number().constant((short) 5).lengthExpression(constant(5)).int16()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).int16()
         .build();
 
     assertThatThrownBy(() -> struct.addInt16(0, (short) 3))
@@ -681,7 +681,7 @@ public class Int16TypeTest {
   @Test
   void addInt16Array_with_index_constant() {
     var struct = struct()
-        .number().constant((short) 5).lengthExpression(constant(5)).int16()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).int16()
         .build();
 
     assertThatThrownBy(() -> struct.addInt16(0, 3, (short) 3))
@@ -821,7 +821,7 @@ public class Int16TypeTest {
   @Test
   void removeInt16Array_fixed_length() {
     var struct = struct()
-        .number().constant((short) 5).lengthExpression(constant(5)).int16()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).int16()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
@@ -832,7 +832,7 @@ public class Int16TypeTest {
   @Test
   void removeInt16Array_fixed_length_with_index() {
     var struct = struct()
-        .number().constant((short) 5).lengthExpression(constant(5)).int16()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).int16()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

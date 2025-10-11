@@ -7,6 +7,10 @@ import java.math.BigInteger;
  * from/to a byte array at a given index.
  */
 public interface Serializer {
+  // boolean primitive: 0=false, 1=true
+  boolean readBoolean(byte[] bytes, int index);
+  void writeBoolean(byte[] bytes, int index, boolean value);
+
   byte readInt8(byte[] bytes, int index);
   void writeInt8(byte[] bytes, int index, byte b);
 

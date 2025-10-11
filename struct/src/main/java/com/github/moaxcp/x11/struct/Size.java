@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11.struct;
 
 public enum Size {
+  BOOL(1),
   INT8(1),
   UINT8(1),
   INT16(2),

@@ -32,7 +32,7 @@ public class Float32TypeTest {
     var expression = valueOf(0);
     var struct = struct()
         .float32()
-        .number().constant(3.0f).lengthExpression(expression).assignment(add).float32()
+        .primitive().constant(3.0f).lengthExpression(expression).assignment(add).float32()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
@@ -89,7 +89,7 @@ public class Float32TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .number().constant(3.0f).float32()
+        .primitive().constant(3.0f).float32()
         .build();
 
     // 3.0f -> 0x40400000 -> {64,64,0,0}
@@ -109,7 +109,7 @@ public class Float32TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .number().constant(3.0f).float32()
+        .primitive().constant(3.0f).float32()
         .float32Array(0)
         .build();
 
@@ -125,8 +125,8 @@ public class Float32TypeTest {
   @Test
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
-        .number().constant(3.0f).float32()
-        .number().constant(2.0f).lengthField(0).float32()
+        .primitive().constant(3.0f).float32()
+        .primitive().constant(2.0f).lengthField(0).float32()
         .build();
 
     // 3.0f then 3 elements of 2.0f
@@ -198,7 +198,7 @@ public class Float32TypeTest {
   @Test
   void setFloat32_constant() {
     var struct = struct()
-        .number().constant(3.0f).float32()
+        .primitive().constant(3.0f).float32()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2.0f))
@@ -225,20 +225,20 @@ public class Float32TypeTest {
         .float32Array(0)
         .float32()
         .fromBytes(new byte[] {
-            0, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            63, -128, 0, 0,
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
     struct.setFloat32(1, 0, 2.0f);
 
-    assertThat(struct.getFloat32(0)).isEqualTo(0.0f);
+    assertThat(struct.getFloat32(0)).isEqualTo(1.0f);
     assertThat(struct.getFloat32(1, 0)).isEqualTo(2.0f);
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
-        0, 0, 0, 0,
+        63, -128, 0, 0,
         64, 0, 0, 0,
-        64, 0, 0, 0
+        64, 64, 0, 0
     });
   }
 
@@ -249,9 +249,9 @@ public class Float32TypeTest {
         .float32Array(0)
         .float32()
         .fromBytes(new byte[] {
-            0, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            63, -128, 0, 0,
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -267,9 +267,9 @@ public class Float32TypeTest {
         .float32Array(0)
         .float32()
         .fromBytes(new byte[] {
-            0, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            63, -128, 0, 0,
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -277,12 +277,12 @@ public class Float32TypeTest {
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Float32Type at position 1 index: 2 length: 1");
 
-    assertThat(struct.getFloat32(0)).isEqualTo(0.0f);
-    assertThat(struct.getFloat32(1, 0)).isEqualTo(3.0f);
+    assertThat(struct.getFloat32(0)).isEqualTo(1.0f);
+    assertThat(struct.getFloat32(1, 0)).isEqualTo(4.0f);
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
-        0, 0, 0, 0,
-        64, 64, 0, 0,
-        64, 0, 0, 0
+        63, -128, 0, 0,
+        64, -128, 0, 0,
+        64, 64, 0, 0
     });
   }
 
@@ -324,7 +324,7 @@ public class Float32TypeTest {
   @Test
   void setFloat32Array_constant_value_and_length() {
     var struct = struct()
-        .number().constant(3.0f).lengthExpression(constant(3)).float32()
+        .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2, 2.0f))
@@ -336,10 +336,10 @@ public class Float32TypeTest {
   void setFloat32Array_constant_value() {
     var struct = struct()
         .float32()
-        .number().constant(3.0f).lengthField(0).float32()
+        .primitive().constant(3.0f).lengthField(0).float32()
         .fromBytes(new byte[] {
-            64, 0, 0, 0,
-            64, 64, 0, 0,
+            63, -128, 0, 0,
+            64, -128, 0, 0,
             64, 64, 0, 0
         })
         .build();
@@ -353,10 +353,10 @@ public class Float32TypeTest {
   void setFloat32Array_constant_value_same() {
     var struct = struct()
         .float32()
-        .number().constant(3.0f).lengthField(0).float32()
+        .primitive().constant(3.0f).lengthField(0).float32()
         .fromBytes(new byte[] {
             64, 0, 0, 0,
-            64, 64, 0, 0,
+            64, -128, 0, 0,
             64, 64, 0, 0
         })
         .build();
@@ -365,7 +365,7 @@ public class Float32TypeTest {
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
         64, 0, 0, 0,
-        64, 64, 0, 0,
+        64, -128, 0, 0,
         64, 64, 0, 0
     });
   }
@@ -450,7 +450,7 @@ public class Float32TypeTest {
   @Test
   void getFloat32_constant() {
     var struct = struct()
-        .number().constant(3.0f).float32()
+        .primitive().constant(3.0f).float32()
         .build();
 
     assertThat(struct.getFloat32(0)).isEqualTo(3.0f);
@@ -497,13 +497,13 @@ public class Float32TypeTest {
         .float32Array(0)
         .fromBytes(new byte[] {
             64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
-    assertThat(struct.getFloat32(1, 0)).isEqualTo(3.0f);
-    assertThat(struct.getFloat32(1, 1)).isEqualTo(2.0f);
+    assertThat(struct.getFloat32(1, 0)).isEqualTo(4.0f);
+    assertThat(struct.getFloat32(1, 1)).isEqualTo(3.0f);
   }
 
   @Test
@@ -525,8 +525,8 @@ public class Float32TypeTest {
         .float32Array(0)
         .fromBytes(new byte[] {
             64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -551,7 +551,7 @@ public class Float32TypeTest {
   @Test
   void getFloat32Array_constant() {
     var struct = struct()
-        .number().constant(3.0f).lengthExpression(constant(3)).float32()
+        .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
         .build();
 
     assertThat(struct.getFloat32(0, 2)).isEqualTo(3.0f);
@@ -588,8 +588,8 @@ public class Float32TypeTest {
         .float32Array(0)
         .fromBytes(new byte[] {
             64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -597,12 +597,12 @@ public class Float32TypeTest {
     struct.addFloat32(1, 2.0f);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
-        64, 0, 0, 0,
+        64, -128, 0, 0,
+        64, -128, 0, 0,
         64, 64, 0, 0,
-        64, 0, 0, 0,
         64, 64, 0, 0,
         64, 0, 0, 0
-    } );
+    });
   }
 
   @Test
@@ -612,8 +612,8 @@ public class Float32TypeTest {
         .float32Array(0)
         .fromBytes(new byte[] {
             64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -629,8 +629,8 @@ public class Float32TypeTest {
         .float32Array(0)
         .fromBytes(new byte[] {
             64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -654,12 +654,12 @@ public class Float32TypeTest {
   @Test
   void addFloat32Array_constant() {
     var struct = struct()
-        .number().constant(3.0f).lengthExpression(constant(3)).float32()
+        .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
         .build();
 
-    assertThatThrownBy(() -> struct.addFloat32(0, 3.0f))
+    assertThatThrownBy(() -> struct.addFloat32(0, 5.0f))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Float32Type at position 0 is constant index: 3 value: 3.0 constant: 3.0");
+        .hasMessage("Float32Type at position 0 is constant index: 3 value: 5.0 constant: 3.0");
   }
 
   @Test
@@ -679,9 +679,9 @@ public class Float32TypeTest {
         .float32()
         .float32Array(0)
         .fromBytes(new byte[] {
-            64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            63, -128, 0, 0,
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -689,11 +689,9 @@ public class Float32TypeTest {
     struct.addFloat32(1, 1, 2.0f);
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
-        64, 0, 0, 0,
-        64, 64, 0, 0,
-        64, 64, 0, 0,
-        64, 0, 0, 0,
-        64, 0, 0, 0
+        63, -128, 0, 0,
+        64, -128, 0, 0,
+        64, 64, 0, 0
     } );
   }
 
@@ -703,9 +701,9 @@ public class Float32TypeTest {
         .float32()
         .float32Array(0)
         .fromBytes(new byte[] {
-            64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            63, -128, 0, 0,
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -720,9 +718,9 @@ public class Float32TypeTest {
         .float32()
         .float32Array(0)
         .fromBytes(new byte[] {
-            64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            63, -128, 0, 0,
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -771,7 +769,7 @@ public class Float32TypeTest {
   @Test
   void addFloat32Array_with_index_constant() {
     var struct = struct()
-        .number().constant(3.0f).lengthExpression(constant(3)).float32()
+        .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 2, 3.0f))
@@ -785,9 +783,9 @@ public class Float32TypeTest {
         .float32()
         .float32Array(0)
         .fromBytes(new byte[] {
-            64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            63, -128, 0, 0,
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -880,9 +878,9 @@ public class Float32TypeTest {
         .float32()
         .float32Array(0)
         .fromBytes(new byte[] {
-            64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            63, -128, 0, 0,
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -897,9 +895,9 @@ public class Float32TypeTest {
         .float32()
         .float32Array(0)
         .fromBytes(new byte[] {
-            64, 0, 0, 0,
-            64, 64, 0, 0,
-            64, 0, 0, 0
+            63, -128, 0, 0,
+            64, -128, 0, 0,
+            64, 64, 0, 0
         })
         .build();
 
@@ -923,7 +921,7 @@ public class Float32TypeTest {
   @Test
   void removeFloat32Array_fixed_length() {
     var struct = struct()
-        .number().constant(3.0f).lengthExpression(constant(3)).float32()
+        .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
@@ -934,7 +932,7 @@ public class Float32TypeTest {
   @Test
   void removeFloat32Array_fixed_length_with_index() {
     var struct = struct()
-        .number().constant(3.0f).lengthExpression(constant(3)).float32()
+        .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 2))

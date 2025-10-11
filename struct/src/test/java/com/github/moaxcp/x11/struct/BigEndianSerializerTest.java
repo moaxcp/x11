@@ -75,4 +75,14 @@ public class BigEndianSerializerTest {
     assertThat(ser.readFloat(bytes, 0)).isEqualTo(1.0f);
     assertThat(ser.readDouble(bytes, 4)).isEqualTo(1.0d);
   }
+
+  @Test
+  void boolean_roundtrip() {
+    byte[] bytes = new byte[2];
+    ser.writeBoolean(bytes, 0, true);
+    ser.writeBoolean(bytes, 1, false);
+    assertThat(bytes).isEqualTo(new byte[] {1, 0});
+    assertThat(ser.readBoolean(bytes, 0)).isTrue();
+    assertThat(ser.readBoolean(bytes, 1)).isFalse();
+  }
 }

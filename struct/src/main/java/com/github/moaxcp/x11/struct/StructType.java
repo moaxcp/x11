@@ -75,6 +75,22 @@ public final class StructType extends Type<Struct> {
     }
   }
 
+  public boolean getBool(Struct struct, int position) {
+    return ((BoolType) fields.get(position)).getBoolean(struct);
+  }
+
+  public void setBool(Struct struct, int position, boolean value) {
+    ((BoolType) fields.get(position)).set(struct, value);
+  }
+
+  public boolean getBool(Struct struct, int position, long index) {
+    return ((BoolType) fields.get(position)).getBoolean(struct, index);
+  }
+
+  public void setBool(Struct struct, int position, long index, boolean value) {
+    ((BoolType) fields.get(position)).set(struct, index, value);
+  }
+
   public byte getInt8(Struct struct, int position) {
     return ((Int8Type) fields.get(position)).getInt8(struct);
   }
