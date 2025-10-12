@@ -38,12 +38,12 @@ public final class Int8Type extends NumberType<Byte> {
   }
 
   public byte getInt8(Pointer<?, ? extends Type<?>> pointer) {
-    return pointer.getByteArray().int8(getOffset(pointer));
+    return pointer.getByteArray().getInt8(getOffset(pointer));
   }
 
   public byte getInt8(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
-    return pointer.getByteArray().int8(getOffset(pointer, index));
+    return pointer.getByteArray().getInt8(getOffset(pointer, index));
   }
 
   @Override
@@ -67,7 +67,7 @@ public final class Int8Type extends NumberType<Byte> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
     checkConstant(pointer, index, value);
-    pointer.getByteArray().int8(getOffset(pointer, index), value);
+    pointer.getByteArray().setInt8(getOffset(pointer, index), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, Byte value) {

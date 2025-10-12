@@ -32,7 +32,7 @@ public final class Uint64Type extends NumberType<BigInteger> {
   @Override
   public BigInteger get(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
-    return pointer.getByteArray().uint64(getOffset(pointer, index));
+    return pointer.getByteArray().getUint64(getOffset(pointer, index));
   }
 
   @Override
@@ -43,7 +43,7 @@ public final class Uint64Type extends NumberType<BigInteger> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, BigInteger value) {
     checkConstant(pointer, index, value);
-    pointer.getByteArray().uint64(getOffset(pointer, index), value);
+    pointer.getByteArray().setUint64(getOffset(pointer, index), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, BigInteger value) {

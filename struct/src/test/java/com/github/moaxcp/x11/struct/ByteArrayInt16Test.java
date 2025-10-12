@@ -13,11 +13,11 @@ public class ByteArrayInt16Test {
   void int16_overwrite() {
     var bytes = new ByteArray(new byte[] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < 10; i++) {
-      bytes.int16(i * 2, (short) -i);
+      bytes.setInt16(i * 2, (short) -i);
     }
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {0, 0, -1, -1, -1, -2, -1, -3, -1, -4, -1, -5, -1, -6, -1, -7, -1, -8, -1, -9});
     for (int i = 0; i < 10; i++) {
-      assertThat(bytes.int16(i * 2)).isEqualTo((short) -i);
+      assertThat(bytes.getInt16(i * 2)).isEqualTo((short) -i);
     }
   }
 

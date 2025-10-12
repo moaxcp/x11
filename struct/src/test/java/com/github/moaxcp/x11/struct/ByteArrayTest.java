@@ -36,7 +36,7 @@ public class ByteArrayTest {
     var bytes = new ByteArray(10);
     var source = new ByteArray(10);
     for (int i = 0; i < 10; i++) {
-      source.int8(i, (byte) i);
+      source.setInt8(i, (byte) i);
     }
     bytes.setBytes(source, 0, 0, 10);
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
@@ -46,8 +46,8 @@ public class ByteArrayTest {
   void setBytesSource0Offset0() {
     var bytes = new ByteArray(10);
     var source = new ByteArray(2);
-    source.int8(0, (byte) 1);
-    source.int8(1, (byte) 1);
+    source.setInt8(0, (byte) 1);
+    source.setInt8(1, (byte) 1);
     bytes.setBytes(source, 0, 0, 2);
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {1, 1, 0, 0, 0, 0, 0, 0, 0, 0});
   }
@@ -56,8 +56,8 @@ public class ByteArrayTest {
   void setBytesSource1ffset4() {
     var bytes = new ByteArray(10);
     var source = new ByteArray(4);
-    source.int8(1, (byte) 1);
-    source.int8(2, (byte) 1);
+    source.setInt8(1, (byte) 1);
+    source.setInt8(2, (byte) 1);
     bytes.setBytes(source, 1, 4, 2);
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {0, 0, 0, 0, 1, 1, 0, 0, 0, 0});
   }
@@ -66,8 +66,8 @@ public class ByteArrayTest {
   void setBytesSource1offset8() {
     var bytes = new ByteArray(10);
     var source = new ByteArray(4);
-    source.int8(1, (byte) 1);
-    source.int8(2, (byte) 1);
+    source.setInt8(1, (byte) 1);
+    source.setInt8(2, (byte) 1);
     bytes.setBytes(source, 1, 8, 2);
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {0, 0, 0, 0, 0, 0, 0, 0, 1, 1});
   }
@@ -76,8 +76,8 @@ public class ByteArrayTest {
   void setBytesSource1offset15Resize() {
     var bytes = new ByteArray(10);
     var source = new ByteArray(4);
-    source.int8(1, (byte) 1);
-    source.int8(2, (byte) 1);
+    source.setInt8(1, (byte) 1);
+    source.setInt8(2, (byte) 1);
     bytes.setBytes(source, 1, 15, 2);
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1});
   }
@@ -87,7 +87,7 @@ public class ByteArrayTest {
     var bytes = new ByteArray(3);
     var source = new ByteArray(10);
     for (int i = 0; i < 10; i++) {
-      source.int8(i, (byte) i);
+      source.setInt8(i, (byte) i);
     }
     bytes.setBytes(source, 0, 0, 10);
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9});

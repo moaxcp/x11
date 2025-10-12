@@ -13,11 +13,11 @@ public class ByteArrayInt8Test {
   void int8_overwrite() {
     var bytes = new ByteArray(new byte[] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < 10; i++) {
-      bytes.int8(i, (byte) -i);
+      bytes.setInt8(i, (byte) -i);
     }
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {0, -1, -2, -3, -4, -5, -6, -7, -8, -9});
     for (int i = 0; i < 10; i++) {
-      assertThat(bytes.int8(i)).isEqualTo((byte) -i);
+      assertThat(bytes.getInt8(i)).isEqualTo((byte) -i);
     }
   }
 

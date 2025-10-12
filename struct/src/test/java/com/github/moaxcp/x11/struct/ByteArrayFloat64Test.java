@@ -13,7 +13,7 @@ public class ByteArrayFloat64Test {
   void float64_overwrite() {
     var bytes = new ByteArray(new byte[] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < 10; i++) {
-      bytes.float64(i * 8, -i);
+      bytes.setFloat64(i * 8, -i);
     }
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {
         0, 0, 0, 0, 0, 0, 0, 0,
@@ -28,7 +28,7 @@ public class ByteArrayFloat64Test {
         -64, 34, 0, 0, 0, 0, 0, 0
     });
     for (int i = 0; i < 10; i++) {
-      assertThat(bytes.float64(i * 8)).isEqualTo(-i);
+      assertThat(bytes.getFloat64(i * 8)).isEqualTo(-i);
     }
   }
 

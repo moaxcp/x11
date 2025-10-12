@@ -14,7 +14,7 @@ public class ByteArrayUint64Test {
   void uint64_overwrite() {
     var bytes = new ByteArray(new byte[] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < 10; i++) {
-      bytes.uint64(i * 8, new BigInteger("18446744073709551615").subtract(BigInteger.valueOf(i)));
+      bytes.setUint64(i * 8, new BigInteger("18446744073709551615").subtract(BigInteger.valueOf(i)));
     }
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {
         -1, -1, -1, -1, -1, -1, -1, -1,
@@ -29,7 +29,7 @@ public class ByteArrayUint64Test {
         -1, -1, -1, -1, -1, -1, -1, -10
     });
     for (int i = 0; i < 10; i++) {
-      assertThat(bytes.uint64(i * 8)).isEqualTo(new BigInteger("18446744073709551615").subtract(BigInteger.valueOf(i)));
+      assertThat(bytes.getUint64(i * 8)).isEqualTo(new BigInteger("18446744073709551615").subtract(BigInteger.valueOf(i)));
     }
   }
 

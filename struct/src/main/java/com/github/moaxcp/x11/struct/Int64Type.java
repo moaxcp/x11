@@ -38,12 +38,12 @@ public final class Int64Type extends NumberType<Long> {
   }
 
   public long getInt64(Pointer<?, ? extends Type<?>> pointer) {
-    return pointer.getByteArray().int64(getOffset(pointer));
+    return pointer.getByteArray().getInt64(getOffset(pointer));
   }
 
   public long getInt64(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
-    return pointer.getByteArray().int64(getOffset(pointer, index));
+    return pointer.getByteArray().getInt64(getOffset(pointer, index));
   }
 
   @Override
@@ -67,7 +67,7 @@ public final class Int64Type extends NumberType<Long> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, long value) {
     checkConstant(pointer, index, value);
-    pointer.getByteArray().int64(getOffset(pointer, index), value);
+    pointer.getByteArray().setInt64(getOffset(pointer, index), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, Long value) {

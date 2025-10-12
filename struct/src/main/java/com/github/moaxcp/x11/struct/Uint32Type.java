@@ -38,12 +38,12 @@ public final class Uint32Type extends NumberType<Long> {
   }
 
   public long getUint32(Pointer<?, ? extends Type<?>> pointer) {
-    return pointer.getByteArray().uint32(getOffset(pointer));
+    return pointer.getByteArray().getUint32(getOffset(pointer));
   }
 
   public long getUint32(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
-    return pointer.getByteArray().uint32(getOffset(pointer, index));
+    return pointer.getByteArray().getUint32(getOffset(pointer, index));
   }
 
   @Override
@@ -67,7 +67,7 @@ public final class Uint32Type extends NumberType<Long> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, long value) {
     checkConstant(pointer, index, value);
-    pointer.getByteArray().uint32(getOffset(pointer, index), value);
+    pointer.getByteArray().setUint32(getOffset(pointer, index), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, Long value) {

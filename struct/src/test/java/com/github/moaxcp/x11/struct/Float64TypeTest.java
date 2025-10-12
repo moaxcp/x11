@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
+import static com.github.moaxcp.x11.struct.ByteArray.ba;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Float64Type.float64Type;
@@ -224,22 +225,14 @@ public class Float64TypeTest {
         .float64()
         .float64Array(0)
         .float64()
-        .fromBytes(new byte[] {
-            0,0,0,0,0,0,0,0,
-            64, 8, 0, 0, 0, 0, 0, 0,
-            64, 0, 0, 0, 0, 0, 0, 0
-        })
+        .fromBytes(ba().float64(2).float64(5).float64(3).float64(4))
         .build();
 
     struct.setFloat64(1, 0, 2.0d);
 
-    assertThat(struct.getFloat64(0)).isEqualTo(0.0d);
+    assertThat(struct.getFloat64(0)).isEqualTo(2.0);
     assertThat(struct.getFloat64(1, 0)).isEqualTo(2.0d);
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
-        0,0,0,0,0,0,0,0,
-        64, 0, 0, 0, 0, 0, 0, 0,
-        64, 0, 0, 0, 0, 0, 0, 0
-    });
+    assertThat(struct.getByteArray()).isEqualTo(ba().float64(2).float64(2).float64(3).float64(4));
   }
 
   @Test
@@ -248,16 +241,12 @@ public class Float64TypeTest {
         .float64()
         .float64Array(0)
         .float64()
-        .fromBytes(new byte[] {
-            0,0,0,0,0,0,0,0,
-            64, 8, 0, 0, 0, 0, 0, 0,
-            64, 0, 0, 0, 0, 0, 0, 0
-        })
+        .fromBytes(ba().float64(2).float64(2).float64(3).float64(4))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(1, -1, 2.0d))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Float64Type at position 1 index: -1 length: 1");
+        .hasMessage("Float64Type at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -266,24 +255,14 @@ public class Float64TypeTest {
         .float64()
         .float64Array(0)
         .float64()
-        .fromBytes(new byte[] {
-            0,0,0,0,0,0,0,0,
-            64, 8, 0, 0, 0, 0, 0, 0,
-            64, 0, 0, 0, 0, 0, 0, 0
-        })
+        .fromBytes(ba().float64(2).float64(2).float64(3).float64(4))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(1, 2, 2.0d))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64Type at position 1 index: 2 length: 1");
+        .hasMessage("Float64Type at position 1 index: 2 length: 2");
 
-    assertThat(struct.getFloat64(0)).isEqualTo(0.0d);
-    assertThat(struct.getFloat64(1, 0)).isEqualTo(3.0d);
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
-        0,0,0,0,0,0,0,0,
-        64, 8, 0, 0, 0, 0, 0, 0,
-        64, 0, 0, 0, 0, 0, 0, 0
-    });
+    assertThat(struct.getByteArray()).isEqualTo(ba().float64(2).float64(2).float64(3).float64(4));
   }
 
   @Test
@@ -586,23 +565,13 @@ public class Float64TypeTest {
     var struct = struct()
         .float64()
         .float64Array(0)
-        .fromBytes(new byte[] {
-            64, 0, 0, 0, 0, 0, 0, 0,
-            64, 8, 0, 0, 0, 0, 0, 0,
-            64, 0, 0, 0, 0, 0, 0, 0
-        })
+        .fromBytes(ba().float64(2).float64(2).float64(3))
         .build();
 
     struct.addFloat64(1, 3.0d);
     struct.addFloat64(1, 2.0d);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
-        64, 0, 0, 0, 0, 0, 0, 0,
-        64, 8, 0, 0, 0, 0, 0, 0,
-        64, 0, 0, 0, 0, 0, 0, 0,
-        64, 8, 0, 0, 0, 0, 0, 0,
-        64, 0, 0, 0, 0, 0, 0, 0
-    } );
+    assertThat(struct.getByteArray()).isEqualTo(ba().float64(4).float64(2).float64(3).float64(3).float64(2));
   }
 
   @Test
@@ -657,9 +626,9 @@ public class Float64TypeTest {
         .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
         .build();
 
-    assertThatThrownBy(() -> struct.addFloat64(0, 3.0d))
+    assertThatThrownBy(() -> struct.addFloat64(0, 4.0d))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Float64Type at position 0 is constant index: 3 value: 3.0 constant: 3.0");
+        .hasMessage("Float64Type at position 0 is constant index: 3 value: 4.0 constant: 3.0");
   }
 
   @Test
@@ -678,23 +647,13 @@ public class Float64TypeTest {
     var struct = struct()
         .float64()
         .float64Array(0)
-        .fromBytes(new byte[] {
-            64, 0, 0, 0, 0, 0, 0, 0,
-            64, 8, 0, 0, 0, 0, 0, 0,
-            64, 0, 0, 0, 0, 0, 0, 0
-        })
+        .fromBytes(ba().float64(2).float64(2).float64(3))
         .build();
 
     struct.addFloat64(1, 0, 3.0d);
     struct.addFloat64(1, 1, 2.0d);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
-        64, 0, 0, 0, 0, 0, 0, 0,
-        64, 8, 0, 0, 0, 0, 0, 0,
-        64, 8, 0, 0, 0, 0, 0, 0,
-        64, 0, 0, 0, 0, 0, 0, 0,
-        64, 0, 0, 0, 0, 0, 0, 0
-    } );
+    assertThat(struct.getByteArray()).isEqualTo(ba().float64(4).float64(3).float64(2).float64(2).float64(3));
   }
 
   @Test
@@ -774,9 +733,9 @@ public class Float64TypeTest {
         .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
         .build();
 
-    assertThatThrownBy(() -> struct.addFloat64(0, 2, 3.0d))
+    assertThatThrownBy(() -> struct.addFloat64(0, 2, 4.0d))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Float64Type at position 0 is constant index: 2 value: 3.0 constant: 3.0");
+        .hasMessage("Float64Type at position 0 is constant index: 2 value: 4.0 constant: 3.0");
   }
 
   @Test
@@ -857,7 +816,7 @@ public class Float64TypeTest {
 
     assertThat(((Float64Type) struct.getType(1)).getFloat64(struct, 0)).isEqualTo(2.0d);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {64, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0} );
+    assertThat(struct.getByteArray()).isEqualTo(ba().float64(1).float64(2));
   }
 
   @Test
@@ -871,7 +830,7 @@ public class Float64TypeTest {
 
     struct.remove(1, 1);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {64, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0} );
+    assertThat(struct.getByteArray()).isEqualTo(ba().float64(1).float64(3));
   }
 
   @Test

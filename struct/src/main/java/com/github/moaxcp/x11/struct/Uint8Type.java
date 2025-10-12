@@ -40,12 +40,12 @@ public final class Uint8Type extends NumberType<Short> {
   }
 
   public short getUint8(Pointer<?, ? extends Type<?>> pointer) {
-    return pointer.getByteArray().uint8(getOffset(pointer));
+    return pointer.getByteArray().getUint8(getOffset(pointer));
   }
 
   public short getUint8(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
-    return pointer.getByteArray().uint8(getOffset(pointer, index));
+    return pointer.getByteArray().getUint8(getOffset(pointer, index));
   }
 
   @Override
@@ -69,7 +69,7 @@ public final class Uint8Type extends NumberType<Short> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
     checkConstant(pointer, index, value);
-    pointer.getByteArray().uint8(getOffset(pointer, index), value);
+    pointer.getByteArray().setUint8(getOffset(pointer, index), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, Short value) {

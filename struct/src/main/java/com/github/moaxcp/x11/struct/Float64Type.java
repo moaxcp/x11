@@ -38,12 +38,12 @@ public final class Float64Type extends NumberType<Double> {
   }
 
   public double getFloat64(Pointer<?, ? extends Type<?>> pointer) {
-    return pointer.getByteArray().float64(getOffset(pointer));
+    return pointer.getByteArray().getFloat64(getOffset(pointer));
   }
 
   public double getFloat64(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
-    return pointer.getByteArray().float64(getOffset(pointer, index));
+    return pointer.getByteArray().getFloat64(getOffset(pointer, index));
   }
 
   @Override
@@ -67,7 +67,7 @@ public final class Float64Type extends NumberType<Double> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, double value) {
     checkConstant(pointer, index, value);
-    pointer.getByteArray().float64(getOffset(pointer, index), value);
+    pointer.getByteArray().setFloat64(getOffset(pointer, index), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, Double value) {

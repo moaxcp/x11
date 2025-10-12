@@ -38,12 +38,12 @@ public final class Float32Type extends NumberType<Float> {
   }
 
   public float getFloat32(Pointer<?, ? extends Type<?>> pointer) {
-    return pointer.getByteArray().float32(getOffset(pointer));
+    return pointer.getByteArray().getFloat32(getOffset(pointer));
   }
 
   public float getFloat32(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
-    return pointer.getByteArray().float32(getOffset(pointer, index));
+    return pointer.getByteArray().getFloat32(getOffset(pointer, index));
   }
 
   @Override
@@ -67,7 +67,7 @@ public final class Float32Type extends NumberType<Float> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     checkConstant(pointer, index, value);
-    pointer.getByteArray().float32(getOffset(pointer, index), value);
+    pointer.getByteArray().setFloat32(getOffset(pointer, index), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, Float value) {

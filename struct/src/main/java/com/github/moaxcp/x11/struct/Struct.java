@@ -423,7 +423,7 @@ public class Struct implements Pointer<Struct, StructType> {
     int result = Math.toIntExact(offset);
     result = 31 * result + structType.hashCode();
     for (int i = 0; i < getByteLength(); i++) {
-      result = Math.toIntExact(31 * result + bytes.int8(getOffset() + i));
+      result = Math.toIntExact(31 * result + bytes.getInt8(getOffset() + i));
     }
     return result;
   }

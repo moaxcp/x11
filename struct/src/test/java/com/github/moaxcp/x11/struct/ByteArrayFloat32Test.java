@@ -13,7 +13,7 @@ public class ByteArrayFloat32Test {
   void float32_overwrite() {
     var bytes = new ByteArray(new byte[] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < 10; i++) {
-      bytes.float32(i * 4, -i);
+      bytes.setFloat32(i * 4, -i);
     }
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {
         0, 0, 0, 0,
@@ -28,7 +28,7 @@ public class ByteArrayFloat32Test {
         -63, 16, 0, 0
     });
     for (int i = 0; i < 10; i++) {
-      assertThat(bytes.float32(i * 4)).isEqualTo(-i);
+      assertThat(bytes.getFloat32(i * 4)).isEqualTo(-i);
     }
   }
 

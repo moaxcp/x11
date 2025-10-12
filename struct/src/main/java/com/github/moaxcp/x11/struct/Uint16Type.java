@@ -38,12 +38,12 @@ public final class Uint16Type extends NumberType<Integer> {
   }
 
   public int getUint16(Pointer<?, ? extends Type<?>> pointer) {
-    return pointer.getByteArray().uint16(getOffset(pointer));
+    return pointer.getByteArray().getUint16(getOffset(pointer));
   }
 
   public int getUint16(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
-    return pointer.getByteArray().uint16(getOffset(pointer, index));
+    return pointer.getByteArray().getUint16(getOffset(pointer, index));
   }
 
   @Override
@@ -67,7 +67,7 @@ public final class Uint16Type extends NumberType<Integer> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, int value) {
     checkConstant(pointer, index, value);
-    pointer.getByteArray().uint16(getOffset(pointer, index), value);
+    pointer.getByteArray().setUint16(getOffset(pointer, index), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, Integer value) {

@@ -13,7 +13,7 @@ public class ByteArrayInt32Test {
   void int32_overwrite() {
     var bytes = new ByteArray(new byte[] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < 10; i++) {
-      bytes.int32(i * 4, -i);
+      bytes.setInt32(i * 4, -i);
     }
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {
         0, 0, 0, 0,
@@ -28,7 +28,7 @@ public class ByteArrayInt32Test {
         -1, -1, -1, -9
     });
     for (int i = 0; i < 10; i++) {
-      assertThat(bytes.int32(i * 4)).isEqualTo(-i);
+      assertThat(bytes.getInt32(i * 4)).isEqualTo(-i);
     }
   }
 
