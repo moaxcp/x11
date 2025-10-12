@@ -33,7 +33,7 @@ public class Float64TypeTest {
     var expression = valueOf(0);
     var struct = struct()
         .float64()
-        .primitive().constant(3.0d).lengthExpression(expression).assignment(add).float64()
+        .field().constant(3.0d).lengthExpression(expression).assignment(add).float64()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
@@ -90,7 +90,7 @@ public class Float64TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).float64()
+        .field().constant(3.0d).float64()
         .build();
 
     // 3.0d -> 0x4008000000000000 -> {64,8,0,0,0,0,0,0}
@@ -110,7 +110,7 @@ public class Float64TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).float64()
+        .field().constant(3.0d).float64()
         .float64Array(0)
         .build();
 
@@ -126,8 +126,8 @@ public class Float64TypeTest {
   @Test
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).float64()
-        .primitive().constant(2.0d).lengthField(0).float64()
+        .field().constant(3.0d).float64()
+        .field().constant(2.0d).lengthField(0).float64()
         .build();
 
     // 3.0d then 3 elements of 2.0d
@@ -199,7 +199,7 @@ public class Float64TypeTest {
   @Test
   void setFloat64_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).float64()
+        .field().constant(3.0d).float64()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2.0d))
@@ -303,7 +303,7 @@ public class Float64TypeTest {
   @Test
   void setFloat64Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
+        .field().constant(3.0d).lengthExpression(constant(3)).float64()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2, 2.0d))
@@ -315,7 +315,7 @@ public class Float64TypeTest {
   void setFloat64Array_constant_value() {
     var struct = struct()
         .float64()
-        .primitive().constant(3.0d).lengthField(0).float64()
+        .field().constant(3.0d).lengthField(0).float64()
         .fromBytes(new byte[] {
             64, 0, 0, 0, 0, 0, 0, 0,
             64, 8, 0, 0, 0, 0, 0, 0,
@@ -332,7 +332,7 @@ public class Float64TypeTest {
   void setFloat64Array_constant_value_same() {
     var struct = struct()
         .float64()
-        .primitive().constant(3.0d).lengthField(0).float64()
+        .field().constant(3.0d).lengthField(0).float64()
         .fromBytes(new byte[] {
             64, 0, 0, 0, 0, 0, 0, 0,
             64, 8, 0, 0, 0, 0, 0, 0,
@@ -429,7 +429,7 @@ public class Float64TypeTest {
   @Test
   void getFloat64_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).float64()
+        .field().constant(3.0d).float64()
         .build();
 
     assertThat(struct.getFloat64(0)).isEqualTo(3.0d);
@@ -530,7 +530,7 @@ public class Float64TypeTest {
   @Test
   void getFloat64Array_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
+        .field().constant(3.0d).lengthExpression(constant(3)).float64()
         .build();
 
     assertThat(struct.getFloat64(0, 2)).isEqualTo(3.0d);
@@ -623,7 +623,7 @@ public class Float64TypeTest {
   @Test
   void addFloat64Array_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
+        .field().constant(3.0d).lengthExpression(constant(3)).float64()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 4.0d))
@@ -730,7 +730,7 @@ public class Float64TypeTest {
   @Test
   void addFloat64Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
+        .field().constant(3.0d).lengthExpression(constant(3)).float64()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 2, 4.0d))
@@ -882,7 +882,7 @@ public class Float64TypeTest {
   @Test
   void removeFloat64Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
+        .field().constant(3.0d).lengthExpression(constant(3)).float64()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
@@ -893,7 +893,7 @@ public class Float64TypeTest {
   @Test
   void removeFloat64Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
+        .field().constant(3.0d).lengthExpression(constant(3)).float64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 2))

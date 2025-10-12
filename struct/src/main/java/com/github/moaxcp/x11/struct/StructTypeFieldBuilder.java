@@ -4,10 +4,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.math.BigInteger;
 
-public final class PrimitiveTypeBuilder {
+public final class StructTypeFieldBuilder {
 
-  public static PrimitiveTypeBuilder primitive() {
-    return new PrimitiveTypeBuilder();
+  public static StructTypeFieldBuilder field() {
+    return new StructTypeFieldBuilder();
   }
 
   private int position = -1;
@@ -18,22 +18,22 @@ public final class PrimitiveTypeBuilder {
   @Nullable
   private Assignment assignment;
 
-  public PrimitiveTypeBuilder position(int position) {
+  public StructTypeFieldBuilder position(int position) {
     this.position = position;
     return this;
   }
 
-  public PrimitiveTypeBuilder constant(Object constantValue) {
+  public StructTypeFieldBuilder constant(Object constantValue) {
     this.constantValue = constantValue;
     return this;
   }
 
-  public PrimitiveTypeBuilder lengthExpression(Expression lengthExpression) {
+  public StructTypeFieldBuilder lengthExpression(Expression lengthExpression) {
     this.lengthExpression = lengthExpression;
     return this;
   }
 
-  public PrimitiveTypeBuilder assignment(Assignment assignment) {
+  public StructTypeFieldBuilder assignment(Assignment assignment) {
     this.assignment = assignment;
     return this;
   }
@@ -109,5 +109,8 @@ public final class PrimitiveTypeBuilder {
     return new Float64Type(position, getConstantValue(Double.class), lengthExpression, assignment);
   }
 
+  public PadType pad() {
+    return new PadType(position, lengthExpression, assignment);
+  }
 
 }

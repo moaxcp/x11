@@ -62,6 +62,9 @@ public final class StructType extends Type<Struct> {
       var pointerField = ((Type) fields.get(i));
       var structField = struct.getType(i);
       for (int j = 0; j < structField.getArrayLength(struct); j++) {
+        if(pointerField instanceof PadType) {
+          continue;
+        }
         pointerField.set(pointer, j, structField.get(struct, j));
       }
     }

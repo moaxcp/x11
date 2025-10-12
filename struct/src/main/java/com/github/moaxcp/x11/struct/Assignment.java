@@ -79,6 +79,7 @@ public interface Assignment {
         }
         case BoolType ignored -> throw new IllegalArgumentException("cannot add to boolean type in Assignment.add");
         case StructType ignored -> throw new IllegalArgumentException("cannot add to non-integer type in Assignment.add");
+        case PadType ignored -> throw new IllegalArgumentException("cannot add to pad type in Assignment.add");
         case null -> throw new IllegalArgumentException("cannot add to null type in Assignment.add");
       }
     }

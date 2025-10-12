@@ -59,6 +59,7 @@ public interface Expression {
         case Float64Type f32 -> (long) f32.getFloat64(pointer);
         case BoolType ignored -> throw new IllegalArgumentException("cannot evaluate boolean type");
         case StructType ignored -> throw new IllegalArgumentException("cannot evaluate struct type");
+        case PadType ignored -> throw new IllegalArgumentException("cannot evaluate pad type");
         case null -> throw new IllegalArgumentException("cannot evaluate null type");
       };
     }

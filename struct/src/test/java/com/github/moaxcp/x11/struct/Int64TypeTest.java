@@ -32,7 +32,7 @@ public class Int64TypeTest {
     var expression = valueOf(0);
     var struct = struct()
         .int64()
-        .primitive().constant(5L).lengthExpression(expression).assignment(add).int64()
+        .field().constant(5L).lengthExpression(expression).assignment(add).int64()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
@@ -89,7 +89,7 @@ public class Int64TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .primitive().constant(5L).int64()
+        .field().constant(5L).int64()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0,0,0,0,0,0,0,5});
@@ -108,7 +108,7 @@ public class Int64TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .primitive().constant(5L).int64()
+        .field().constant(5L).int64()
         .int64Array(0)
         .build();
 
@@ -125,8 +125,8 @@ public class Int64TypeTest {
   @Test
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
-        .primitive().constant(5L).int64()
-        .primitive().constant(6L).lengthField(0).int64()
+        .field().constant(5L).int64()
+        .field().constant(6L).lengthField(0).int64()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
@@ -198,7 +198,7 @@ public class Int64TypeTest {
   @Test
   void setInt64_constant() {
     var struct = struct()
-        .primitive().constant(5L).int64()
+        .field().constant(5L).int64()
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(0, 2L))
@@ -324,7 +324,7 @@ public class Int64TypeTest {
   @Test
   void setInt64Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .field().constant(5L).lengthExpression(constant(5)).int64()
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(0, 3, 2L))
@@ -336,7 +336,7 @@ public class Int64TypeTest {
   void setInt64Array_constant_value() {
     var struct = struct()
         .int64()
-        .primitive().constant(5L).lengthField(0).int64()
+        .field().constant(5L).lengthField(0).int64()
         .fromBytes(new byte[] {
             0,0,0,0,0,0,0,2,
             0,0,0,0,0,0,0,5,
@@ -353,7 +353,7 @@ public class Int64TypeTest {
   void setInt64Array_constant_value_same() {
     var struct = struct()
         .int64()
-        .primitive().constant(5L).lengthField(0).int64()
+        .field().constant(5L).lengthField(0).int64()
         .fromBytes(new byte[] {
             0,0,0,0,0,0,0,2,
             0,0,0,0,0,0,0,5,
@@ -450,7 +450,7 @@ public class Int64TypeTest {
   @Test
   void getInt64_constant() {
     var struct = struct()
-        .primitive().constant(5L).int64()
+        .field().constant(5L).int64()
         .build();
 
     assertThat(struct.getInt64(0)).isEqualTo(5L);
@@ -551,7 +551,7 @@ public class Int64TypeTest {
   @Test
   void getInt64Array_constant() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .field().constant(5L).lengthExpression(constant(5)).int64()
         .build();
 
     assertThat(struct.getInt64(0, 3)).isEqualTo(5L);
@@ -654,7 +654,7 @@ public class Int64TypeTest {
   @Test
   void addInt64Array_constant() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .field().constant(5L).lengthExpression(constant(5)).int64()
         .build();
 
     assertThatThrownBy(() -> struct.addInt64(0, 3L))
@@ -771,7 +771,7 @@ public class Int64TypeTest {
   @Test
   void addInt64Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .field().constant(5L).lengthExpression(constant(5)).int64()
         .build();
 
     assertThatThrownBy(() -> struct.addInt64(0, 3, 3L))
@@ -923,7 +923,7 @@ public class Int64TypeTest {
   @Test
   void removeInt64Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .field().constant(5L).lengthExpression(constant(5)).int64()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
@@ -934,7 +934,7 @@ public class Int64TypeTest {
   @Test
   void removeInt64Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .field().constant(5L).lengthExpression(constant(5)).int64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

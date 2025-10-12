@@ -32,7 +32,7 @@ public class Int32TypeTest {
     var expression = valueOf(0);
     var struct = struct()
         .int32()
-        .primitive().constant(5).lengthExpression(expression).assignment(add).int32()
+        .field().constant(5).lengthExpression(expression).assignment(add).int32()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
@@ -89,7 +89,7 @@ public class Int32TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .primitive().constant(5).int32()
+        .field().constant(5).int32()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0, 0, 0, 5});
@@ -108,7 +108,7 @@ public class Int32TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .primitive().constant(5).int32()
+        .field().constant(5).int32()
         .int32Array(0)
         .build();
 
@@ -125,8 +125,8 @@ public class Int32TypeTest {
   @Test
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
-        .primitive().constant(5).int32()
-        .primitive().constant(6).lengthField(0).int32()
+        .field().constant(5).int32()
+        .field().constant(6).lengthField(0).int32()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {
@@ -198,7 +198,7 @@ public class Int32TypeTest {
   @Test
   void setInt32_constant() {
     var struct = struct()
-        .primitive().constant(5).int32()
+        .field().constant(5).int32()
         .build();
 
     assertThatThrownBy(() -> struct.setInt32(0, 2))
@@ -324,7 +324,7 @@ public class Int32TypeTest {
   @Test
   void setInt32Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).int32()
+        .field().constant(5).lengthExpression(constant(5)).int32()
         .build();
 
     assertThatThrownBy(() -> struct.setInt32(0, 3, 2))
@@ -336,7 +336,7 @@ public class Int32TypeTest {
   void setInt32Array_constant_value() {
     var struct = struct()
         .int32()
-        .primitive().constant(5).lengthField(0).int32()
+        .field().constant(5).lengthField(0).int32()
         .fromBytes(new byte[] {
             0, 0, 0, 2,
             0, 0, 0, 5,
@@ -353,7 +353,7 @@ public class Int32TypeTest {
   void setInt32Array_constant_value_same() {
     var struct = struct()
         .int32()
-        .primitive().constant(5).lengthField(0).int32()
+        .field().constant(5).lengthField(0).int32()
         .fromBytes(new byte[] {
             0, 0, 0, 2,
             0, 0, 0, 5,
@@ -450,7 +450,7 @@ public class Int32TypeTest {
   @Test
   void getInt32_constant() {
     var struct = struct()
-        .primitive().constant(5).int32()
+        .field().constant(5).int32()
         .build();
 
     assertThat(struct.getInt32(0)).isEqualTo(5);
@@ -551,7 +551,7 @@ public class Int32TypeTest {
   @Test
   void getInt32Array_constant() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).int32()
+        .field().constant(5).lengthExpression(constant(5)).int32()
         .build();
 
     assertThat(struct.getInt32(0, 3)).isEqualTo(5);
@@ -654,7 +654,7 @@ public class Int32TypeTest {
   @Test
   void addInt32Array_constant() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).int32()
+        .field().constant(5).lengthExpression(constant(5)).int32()
         .build();
 
     assertThatThrownBy(() -> struct.addInt32(0, 3))
@@ -771,7 +771,7 @@ public class Int32TypeTest {
   @Test
   void addInt32Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).int32()
+        .field().constant(5).lengthExpression(constant(5)).int32()
         .build();
 
     assertThatThrownBy(() -> struct.addInt32(0, 3, 3))
@@ -923,7 +923,7 @@ public class Int32TypeTest {
   @Test
   void removeInt32Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).int32()
+        .field().constant(5).lengthExpression(constant(5)).int32()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
@@ -934,7 +934,7 @@ public class Int32TypeTest {
   @Test
   void removeInt32Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).int32()
+        .field().constant(5).lengthExpression(constant(5)).int32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

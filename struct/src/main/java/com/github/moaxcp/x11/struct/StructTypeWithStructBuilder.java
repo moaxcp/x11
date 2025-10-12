@@ -1,9 +1,9 @@
 package com.github.moaxcp.x11.struct;
 
-public class StructWithStructTypeBuilder extends StructTypeBuilder<StructWithStructTypeBuilder> {
+public class StructTypeWithStructBuilder extends StructTypeBuilder<StructTypeWithStructBuilder> {
   private final StructBuilder structBuilder;
 
-  StructWithStructTypeBuilder(StructBuilder structBuilder) {
+  StructTypeWithStructBuilder(StructBuilder structBuilder) {
     this.structBuilder = structBuilder;
   }
 
@@ -11,11 +11,11 @@ public class StructWithStructTypeBuilder extends StructTypeBuilder<StructWithStr
     return structBuilder;
   }
 
-  public ChildStructTypeBuilder<StructWithStructTypeBuilder> struct() {
+  public ChildStructTypeBuilder<StructTypeWithStructBuilder> struct() {
     return new ChildStructTypeBuilder<>(this, fields());
   }
 
-  public ChildStructTypeBuilder<StructWithStructTypeBuilder> structArray(int lengthPosition) {
+  public ChildStructTypeBuilder<StructTypeWithStructBuilder> structArray(int lengthPosition) {
     return new ChildStructTypeBuilder<>(this, fields()).lengthField(lengthPosition);
   }
 }
