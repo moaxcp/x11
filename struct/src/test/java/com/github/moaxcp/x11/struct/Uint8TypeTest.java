@@ -31,7 +31,7 @@ public class Uint8TypeTest {
     var expression = valueOf(0);
     var struct = struct()
         .uint8()
-        .field().constant((short) 5).lengthExpression(expression).assignment(add).uint8()
+        .primitive().constant((short) 5).lengthExpression(expression).assignment(add).uint8()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
@@ -88,7 +88,7 @@ public class Uint8TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .field().constant((short) 5).uint8()
+        .primitive().constant((short) 5).uint8()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {5});
@@ -107,7 +107,7 @@ public class Uint8TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .field().constant((short) 5).uint8()
+        .primitive().constant((short) 5).uint8()
         .uint8Array(0)
         .build();
 
@@ -173,7 +173,7 @@ public class Uint8TypeTest {
   @Test
   void setUint8_constant() {
     var struct = struct()
-        .field().constant((short) 5).uint8()
+        .primitive().constant((short) 5).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(0, (short) 2))
@@ -279,7 +279,7 @@ public class Uint8TypeTest {
   @Test
   void setUint8Array_constant_value_and_length() {
     var struct = struct()
-        .field().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(0, 3, (short) 2))
@@ -291,7 +291,7 @@ public class Uint8TypeTest {
   void setUint8Array_constant_value() {
     var struct = struct()
         .uint8()
-        .field().constant((short) 5).lengthField(0).uint8()
+        .primitive().constant((short) 5).lengthField(0).uint8()
         .fromBytes(new byte[] {2, 5, 5})
         .build();
 
@@ -304,7 +304,7 @@ public class Uint8TypeTest {
   void setUint8Array_constant_value_same() {
     var struct = struct()
         .uint8()
-        .field().constant((short) 5).lengthField(0).uint8()
+        .primitive().constant((short) 5).lengthField(0).uint8()
         .fromBytes(new byte[] {2, 5, 5})
         .build();
 
@@ -393,7 +393,7 @@ public class Uint8TypeTest {
   @Test
   void getUint8_constant() {
     var struct = struct()
-        .field().constant((short) 5).uint8()
+        .primitive().constant((short) 5).uint8()
         .build();
 
     assertThat(struct.getUint8(0)).isEqualTo((short) 5);
@@ -486,7 +486,7 @@ public class Uint8TypeTest {
   @Test
   void getUint8Array_constant() {
     var struct = struct()
-        .field().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
     assertThat(struct.getUint8(0, 3)).isEqualTo((byte) 5);
@@ -571,7 +571,7 @@ public class Uint8TypeTest {
   @Test
   void addUint8Array_constant() {
     var struct = struct()
-        .field().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, (byte) 3))
@@ -670,7 +670,7 @@ public class Uint8TypeTest {
   @Test
   void addUint8Array_with_index_constant() {
     var struct = struct()
-        .field().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, 3, (short) 3))
@@ -810,7 +810,7 @@ public class Uint8TypeTest {
   @Test
   void removeUint8Array_fixed_length() {
     var struct = struct()
-        .field().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
@@ -821,7 +821,7 @@ public class Uint8TypeTest {
   @Test
   void removeUint8Array_fixed_length_with_index() {
     var struct = struct()
-        .field().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

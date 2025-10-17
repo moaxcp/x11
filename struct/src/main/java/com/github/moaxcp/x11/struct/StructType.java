@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class StructType extends Type<Struct> {
+public final class StructType extends ValueType<Struct> {
 
-  private final List<Type<?>> fields;
+  private final List<Type> fields;
 
   private StructType(int position, StructType structType) {
     super(position);
     fields = new ArrayList<>(structType.fields);
   }
 
-  StructType(int position, Struct constant, Expression lengthExpression, Assignment assignment, List<Type<?>> fields) {
+  StructType(int position, Struct constant, Expression lengthExpression, Assignment assignment, List<Type> fields) {
     super(position, constant, lengthExpression, assignment);
     this.fields = fields;
   }
@@ -24,7 +24,7 @@ public final class StructType extends Type<Struct> {
     return new StructType(position, this);
   }
 
-  public <V extends Type<?>> V getType(int position) {
+  public <V extends Type> V getType(int position) {
     return (V) fields.get(position);
   }
 
@@ -33,13 +33,13 @@ public final class StructType extends Type<Struct> {
   }
 
   @Override
-  public long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public long getByteLength(Pointer<?, ? extends Type> pointer, long index) {
     var struct = get(pointer, index);
     return struct.getByteLength();
   }
 
   @Override
-  public boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
+  public boolean isFixedLength(Pointer<?, ? extends Type> pointer) {
     for (int i = 0; i < fields.size(); i++) {
       var type = fields.get(i);
       if(!type.isFixedLength(pointer)) {
@@ -50,28 +50,38 @@ public final class StructType extends Type<Struct> {
   }
 
   @Override
-  public Struct get(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public Struct get(Pointer<?, ? extends Type> pointer, long index) {
     var offset = getOffset(pointer, index);
     return new Struct(offset, this, pointer.getByteArray());
   }
 
   @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
+  public void set(Pointer<?, ? extends Type> pointer, long index, Struct value) {
     var struct = get(pointer, index);
     for (int i = 0; i < fields.size(); i++) {
-      var pointerField = ((Type) fields.get(i));
+      var pointerField = fields.get(i);
       var structField = struct.getType(i);
-      for (int j = 0; j < structField.getArrayLength(struct); j++) {
-        if(pointerField instanceof PadType) {
-          continue;
+      assert pointerField.getClass().equals(structField.getClass()) : "pointerField and structField must be the same type";
+      switch (structField) {
+        case ValueType<?> valueType -> {
+          for (int j = 0; j < valueType.getArrayLength(struct); j++) {
+            switch (valueType) {
+              case PrimitiveType<?> v -> {
+              }
+              case StructType structType -> {
+                structType.set(pointer, j, structType.get(struct, j));
+              }
+            }
+          }
         }
-        pointerField.set(pointer, j, structField.get(struct, j));
+        case PadType padType -> {
+        }
       }
     }
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public void allocate(Pointer<?, ? extends Type> pointer, long index) {
     var struct = get(pointer, index);
     for (int i = 0; i < fields.size(); i++) {
       struct.getType(i).allocate(pointer);

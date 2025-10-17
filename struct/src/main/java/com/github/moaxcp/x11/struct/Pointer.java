@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11.struct;
 
-public interface Pointer<SELF extends Pointer<SELF, T>, T extends Type<SELF>> extends ByteArrayListener {
+public interface Pointer<SELF extends Pointer<SELF, T>, T extends Type> extends ByteArrayListener {
   SELF copy();
 
   long getOffset();
@@ -11,7 +11,7 @@ public interface Pointer<SELF extends Pointer<SELF, T>, T extends Type<SELF>> ex
 
   T getType();
 
-  <V extends Type<?>> V getType(int position);
+  <V extends Type> V getType(int position);
 
   int getPositions();
 

@@ -27,62 +27,34 @@ public final class Int8Type extends NumberType<Byte> {
     return new Int8Type(position, constantValue, lengthExpression, assignment);
   }
 
-  @Override
-  public Byte get(Pointer<?, ? extends Type<?>> pointer) {
-    throw new UnsupportedOperationException("get(Pointer) not supported for Int8Type. Use getInt8(Pointer) instead.");
-  }
-
-  @Override
-  public Byte get(Pointer<?, ? extends Type<?>> pointer, long index) {
-    throw new UnsupportedOperationException("get(Pointer, long) not supported for Int8Type. Use getInt8(Pointer, long) instead.");
-  }
-
-  public byte getInt8(Pointer<?, ? extends Type<?>> pointer) {
+  public byte getInt8(Pointer<?, ? extends Type> pointer) {
     return pointer.getByteArray().getInt8(getOffset(pointer));
   }
 
-  public byte getInt8(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public byte getInt8(Pointer<?, ? extends Type> pointer, long index) {
     checkIndex(pointer, index);
     return pointer.getByteArray().getInt8(getOffset(pointer, index));
   }
 
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, Byte value) {
-    throw new UnsupportedOperationException("set(Pointer, Byte) not supported for Int8Type. Use set(Pointer, byte) instead.");
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Byte value) {
-    throw new UnsupportedOperationException("set(Pointer, long, Byte) not supported for Int8Type. Use set(Pointer, long, byte) instead.");
-  }
-
-  public void set(Pointer<?, ? extends Type<?>> pointer, byte value) {
+  public void set(Pointer<?, ? extends Type> pointer, byte value) {
     setUnchecked(pointer, 0, value);
   }
 
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
+  public void set(Pointer<?, ? extends Type> pointer, long index, byte value) {
     checkIndex(pointer, index);
     setUnchecked(pointer, index, value);
   }
 
-  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
+  private void setUnchecked(Pointer<?, ? extends Type> pointer, long index, byte value) {
     checkConstant(pointer, index, value);
     pointer.getByteArray().setInt8(getOffset(pointer, index), value);
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer, Byte value) {
-    throw new UnsupportedOperationException("add(Pointer, Byte) not supported for Int8Type. Use add(Pointer, byte) instead.");
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, Byte value) {
-    throw new UnsupportedOperationException("add(Pointer, long, Byte) not supported for Int8Type. Use add(Pointer, long, byte) instead.");
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, byte value) {
+  public void add(Pointer<?, ? extends Type> pointer, byte value) {
     add(pointer, getArrayLength(pointer), value);
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
+  public void add(Pointer<?, ? extends Type> pointer, long index, byte value) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition() + " index: " + index + " length: " + 1);
     }
@@ -90,7 +62,7 @@ public final class Int8Type extends NumberType<Byte> {
     setUnchecked(pointer, index, value);
   }
 
-  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
+  public void allocate(Pointer<?, ? extends Type> pointer) {
     if(isArray()) {
       long length = getArrayLength(pointer);
       for (int i = 0; i < length; i++) {
@@ -102,7 +74,7 @@ public final class Int8Type extends NumberType<Byte> {
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public void allocate(Pointer<?, ? extends Type> pointer, long index) {
     checkIndexAllocate(pointer, index);
     pointer.getByteArray().addInt8(getOffset(pointer, index), constantValue != null ? constantValue : 0);
     if (assignment != null) {

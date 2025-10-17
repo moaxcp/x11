@@ -4,41 +4,37 @@ import org.jspecify.annotations.Nullable;
 
 import java.math.BigInteger;
 
-public final class StructTypeFieldBuilder {
+public final class StructTypePrimitiveBuilder {
 
-  public static StructTypeFieldBuilder field() {
-    return new StructTypeFieldBuilder();
-  }
+  protected int position = -1;
+  @Nullable
+  protected Object constantValue;
+  @Nullable
+  protected Expression lengthExpression;
+  @Nullable
+  protected Assignment assignment;
 
-  private int position = -1;
-  @Nullable
-  private Object constantValue;
-  @Nullable
-  private Expression lengthExpression;
-  @Nullable
-  private Assignment assignment;
-
-  public StructTypeFieldBuilder position(int position) {
+  public StructTypePrimitiveBuilder position(int position) {
     this.position = position;
     return this;
   }
 
-  public StructTypeFieldBuilder constant(Object constantValue) {
+  public StructTypePrimitiveBuilder constant(Object constantValue) {
     this.constantValue = constantValue;
     return this;
   }
 
-  public StructTypeFieldBuilder lengthExpression(Expression lengthExpression) {
+  public StructTypePrimitiveBuilder lengthExpression(Expression lengthExpression) {
     this.lengthExpression = lengthExpression;
     return this;
   }
 
-  public StructTypeFieldBuilder assignment(Assignment assignment) {
+  public StructTypePrimitiveBuilder assignment(Assignment assignment) {
     this.assignment = assignment;
     return this;
   }
 
-  private <T> T getConstantValue(Class<T> clazz) {
+  protected <T> T getConstantValue(Class<T> clazz) {
     return switch (constantValue) {
       case Number n -> {
         if (clazz == Byte.class) {
@@ -108,9 +104,4 @@ public final class StructTypeFieldBuilder {
   public Float64Type float64() {
     return new Float64Type(position, getConstantValue(Double.class), lengthExpression, assignment);
   }
-
-  public PadType pad() {
-    return new PadType(position, lengthExpression, assignment);
-  }
-
 }

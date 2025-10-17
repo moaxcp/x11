@@ -32,7 +32,7 @@ public class Int8TypeTest {
     var expression = valueOf(0);
     var struct = struct()
         .int8()
-        .field().constant((byte) 5).lengthExpression(expression).assignment(add).int8()
+        .primitive().constant((byte) 5).lengthExpression(expression).assignment(add).int8()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
@@ -89,7 +89,7 @@ public class Int8TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .field().constant((byte) 5).int8()
+        .primitive().constant((byte) 5).int8()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {5});
@@ -108,7 +108,7 @@ public class Int8TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .field().constant((byte) 5).int8()
+        .primitive().constant((byte) 5).int8()
         .int8Array(0)
         .build();
 
@@ -118,8 +118,8 @@ public class Int8TypeTest {
   @Test
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
-        .field().constant((byte) 5).int8()
-        .field().constant((byte) 6).lengthField(0).int8()
+        .primitive().constant((byte) 5).int8()
+        .primitive().constant((byte) 6).lengthField(0).int8()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {5, 6, 6, 6, 6, 6});
@@ -184,7 +184,7 @@ public class Int8TypeTest {
   @Test
   void setInt8_constant() {
     var struct = struct()
-        .field().constant((byte) 5).int8()
+        .primitive().constant((byte) 5).int8()
         .build();
 
     assertThatThrownBy(() -> struct.setInt8(0, (byte) 2))
@@ -290,7 +290,7 @@ public class Int8TypeTest {
   @Test
   void setInt8Array_constant_value_and_length() {
     var struct = struct()
-        .field().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .primitive().constant((byte) 5).lengthExpression(constant(5)).int8()
         .build();
 
     assertThatThrownBy(() -> struct.setInt8(0, 3, (byte) 2))
@@ -302,7 +302,7 @@ public class Int8TypeTest {
   void setInt8Array_constant_value() {
     var struct = struct()
         .int8()
-        .field().constant((byte) 5).lengthField(0).int8()
+        .primitive().constant((byte) 5).lengthField(0).int8()
         .fromBytes(new byte[] {2, 5, 5})
         .build();
 
@@ -315,7 +315,7 @@ public class Int8TypeTest {
   void setInt8Array_constant_value_same() {
     var struct = struct()
         .int8()
-        .field().constant((byte) 5).lengthField(0).int8()
+        .primitive().constant((byte) 5).lengthField(0).int8()
         .fromBytes(new byte[] {2, 5, 5})
         .build();
 
@@ -404,7 +404,7 @@ public class Int8TypeTest {
   @Test
   void getInt8_constant() {
     var struct = struct()
-        .field().constant((byte) 5).int8()
+        .primitive().constant((byte) 5).int8()
         .build();
 
     assertThat(struct.getInt8(0)).isEqualTo((byte) 5);
@@ -497,7 +497,7 @@ public class Int8TypeTest {
   @Test
   void getInt8Array_constant() {
     var struct = struct()
-        .field().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .primitive().constant((byte) 5).lengthExpression(constant(5)).int8()
         .build();
 
     assertThat(struct.getInt8(0, 3)).isEqualTo((byte) 5);
@@ -582,7 +582,7 @@ public class Int8TypeTest {
   @Test
   void addInt8Array_constant() {
     var struct = struct()
-        .field().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .primitive().constant((byte) 5).lengthExpression(constant(5)).int8()
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(0, (byte) 3))
@@ -681,7 +681,7 @@ public class Int8TypeTest {
   @Test
   void addInt8Array_with_index_constant() {
     var struct = struct()
-        .field().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .primitive().constant((byte) 5).lengthExpression(constant(5)).int8()
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(0, 3, (byte) 3))
@@ -821,7 +821,7 @@ public class Int8TypeTest {
   @Test
   void removeInt8Array_fixed_length() {
     var struct = struct()
-        .field().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .primitive().constant((byte) 5).lengthExpression(constant(5)).int8()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
@@ -832,7 +832,7 @@ public class Int8TypeTest {
   @Test
   void removeInt8Array_fixed_length_with_index() {
     var struct = struct()
-        .field().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .primitive().constant((byte) 5).lengthExpression(constant(5)).int8()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

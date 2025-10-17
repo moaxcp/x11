@@ -31,7 +31,7 @@ public class BoolTypeTest {
     var expression = valueOf(0);
     var struct = struct()
         .int8()
-        .field().constant(true).lengthExpression(expression).assignment(add).bool()
+        .primitive().constant(true).lengthExpression(expression).assignment(add).bool()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
@@ -88,7 +88,7 @@ public class BoolTypeTest {
   @Test
   void allocate_with_constant_true() {
     var struct = struct()
-        .field().constant(true).bool()
+        .primitive().constant(true).bool()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1});
@@ -97,7 +97,7 @@ public class BoolTypeTest {
   @Test
   void allocate_with_constant_false() {
     var struct = struct()
-        .field().constant(false).bool()
+        .primitive().constant(false).bool()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
@@ -116,7 +116,7 @@ public class BoolTypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .field().constant(5).int8()
+        .primitive().constant(5).int8()
         .boolArray(0)
         .build();
 
@@ -182,7 +182,7 @@ public class BoolTypeTest {
   @Test
   void setBool_constant() {
     var struct = struct()
-        .field().constant(true).bool()
+        .primitive().constant(true).bool()
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, false))
@@ -288,7 +288,7 @@ public class BoolTypeTest {
   @Test
   void setBoolArray_constant_value_and_length() {
     var struct = struct()
-        .field().constant(true).lengthExpression(constant(5)).bool()
+        .primitive().constant(true).lengthExpression(constant(5)).bool()
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, 3, false))
@@ -300,7 +300,7 @@ public class BoolTypeTest {
   void setBoolArray_constant_value() {
     var struct = struct()
         .int8()
-        .field().constant(true).lengthField(0).bool()
+        .primitive().constant(true).lengthField(0).bool()
         .fromBytes(new byte[] {2, 1, 1})
         .build();
 
@@ -313,7 +313,7 @@ public class BoolTypeTest {
   void setBoolArray_constant_value_same() {
     var struct = struct()
         .int8()
-        .field().constant(true).lengthField(0).bool()
+        .primitive().constant(true).lengthField(0).bool()
         .fromBytes(new byte[] {2, 1, 1})
         .build();
 
@@ -402,7 +402,7 @@ public class BoolTypeTest {
   @Test
   void getBoolean_constant() {
     var struct = struct()
-        .field().constant(true).bool()
+        .primitive().constant(true).bool()
         .build();
 
     assertThat(struct.getBool(0)).isTrue();
@@ -495,7 +495,7 @@ public class BoolTypeTest {
   @Test
   void getBooleanArray_constant() {
     var struct = struct()
-        .field().constant(true).lengthExpression(constant(5)).bool()
+        .primitive().constant(true).lengthExpression(constant(5)).bool()
         .build();
 
     assertThat(struct.getBool(0, 3)).isTrue();
@@ -581,7 +581,7 @@ public class BoolTypeTest {
   @Test
   void addBoolArray_constant() {
     var struct = struct()
-        .field().constant(true).lengthExpression(constant(5)).bool()
+        .primitive().constant(true).lengthExpression(constant(5)).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(0, false))
@@ -680,7 +680,7 @@ public class BoolTypeTest {
   @Test
   void addBoolArray_with_index_constant() {
     var struct = struct()
-        .field().constant(true).lengthExpression(constant(5)).bool()
+        .primitive().constant(true).lengthExpression(constant(5)).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(0, 3, false))
@@ -820,7 +820,7 @@ public class BoolTypeTest {
   @Test
   void removeBoolArray_fixed_length() {
     var struct = struct()
-        .field().constant(true).lengthExpression(constant(5)).bool()
+        .primitive().constant(true).lengthExpression(constant(5)).bool()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
@@ -831,7 +831,7 @@ public class BoolTypeTest {
   @Test
   void removeBoolArray_fixed_length_with_index() {
     var struct = struct()
-        .field().constant(true).lengthExpression(constant(5)).bool()
+        .primitive().constant(true).lengthExpression(constant(5)).bool()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

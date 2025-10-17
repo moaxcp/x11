@@ -7,12 +7,12 @@ public interface Assignment {
   class Noop implements Assignment {
 
     @Override
-    public boolean positionUsed(Pointer<?, ? extends Type<?>> pointer, int position) {
+    public boolean positionUsed(Pointer<?, ? extends Type> pointer, int position) {
       return false;
     }
 
     @Override
-    public void assign(Pointer<?, ? extends Type<?>> pointer, long added) {
+    public void assign(Pointer<?, ? extends Type> pointer, long added) {
 
     }
   }
@@ -26,15 +26,15 @@ public interface Assignment {
     }
 
     @Override
-    public boolean positionUsed(Pointer<?, ? extends Type<?>> pointer, int position) {
+    public boolean positionUsed(Pointer<?, ? extends Type> pointer, int position) {
       return this.position == position;
     }
 
     @Override
-    public void assign(Pointer<?, ? extends Type<?>> pointer, long added) {
+    public void assign(Pointer<?, ? extends Type> pointer, long added) {
       var type = pointer.getType(position);
-      if (type.isConstant(pointer)) {
-        throw new IllegalStateException("cannot add to constant in Assignment.add");
+      if (type instanceof ValueType<?> v && v.isConstant(pointer)) {
+        throw new IllegalStateException(v.getClass().getSimpleName() + " at position " + v.getPosition() + " is constant. Cannot add to constant.");
       }
       switch (type) {
         case Int8Type i8 -> {
@@ -93,9 +93,9 @@ public interface Assignment {
     return new Add(position);
   }
 
-  boolean positionUsed(Pointer<?, ? extends Type<?>> pointer, int position);
+  boolean positionUsed(Pointer<?, ? extends Type> pointer, int position);
 
-  void assign(Pointer<?, ? extends Type<?>> pointer, long added);
+  void assign(Pointer<?, ? extends Type> pointer, long added);
 
   //todo add direct assignment of length for allocation
 }

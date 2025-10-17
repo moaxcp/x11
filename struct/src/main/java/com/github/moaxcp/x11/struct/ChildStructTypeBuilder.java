@@ -9,7 +9,7 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
   }
 
   public PARENT end() {
-    parent.field(toStructType());
+    parent.primitive(toStructType());
     return parent;
   }
 }

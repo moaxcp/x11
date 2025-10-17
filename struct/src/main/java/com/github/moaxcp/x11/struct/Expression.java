@@ -14,12 +14,12 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Pointer<?, ? extends Type<?>> pointer) {
+    public boolean isConstant(Pointer<?, ? extends Type> pointer) {
       return true;
     }
 
     @Override
-    public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
+    public long evaluate(Pointer<?, ? extends Type> pointer) {
       return value;
     }
   }
@@ -33,12 +33,12 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Pointer<?, ? extends Type<?>> pointer) {
-      return pointer.getType(position).isConstant(pointer);
+    public boolean isConstant(Pointer<?, ? extends Type> pointer) {
+      return pointer.getType(position) instanceof ValueType<?> v && v.isConstant(pointer);
     }
 
     @Override
-    public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
+    public long evaluate(Pointer<?, ? extends Type> pointer) {
       var type = pointer.getType(position);
       return switch (type) {
         case Int8Type i8 -> i8.getInt8(pointer);
@@ -74,12 +74,12 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Pointer<?, ? extends Type<?>> pointer) {
+    public boolean isConstant(Pointer<?, ? extends Type> pointer) {
       return Arrays.stream(expressions).allMatch(e -> e.isConstant(pointer));
     }
 
     @Override
-    public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
+    public long evaluate(Pointer<?, ? extends Type> pointer) {
       return Arrays.stream(expressions).mapToLong(e -> e.evaluate(pointer)).sum();
     }
   }
@@ -96,7 +96,7 @@ public interface Expression {
     return new Sum(expressions);
   }
 
-  boolean isConstant(Pointer<?, ? extends Type<?>> pointer);
+  boolean isConstant(Pointer<?, ? extends Type> pointer);
 
-  long evaluate(Pointer<?, ? extends Type<?>> pointer);
+  long evaluate(Pointer<?, ? extends Type> pointer);
 }

@@ -22,4 +22,25 @@ public enum Size {
   public int size() {
     return size;
   }
+
+  public String label() {
+    return toString().toLowerCase();
+  }
+
+  public String title() {
+    return toString().substring(0, 1).toUpperCase() + toString().substring(1).toLowerCase();
+  }
+
+  public String primitive() {
+    return switch(this) {
+      case BOOL -> "boolean";
+      case INT8 -> "byte";
+      case UINT8, INT16 -> "short";
+      case UINT16, INT32 -> "int";
+      case UINT32, INT64 -> "long";
+      case UINT64 -> "BigInteger";
+      case FLOAT32 -> "float";
+      case FLOAT64 -> "double";
+    };
+  }
 }

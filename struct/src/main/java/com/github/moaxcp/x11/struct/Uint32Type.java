@@ -27,62 +27,34 @@ public final class Uint32Type extends NumberType<Long> {
     return new Uint32Type(position, constantValue, lengthExpression, assignment);
   }
 
-  @Override
-  public Long get(Pointer<?, ? extends Type<?>> pointer) {
-    throw new UnsupportedOperationException("get(Pointer) not supported for Uint32Type. Use getUint32(Pointer) instead.");
-  }
-
-  @Override
-  public Long get(Pointer<?, ? extends Type<?>> pointer, long index) {
-    throw new UnsupportedOperationException("get(Pointer, long) not supported for Uint32Type. Use getUint32(Pointer, long) instead.");
-  }
-
-  public long getUint32(Pointer<?, ? extends Type<?>> pointer) {
+  public long getUint32(Pointer<?, ? extends Type> pointer) {
     return pointer.getByteArray().getUint32(getOffset(pointer));
   }
 
-  public long getUint32(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public long getUint32(Pointer<?, ? extends Type> pointer, long index) {
     checkIndex(pointer, index);
     return pointer.getByteArray().getUint32(getOffset(pointer, index));
   }
 
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, Long value) {
-    throw new UnsupportedOperationException("set(Pointer, Long) not supported for Uint32Type. Use set(Pointer, long) instead.");
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Long value) {
-    throw new UnsupportedOperationException("set(Pointer, long, Long) not supported for Uint32Type. Use set(Pointer, long, long) instead.");
-  }
-
-  public void set(Pointer<?, ? extends Type<?>> pointer, long value) {
+  public void set(Pointer<?, ? extends Type> pointer, long value) {
     setUnchecked(pointer, 0, value);
   }
 
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, long value) {
+  public void set(Pointer<?, ? extends Type> pointer, long index, long value) {
     checkIndex(pointer, index);
     setUnchecked(pointer, index, value);
   }
 
-  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, long value) {
+  private void setUnchecked(Pointer<?, ? extends Type> pointer, long index, long value) {
     checkConstant(pointer, index, value);
     pointer.getByteArray().setUint32(getOffset(pointer, index), value);
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer, Long value) {
-    throw new UnsupportedOperationException("add(Pointer, Long) not supported for Uint32Type. Use add(Pointer, long) instead.");
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, Long value) {
-    throw new UnsupportedOperationException("add(Pointer, long, Long) not supported for Uint32Type. Use add(Pointer, long, long) instead.");
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, long value) {
+  public void add(Pointer<?, ? extends Type> pointer, long value) {
     add(pointer, getArrayLength(pointer), value);
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, long value) {
+  public void add(Pointer<?, ? extends Type> pointer, long index, long value) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition() + " index: " + index + " length: " + 1);
     }
@@ -90,7 +62,7 @@ public final class Uint32Type extends NumberType<Long> {
     setUnchecked(pointer, index, value);
   }
 
-  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
+  public void allocate(Pointer<?, ? extends Type> pointer) {
     if (isArray()) {
       long length = getArrayLength(pointer);
       for (int i = 0; i < length; i++) {
@@ -102,7 +74,7 @@ public final class Uint32Type extends NumberType<Long> {
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public void allocate(Pointer<?, ? extends Type> pointer, long index) {
     checkIndexAllocate(pointer, index);
     pointer.getByteArray().addUint32(getOffset(pointer, index), constantValue != null ? constantValue : 0L);
     if (assignment != null) {

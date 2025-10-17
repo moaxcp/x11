@@ -27,62 +27,34 @@ public final class Float64Type extends NumberType<Double> {
     return new Float64Type(position, constantValue, lengthExpression, assignment);
   }
 
-  @Override
-  public Double get(Pointer<?, ? extends Type<?>> pointer) {
-    throw new UnsupportedOperationException("get(Pointer) not supported for Float64Type. Use getFloat64(Pointer) instead.");
-  }
-
-  @Override
-  public Double get(Pointer<?, ? extends Type<?>> pointer, long index) {
-    throw new UnsupportedOperationException("get(Pointer, long) not supported for Float64Type. Use getFloat64(Pointer, long) instead.");
-  }
-
-  public double getFloat64(Pointer<?, ? extends Type<?>> pointer) {
+  public double getFloat64(Pointer<?, ? extends Type> pointer) {
     return pointer.getByteArray().getFloat64(getOffset(pointer));
   }
 
-  public double getFloat64(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public double getFloat64(Pointer<?, ? extends Type> pointer, long index) {
     checkIndex(pointer, index);
     return pointer.getByteArray().getFloat64(getOffset(pointer, index));
   }
 
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, Double value) {
-    throw new UnsupportedOperationException("set(Pointer, Double) not supported for Float64Type. Use set(Pointer, double) instead.");
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Double value) {
-    throw new UnsupportedOperationException("set(Pointer, long, Double) not supported for Float64Type. Use set(Pointer, long, double) instead.");
-  }
-
-  public void set(Pointer<?, ? extends Type<?>> pointer, double value) {
+  public void set(Pointer<?, ? extends Type> pointer, double value) {
     setUnchecked(pointer, 0, value);
   }
 
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, double value) {
+  public void set(Pointer<?, ? extends Type> pointer, long index, double value) {
     checkIndex(pointer, index);
     setUnchecked(pointer, index, value);
   }
 
-  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, double value) {
+  private void setUnchecked(Pointer<?, ? extends Type> pointer, long index, double value) {
     checkConstant(pointer, index, value);
     pointer.getByteArray().setFloat64(getOffset(pointer, index), value);
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer, Double value) {
-    throw new UnsupportedOperationException("add(Pointer, Double) not supported for Float64Type. Use add(Pointer, double) instead.");
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, Double value) {
-    throw new UnsupportedOperationException("add(Pointer, long, Double) not supported for Float64Type. Use add(Pointer, long, double) instead.");
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, double value) {
+  public void add(Pointer<?, ? extends Type> pointer, double value) {
     add(pointer, getArrayLength(pointer), value);
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, double value) {
+  public void add(Pointer<?, ? extends Type> pointer, long index, double value) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition() + " index: " + index + " length: " + 1);
     }
@@ -90,7 +62,7 @@ public final class Float64Type extends NumberType<Double> {
     setUnchecked(pointer, index, value);
   }
 
-  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
+  public void allocate(Pointer<?, ? extends Type> pointer) {
     if (isArray()) {
       long length = getArrayLength(pointer);
       for (int i = 0; i < length; i++) {
@@ -102,7 +74,7 @@ public final class Float64Type extends NumberType<Double> {
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public void allocate(Pointer<?, ? extends Type> pointer, long index) {
     checkIndexAllocate(pointer, index);
     pointer.getByteArray().addFloat64(getOffset(pointer, index), constantValue != null ? constantValue : 0.0d);
     if (assignment != null) {

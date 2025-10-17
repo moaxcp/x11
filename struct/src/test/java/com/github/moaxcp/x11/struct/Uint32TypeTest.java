@@ -32,7 +32,7 @@ public class Uint32TypeTest {
     var expression = valueOf(0);
     var struct = struct()
         .uint32()
-        .field().constant(5L).lengthExpression(expression).assignment(add).uint32()
+        .primitive().constant(5L).lengthExpression(expression).assignment(add).uint32()
         .build();
 
     assertThat(struct.getType(1).getPosition()).isEqualTo(1);
@@ -89,7 +89,7 @@ public class Uint32TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .field().constant(5L).uint32()
+        .primitive().constant(5L).uint32()
         .build();
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0, 0, 0, 5});
@@ -108,7 +108,7 @@ public class Uint32TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .field().constant(5L).uint32()
+        .primitive().constant(5L).uint32()
         .uint32Array(0)
         .build();
 
@@ -181,7 +181,7 @@ public class Uint32TypeTest {
   @Test
   void setUint32_constant() {
     var struct = struct()
-        .field().constant(5L).uint32()
+        .primitive().constant(5L).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.setUint32(0, 2L))
@@ -287,7 +287,7 @@ public class Uint32TypeTest {
   @Test
   void setUint32Array_constant_value_and_length() {
     var struct = struct()
-        .field().constant(5L).lengthExpression(constant(5)).uint32()
+        .primitive().constant(5L).lengthExpression(constant(5)).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.setUint32(0, 3, 2L))
@@ -299,7 +299,7 @@ public class Uint32TypeTest {
   void setUint32Array_constant_value() {
     var struct = struct()
         .uint32()
-        .field().constant(5L).lengthField(0).uint32()
+        .primitive().constant(5L).lengthField(0).uint32()
         .fromBytes(new byte[] {0, 0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 5})
         .build();
 
@@ -312,7 +312,7 @@ public class Uint32TypeTest {
   void setUint32Array_constant_value_same() {
     var struct = struct()
         .uint32()
-        .field().constant(5L).lengthField(0).uint32()
+        .primitive().constant(5L).lengthField(0).uint32()
         .fromBytes(new byte[] {0, 0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 5})
         .build();
 
@@ -401,7 +401,7 @@ public class Uint32TypeTest {
   @Test
   void getUint32_constant() {
     var struct = struct()
-        .field().constant(5L).uint32()
+        .primitive().constant(5L).uint32()
         .build();
 
     assertThat(struct.getUint32(0)).isEqualTo(5L);
@@ -494,7 +494,7 @@ public class Uint32TypeTest {
   @Test
   void getUint32Array_constant() {
     var struct = struct()
-        .field().constant(5L).lengthExpression(constant(5)).uint32()
+        .primitive().constant(5L).lengthExpression(constant(5)).uint32()
         .build();
 
     assertThat(struct.getUint32(0, 3)).isEqualTo(5L);
@@ -585,7 +585,7 @@ public class Uint32TypeTest {
   @Test
   void addUint32Array_constant() {
     var struct = struct()
-        .field().constant(5L).lengthExpression(constant(5)).uint32()
+        .primitive().constant(5L).lengthExpression(constant(5)).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.addUint32(0, 3L))
@@ -690,7 +690,7 @@ public class Uint32TypeTest {
   @Test
   void addUint32Array_with_index_constant() {
     var struct = struct()
-        .field().constant(5L).lengthExpression(constant(5)).uint32()
+        .primitive().constant(5L).lengthExpression(constant(5)).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.addUint32(0, 3, 3L))
@@ -830,7 +830,7 @@ public class Uint32TypeTest {
   @Test
   void removeUint32Array_fixed_length() {
     var struct = struct()
-        .field().constant(5L).lengthExpression(constant(5)).uint32()
+        .primitive().constant(5L).lengthExpression(constant(5)).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
@@ -841,7 +841,7 @@ public class Uint32TypeTest {
   @Test
   void removeUint32Array_fixed_length_with_index() {
     var struct = struct()
-        .field().constant(5L).lengthExpression(constant(5)).uint32()
+        .primitive().constant(5L).lengthExpression(constant(5)).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

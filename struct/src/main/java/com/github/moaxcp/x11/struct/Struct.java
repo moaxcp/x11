@@ -61,7 +61,7 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   @Override
-  public <V extends Type<?>> V getType(int position) {
+  public <V extends Type> V getType(int position) {
     return structType.getType(position);
   }
 
@@ -395,11 +395,14 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public void removeAll(int position) {
-     structType.getType(position).removeAll(this);
+     structType.getType(position).remove(this);
   }
 
   public void remove(int position, long index) {
-     structType.getType(position).remove(this, index);
+     assert structType.getType(position) instanceof ValueType<?> : "Field at postion " + position + " is " + structType.getType(position).getClass().getSimpleName() + " but it must be a ValueType";
+     if (structType.getType(position) instanceof ValueType<?> valueType) {
+       valueType.remove(this, index);
+     }
   }
 
   public Struct getStruct(int position) {
