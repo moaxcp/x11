@@ -13,14 +13,14 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
   protected final T constantValue;
 
   public ValueType(int position) {
-    super(position);
+    super(position, null);
     this.lengthExpression = null;
     this.assignment = null;
     this.constantValue = null;
   }
 
-  public ValueType(int position, @Nullable T constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position);
+  public ValueType(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable T constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange);
     this.lengthExpression = lengthExpression;
     this.assignment = assignment;
     this.constantValue = constantValue;
@@ -110,20 +110,36 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
     }
-    allocate(pointer, index);
-    set(pointer, index, value);
-    if (assignment != null) {
-      assignment.assign(pointer, 1);
+    callWithByteLengthChange(pointer, () -> {
+      allocate(pointer, index);
+      set(pointer, index, value);
+      if (assignment != null) {
+        assignment.assign(pointer, 1);
+      }
+    });
+  }
+
+  protected void callWithByteLengthChange(Pointer<?, ? extends Type> pointer, Runnable runnable) {
+    var previous = 0L;
+    if (byteLengthChange != null) {
+      previous = getByteLength(pointer);
+    }
+    runnable.run();
+    if (byteLengthChange != null) {
+      var current = getByteLength(pointer);
+      byteLengthChange.byteLengthChanged(pointer, previous, current);
     }
   }
 
   @Override
   public void allocate(Pointer<?, ? extends Type> pointer) {
     if(isArray()) {
-      long length = getArrayLength(pointer);
-      for (int i = 0; i < length; i++) {
-        allocate(pointer, i);
-      }
+      callWithByteLengthChange(pointer, () -> {
+        long length = getArrayLength(pointer);
+        for (int i = 0; i < length; i++) {
+          allocate(pointer, i);
+        }
+      });
     } else {
       allocate(pointer, 0);
     }
@@ -138,7 +154,6 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
     }
   }
 
-  @Override
   public final void remove(Pointer<?, ? extends Type> pointer) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot remove from non-array type at position " + getPosition());
@@ -146,11 +161,13 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
     if (isFixedLength(pointer)) {
       throw new UnsupportedOperationException("Cannot remove fixed length array " + getClass().getSimpleName() + " at position " + getPosition());
     }
-    var length = getArrayLength(pointer);
-    pointer.getByteArray().remove(getOffset(pointer), getByteLength(pointer));
-    if (assignment != null) {
-      assignment.assign(pointer, -length);
-    }
+    callWithByteLengthChange(pointer, () -> {
+      var length = getArrayLength(pointer);
+      pointer.getByteArray().remove(getOffset(pointer), getByteLength(pointer));
+      if (assignment != null) {
+        assignment.assign(pointer, -length);
+      }
+    });
   }
 
   public final void remove(Pointer<?, ? extends Type> pointer, long index) {
@@ -161,9 +178,29 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
       throw new UnsupportedOperationException("Cannot remove element from fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
     }
     checkIndex(pointer, index);
-    pointer.getByteArray().remove(getOffset(pointer, index), getByteLength(pointer, index));
-    if (assignment != null) {
-      assignment.assign(pointer, -1);
-    }
+    callWithByteLengthChange(pointer, () -> {
+      pointer.getByteArray().remove(getOffset(pointer, index), getByteLength(pointer, index));
+      if (assignment != null) {
+        assignment.assign(pointer, -1);
+      }
+    });
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+
+    ValueType<?> valueType = (ValueType<?>) o;
+    return Objects.equals(lengthExpression, valueType.lengthExpression) && Objects.equals(assignment, valueType.assignment) && Objects.equals(constantValue, valueType.constantValue);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = super.hashCode();
+    result = 31 * result + Objects.hashCode(lengthExpression);
+    result = 31 * result + Objects.hashCode(assignment);
+    result = 31 * result + Objects.hashCode(constantValue);
+    return result;
   }
 }

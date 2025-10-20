@@ -30,15 +30,15 @@ public class Int16TypeTest {
   void constructorEverything() {
     var add = add(0);
     var expression = valueOf(0);
+    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .int16()
-        .primitive().constant((short) 5).lengthExpression(expression).assignment(add).int16()
+        .primitive().byteLengthChange(byteLengthListener).constant((short) 5).lengthExpression(expression).assignment(add).int16()
+        .align(2)
         .build();
 
-    assertThat(struct.getType(1).getPosition()).isEqualTo(1);
-    assertThat(struct.getType(1).getLengthExpression()).isEqualTo(expression);
-    assertThat(struct.getType(1).getAssingment()).isEqualTo(add);
-    assertThat(struct.getType(1).getConstantValue()).isEqualTo((short) 5);
+    assertThat(struct.getByteLength()).isEqualTo(INT16.size() + 2);
+    assertThat(struct.<Type>getType(1)).isEqualTo(new Int16Type(1, byteLengthListener, (short) 5, expression, add));
   }
 
   @Test

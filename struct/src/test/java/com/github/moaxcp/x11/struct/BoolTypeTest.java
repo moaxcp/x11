@@ -16,35 +16,35 @@ public class BoolTypeTest {
   @Test
   void constructor() {
     var type = BoolType.bool();
-    assertThat(type.getPosition()).isEqualTo(-1);
+    assertThat(type).isEqualTo(new BoolType(-1));
   }
 
   @Test
   void constructorPosition() {
     var type = BoolType.bool(15);
-    assertThat(type.getPosition()).isEqualTo(15);
+    assertThat(type).isEqualTo(new BoolType(15));
   }
 
   @Test
   void constructorEverything() {
     var add = add(0);
     var expression = valueOf(0);
+    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .int8()
-        .primitive().constant(true).lengthExpression(expression).assignment(add).bool()
+        .primitive().byteLengthChange(byteLengthListener).constant(true).lengthExpression(expression).assignment(add).bool()
+        .align(2)
         .build();
 
-    assertThat(struct.getType(1).getPosition()).isEqualTo(1);
-    assertThat(struct.getType(1).getLengthExpression()).isEqualTo(expression);
-    assertThat(struct.getType(1).getAssingment()).isEqualTo(add);
-    assertThat(struct.getType(1).getConstantValue()).isEqualTo(true);
+    assertThat(struct.getByteLength()).isEqualTo(BOOL.size() + 2);
+    assertThat(struct.<Type>getType(1)).isEqualTo(new BoolType(1, byteLengthListener, true, expression, add));
   }
 
   @Test
   void copy() {
     var type = BoolType.bool();
-    var copy = type.copy(15);
-    assertThat(copy.getPosition()).isEqualTo(15);
+    var copy = type.copy(-1);
+    assertThat(copy).isEqualTo(type);
   }
 
   @Test
@@ -53,6 +53,7 @@ public class BoolTypeTest {
         .bool()
         .build();
 
+    assertThat(struct.getByteLength()).isEqualTo(BOOL.size());
     assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(BOOL.size());
   }
 
@@ -131,7 +132,7 @@ public class BoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolType) struct.getType(0)).set(struct, Boolean.TRUE))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, Boolean) not supported for BooleanType. Use set(Pointer, boolean) instead.");
+        .hasMessage("set(Pointer, Boolean) not supported for BoolType. Use set(Pointer, boolean) instead.");
   }
 
   @Test
@@ -199,7 +200,7 @@ public class BoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolType) struct.getType(1)).set(struct, 0, Boolean.TRUE))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Boolean) not supported for BooleanType. Use set(Pointer, long, boolean) instead.");
+        .hasMessage("set(Pointer, long, Boolean) not supported for BoolType. Use set(Pointer, long, boolean) instead.");
   }
 
   @Test
@@ -343,7 +344,7 @@ public class BoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolType) struct.getType(0)).get(struct))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer) not supported for BooleanType. Use getBoolean(Pointer) instead.");
+        .hasMessage("get(Pointer) not supported for BoolType. Use getBool(Pointer) instead.");
   }
 
   @Test
@@ -439,7 +440,7 @@ public class BoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolType) struct.getType(1)).get(struct, 0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer, long) not supported for BooleanType. Use getBoolean(Pointer, long) instead.");
+        .hasMessage("get(Pointer, long) not supported for BoolType. Use getBool(Pointer, long) instead.");
   }
 
   @Test
@@ -510,7 +511,7 @@ public class BoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolType) struct.getType(1)).add(struct, Boolean.TRUE))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Boolean) not supported for BooleanType. Use add(Pointer, boolean) instead.");
+        .hasMessage("add(Pointer, Boolean) not supported for BoolType. Use add(Pointer, boolean) instead.");
   }
 
   @Test
@@ -522,7 +523,7 @@ public class BoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolType) struct.getType(1)).add(struct, 0, Boolean.TRUE))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Boolean) not supported for BooleanType. Use add(Pointer, long, boolean) instead.");
+        .hasMessage("add(Pointer, long, Boolean) not supported for BoolType. Use add(Pointer, long, boolean) instead.");
   }
 
   @Test

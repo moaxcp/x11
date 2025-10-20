@@ -31,15 +31,15 @@ public class Float64TypeTest {
   void constructorEverything() {
     var add = add(0);
     var expression = valueOf(0);
+    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .float64()
-        .primitive().constant(3.0d).lengthExpression(expression).assignment(add).float64()
+        .primitive().byteLengthChange(byteLengthListener).constant(3.0d).lengthExpression(expression).assignment(add).float64()
+        .align(2)
         .build();
 
-    assertThat(struct.getType(1).getPosition()).isEqualTo(1);
-    assertThat(struct.getType(1).getLengthExpression()).isEqualTo(expression);
-    assertThat(struct.getType(1).getAssingment()).isEqualTo(add);
-    assertThat(struct.getType(1).getConstantValue()).isEqualTo(3.0d);
+    assertThat(struct.getByteLength()).isEqualTo(FLOAT64.size() + 2);
+    assertThat(struct.<Type>getType(1)).isEqualTo(new Float64Type(1, byteLengthListener, 3.0, expression, add));
   }
 
   @Test
@@ -55,6 +55,7 @@ public class Float64TypeTest {
         .float64()
         .build();
 
+    assertThat(struct.getByteLength()).isEqualTo(FLOAT64.size());
     assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(FLOAT64.size());
   }
 

@@ -16,8 +16,8 @@ public final class Uint64Type extends NumberType<BigInteger> {
     return new Uint64Type(position);
   }
 
-  public Uint64Type(int position, @Nullable BigInteger constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, UINT64, constantValue, lengthExpression, assignment);
+  public Uint64Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable BigInteger constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, UINT64, constantValue, lengthExpression, assignment);
   }
 
   public Uint64Type(int position) {
@@ -26,7 +26,11 @@ public final class Uint64Type extends NumberType<BigInteger> {
 
   @Override
   protected Uint64Type copy(int position) {
-    return new Uint64Type(position, constantValue, lengthExpression, assignment);
+    return new Uint64Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
+  }
+
+  public BigInteger getUint64(Pointer<?, ? extends Type> pointer) {
+    return pointer.getByteArray().getUint64(getOffset(pointer));
   }
 
   public BigInteger getUint64(Pointer<?, ? extends Type> pointer, long index) {
@@ -34,7 +38,11 @@ public final class Uint64Type extends NumberType<BigInteger> {
     return pointer.getByteArray().getUint64(getOffset(pointer, index));
   }
 
-  public void setUint64(Pointer<?, ? extends Type> pointer, long index, BigInteger value) {
+  public void set(Pointer<?, ? extends Type> pointer, BigInteger value) {
+    setUnchecked(pointer, 0, value);
+  }
+
+  public void set(Pointer<?, ? extends Type> pointer, long index, BigInteger value) {
     checkIndex(pointer, index);
     setUnchecked(pointer, index, value);
   }
@@ -44,11 +52,11 @@ public final class Uint64Type extends NumberType<BigInteger> {
     pointer.getByteArray().setUint64(getOffset(pointer, index), value);
   }
 
-  public void addUint64(Pointer<?, ? extends Type> pointer, BigInteger value) {
+  public void add(Pointer<?, ? extends Type> pointer, BigInteger value) {
     add(pointer, getArrayLength(pointer), value);
   }
 
-  public void addUint64(Pointer<?, ? extends Type> pointer, long index, BigInteger value) {
+  public void add(Pointer<?, ? extends Type> pointer, long index, BigInteger value) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition() + " index: " + index + " length: " + 1);
     }

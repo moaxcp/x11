@@ -14,8 +14,8 @@ public final class Int16Type extends NumberType<Short> {
     return new Int16Type(position);
   }
 
-  public Int16Type(int position, @Nullable Short constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, INT16, constantValue, lengthExpression, assignment);
+  public Int16Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Short constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, INT16, constantValue, lengthExpression, assignment);
   }
 
   public Int16Type(int position) {
@@ -24,7 +24,7 @@ public final class Int16Type extends NumberType<Short> {
 
   @Override
   protected Int16Type copy(int position) {
-    return new Int16Type(position, constantValue, lengthExpression, assignment);
+    return new Int16Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
   }
 
   public short getInt16(Pointer<?, ? extends Type> pointer) {

@@ -43,4 +43,17 @@ public enum Size {
       case FLOAT64 -> "double";
     };
   }
+
+  public String wrapper() {
+    return switch(this) {
+      case BOOL -> "Boolean";
+      case INT8 -> "Byte";
+      case UINT8, INT16 -> "Short";
+      case UINT16, INT32 -> "Integer";
+      case UINT32, INT64 -> "Long";
+      case UINT64 -> "BigInteger";
+      case FLOAT32 -> "Float";
+      case FLOAT64 -> "Double";
+    };
+  }
 }

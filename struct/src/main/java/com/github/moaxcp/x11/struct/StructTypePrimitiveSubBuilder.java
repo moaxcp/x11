@@ -9,6 +9,11 @@ public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARE
     structTypePrimitiveBuilder = new StructTypePrimitiveBuilder().position(position);
   }
 
+  public StructTypePrimitiveSubBuilder<PARENT> byteLengthChange(ByteLengthChangeListener byteLengthChange) {
+    structTypePrimitiveBuilder.byteLengthChange(byteLengthChange);
+    return this;
+  }
+
   public StructTypePrimitiveSubBuilder<PARENT> constant(Object constantValue) {
     structTypePrimitiveBuilder.constant(constantValue);
     return this;
@@ -31,46 +36,46 @@ public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARE
   }
 
   public PARENT bool() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.bool());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.bool());
   }
 
   public PARENT int8() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.int8());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.int8());
   }
 
   public PARENT uint8() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.uint8());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.uint8());
   }
 
   public PARENT int16() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.int16());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.int16());
   }
 
   public PARENT uint16() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.uint16());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.uint16());
   }
 
   public PARENT int32() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.int32());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.int32());
   }
 
   public PARENT uint32() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.uint32());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.uint32());
   }
 
   public PARENT int64() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.int64());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.int64());
   }
 
   public PARENT uint64() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.uint64());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.uint64());
   }
 
   public PARENT float32() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.float32());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.float32());
   }
 
   public PARENT float64() {
-    return structTypeBuilder.primitive(structTypePrimitiveBuilder.float64());
+    return structTypeBuilder.type(structTypePrimitiveBuilder.float64());
   }
 }

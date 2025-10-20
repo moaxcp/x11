@@ -6,6 +6,7 @@ import java.util.List;
 public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   private int position;
+  private ByteLengthChangeListener byteLengthChange;
   private Expression lengthExpression;
   private Assignment assignment;
   private Struct constant;
@@ -17,6 +18,11 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   public SELF position(int position) {
     this.position = position;
+    return (SELF) this;
+  }
+
+  public SELF byteLengthChange(ByteLengthChangeListener byteLengthChange) {
+    this.byteLengthChange = byteLengthChange;
     return (SELF) this;
   }
 
@@ -40,7 +46,11 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return new StructTypePrimitiveSubBuilder<>((SELF) this, fields.size());
   }
 
-  SELF primitive(Type type) {
+  public StructTypePadSubBuilder<SELF> pad() {
+    return new StructTypePadSubBuilder<>((SELF) this, fields.size());
+  }
+
+  SELF type(Type type) {
     fields.add(type);
     return (SELF) this;
   }
@@ -174,6 +184,14 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return primitive().lengthExpression(expression).float64();
   }
 
+  public SELF pad(long length) {
+    return pad().length(length).pad();
+  }
+
+  public SELF align(long length) {
+    return pad().length(length).align();
+  }
+
   public ChildStructTypeBuilder<SELF> struct() {
     return new ChildStructTypeBuilder<>((SELF) this, fields.size());
   }
@@ -188,6 +206,6 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public StructType toStructType() {
-    return new StructType(position, constant, lengthExpression, assignment, fields);
+    return new StructType(position, byteLengthChange, constant, lengthExpression, assignment, fields);
   }
 }

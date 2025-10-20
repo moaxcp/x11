@@ -8,6 +8,7 @@ import static com.github.moaxcp.x11.struct.Builders.struct;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Int64Type.int64Type;
+import static com.github.moaxcp.x11.struct.Size.INT16;
 import static com.github.moaxcp.x11.struct.Size.INT64;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,15 +31,15 @@ public class Int64TypeTest {
   void constructorEverything() {
     var add = add(0);
     var expression = valueOf(0);
+    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .int64()
-        .primitive().constant(5L).lengthExpression(expression).assignment(add).int64()
+        .primitive().byteLengthChange(byteLengthListener).constant(5L).lengthExpression(expression).assignment(add).int64()
+        .align(2)
         .build();
 
-    assertThat(struct.getType(1).getPosition()).isEqualTo(1);
-    assertThat(struct.getType(1).getLengthExpression()).isEqualTo(expression);
-    assertThat(struct.getType(1).getAssingment()).isEqualTo(add);
-    assertThat(struct.getType(1).getConstantValue()).isEqualTo(5L);
+    assertThat(struct.getByteLength()).isEqualTo(INT64.size() + 2);
+    assertThat(struct.<Type>getType(1)).isEqualTo(new Int64Type(1, byteLengthListener, 5L, expression, add));
   }
 
   @Test
@@ -54,6 +55,7 @@ public class Int64TypeTest {
         .int64()
         .build();
 
+    assertThat(struct.getByteLength()).isEqualTo(INT64.size());
     assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(INT64.size());
   }
 
@@ -147,7 +149,7 @@ public class Int64TypeTest {
 
     assertThatThrownBy(() -> ((Int64Type) struct.getType(0)).set(struct, Long.valueOf(2L)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, Long) not supported for Int64Type. Use setInt64(Pointer, long) instead.");
+        .hasMessage("set(Pointer, Long) not supported for Int64Type. Use set(Pointer, long) instead.");
   }
 
   @Test
@@ -215,7 +217,7 @@ public class Int64TypeTest {
 
     assertThatThrownBy(() -> ((Int64Type) struct.getType(1)).set(struct, 0, Long.valueOf(2L)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Long) not supported for Int64Type. Use setInt64(Pointer, long, long) instead.");
+        .hasMessage("set(Pointer, long, Long) not supported for Int64Type. Use set(Pointer, long, long) instead.");
   }
 
   @Test

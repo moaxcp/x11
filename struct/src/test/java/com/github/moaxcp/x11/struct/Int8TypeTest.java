@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Assignment.add;
+import static com.github.moaxcp.x11.struct.Builders.struct;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Int8Type.int8;
 import static com.github.moaxcp.x11.struct.Size.INT8;
-import static com.github.moaxcp.x11.struct.Builders.struct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -30,15 +30,15 @@ public class Int8TypeTest {
   void constructorEverything() {
     var add = add(0);
     var expression = valueOf(0);
+    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .int8()
-        .primitive().constant((byte) 5).lengthExpression(expression).assignment(add).int8()
+        .primitive().byteLengthChange(byteLengthListener).constant((byte) 5).lengthExpression(expression).assignment(add).int8()
+        .align(2)
         .build();
 
-    assertThat(struct.getType(1).getPosition()).isEqualTo(1);
-    assertThat(struct.getType(1).getLengthExpression()).isEqualTo(expression);
-    assertThat(struct.getType(1).getAssingment()).isEqualTo(add);
-    assertThat(struct.getType(1).getConstantValue()).isEqualTo((byte) 5);
+    assertThat(struct.getByteLength()).isEqualTo(INT8.size() + 2);
+    assertThat(struct.<Type>getType(1)).isEqualTo(new Int8Type(1, byteLengthListener, (byte) 5, expression, add));
   }
 
   @Test
@@ -54,6 +54,7 @@ public class Int8TypeTest {
         .int8()
         .build();
 
+    assertThat(struct.getByteLength()).isEqualTo(INT8.size());
     assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(INT8.size());
   }
 

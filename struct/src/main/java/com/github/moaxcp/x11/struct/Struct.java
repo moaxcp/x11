@@ -395,7 +395,7 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public void removeAll(int position) {
-     structType.getType(position).remove(this);
+    ((ValueType<?>) structType.getType(position)).remove(this);
   }
 
   public void remove(int position, long index) {

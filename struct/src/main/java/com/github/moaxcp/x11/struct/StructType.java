@@ -1,27 +1,23 @@
 package com.github.moaxcp.x11.struct;
 
+import org.jspecify.annotations.Nullable;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public final class StructType extends ValueType<Struct> {
 
   private final List<Type> fields;
 
-  private StructType(int position, StructType structType) {
-    super(position);
-    fields = new ArrayList<>(structType.fields);
-  }
-
-  StructType(int position, Struct constant, Expression lengthExpression, Assignment assignment, List<Type> fields) {
-    super(position, constant, lengthExpression, assignment);
+  StructType(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Struct constant, @Nullable Expression lengthExpression, @Nullable Assignment assignment, List<Type> fields) {
+    super(position, byteLengthChange, constant, lengthExpression, assignment);
     this.fields = fields;
   }
 
   @Override
   public StructType copy(int position) {
-    return new StructType(position, this);
+    return new StructType(position, this.byteLengthChange, this.constantValue, this.lengthExpression, this.assignment, new ArrayList<>(fields));
   }
 
   public <V extends Type> V getType(int position) {
@@ -34,8 +30,16 @@ public final class StructType extends ValueType<Struct> {
 
   @Override
   public long getByteLength(Pointer<?, ? extends Type> pointer, long index) {
-    var struct = get(pointer, index);
-    return struct.getByteLength();
+    long byteLength = 0;
+    var length = getArrayLength(pointer);
+    for (long i = 0; i < length; i++) {
+      var struct = new Struct(getOffset(pointer, i), this, pointer.getByteArray());
+      for (int j = 0; j < fields.size(); j++) {
+        var field = fields.get(j);
+        byteLength += field.getByteLength(struct);
+      }
+    }
+    return byteLength;
   }
 
   @Override
@@ -217,7 +221,7 @@ public final class StructType extends ValueType<Struct> {
   }
 
   public BigInteger getUint64(Struct struct, int position) {
-    return ((Uint64Type) fields.get(position)).get(struct);
+    return ((Uint64Type) fields.get(position)).getUint64(struct);
   }
 
   public void setUint64(Struct struct, int position, BigInteger bi) {
@@ -225,7 +229,7 @@ public final class StructType extends ValueType<Struct> {
   }
 
   public BigInteger getUint64(Struct struct, int position, long index) {
-    return ((Uint64Type) fields.get(position)).get(struct, index);
+    return ((Uint64Type) fields.get(position)).getUint64(struct, index);
   }
 
   public void setUint64(Struct struct, int position, long index, BigInteger bi) {
@@ -273,16 +277,29 @@ public final class StructType extends ValueType<Struct> {
   }
 
   @Override
-  public final boolean equals(Object o) {
-    if (!(o instanceof StructType that)) return false;
+  public String toString() {
+    return "StructType{" +
+        "fields=" + fields +
+        ", lengthExpression=" + lengthExpression +
+        ", assignment=" + assignment +
+        ", constantValue=" + constantValue +
+        ", position=" + position +
+        '}';
+  }
 
-    return position == that.position && Objects.equals(fields, that.fields);
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+
+    StructType that = (StructType) o;
+    return fields.equals(that.fields);
   }
 
   @Override
   public int hashCode() {
-    int result = position;
-    result = 31 * result + Objects.hashCode(fields);
+    int result = super.hashCode();
+    result = 31 * result + fields.hashCode();
     return result;
   }
 }

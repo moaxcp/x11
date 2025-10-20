@@ -14,8 +14,8 @@ public final class Uint32Type extends NumberType<Long> {
     return new Uint32Type(position);
   }
 
-  public Uint32Type(int position, @Nullable Long constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, UINT32, constantValue, lengthExpression, assignment);
+  public Uint32Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Long constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, UINT32, constantValue, lengthExpression, assignment);
   }
 
   public Uint32Type(int position) {
@@ -24,7 +24,7 @@ public final class Uint32Type extends NumberType<Long> {
 
   @Override
   protected Uint32Type copy(int position) {
-    return new Uint32Type(position, constantValue, lengthExpression, assignment);
+    return new Uint32Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
   }
 
   public long getUint32(Pointer<?, ? extends Type> pointer) {

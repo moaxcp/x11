@@ -14,8 +14,8 @@ public final class Int8Type extends NumberType<Byte> {
     return new Int8Type(position);
   }
 
-  public Int8Type(int position, @Nullable Byte constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, INT8, constantValue, lengthExpression, assignment);
+  public Int8Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Byte constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, INT8, constantValue, lengthExpression, assignment);
   }
 
   public Int8Type(int position) {
@@ -24,7 +24,7 @@ public final class Int8Type extends NumberType<Byte> {
 
   @Override
   protected Int8Type copy(int position) {
-    return new Int8Type(position, constantValue, lengthExpression, assignment);
+    return new Int8Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
   }
 
   public byte getInt8(Pointer<?, ? extends Type> pointer) {

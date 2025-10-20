@@ -14,8 +14,8 @@ public final class Int64Type extends NumberType<Long> {
     return new Int64Type(position);
   }
 
-  public Int64Type(int position, @Nullable Long constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, INT64, constantValue, lengthExpression, assignment);
+  public Int64Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Long constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, INT64, constantValue, lengthExpression, assignment);
   }
 
   public Int64Type(int position) {
@@ -24,7 +24,7 @@ public final class Int64Type extends NumberType<Long> {
 
   @Override
   protected Int64Type copy(int position) {
-    return new Int64Type(position, constantValue, lengthExpression, assignment);
+    return new Int64Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
   }
 
   public long getInt64(Pointer<?, ? extends Type> pointer) {

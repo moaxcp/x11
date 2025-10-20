@@ -14,8 +14,8 @@ public final class Float64Type extends NumberType<Double> {
     return new Float64Type(position);
   }
 
-  public Float64Type(int position, @Nullable Double constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, FLOAT64, constantValue, lengthExpression, assignment);
+  public Float64Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Double constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, FLOAT64, constantValue, lengthExpression, assignment);
   }
 
   public Float64Type(int position) {
@@ -24,7 +24,7 @@ public final class Float64Type extends NumberType<Double> {
 
   @Override
   protected Float64Type copy(int position) {
-    return new Float64Type(position, constantValue, lengthExpression, assignment);
+    return new Float64Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
   }
 
   public double getFloat64(Pointer<?, ? extends Type> pointer) {

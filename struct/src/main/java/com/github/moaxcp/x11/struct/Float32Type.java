@@ -14,8 +14,8 @@ public final class Float32Type extends NumberType<Float> {
     return new Float32Type(position);
   }
 
-  public Float32Type(int position, @Nullable Float constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, FLOAT32, constantValue, lengthExpression, assignment);
+  public Float32Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Float constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, FLOAT32, constantValue, lengthExpression, assignment);
   }
 
   public Float32Type(int position) {
@@ -24,7 +24,7 @@ public final class Float32Type extends NumberType<Float> {
 
   @Override
   protected Float32Type copy(int position) {
-    return new Float32Type(position, constantValue, lengthExpression, assignment);
+    return new Float32Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
   }
 
   public float getFloat32(Pointer<?, ? extends Type> pointer) {

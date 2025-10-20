@@ -30,15 +30,15 @@ public class Int32TypeTest {
   void constructorEverything() {
     var add = add(0);
     var expression = valueOf(0);
+    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .int32()
-        .primitive().constant(5).lengthExpression(expression).assignment(add).int32()
+        .primitive().byteLengthChange(byteLengthListener).constant(5).lengthExpression(expression).assignment(add).int32()
+        .align(2)
         .build();
 
-    assertThat(struct.getType(1).getPosition()).isEqualTo(1);
-    assertThat(struct.getType(1).getLengthExpression()).isEqualTo(expression);
-    assertThat(struct.getType(1).getAssingment()).isEqualTo(add);
-    assertThat(struct.getType(1).getConstantValue()).isEqualTo(5);
+    assertThat(struct.getByteLength()).isEqualTo(INT32.size() + 2);
+    assertThat(struct.<Type>getType(1)).isEqualTo(new Int32Type(1, byteLengthListener, 5, expression, add));
   }
 
   @Test
@@ -54,6 +54,7 @@ public class Int32TypeTest {
         .int32()
         .build();
 
+    assertThat(struct.getByteLength()).isEqualTo(INT32.size());
     assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(INT32.size());
   }
 

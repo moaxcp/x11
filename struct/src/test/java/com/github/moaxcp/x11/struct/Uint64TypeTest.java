@@ -32,15 +32,15 @@ public class Uint64TypeTest {
   void constructorEverything() {
     var add = add(0);
     var expression = valueOf(0);
+    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .uint64()
-        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(expression).assignment(add).uint64()
+        .primitive().byteLengthChange(byteLengthListener).constant(BigInteger.valueOf(5)).lengthExpression(expression).assignment(add).uint64()
+        .align(2)
         .build();
 
-    assertThat(struct.getType(1).getPosition()).isEqualTo(1);
-    assertThat(struct.getType(1).getLengthExpression()).isEqualTo(expression);
-    assertThat(struct.getType(1).getAssingment()).isEqualTo(add);
-    assertThat(struct.getType(1).getConstantValue()).isEqualTo(BigInteger.valueOf(5));
+    assertThat(struct.getByteLength()).isEqualTo(UINT64.size() + 2);
+    assertThat(struct.<Type>getType(1)).isEqualTo(new Uint64Type(1, byteLengthListener, BigInteger.valueOf(5), expression, add));
   }
 
   @Test
@@ -56,6 +56,7 @@ public class Uint64TypeTest {
         .uint64()
         .build();
 
+    assertThat(struct.getByteLength()).isEqualTo(UINT64.size());
     assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(UINT64.size());
   }
 
@@ -787,7 +788,7 @@ public class Uint64TypeTest {
     struct.addUint64(1, BigInteger.valueOf(2));
     struct.remove(1, 0);
 
-    assertThat(((Uint64Type) struct.getType(1)).get(struct, 0)).isEqualTo(BigInteger.valueOf(2));
+    assertThat(((Uint64Type) struct.getType(1)).getUint64(struct, 0)).isEqualTo(BigInteger.valueOf(2));
 
     assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0,0,0,0,0,0,0,1, 0,0,0,0,0,0,0,2} );
   }

@@ -14,8 +14,8 @@ public final class Uint16Type extends NumberType<Integer> {
     return new Uint16Type(position);
   }
 
-  public Uint16Type(int position, @Nullable Integer constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, UINT16, constantValue, lengthExpression, assignment);
+  public Uint16Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Integer constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, UINT16, constantValue, lengthExpression, assignment);
   }
 
   public Uint16Type(int position) {
@@ -24,7 +24,7 @@ public final class Uint16Type extends NumberType<Integer> {
 
   @Override
   protected Uint16Type copy(int position) {
-    return new Uint16Type(position, constantValue, lengthExpression, assignment);
+    return new Uint16Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
   }
 
   public int getUint16(Pointer<?, ? extends Type> pointer) {

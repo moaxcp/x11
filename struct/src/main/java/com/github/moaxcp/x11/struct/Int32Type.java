@@ -14,8 +14,8 @@ public final class Int32Type extends NumberType<Integer> {
     return new Int32Type(position);
   }
 
-  public Int32Type(int position, @Nullable Integer constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, INT32, constantValue, lengthExpression, assignment);
+  public Int32Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Integer constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, INT32, constantValue, lengthExpression, assignment);
   }
 
   public Int32Type(int position) {
@@ -24,7 +24,7 @@ public final class Int32Type extends NumberType<Integer> {
 
   @Override
   protected Int32Type copy(int position) {
-    return new Int32Type(position, constantValue, lengthExpression, assignment);
+    return new Int32Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
   }
 
   public int getInt32(Pointer<?, ? extends Type> pointer) {

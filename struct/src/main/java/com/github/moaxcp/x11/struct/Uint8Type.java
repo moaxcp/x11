@@ -14,8 +14,8 @@ public final class Uint8Type extends NumberType<Short> {
     return new Uint8Type(position);
   }
 
-  public Uint8Type(int position, @Nullable Short constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, UINT8, constantValue, lengthExpression, assignment);
+  public Uint8Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Short constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, UINT8, constantValue, lengthExpression, assignment);
   }
 
   public Uint8Type(int position) {
@@ -24,7 +24,7 @@ public final class Uint8Type extends NumberType<Short> {
 
   @Override
   protected Uint8Type copy(int position) {
-    return new Uint8Type(position, constantValue, lengthExpression, assignment);
+    return new Uint8Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
   }
 
   public short getUint8(Pointer<?, ? extends Type> pointer) {

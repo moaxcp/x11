@@ -8,7 +8,7 @@ public abstract sealed class NumberType<T extends Number> extends PrimitiveType<
     super(position, size);
   }
 
-  NumberType(int position, Size unitSize, T constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, unitSize, constantValue, lengthExpression, assignment);
+  NumberType(int position, @Nullable ByteLengthChangeListener byteLengthChange, Size unitSize, T constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, unitSize, constantValue, lengthExpression, assignment);
   }
 }

@@ -359,6 +359,11 @@ public class ByteArray {
     return this;
   }
 
+  public Object pad(long length) {
+    shiftBytesFor(bytes.length, length);
+    return this;
+  }
+
   public byte[] get(long index, long length) {
     byte[] result = new byte[Math.toIntExact(length)];
     System.arraycopy(bytes, Math.toIntExact(index), result, 0, Math.toIntExact(length));

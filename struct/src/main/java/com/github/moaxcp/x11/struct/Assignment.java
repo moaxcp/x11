@@ -15,11 +15,28 @@ public interface Assignment {
     public void assign(Pointer<?, ? extends Type> pointer, long added) {
 
     }
+
+    @Override
+    public String toString() {
+      return "Noop{}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
   }
 
   static class Add implements Assignment {
 
-    private int position;
+    private final int position;
 
     public Add(int position) {
       this.position = position;
@@ -66,7 +83,7 @@ public interface Assignment {
           i64.set(pointer, previous + added);
         }
         case Uint64Type u64 -> {
-          BigInteger previous = u64.get(pointer);
+          BigInteger previous = u64.getUint64(pointer);
           u64.set(pointer, previous.add(BigInteger.valueOf(added)));
         }
         case Float32Type f32 -> {
@@ -82,6 +99,26 @@ public interface Assignment {
         case PadType ignored -> throw new IllegalArgumentException("cannot add to pad type in Assignment.add");
         case null -> throw new IllegalArgumentException("cannot add to null type in Assignment.add");
       }
+    }
+
+    @Override
+    public String toString() {
+      return "Add{" +
+          "position=" + position +
+          '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o == null || getClass() != o.getClass()) return false;
+
+      Add add = (Add) o;
+      return position == add.position;
+    }
+
+    @Override
+    public int hashCode() {
+      return position;
     }
   }
 

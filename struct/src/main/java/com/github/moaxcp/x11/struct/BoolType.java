@@ -18,8 +18,8 @@ public final class BoolType extends PrimitiveType<Boolean> {
     return new BoolType(position);
   }
 
-  public BoolType(int position, @Nullable Boolean constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, BOOL, constantValue, lengthExpression, assignment);
+  public BoolType(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Boolean constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, BOOL, constantValue, lengthExpression, assignment);
   }
 
   public BoolType(int position) {
@@ -28,7 +28,7 @@ public final class BoolType extends PrimitiveType<Boolean> {
 
   @Override
   protected BoolType copy(int position) {
-    return new BoolType(position, constantValue, lengthExpression, assignment);
+    return new BoolType(position, byteLengthChange, constantValue, lengthExpression, assignment);
   }
 
   public boolean getBoolean(Pointer<?, ? extends Type> pointer) {

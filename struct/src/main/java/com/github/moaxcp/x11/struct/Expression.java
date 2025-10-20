@@ -22,6 +22,26 @@ public interface Expression {
     public long evaluate(Pointer<?, ? extends Type> pointer) {
       return value;
     }
+
+    @Override
+    public String toString() {
+      return "Constant{" +
+          "value=" + value +
+          '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o == null || getClass() != o.getClass()) return false;
+
+      Constant constant = (Constant) o;
+      return value == constant.value;
+    }
+
+    @Override
+    public int hashCode() {
+      return Long.hashCode(value);
+    }
   }
 
   class ValueOf implements Expression {
@@ -49,7 +69,7 @@ public interface Expression {
         case Uint32Type u32 -> u32.getUint32(pointer);
         case Int64Type i64 -> i64.getInt64(pointer);
         case Uint64Type u64 -> {
-          var value = u64.get(pointer);
+          var value = u64.getUint64(pointer);
           if (value.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
             throw new IllegalArgumentException("cannot convert " + value + " to long");
           }
@@ -62,6 +82,26 @@ public interface Expression {
         case PadType ignored -> throw new IllegalArgumentException("cannot evaluate pad type");
         case null -> throw new IllegalArgumentException("cannot evaluate null type");
       };
+    }
+
+    @Override
+    public String toString() {
+      return "ValueOf{" +
+          "position=" + position +
+          '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o == null || getClass() != o.getClass()) return false;
+
+      ValueOf valueOf = (ValueOf) o;
+      return position == valueOf.position;
+    }
+
+    @Override
+    public int hashCode() {
+      return position;
     }
   }
 
@@ -81,6 +121,26 @@ public interface Expression {
     @Override
     public long evaluate(Pointer<?, ? extends Type> pointer) {
       return Arrays.stream(expressions).mapToLong(e -> e.evaluate(pointer)).sum();
+    }
+
+    @Override
+    public String toString() {
+      return "Sum{" +
+          "expressions=" + Arrays.toString(expressions) +
+          '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o == null || getClass() != o.getClass()) return false;
+
+      Sum sum = (Sum) o;
+      return Arrays.equals(expressions, sum.expressions);
+    }
+
+    @Override
+    public int hashCode() {
+      return Arrays.hashCode(expressions);
     }
   }
 

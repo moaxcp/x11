@@ -10,8 +10,8 @@ public abstract sealed class PrimitiveType<T> extends ValueType<T> permits BoolT
     this.unitSize = size;
   }
 
-  PrimitiveType(int position, Size unitSize, T constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, constantValue, lengthExpression, assignment);
+  PrimitiveType(int position, @Nullable ByteLengthChangeListener byteLengthChange, Size unitSize, T constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, byteLengthChange, constantValue, lengthExpression, assignment);
     this.unitSize = unitSize;
   }
 
@@ -55,20 +55,47 @@ public abstract sealed class PrimitiveType<T> extends ValueType<T> permits BoolT
   }
 
   @Override
-  public final void set(Pointer<?, ? extends Type> pointer, T value) {
-    throw new UnsupportedOperationException("set(Pointer, Byte) not supported for " + getClass().getSimpleName() + ". Use set(Pointer, " + unitSize.primitive() + ") instead.");
+  public void set(Pointer<?, ? extends Type> pointer, T value) {
+    throw new UnsupportedOperationException("set(Pointer, " + unitSize.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use set(Pointer, " + unitSize.primitive() + ") instead.");
   }
 
   @Override
-  public final void set(Pointer<?, ? extends Type> pointer, long index, T value) {
-    throw new UnsupportedOperationException("set(Pointer, long, T) not supported for " + getClass().getSimpleName() + ". Use set(Pointer, long, " + unitSize.primitive() + ") instead.");
+  public void set(Pointer<?, ? extends Type> pointer, long index, T value) {
+    throw new UnsupportedOperationException("set(Pointer, long, " + unitSize.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use set(Pointer, long, " + unitSize.primitive() + ") instead.");
   }
 
-  public final void add(Pointer<?, ? extends Type> pointer, T value) {
-    throw new UnsupportedOperationException("add(Pointer, Byte) not supported for " + getClass().getSimpleName() + ". Use add(Pointer, " + unitSize.primitive() + ") instead.");
+  public void add(Pointer<?, ? extends Type> pointer, T value) {
+    throw new UnsupportedOperationException("add(Pointer, " + unitSize.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use add(Pointer, " + unitSize.primitive() + ") instead.");
   }
 
-  public final void add(Pointer<?, ? extends Type> pointer, long index, T value) {
-    throw new UnsupportedOperationException("add(Pointer, long, Byte) not supported for " + getClass().getSimpleName() + ". Use add(Pointer, long, " + unitSize.primitive() + ") instead.");
+  public void add(Pointer<?, ? extends Type> pointer, long index, T value) {
+    throw new UnsupportedOperationException("add(Pointer, long, " + unitSize.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use add(Pointer, long, " + unitSize.primitive() + ") instead.");
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "{" +
+        "unitSize=" + unitSize +
+        ", lengthExpression=" + lengthExpression +
+        ", assignment=" + assignment +
+        ", constantValue=" + constantValue +
+        ", position=" + position +
+        '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+
+    PrimitiveType<?> that = (PrimitiveType<?>) o;
+    return unitSize == that.unitSize;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = super.hashCode();
+    result = 31 * result + unitSize.hashCode();
+    return result;
   }
 }
