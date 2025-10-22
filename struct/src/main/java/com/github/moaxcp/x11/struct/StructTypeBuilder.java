@@ -10,7 +10,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   private Expression lengthExpression;
   private Assignment assignment;
   private Struct constant;
-  private List<Type> fields = new ArrayList<>();
+  private final List<Type<?>> fields = new ArrayList<>();
 
   public int fields() {
     return fields.size();
@@ -50,8 +50,14 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return new StructTypePadSubBuilder<>((SELF) this, fields.size());
   }
 
-  SELF type(Type type) {
-    fields.add(type);
+  SELF type(Type<?> type) {
+    if (type instanceof PadType p && p.isAlign()) {
+      var previous = fields.getLast();
+      fields.add(type);
+      previous.addByteLengthChangeListener(ByteLengthChangeListener.align(type.getPosition()));
+    } else {
+      fields.add(type);
+    }
     return (SELF) this;
   }
 
@@ -206,6 +212,6 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public StructType toStructType() {
-    return new StructType(position, byteLengthChange, constant, lengthExpression, assignment, fields);
+    return new StructType(position, constant, lengthExpression, assignment, fields);
   }
 }

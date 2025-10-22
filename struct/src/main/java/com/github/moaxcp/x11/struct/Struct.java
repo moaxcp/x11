@@ -1,6 +1,7 @@
 package com.github.moaxcp.x11.struct;
 
 import java.math.BigInteger;
+import java.util.function.Consumer;
 
 public class Struct implements Pointer<Struct, StructType> {
   private boolean allocated = false;
@@ -61,7 +62,7 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   @Override
-  public <V extends Type> V getType(int position) {
+  public <V extends Type<?>> V getType(int position) {
     return structType.getType(position);
   }
 
@@ -84,6 +85,11 @@ public class Struct implements Pointer<Struct, StructType> {
 
   public long getByteLength() {
     return structType.getByteLength(this);
+  }
+
+  @Override
+  public long getByteLength(int position) {
+    return structType.getType(position).getByteLength(this);
   }
 
   public boolean getBool(int position) {
@@ -394,17 +400,6 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
-  public void removeAll(int position) {
-    ((ValueType<?>) structType.getType(position)).remove(this);
-  }
-
-  public void remove(int position, long index) {
-     assert structType.getType(position) instanceof ValueType<?> : "Field at postion " + position + " is " + structType.getType(position).getClass().getSimpleName() + " but it must be a ValueType";
-     if (structType.getType(position) instanceof ValueType<?> valueType) {
-       valueType.remove(this, index);
-     }
-  }
-
   public Struct getStruct(int position) {
     return structType.getStruct(this, position);
   }
@@ -412,6 +407,32 @@ public class Struct implements Pointer<Struct, StructType> {
   public Struct setStruct(int position, Struct other) {
     structType.setStruct(this, position, other);
     return this;
+  }
+
+  public Struct addStruct(int position, Struct struct) {
+     structType.addStruct(position, struct);
+     return this;
+  }
+
+  public Struct addStruct(int position, long index, Struct struct) {
+    structType.addStruct(position, index, struct);
+    return this;
+  }
+
+  public void removeAll(int position) {
+    ((ValueType<?, ?>) structType.getType(position)).remove(this);
+  }
+
+  public void remove(int position, long index) {
+     assert structType.getType(position) instanceof ValueType<?, ?> : "Field at postion " + position + " is " + structType.getType(position).getClass().getSimpleName() + " but it must be a ValueType";
+     if (structType.getType(position) instanceof ValueType<?, ?> valueType) {
+       valueType.remove(this, index);
+     }
+  }
+
+  public Struct with(Consumer<Struct> consumer) {
+     consumer.accept(this);
+     return this;
   }
 
   @Override

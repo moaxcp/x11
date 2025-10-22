@@ -14,12 +14,17 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Pointer<?, ? extends Type> pointer) {
+    public boolean isConstant(Type<?> type) {
       return true;
     }
 
     @Override
-    public long evaluate(Pointer<?, ? extends Type> pointer) {
+    public long defaultValue(Type<?> type) {
+      return value;
+    }
+
+    @Override
+    public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
       return value;
     }
 
@@ -53,12 +58,17 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Pointer<?, ? extends Type> pointer) {
-      return pointer.getType(position) instanceof ValueType<?> v && v.isConstant(pointer);
+    public boolean isConstant(Type<?> type) {
+      return type.getType(position) instanceof NumberType<?, ?> v && v.isConstant(type);
     }
 
     @Override
-    public long evaluate(Pointer<?, ? extends Type> pointer) {
+    public long defaultValue(Type<?> type) {
+      return ((NumberType<?, ?>) type.getType(position)).defaultValue();
+    }
+
+    @Override
+    public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
       var type = pointer.getType(position);
       return switch (type) {
         case Int8Type i8 -> i8.getInt8(pointer);
@@ -114,12 +124,17 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Pointer<?, ? extends Type> pointer) {
-      return Arrays.stream(expressions).allMatch(e -> e.isConstant(pointer));
+    public boolean isConstant(Type<?> type) {
+      return Arrays.stream(expressions).allMatch(e -> e.isConstant(type));
     }
 
     @Override
-    public long evaluate(Pointer<?, ? extends Type> pointer) {
+    public long defaultValue(Type<?> type) {
+      return Arrays.stream(expressions).mapToLong(e -> e.defaultValue(type)).sum();
+    }
+
+    @Override
+    public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
       return Arrays.stream(expressions).mapToLong(e -> e.evaluate(pointer)).sum();
     }
 
@@ -156,7 +171,9 @@ public interface Expression {
     return new Sum(expressions);
   }
 
-  boolean isConstant(Pointer<?, ? extends Type> pointer);
+  boolean isConstant(Type<?> type);
 
-  long evaluate(Pointer<?, ? extends Type> pointer);
+  long defaultValue(Type<?> type);
+
+  long evaluate(Pointer<?, ? extends Type<?>> pointer);
 }

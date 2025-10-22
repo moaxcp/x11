@@ -2,9 +2,9 @@ package com.github.moaxcp.x11.struct;
 
 import org.jspecify.annotations.Nullable;
 
-import static com.github.moaxcp.x11.struct.Size.INT16;
+import static com.github.moaxcp.x11.struct.Primitive.INT16;
 
-public final class Int16Type extends NumberType<Short> {
+public final class Int16Type extends NumberType<Int16Type, Short> {
 
   public static Int16Type int16() {
     return int16(-1);
@@ -14,8 +14,8 @@ public final class Int16Type extends NumberType<Short> {
     return new Int16Type(position);
   }
 
-  public Int16Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Short constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, byteLengthChange, INT16, constantValue, lengthExpression, assignment);
+  public Int16Type(int position, @Nullable Short constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, INT16, constantValue, lengthExpression, assignment);
   }
 
   public Int16Type(int position) {
@@ -24,37 +24,37 @@ public final class Int16Type extends NumberType<Short> {
 
   @Override
   protected Int16Type copy(int position) {
-    return new Int16Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
+    return new Int16Type(position, constantValue, lengthExpression, assignment);
   }
 
-  public short getInt16(Pointer<?, ? extends Type> pointer) {
+  public short getInt16(Pointer<?, ? extends Type<?>> pointer) {
     return pointer.getByteArray().getInt16(getOffset(pointer));
   }
 
-  public short getInt16(Pointer<?, ? extends Type> pointer, long index) {
+  public short getInt16(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
     return pointer.getByteArray().getInt16(getOffset(pointer, index));
   }
 
-  public void set(Pointer<?, ? extends Type> pointer, short value) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, short value) {
     setUnchecked(pointer, 0, value);
   }
 
-  public void set(Pointer<?, ? extends Type> pointer, long index, short value) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
     checkIndex(pointer, index);
     setUnchecked(pointer, index, value);
   }
 
-  private void setUnchecked(Pointer<?, ? extends Type> pointer, long index, short value) {
+  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
     checkConstant(pointer, index, value);
     pointer.getByteArray().setInt16(getOffset(pointer, index), value);
   }
 
-  public void add(Pointer<?, ? extends Type> pointer, short value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, short value) {
     add(pointer, getArrayLength(pointer), value);
   }
 
-  public void add(Pointer<?, ? extends Type> pointer, long index, short value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition() + " index: " + index + " length: " + 1);
     }
@@ -62,7 +62,7 @@ public final class Int16Type extends NumberType<Short> {
     setUnchecked(pointer, index, value);
   }
 
-  public void allocate(Pointer<?, ? extends Type> pointer) {
+  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     if(isArray()) {
       long length = getArrayLength(pointer);
       for (int i = 0; i < length; i++) {
@@ -74,11 +74,13 @@ public final class Int16Type extends NumberType<Short> {
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type> pointer, long index) {
-    checkIndexAllocate(pointer, index);
-    pointer.getByteArray().addInt16(getOffset(pointer, index), constantValue != null ? constantValue : 0);
-    if (assignment != null) {
-      assignment.assign(pointer, 1);
-    }
+  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
+    callWithByteLengthChange(pointer, () -> {
+      checkIndexAllocate(pointer, index);
+      pointer.getByteArray().addInt16(getOffset(pointer, index), constantValue != null ? constantValue : 0);
+      if (assignment != null) {
+        assignment.assign(pointer, 1);
+      }
+    });
   }
 }

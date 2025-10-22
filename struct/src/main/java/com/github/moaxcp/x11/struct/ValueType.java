@@ -4,7 +4,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-public abstract sealed class ValueType<T> extends Type permits PrimitiveType, StructType {
+public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> extends Type<SELF> permits PrimitiveType, StructType {
   @Nullable
   protected final Expression lengthExpression;
   @Nullable
@@ -13,14 +13,14 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
   protected final T constantValue;
 
   public ValueType(int position) {
-    super(position, null);
+    super(position);
     this.lengthExpression = null;
     this.assignment = null;
     this.constantValue = null;
   }
 
-  public ValueType(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable T constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, byteLengthChange);
+  public ValueType(int position, @Nullable T constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position);
     this.lengthExpression = lengthExpression;
     this.assignment = assignment;
     this.constantValue = constantValue;
@@ -39,7 +39,7 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
     return assignment;
   }
 
-  public long getOffset(Pointer<?, ? extends Type> pointer, long index) {
+  public long getOffset(Pointer<?, ? extends Type<?>> pointer, long index) {
     long offset = getOffset(pointer);
     for (int i = 0; i < index; i++) {
       offset += getByteLength(pointer, i);
@@ -52,7 +52,7 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
   }
 
   @Override
-  public long getByteLength(Pointer<?, ? extends Type> pointer) {
+  public long getByteLength(Pointer<?, ? extends Type<?>> pointer) {
     if(!isArray()) {
       return getByteLength(pointer, 0);
     }
@@ -64,97 +64,69 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
     return length;
   }
 
-  public abstract long getByteLength(Pointer<?, ? extends Type> pointer, long index);
+  public abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index);
 
-  public final long getArrayLength(Pointer<?, ? extends Type> pointer) {
+  public final long getArrayLength(Pointer<?, ? extends Type<?>> pointer) {
     if (!isArray()) {
       return 1;
     }
     return lengthExpression.evaluate(pointer);
   }
 
-  public final boolean isConstant(Pointer<?, ? extends Type> pointer) {
-    return constantValue != null || (lengthExpression != null && lengthExpression.isConstant(pointer));
+  public final boolean isConstant(Type<?> type) {
+    return constantValue != null || (lengthExpression != null && lengthExpression.isConstant(type));
   }
 
-  public T get(Pointer<?, ? extends Type> pointer) {
+  public T get(Pointer<?, ? extends Type<?>> pointer) {
     return get(pointer, 0);
   }
 
-  public abstract T get(Pointer<?, ? extends Type> pointer, long index);
+  public abstract T get(Pointer<?, ? extends Type<?>> pointer, long index);
 
-  protected void checkIndex(Pointer<?, ? extends Type> pointer, long index) {
+  protected void checkIndex(Pointer<?, ? extends Type<?>> pointer, long index) {
     var length = getArrayLength(pointer);
     if (index >= length || index < 0) {
       throw new ArrayIndexOutOfBoundsException(this.getClass().getSimpleName() + " at position " + getPosition() + " index: " + index + " length: " + length);
     }
   }
 
-  public void set(Pointer<?, ? extends Type> pointer, T value) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, T value) {
     set(pointer, 0, value);
   }
 
-  public abstract void set(Pointer<?, ? extends Type> pointer, long index, T value);
+  public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, T value);
 
-  protected void checkConstant(Pointer<?, ? extends Type> pointer, long index, T value) {
-    if (isConstant(pointer) && !Objects.equals(constantValue, value)) {
+  protected void checkConstant(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
+    if (isConstant(pointer.getType()) && !Objects.equals(constantValue, value)) {
       throw new UnsupportedOperationException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
     }
   }
 
-  public void add(Pointer<?, ? extends Type> pointer, T value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, T value) {
     add(pointer, getArrayLength(pointer), value);
   }
 
-  public void add(Pointer<?, ? extends Type> pointer, long index, T value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
     }
-    callWithByteLengthChange(pointer, () -> {
-      allocate(pointer, index);
-      set(pointer, index, value);
-      if (assignment != null) {
-        assignment.assign(pointer, 1);
-      }
-    });
-  }
-
-  protected void callWithByteLengthChange(Pointer<?, ? extends Type> pointer, Runnable runnable) {
-    var previous = 0L;
-    if (byteLengthChange != null) {
-      previous = getByteLength(pointer);
-    }
-    runnable.run();
-    if (byteLengthChange != null) {
-      var current = getByteLength(pointer);
-      byteLengthChange.byteLengthChanged(pointer, previous, current);
+    allocate(pointer, index);
+    set(pointer, index, value);
+    if (assignment != null) {
+      assignment.assign(pointer, 1);
     }
   }
 
-  @Override
-  public void allocate(Pointer<?, ? extends Type> pointer) {
-    if(isArray()) {
-      callWithByteLengthChange(pointer, () -> {
-        long length = getArrayLength(pointer);
-        for (int i = 0; i < length; i++) {
-          allocate(pointer, i);
-        }
-      });
-    } else {
-      allocate(pointer, 0);
-    }
-  }
+  public abstract void allocate(Pointer<?, ? extends Type<?>> pointer, long index);
 
-  public abstract void allocate(Pointer<?, ? extends Type> pointer, long index);
-
-  void checkIndexAllocate(Pointer<?, ? extends Type> pointer, long index) {
+  void checkIndexAllocate(Pointer<?, ? extends Type<?>> pointer, long index) {
     var newLength = getArrayLength(pointer) + 1;
     if (index >= newLength || index < 0) {
       throw new ArrayIndexOutOfBoundsException(this.getClass().getSimpleName() + " at position " + getPosition() + " index: " + index + " new length: " + newLength);
     }
   }
 
-  public final void remove(Pointer<?, ? extends Type> pointer) {
+  public final void remove(Pointer<?, ? extends Type<?>> pointer) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot remove from non-array type at position " + getPosition());
     }
@@ -170,7 +142,7 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
     });
   }
 
-  public final void remove(Pointer<?, ? extends Type> pointer, long index) {
+  public final void remove(Pointer<?, ? extends Type<?>> pointer, long index) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot remove from non-array type at position " + getPosition());
     }
@@ -191,7 +163,7 @@ public abstract sealed class ValueType<T> extends Type permits PrimitiveType, St
     if (o == null || getClass() != o.getClass()) return false;
     if (!super.equals(o)) return false;
 
-    ValueType<?> valueType = (ValueType<?>) o;
+    ValueType<?, ?> valueType = (ValueType<?, ?>) o;
     return Objects.equals(lengthExpression, valueType.lengthExpression) && Objects.equals(assignment, valueType.assignment) && Objects.equals(constantValue, valueType.constantValue);
   }
 

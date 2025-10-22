@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11.struct;
 
-public enum Size {
+public enum Primitive {
   BOOL(1),
   INT8(1),
   UINT8(1),
@@ -15,7 +15,7 @@ public enum Size {
 
   private final int size;
 
-  Size(int size) {
+  Primitive(int size) {
     this.size = size;
   }
 

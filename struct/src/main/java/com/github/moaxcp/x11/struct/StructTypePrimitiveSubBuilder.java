@@ -2,80 +2,80 @@ package com.github.moaxcp.x11.struct;
 
 public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARENT>> {
   private final PARENT structTypeBuilder;
-  private final StructTypePrimitiveBuilder structTypePrimitiveBuilder;
+  private final PrimitiveBuilder primitiveBuilder;
 
   StructTypePrimitiveSubBuilder(PARENT structTypeBuilder, int position) {
     this.structTypeBuilder = structTypeBuilder;
-    structTypePrimitiveBuilder = new StructTypePrimitiveBuilder().position(position);
+    primitiveBuilder = new PrimitiveBuilder().position(position);
   }
 
   public StructTypePrimitiveSubBuilder<PARENT> byteLengthChange(ByteLengthChangeListener byteLengthChange) {
-    structTypePrimitiveBuilder.byteLengthChange(byteLengthChange);
+    primitiveBuilder.byteLengthChange(byteLengthChange);
     return this;
   }
 
   public StructTypePrimitiveSubBuilder<PARENT> constant(Object constantValue) {
-    structTypePrimitiveBuilder.constant(constantValue);
+    primitiveBuilder.constant(constantValue);
     return this;
   }
 
   public StructTypePrimitiveSubBuilder<PARENT> lengthField(int lengthFieldPosition) {
-    structTypePrimitiveBuilder.lengthExpression(Expression.valueOf(lengthFieldPosition));
-    structTypePrimitiveBuilder.assignment(Assignment.add(lengthFieldPosition));
+    primitiveBuilder.lengthExpression(Expression.valueOf(lengthFieldPosition));
+    primitiveBuilder.assignment(Assignment.add(lengthFieldPosition));
     return this;
   }
 
   public StructTypePrimitiveSubBuilder<PARENT> lengthExpression(Expression lengthExpression) {
-    structTypePrimitiveBuilder.lengthExpression(lengthExpression);
+    primitiveBuilder.lengthExpression(lengthExpression);
     return this;
   }
 
   public StructTypePrimitiveSubBuilder<PARENT> assignment(Assignment assignment) {
-    structTypePrimitiveBuilder.assignment(assignment);
+    primitiveBuilder.assignment(assignment);
     return this;
   }
 
   public PARENT bool() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.bool());
+    return structTypeBuilder.type(primitiveBuilder.bool());
   }
 
   public PARENT int8() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.int8());
+    return structTypeBuilder.type(primitiveBuilder.int8());
   }
 
   public PARENT uint8() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.uint8());
+    return structTypeBuilder.type(primitiveBuilder.uint8());
   }
 
   public PARENT int16() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.int16());
+    return structTypeBuilder.type(primitiveBuilder.int16());
   }
 
   public PARENT uint16() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.uint16());
+    return structTypeBuilder.type(primitiveBuilder.uint16());
   }
 
   public PARENT int32() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.int32());
+    return structTypeBuilder.type(primitiveBuilder.int32());
   }
 
   public PARENT uint32() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.uint32());
+    return structTypeBuilder.type(primitiveBuilder.uint32());
   }
 
   public PARENT int64() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.int64());
+    return structTypeBuilder.type(primitiveBuilder.int64());
   }
 
   public PARENT uint64() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.uint64());
+    return structTypeBuilder.type(primitiveBuilder.uint64());
   }
 
   public PARENT float32() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.float32());
+    return structTypeBuilder.type(primitiveBuilder.float32());
   }
 
   public PARENT float64() {
-    return structTypeBuilder.type(structTypePrimitiveBuilder.float64());
+    return structTypeBuilder.type(primitiveBuilder.float64());
   }
 }

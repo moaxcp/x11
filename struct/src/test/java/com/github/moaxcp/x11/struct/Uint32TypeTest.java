@@ -5,9 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
+import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
-import static com.github.moaxcp.x11.struct.Size.UINT32;
+import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
+import static com.github.moaxcp.x11.struct.Primitive.UINT32;
 import static com.github.moaxcp.x11.struct.Uint32Type.uint32Type;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,17 +30,15 @@ public class Uint32TypeTest {
 
   @Test
   void constructorEverything() {
-    var add = add(0);
-    var expression = valueOf(0);
-    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .uint32()
-        .primitive().byteLengthChange(byteLengthListener).constant(5L).lengthExpression(expression).assignment(add).uint32()
+        .primitive().constant(5L).lengthExpression(valueOf(0)).assignment(add(0)).uint32()
         .align(2)
         .build();
 
     assertThat(struct.getByteLength()).isEqualTo(UINT32.size() + 2);
-    assertThat(struct.<Type>getType(1)).isEqualTo(new Uint32Type(1, byteLengthListener, 5L, expression, add));
+    assertThat(struct.<Uint32Type>getType(1))
+        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(5L).lengthExpression(valueOf(0)).assignment(add(0)).uint32());
   }
 
   @Test

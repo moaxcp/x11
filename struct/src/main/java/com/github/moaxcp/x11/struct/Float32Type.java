@@ -2,9 +2,9 @@ package com.github.moaxcp.x11.struct;
 
 import org.jspecify.annotations.Nullable;
 
-import static com.github.moaxcp.x11.struct.Size.FLOAT32;
+import static com.github.moaxcp.x11.struct.Primitive.FLOAT32;
 
-public final class Float32Type extends NumberType<Float> {
+public final class Float32Type extends NumberType<Float32Type, Float> {
 
   public static Float32Type float32Type() {
     return float32Type(-1);
@@ -14,8 +14,8 @@ public final class Float32Type extends NumberType<Float> {
     return new Float32Type(position);
   }
 
-  public Float32Type(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Float constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, byteLengthChange, FLOAT32, constantValue, lengthExpression, assignment);
+  public Float32Type(int position, @Nullable Float constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, FLOAT32, constantValue, lengthExpression, assignment);
   }
 
   public Float32Type(int position) {
@@ -24,37 +24,37 @@ public final class Float32Type extends NumberType<Float> {
 
   @Override
   protected Float32Type copy(int position) {
-    return new Float32Type(position, byteLengthChange, constantValue, lengthExpression, assignment);
+    return new Float32Type(position, constantValue, lengthExpression, assignment);
   }
 
-  public float getFloat32(Pointer<?, ? extends Type> pointer) {
+  public float getFloat32(Pointer<?, ? extends Type<?>> pointer) {
     return pointer.getByteArray().getFloat32(getOffset(pointer));
   }
 
-  public float getFloat32(Pointer<?, ? extends Type> pointer, long index) {
+  public float getFloat32(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
     return pointer.getByteArray().getFloat32(getOffset(pointer, index));
   }
 
-  public void set(Pointer<?, ? extends Type> pointer, float value) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, float value) {
     setUnchecked(pointer, 0, value);
   }
 
-  public void set(Pointer<?, ? extends Type> pointer, long index, float value) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     checkIndex(pointer, index);
     setUnchecked(pointer, index, value);
   }
 
-  private void setUnchecked(Pointer<?, ? extends Type> pointer, long index, float value) {
+  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     checkConstant(pointer, index, value);
     pointer.getByteArray().setFloat32(getOffset(pointer, index), value);
   }
 
-  public void add(Pointer<?, ? extends Type> pointer, float value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, float value) {
     add(pointer, getArrayLength(pointer), value);
   }
 
-  public void add(Pointer<?, ? extends Type> pointer, long index, float value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition() + " index: " + index + " length: " + 1);
     }
@@ -62,7 +62,7 @@ public final class Float32Type extends NumberType<Float> {
     setUnchecked(pointer, index, value);
   }
 
-  public void allocate(Pointer<?, ? extends Type> pointer) {
+  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     if (isArray()) {
       long length = getArrayLength(pointer);
       for (int i = 0; i < length; i++) {
@@ -74,11 +74,13 @@ public final class Float32Type extends NumberType<Float> {
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type> pointer, long index) {
-    checkIndexAllocate(pointer, index);
-    pointer.getByteArray().addFloat32(getOffset(pointer, index), constantValue != null ? constantValue : 0.0f);
-    if (assignment != null) {
-      assignment.assign(pointer, 1);
-    }
+  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
+    callWithByteLengthChange(pointer, () -> {
+      checkIndexAllocate(pointer, index);
+      pointer.getByteArray().addFloat32(getOffset(pointer, index), constantValue != null ? constantValue : 0.0f);
+      if (assignment != null) {
+        assignment.assign(pointer, 1);
+      }
+    });
   }
 }

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.github.moaxcp.x11.struct.ShiftBytes.shiftBytes;
-import static com.github.moaxcp.x11.struct.Size.*;
+import static com.github.moaxcp.x11.struct.Primitive.*;
 
 /**
  * A byte array that can grow beyond the max size of a java array.
@@ -471,6 +471,15 @@ public class ByteArray {
       }
     }
     notifyListeners(shiftBytes(index, size));
+    bytes = newBytes;
+    return this;
+  }
+
+  public ByteArray replace(long index, long length, ByteArray source, long sourceIndex, long sourceLength) {
+    byte[] newBytes = new byte[Math.toIntExact(bytes.length - length + sourceLength)];
+    System.arraycopy(bytes, 0, newBytes, 0, Math.toIntExact(index));
+    System.arraycopy(source.getBytes(), Math.toIntExact(sourceIndex), newBytes, Math.toIntExact(index), Math.toIntExact(sourceLength));
+    System.arraycopy(bytes, Math.toIntExact(index + length), newBytes, Math.toIntExact(index + sourceLength), bytes.length - Math.toIntExact(index + length));
     bytes = newBytes;
     return this;
   }

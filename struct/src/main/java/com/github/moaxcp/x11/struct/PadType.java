@@ -1,62 +1,79 @@
 package com.github.moaxcp.x11.struct;
 
-import org.jspecify.annotations.Nullable;
-
-public final class PadType extends Type {
+public final class PadType extends Type<PadType> {
 
   public static PadType pad(long length) {
-    return new PadType(-1, null, length, false);
+    return new PadType(-1, length, false);
   }
 
   public static PadType pad(int position, long length) {
-    return new PadType(position, null, length, false);
+    return new PadType(position, length, false);
   }
 
   public static PadType align(long length) {
-    return new PadType(-1, null, length, true);
+    return new PadType(-1, length, true);
   }
 
   public static PadType align(int position, long length) {
-    return new PadType(position, null, length, true);
+    return new PadType(position, length, true);
   }
 
   private final long length;
   private final boolean align;
 
-  public PadType(int position, @Nullable ByteLengthChangeListener byteLengthChange, long length, boolean align) {
-    super(position, byteLengthChange);
+  public PadType(int position, long length, boolean align) {
+    super(position);
     this.length = length;
     this.align = align;
   }
 
   @Override
-  protected Type copy(int position) {
-    return new PadType(position, this.byteLengthChange, this.length, this.align);
+  protected PadType copy(int position) {
+    return new PadType(position, this.length, this.align);
   }
 
   @Override
-  public long getByteLength(Pointer<?, ? extends Type> pointer) {
+  public long getAllocationLength(Type<?> parent) {
+    if (!align) {
+      return length;
+    }
+
+    return length - parent.getType(position - 1).getAllocationLength(parent) % length;
+  }
+
+  public long getPadLength() {
     return length;
   }
 
+  public boolean isAlign() {
+    return align;
+  }
+
   @Override
-  public boolean isFixedLength(Pointer<?, ? extends Type> pointer) {
+  public long getByteLength(Pointer<?, ? extends Type<?>> pointer) {
+    if (!align) {
+      return length;
+    }
+    return length - pointer.getByteLength(position - 1) % length;
+  }
+
+  @Override
+  public boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
     return !align || pointer.getType(position - 1).isFixedLength(pointer);
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type> pointer) {
-    var padLength = length;
-    if (align) {
-      padLength = pointer.getType(position - 1).getByteLength(pointer) % length;
-    }
+  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
+    var padLength = getByteLength(pointer);
     for(long i = 0; i < padLength; i++) {
       pointer.getByteArray().addInt8(getOffset(pointer) + i, (byte) 0);
     }
   }
 
-  public void reAlign(Pointer<?, ? extends Type> pointer, long previousLength, long currentLength) {
-    assert !align : "PadType is not aligned";
+  public void reAlign(Pointer<?, ? extends Type<?>> pointer, long previousLength, long currentLength) {
+    assert align : "PadType is not aligned";
+    previousLength = length - previousLength % length;
+    currentLength = length - currentLength % length;
     if(currentLength > previousLength) {
       var padLength = currentLength - previousLength;
       for(long i = 0; i < padLength; i++) {
@@ -65,12 +82,10 @@ public final class PadType extends Type {
     } else if(currentLength < previousLength) {
       var padLength = previousLength - currentLength;
       for(long i = 0; i < padLength; i++) {
-        pointer.getByteArray().removeInt8(getOffset(pointer) + i);
+        pointer.getByteArray().removeInt8(getOffset(pointer));
       }
     }
-    if (byteLengthChange != null) {
-      byteLengthChange.byteLengthChanged(pointer, previousLength, currentLength);
-    }
+    notifyByteLengthChange(pointer, previousLength, currentLength);
   }
 
   @Override

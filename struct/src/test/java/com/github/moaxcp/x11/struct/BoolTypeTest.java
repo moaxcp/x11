@@ -5,9 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
+import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
-import static com.github.moaxcp.x11.struct.Size.BOOL;
+import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
+import static com.github.moaxcp.x11.struct.Primitive.BOOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -27,17 +29,15 @@ public class BoolTypeTest {
 
   @Test
   void constructorEverything() {
-    var add = add(0);
-    var expression = valueOf(0);
-    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .int8()
-        .primitive().byteLengthChange(byteLengthListener).constant(true).lengthExpression(expression).assignment(add).bool()
+        .primitive().constant(true).lengthExpression(valueOf(0)).assignment(add(0)).bool()
         .align(2)
         .build();
 
     assertThat(struct.getByteLength()).isEqualTo(BOOL.size() + 2);
-    assertThat(struct.<Type>getType(1)).isEqualTo(new BoolType(1, byteLengthListener, true, expression, add));
+    assertThat(struct.<BoolType>getType(1))
+        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(true).lengthExpression(valueOf(0)).assignment(add(0)).bool());
   }
 
   @Test

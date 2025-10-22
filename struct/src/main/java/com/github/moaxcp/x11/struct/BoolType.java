@@ -2,13 +2,13 @@ package com.github.moaxcp.x11.struct;
 
 import org.jspecify.annotations.Nullable;
 
-import static com.github.moaxcp.x11.struct.Size.BOOL;
+import static com.github.moaxcp.x11.struct.Primitive.BOOL;
 
 /**
  * Boolean type backed by a single byte in ByteArray.
  * Primitive boolean API only; wrapper-based Type methods throw just like NumberType primitives do.
  */
-public final class BoolType extends PrimitiveType<Boolean> {
+public final class BoolType extends PrimitiveType<BoolType, Boolean> {
 
   public static BoolType bool() {
     return bool(-1);
@@ -18,8 +18,8 @@ public final class BoolType extends PrimitiveType<Boolean> {
     return new BoolType(position);
   }
 
-  public BoolType(int position, @Nullable ByteLengthChangeListener byteLengthChange, @Nullable Boolean constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, byteLengthChange, BOOL, constantValue, lengthExpression, assignment);
+  public BoolType(int position, @Nullable Boolean constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+    super(position, BOOL, constantValue, lengthExpression, assignment);
   }
 
   public BoolType(int position) {
@@ -28,37 +28,37 @@ public final class BoolType extends PrimitiveType<Boolean> {
 
   @Override
   protected BoolType copy(int position) {
-    return new BoolType(position, byteLengthChange, constantValue, lengthExpression, assignment);
+    return new BoolType(position, constantValue, lengthExpression, assignment);
   }
 
-  public boolean getBoolean(Pointer<?, ? extends Type> pointer) {
+  public boolean getBoolean(Pointer<?, ? extends Type<?>> pointer) {
     return pointer.getByteArray().bool(getOffset(pointer));
   }
 
-  public boolean getBoolean(Pointer<?, ? extends Type> pointer, long index) {
+  public boolean getBoolean(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
     return pointer.getByteArray().bool(getOffset(pointer, index));
   }
 
-  public void set(Pointer<?, ? extends Type> pointer, boolean value) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, boolean value) {
     setUnchecked(pointer, 0, value);
   }
 
-  public void set(Pointer<?, ? extends Type> pointer, long index, boolean value) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
     checkIndex(pointer, index);
     setUnchecked(pointer, index, value);
   }
 
-  private void setUnchecked(Pointer<?, ? extends Type> pointer, long index, boolean value) {
+  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
     checkConstant(pointer, index, value);
     pointer.getByteArray().bool(getOffset(pointer, index), value);
   }
 
-  public void add(Pointer<?, ? extends Type> pointer, boolean value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, boolean value) {
     add(pointer, getArrayLength(pointer), value);
   }
 
-  public void add(Pointer<?, ? extends Type> pointer, long index, boolean value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition() + " index: " + index + " length: " + 1);
     }
@@ -66,7 +66,7 @@ public final class BoolType extends PrimitiveType<Boolean> {
     setUnchecked(pointer, index, value);
   }
 
-  public void allocate(Pointer<?, ? extends Type> pointer) {
+  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     if (isArray()) {
       long length = getArrayLength(pointer);
       for (int i = 0; i < length; i++) {
@@ -78,7 +78,7 @@ public final class BoolType extends PrimitiveType<Boolean> {
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type> pointer, long index) {
+  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndexAllocate(pointer, index);
     pointer.getByteArray().addBool(getOffset(pointer, index), constantValue != null ? constantValue : false);
     if (assignment != null) {

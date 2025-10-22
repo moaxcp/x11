@@ -6,10 +6,12 @@ import org.junit.jupiter.api.Test;
 import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
 import static com.github.moaxcp.x11.struct.ByteArray.ba;
+import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Float32Type.float32Type;
-import static com.github.moaxcp.x11.struct.Size.FLOAT32;
+import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
+import static com.github.moaxcp.x11.struct.Primitive.FLOAT32;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -29,17 +31,14 @@ public class Float32TypeTest {
 
   @Test
   void constructorEverything() {
-    var add = add(0);
-    var expression = valueOf(0);
-    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .float32()
-        .primitive().byteLengthChange(byteLengthListener).constant(3.0f).lengthExpression(expression).assignment(add).float32()
+        .primitive().constant(3.0f).lengthExpression(valueOf(0)).assignment(add(0)).float32()
         .align(2)
         .build();
 
     assertThat(struct.getByteLength()).isEqualTo(FLOAT32.size() + 2);
-    assertThat(struct.<Type>getType(1)).isEqualTo(new Float32Type(1, byteLengthListener, 3.0f, expression, add));
+    assertThat(struct.<Float32Type>getType(1)).isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(3.0f).lengthExpression(valueOf(0)).assignment(add(0)).float32());
   }
 
   @Test

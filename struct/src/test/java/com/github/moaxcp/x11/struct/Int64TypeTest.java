@@ -5,11 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
+import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Int64Type.int64Type;
-import static com.github.moaxcp.x11.struct.Size.INT16;
-import static com.github.moaxcp.x11.struct.Size.INT64;
+import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
+import static com.github.moaxcp.x11.struct.Primitive.INT64;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -29,17 +30,15 @@ public class Int64TypeTest {
 
   @Test
   void constructorEverything() {
-    var add = add(0);
-    var expression = valueOf(0);
-    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .int64()
-        .primitive().byteLengthChange(byteLengthListener).constant(5L).lengthExpression(expression).assignment(add).int64()
+        .primitive().constant(5L).lengthExpression(valueOf(0)).assignment(add(0)).int64()
         .align(2)
         .build();
 
     assertThat(struct.getByteLength()).isEqualTo(INT64.size() + 2);
-    assertThat(struct.<Type>getType(1)).isEqualTo(new Int64Type(1, byteLengthListener, 5L, expression, add));
+    assertThat(struct.<Int64Type>getType(1))
+        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(5L).lengthExpression(valueOf(0)).assignment(add(0)).int64());
   }
 
   @Test

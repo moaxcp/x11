@@ -24,10 +24,10 @@ public class StructTypePadBuilder {
   }
 
   public PadType pad() {
-    return new PadType(position, byteLengthChange, length, false);
+    return new PadType(position, length, false);
   }
 
   public PadType align() {
-    return new PadType(position, byteLengthChange, length, true);
+    return new PadType(position, length, true);
   }
 }

@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
+import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Int16Type.int16;
-import static com.github.moaxcp.x11.struct.Size.INT16;
+import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
+import static com.github.moaxcp.x11.struct.Primitive.INT16;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -28,17 +30,15 @@ public class Int16TypeTest {
 
   @Test
   void constructorEverything() {
-    var add = add(0);
-    var expression = valueOf(0);
-    var byteLengthListener = ByteLengthChangeListener.align(2);
     var struct = struct()
         .int16()
-        .primitive().byteLengthChange(byteLengthListener).constant((short) 5).lengthExpression(expression).assignment(add).int16()
+        .primitive().constant((short) 5).lengthExpression(valueOf(0)).assignment(add(0)).int16()
         .align(2)
         .build();
 
     assertThat(struct.getByteLength()).isEqualTo(INT16.size() + 2);
-    assertThat(struct.<Type>getType(1)).isEqualTo(new Int16Type(1, byteLengthListener, (short) 5, expression, add));
+    assertThat(struct.<Int16Type>getType(1))
+        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant((short) 5).lengthExpression(valueOf(0)).assignment(add(0)).int16());
   }
 
   @Test

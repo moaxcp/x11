@@ -1,25 +1,38 @@
 package com.github.moaxcp.x11.struct;
 
 
-import org.jspecify.annotations.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract sealed class Type permits PadType, ValueType {
+public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, ValueType {
   protected final int position;
-  @Nullable
-  protected final ByteLengthChangeListener byteLengthChange;
+  protected List<ByteLengthChangeListener> byteLengthChangeListeners = new ArrayList<>();
 
-  public Type(int position, @Nullable ByteLengthChangeListener byteLengthChange) {
+  public Type(int position) {
     this.position = position;
-    this.byteLengthChange = byteLengthChange;
   }
 
-  protected abstract Type copy(int position);
+  protected abstract SELF copy(int position);
+
+  public final SELF addByteLengthChangeListener(ByteLengthChangeListener listener) {
+    byteLengthChangeListeners.add(listener);
+    return (SELF) this;
+  }
+
+  public final SELF addByteLengthChangeListener(List<ByteLengthChangeListener> listeners) {
+    byteLengthChangeListeners.addAll(listeners);
+    return (SELF) this;
+  }
 
   public final int getPosition() {
     return position;
   }
 
-  public final long getOffset(Pointer<?, ? extends Type> pointer) {
+  public <V extends Type<?>> V getType(int position) {
+    return null;
+  }
+
+  public final long getOffset(Pointer<?, ? extends Type<?>> pointer) {
     long offset = pointer.getOffset();
     for (int i = 0; i < getPosition(); i++) {
       offset += pointer.getType(i).getByteLength(pointer);
@@ -27,22 +40,42 @@ public abstract sealed class Type permits PadType, ValueType {
     return offset;
   }
 
-  public abstract long getByteLength(Pointer<?, ? extends Type> pointer);
+  public abstract long getAllocationLength(Type<?> parent);
 
-  public abstract boolean isFixedLength(Pointer<?, ? extends Type> pointer);
+  public abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer);
 
-  public abstract void allocate(Pointer<?, ? extends Type> pointer);
+  public abstract boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer);
+
+  public abstract void allocate(Pointer<?, ? extends Type<?>> pointer);
+
+  protected final void notifyByteLengthChange(Pointer<?, ? extends Type<?>> pointer, long previousLength, long currentLength) {
+    byteLengthChangeListeners.forEach(b -> b.byteLengthChanged(pointer, previousLength, currentLength));
+  }
+
+  protected void callWithByteLengthChange(Pointer<?, ? extends Type<?>> pointer, Runnable runnable) {
+    var previous = 0L;
+    if (!byteLengthChangeListeners.isEmpty()) {
+      previous = getByteLength(pointer);
+    }
+    runnable.run();
+    if (!byteLengthChangeListeners.isEmpty()) {
+      var current = getByteLength(pointer);
+      notifyByteLengthChange(pointer, previous, current);
+    }
+  }
 
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;
 
-    Type type = (Type) o;
-    return position == type.position;
+    Type<?> type = (Type<?>) o;
+    return position == type.position && byteLengthChangeListeners.equals(type.byteLengthChangeListeners);
   }
 
   @Override
   public int hashCode() {
-    return position;
+    int result = position;
+    result = 31 * result + byteLengthChangeListeners.hashCode();
+    return result;
   }
 }
