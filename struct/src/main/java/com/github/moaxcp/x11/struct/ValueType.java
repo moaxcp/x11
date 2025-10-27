@@ -2,28 +2,29 @@ package com.github.moaxcp.x11.struct;
 
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> extends Type<SELF> permits PrimitiveType, StructType {
   @Nullable
   protected final Expression lengthExpression;
   @Nullable
-  protected final Assignment assignment;
-  @Nullable
   protected final T constantValue;
+  protected final List<ArrayLengthChangeListener> arrayLengthChangeListeners;
 
   public ValueType(int position) {
     super(position);
     this.lengthExpression = null;
-    this.assignment = null;
     this.constantValue = null;
+    arrayLengthChangeListeners = new ArrayList<>();
   }
 
-  public ValueType(int position, @Nullable T constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
+  public ValueType(int position, @Nullable T constantValue, @Nullable Expression lengthExpression) {
     super(position);
     this.lengthExpression = lengthExpression;
-    this.assignment = assignment;
     this.constantValue = constantValue;
+    arrayLengthChangeListeners = new ArrayList<>();
   }
 
   public final @Nullable T getConstantValue() {
@@ -34,9 +35,14 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     return lengthExpression;
   }
 
-  @Nullable
-  public final Assignment getAssingment() {
-    return assignment;
+  public SELF addArrayLengthChangeListener(ArrayLengthChangeListener arrayLengthChange) {
+    arrayLengthChangeListeners.add(arrayLengthChange);
+    return (SELF) this;
+  }
+
+  public SELF addArrayLengthChangeListeners(List<ArrayLengthChangeListener> arrayLengthChange) {
+    arrayLengthChangeListeners.addAll(arrayLengthChange);
+    return (SELF) this;
   }
 
   public long getOffset(Pointer<?, ? extends Type<?>> pointer, long index) {
@@ -112,9 +118,6 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     }
     allocate(pointer, index);
     set(pointer, index, value);
-    if (assignment != null) {
-      assignment.assign(pointer, 1);
-    }
   }
 
   public abstract void allocate(Pointer<?, ? extends Type<?>> pointer, long index);
@@ -133,13 +136,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     if (isFixedLength(pointer)) {
       throw new UnsupportedOperationException("Cannot remove fixed length array " + getClass().getSimpleName() + " at position " + getPosition());
     }
-    callWithByteLengthChange(pointer, () -> {
-      var length = getArrayLength(pointer);
-      pointer.getByteArray().remove(getOffset(pointer), getByteLength(pointer));
-      if (assignment != null) {
-        assignment.assign(pointer, -length);
-      }
-    });
+    callWithArrayLengthChange(pointer, -getArrayLength(pointer), () -> callWithByteLengthChange(pointer, () -> pointer.getByteArray().remove(getOffset(pointer), getByteLength(pointer))));
   }
 
   public final void remove(Pointer<?, ? extends Type<?>> pointer, long index) {
@@ -150,12 +147,26 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
       throw new UnsupportedOperationException("Cannot remove element from fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
     }
     checkIndex(pointer, index);
-    callWithByteLengthChange(pointer, () -> {
-      pointer.getByteArray().remove(getOffset(pointer, index), getByteLength(pointer, index));
-      if (assignment != null) {
-        assignment.assign(pointer, -1);
-      }
+    callWithArrayLengthChange(pointer, -1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        pointer.getByteArray().remove(getOffset(pointer, index), getByteLength(pointer, index));
+      });
     });
+  }
+
+  protected void callWithArrayLengthChange(Pointer<?, ? extends Type<?>> pointer, long added, Runnable runnable) {
+    if (arrayLengthChangeListeners.isEmpty()) {
+      runnable.run();
+      return;
+    }
+    var oldLength = getArrayLength(pointer);
+    runnable.run();
+    var newLength = oldLength + added;
+    if (newLength != oldLength) {
+      for (ArrayLengthChangeListener listener : arrayLengthChangeListeners) {
+        listener.arrayLengthChanged(pointer, oldLength, newLength);
+      }
+    }
   }
 
   @Override
@@ -164,14 +175,14 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     if (!super.equals(o)) return false;
 
     ValueType<?, ?> valueType = (ValueType<?, ?>) o;
-    return Objects.equals(lengthExpression, valueType.lengthExpression) && Objects.equals(assignment, valueType.assignment) && Objects.equals(constantValue, valueType.constantValue);
+    return Objects.equals(lengthExpression, valueType.lengthExpression) && Objects.equals(arrayLengthChangeListeners, valueType.arrayLengthChangeListeners) && Objects.equals(constantValue, valueType.constantValue);
   }
 
   @Override
   public int hashCode() {
     int result = super.hashCode();
     result = 31 * result + Objects.hashCode(lengthExpression);
-    result = 31 * result + Objects.hashCode(assignment);
+    result = 31 * result + Objects.hashCode(arrayLengthChangeListeners);
     result = 31 * result + Objects.hashCode(constantValue);
     return result;
   }

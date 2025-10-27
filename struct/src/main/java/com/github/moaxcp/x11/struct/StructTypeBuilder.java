@@ -6,9 +6,9 @@ import java.util.List;
 public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   private int position;
-  private ByteLengthChangeListener byteLengthChange;
+  private final List<ByteLengthChangeListener> byteLengthChangeListeners = new ArrayList<>();
+  private final List<ArrayLengthChangeListener> arrayLengthChangeListeners = new ArrayList<>();
   private Expression lengthExpression;
-  private Assignment assignment;
   private Struct constant;
   private final List<Type<?>> fields = new ArrayList<>();
 
@@ -22,23 +22,23 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public SELF byteLengthChange(ByteLengthChangeListener byteLengthChange) {
-    this.byteLengthChange = byteLengthChange;
+    byteLengthChangeListeners.add(byteLengthChange);
+    return (SELF) this;
+  }
+
+  public SELF arrayLengthChange(ArrayLengthChangeListener arrayLengthChange) {
+    arrayLengthChangeListeners.add(arrayLengthChange);
     return (SELF) this;
   }
 
   public SELF lengthField(int lengthFieldPosition) {
     this.lengthExpression = Expression.valueOf(lengthFieldPosition);
-    this.assignment = Assignment.add(lengthFieldPosition);
+    this.arrayLengthChangeListeners.add(ArrayLengthChangeListener.lengthField(lengthFieldPosition));
     return (SELF) this;
   }
 
   public SELF lengthExpression(Expression lengthExpression) {
     this.lengthExpression = lengthExpression;
-    return (SELF) this;
-  }
-
-  public SELF assignment(Assignment assingment) {
-    this.assignment = assingment;
     return (SELF) this;
   }
 
@@ -212,6 +212,9 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public StructType toStructType() {
-    return new StructType(position, constant, lengthExpression, assignment, fields);
+    var type = new StructType(position, constant, lengthExpression, fields);
+    type.addByteLengthChangeListeners(byteLengthChangeListeners);
+    type.addArrayLengthChangeListeners(arrayLengthChangeListeners);
+    return type;
   }
 }

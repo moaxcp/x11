@@ -3,13 +3,12 @@ package com.github.moaxcp.x11.struct;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
 import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
-import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
 import static com.github.moaxcp.x11.struct.Primitive.UINT8;
+import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -31,13 +30,13 @@ public class Uint8TypeTest {
   void constructorEverything() {
     var struct = struct()
         .uint8()
-        .primitive().constant((short) 5).lengthExpression(valueOf(0)).assignment(add(0)).uint8()
+        .primitive().constant((short) 5).lengthExpression(valueOf(0)).uint8()
         .align(2)
         .build();
 
     assertThat(struct.getByteLength()).isEqualTo(UINT8.size() + 2);
     assertThat(struct.<Uint8Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant((short) 5).lengthExpression(valueOf(0)).assignment(add(0)).uint8());
+        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant((short) 5).lengthExpression(valueOf(0)).uint8());
   }
 
   @Test

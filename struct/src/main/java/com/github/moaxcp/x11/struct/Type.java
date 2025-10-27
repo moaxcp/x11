@@ -19,7 +19,7 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
     return (SELF) this;
   }
 
-  public final SELF addByteLengthChangeListener(List<ByteLengthChangeListener> listeners) {
+  public final SELF addByteLengthChangeListeners(List<ByteLengthChangeListener> listeners) {
     byteLengthChangeListeners.addAll(listeners);
     return (SELF) this;
   }
@@ -53,15 +53,14 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
   }
 
   protected void callWithByteLengthChange(Pointer<?, ? extends Type<?>> pointer, Runnable runnable) {
-    var previous = 0L;
-    if (!byteLengthChangeListeners.isEmpty()) {
-      previous = getByteLength(pointer);
+    if (byteLengthChangeListeners.isEmpty()) {
+      runnable.run();
+      return;
     }
+    var previous = getByteLength(pointer);
     runnable.run();
-    if (!byteLengthChangeListeners.isEmpty()) {
-      var current = getByteLength(pointer);
-      notifyByteLengthChange(pointer, previous, current);
-    }
+    var current = getByteLength(pointer);
+    notifyByteLengthChange(pointer, previous, current);
   }
 
   @Override

@@ -13,13 +13,12 @@ public final class PrimitiveBuilder {
   }
 
   private int position = -1;
-  private List<ByteLengthChangeListener> byteLengthChangeListeners = new ArrayList<>();
+  private final List<ByteLengthChangeListener> byteLengthChangeListeners = new ArrayList<>();
+  private final List<ArrayLengthChangeListener> arrayLengthChangeListeners = new ArrayList<>();
   @Nullable
   private Object constantValue;
   @Nullable
   private Expression lengthExpression;
-  @Nullable
-  private Assignment assignment;
 
   public PrimitiveBuilder position(int position) {
     this.position = position;
@@ -31,6 +30,11 @@ public final class PrimitiveBuilder {
     return this;
   }
 
+  public PrimitiveBuilder arrayLengthChange(ArrayLengthChangeListener arrayLengthChange) {
+    arrayLengthChangeListeners.add(arrayLengthChange);
+    return this;
+  }
+
   public PrimitiveBuilder constant(Object constantValue) {
     this.constantValue = constantValue;
     return this;
@@ -38,11 +42,6 @@ public final class PrimitiveBuilder {
 
   public PrimitiveBuilder lengthExpression(Expression lengthExpression) {
     this.lengthExpression = lengthExpression;
-    return this;
-  }
-
-  public PrimitiveBuilder assignment(Assignment assignment) {
-    this.assignment = assignment;
     return this;
   }
 
@@ -74,57 +73,68 @@ public final class PrimitiveBuilder {
   }
 
   public BoolType bool() {
-    return new BoolType(position, getConstantValue(Boolean.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new BoolType(position, getConstantValue(Boolean.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 
   public Int8Type int8() {
-    return new Int8Type(position, getConstantValue(Byte.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new Int8Type(position, getConstantValue(Byte.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 
   public Uint8Type uint8() {
-    return new Uint8Type(position, getConstantValue(Short.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new Uint8Type(position, getConstantValue(Short.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 
   public Int16Type int16() {
-    return new Int16Type(position, getConstantValue(Short.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new Int16Type(position, getConstantValue(Short.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 
   public Uint16Type uint16() {
-    return new Uint16Type(position, getConstantValue(Integer.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new Uint16Type(position, getConstantValue(Integer.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 
   public Int32Type int32() {
-    return new Int32Type(position, getConstantValue(Integer.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new Int32Type(position, getConstantValue(Integer.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 
   public Uint32Type uint32() {
-    return new Uint32Type(position, getConstantValue(Long.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new Uint32Type(position, getConstantValue(Long.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 
   public Int64Type int64() {
-    return new Int64Type(position, getConstantValue(Long.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new Int64Type(position, getConstantValue(Long.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 
   public Uint64Type uint64() {
-    return new Uint64Type(position, getConstantValue(BigInteger.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new Uint64Type(position, getConstantValue(BigInteger.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 
   public Float32Type float32() {
-    return new Float32Type(position, getConstantValue(Float.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new Float32Type(position, getConstantValue(Float.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 
   public Float64Type float64() {
-    return new Float64Type(position, getConstantValue(Double.class), lengthExpression, assignment)
-        .addByteLengthChangeListener(byteLengthChangeListeners);
+    return new Float64Type(position, getConstantValue(Double.class), lengthExpression)
+        .addArrayLengthChangeListeners(arrayLengthChangeListeners)
+        .addByteLengthChangeListeners(byteLengthChangeListeners);
   }
 }

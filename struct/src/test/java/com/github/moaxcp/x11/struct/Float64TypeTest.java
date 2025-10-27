@@ -3,15 +3,14 @@ package com.github.moaxcp.x11.struct;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
 import static com.github.moaxcp.x11.struct.ByteArray.ba;
 import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Float64Type.float64Type;
-import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
 import static com.github.moaxcp.x11.struct.Primitive.FLOAT64;
+import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -33,13 +32,13 @@ public class Float64TypeTest {
   void constructorEverything() {
     var struct = struct()
         .float64()
-        .primitive().constant(3.0d).lengthExpression(valueOf(0)).assignment(add(0)).float64()
+        .primitive().constant(3.0d).lengthExpression(valueOf(0)).float64()
         .align(2)
         .build();
 
     assertThat(struct.getByteLength()).isEqualTo(FLOAT64.size() + 2);
     assertThat(struct.<Float64Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(3.0d).lengthExpression(valueOf(0)).assignment(add(0)).float64());
+        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(3.0d).lengthExpression(valueOf(0)).float64());
   }
 
   @Test

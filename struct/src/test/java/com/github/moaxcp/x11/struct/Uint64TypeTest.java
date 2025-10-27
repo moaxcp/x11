@@ -5,13 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
-import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
 import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
-import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
 import static com.github.moaxcp.x11.struct.Primitive.UINT64;
+import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
 import static com.github.moaxcp.x11.struct.Uint64Type.uint64Type;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,13 +33,13 @@ public class Uint64TypeTest {
   void constructorEverything() {
     var struct = struct()
         .uint64()
-        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(valueOf(0)).assignment(add(0)).uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(valueOf(0)).uint64()
         .align(2)
         .build();
 
     assertThat(struct.getByteLength()).isEqualTo(UINT64.size() + 2);
     assertThat(struct.<Uint64Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(BigInteger.valueOf(5)).lengthExpression(valueOf(0)).assignment(add(0)).uint64());
+        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(BigInteger.valueOf(5)).lengthExpression(valueOf(0)).uint64());
   }
 
   @Test

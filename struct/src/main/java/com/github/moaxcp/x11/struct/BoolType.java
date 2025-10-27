@@ -18,8 +18,8 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
     return new BoolType(position);
   }
 
-  public BoolType(int position, @Nullable Boolean constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, BOOL, constantValue, lengthExpression, assignment);
+  public BoolType(int position, @Nullable Boolean constantValue, @Nullable Expression lengthExpression) {
+    super(position, BOOL, constantValue, lengthExpression);
   }
 
   public BoolType(int position) {
@@ -28,7 +28,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
 
   @Override
   protected BoolType copy(int position) {
-    return new BoolType(position, constantValue, lengthExpression, assignment);
+    return new BoolType(position, constantValue, lengthExpression);
   }
 
   public boolean getBoolean(Pointer<?, ? extends Type<?>> pointer) {
@@ -79,10 +79,11 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    checkIndexAllocate(pointer, index);
-    pointer.getByteArray().addBool(getOffset(pointer, index), constantValue != null ? constantValue : false);
-    if (assignment != null) {
-      assignment.assign(pointer, 1);
-    }
+    callWithArrayLengthChange(pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        pointer.getByteArray().addBool(getOffset(pointer, index), constantValue != null ? constantValue : false);
+      });
+    });
   }
 }

@@ -14,8 +14,8 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
     return new Float32Type(position);
   }
 
-  public Float32Type(int position, @Nullable Float constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, FLOAT32, constantValue, lengthExpression, assignment);
+  public Float32Type(int position, @Nullable Float constantValue, @Nullable Expression lengthExpression) {
+    super(position, FLOAT32, constantValue, lengthExpression);
   }
 
   public Float32Type(int position) {
@@ -24,7 +24,7 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
 
   @Override
   protected Float32Type copy(int position) {
-    return new Float32Type(position, constantValue, lengthExpression, assignment);
+    return new Float32Type(position, constantValue, lengthExpression);
   }
 
   public float getFloat32(Pointer<?, ? extends Type<?>> pointer) {
@@ -75,12 +75,11 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithByteLengthChange(pointer, () -> {
-      checkIndexAllocate(pointer, index);
-      pointer.getByteArray().addFloat32(getOffset(pointer, index), constantValue != null ? constantValue : 0.0f);
-      if (assignment != null) {
-        assignment.assign(pointer, 1);
-      }
+    callWithArrayLengthChange(pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        pointer.getByteArray().addFloat32(getOffset(pointer, index), constantValue != null ? constantValue : 0.0f);
+      });
     });
   }
 }

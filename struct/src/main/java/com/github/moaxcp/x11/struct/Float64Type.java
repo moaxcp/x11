@@ -14,8 +14,8 @@ public final class Float64Type extends NumberType<Float64Type, Double> {
     return new Float64Type(position);
   }
 
-  public Float64Type(int position, @Nullable Double constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, FLOAT64, constantValue, lengthExpression, assignment);
+  public Float64Type(int position, @Nullable Double constantValue, @Nullable Expression lengthExpression) {
+    super(position, FLOAT64, constantValue, lengthExpression);
   }
 
   public Float64Type(int position) {
@@ -24,7 +24,7 @@ public final class Float64Type extends NumberType<Float64Type, Double> {
 
   @Override
   protected Float64Type copy(int position) {
-    return new Float64Type(position, constantValue, lengthExpression, assignment);
+    return new Float64Type(position, constantValue, lengthExpression);
   }
 
   public double getFloat64(Pointer<?, ? extends Type<?>> pointer) {
@@ -75,12 +75,11 @@ public final class Float64Type extends NumberType<Float64Type, Double> {
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithByteLengthChange(pointer, () -> {
-      checkIndexAllocate(pointer, index);
-      pointer.getByteArray().addFloat64(getOffset(pointer, index), constantValue != null ? constantValue : 0.0d);
-      if (assignment != null) {
-        assignment.assign(pointer, 1);
-      }
+    callWithArrayLengthChange(pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        pointer.getByteArray().addFloat64(getOffset(pointer, index), constantValue != null ? constantValue : 0.0d);
+      });
     });
   }
 }

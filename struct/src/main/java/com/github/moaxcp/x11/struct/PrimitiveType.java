@@ -10,8 +10,8 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
     this.unitSize = size;
   }
 
-  PrimitiveType(int position, Primitive unitSize, T constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, constantValue, lengthExpression, assignment);
+  PrimitiveType(int position, Primitive unitSize, T constantValue, @Nullable Expression lengthExpression) {
+    super(position, constantValue, lengthExpression);
     this.unitSize = unitSize;
   }
 
@@ -85,7 +85,6 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
     return getClass().getSimpleName() + "{" +
         "unitSize=" + unitSize +
         ", lengthExpression=" + lengthExpression +
-        ", assignment=" + assignment +
         ", constantValue=" + constantValue +
         ", byteLengthChangeListeners=" + byteLengthChangeListeners +
         ", position=" + position +

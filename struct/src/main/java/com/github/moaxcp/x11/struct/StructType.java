@@ -10,14 +10,14 @@ public final class StructType extends ValueType<StructType, Struct> {
 
   private final List<Type<?>> fields;
 
-  StructType(int position, @Nullable Struct constant, @Nullable Expression lengthExpression, @Nullable Assignment assignment, List<Type<?>> fields) {
-    super(position, constant, lengthExpression, assignment);
+  StructType(int position, @Nullable Struct constant, @Nullable Expression lengthExpression, List<Type<?>> fields) {
+    super(position, constant, lengthExpression);
     this.fields = fields;
   }
 
   @Override
   public StructType copy(int position) {
-    return new StructType(position, this.constantValue, this.lengthExpression, this.assignment, new ArrayList<>(fields));
+    return new StructType(position, this.constantValue, this.lengthExpression, new ArrayList<>(fields));
   }
 
   public <V extends Type<?>> V getType(int position) {
@@ -96,11 +96,13 @@ public final class StructType extends ValueType<StructType, Struct> {
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithByteLengthChange(pointer, () -> {
-      var struct = new Struct(false, getOffset(pointer, index), this, pointer.getByteArray());
-      for (int i = 0; i < fields.size(); i++) {
-        struct.getType(i).allocate(pointer);
-      }
+    callWithArrayLengthChange(pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        var struct = new Struct(false, getOffset(pointer, index), this, pointer.getByteArray());
+        for (int i = 0; i < fields.size(); i++) {
+          struct.getType(i).allocate(pointer);
+        }
+      });
     });
   }
 
@@ -301,7 +303,6 @@ public final class StructType extends ValueType<StructType, Struct> {
     return "StructType{" +
         "fields=" + fields +
         ", lengthExpression=" + lengthExpression +
-        ", assignment=" + assignment +
         ", constantValue=" + constantValue +
         ", position=" + position +
         '}';

@@ -14,8 +14,8 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
     return new Int8Type(position);
   }
 
-  public Int8Type(int position, @Nullable Byte constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, INT8, constantValue, lengthExpression, assignment);
+  public Int8Type(int position, @Nullable Byte constantValue, @Nullable Expression lengthExpression) {
+    super(position, INT8, constantValue, lengthExpression);
   }
 
   public Int8Type(int position) {
@@ -24,7 +24,7 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
 
   @Override
   protected Int8Type copy(int position) {
-    return new Int8Type(position, constantValue, lengthExpression, assignment);
+    return new Int8Type(position, constantValue, lengthExpression);
   }
 
   public byte getInt8(Pointer<?, ? extends Type<?>> pointer) {
@@ -75,12 +75,11 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithByteLengthChange(pointer, () -> {
-      checkIndexAllocate(pointer, index);
-      pointer.getByteArray().addInt8(getOffset(pointer, index), constantValue != null ? constantValue : 0);
-      if (assignment != null) {
-        assignment.assign(pointer, 1);
-      }
+    callWithArrayLengthChange(pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        pointer.getByteArray().addInt8(getOffset(pointer, index), constantValue != null ? constantValue : 0);
+      });
     });
   }
 }

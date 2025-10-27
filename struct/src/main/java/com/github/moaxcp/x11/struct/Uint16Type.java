@@ -14,8 +14,8 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
     return new Uint16Type(position);
   }
 
-  public Uint16Type(int position, @Nullable Integer constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, UINT16, constantValue, lengthExpression, assignment);
+  public Uint16Type(int position, @Nullable Integer constantValue, @Nullable Expression lengthExpression) {
+    super(position, UINT16, constantValue, lengthExpression);
   }
 
   public Uint16Type(int position) {
@@ -24,7 +24,7 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
 
   @Override
   protected Uint16Type copy(int position) {
-    return new Uint16Type(position, constantValue, lengthExpression, assignment);
+    return new Uint16Type(position, constantValue, lengthExpression);
   }
 
   public int getUint16(Pointer<?, ? extends Type<?>> pointer) {
@@ -75,12 +75,11 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithByteLengthChange(pointer, () -> {
-      checkIndexAllocate(pointer, index);
-      pointer.getByteArray().addUint16(getOffset(pointer, index), constantValue != null ? constantValue : 0);
-      if (assignment != null) {
-        assignment.assign(pointer, 1);
-      }
+    callWithArrayLengthChange(pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        pointer.getByteArray().addUint16(getOffset(pointer, index), constantValue != null ? constantValue : 0);
+      });
     });
   }
 }

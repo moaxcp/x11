@@ -14,8 +14,8 @@ public final class Uint32Type extends NumberType<Uint32Type, Long> {
     return new Uint32Type(position);
   }
 
-  public Uint32Type(int position, @Nullable Long constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, UINT32, constantValue, lengthExpression, assignment);
+  public Uint32Type(int position, @Nullable Long constantValue, @Nullable Expression lengthExpression) {
+    super(position, UINT32, constantValue, lengthExpression);
   }
 
   public Uint32Type(int position) {
@@ -24,7 +24,7 @@ public final class Uint32Type extends NumberType<Uint32Type, Long> {
 
   @Override
   protected Uint32Type copy(int position) {
-    return new Uint32Type(position, constantValue, lengthExpression, assignment);
+    return new Uint32Type(position, constantValue, lengthExpression);
   }
 
   public long getUint32(Pointer<?, ? extends Type<?>> pointer) {
@@ -75,12 +75,11 @@ public final class Uint32Type extends NumberType<Uint32Type, Long> {
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithByteLengthChange(pointer, () -> {
-      checkIndexAllocate(pointer, index);
-      pointer.getByteArray().addUint32(getOffset(pointer, index), constantValue != null ? constantValue : 0L);
-      if (assignment != null) {
-        assignment.assign(pointer, 1);
-      }
+    callWithArrayLengthChange(pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        pointer.getByteArray().addUint32(getOffset(pointer, index), constantValue != null ? constantValue : 0L);
+      });
     });
   }
 }

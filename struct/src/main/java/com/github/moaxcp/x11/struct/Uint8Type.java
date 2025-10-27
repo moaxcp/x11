@@ -14,8 +14,8 @@ public final class Uint8Type extends NumberType<Uint8Type, Short> {
     return new Uint8Type(position);
   }
 
-  public Uint8Type(int position, @Nullable Short constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, UINT8, constantValue, lengthExpression, assignment);
+  public Uint8Type(int position, @Nullable Short constantValue, @Nullable Expression lengthExpression) {
+    super(position, UINT8, constantValue, lengthExpression);
   }
 
   public Uint8Type(int position) {
@@ -24,7 +24,7 @@ public final class Uint8Type extends NumberType<Uint8Type, Short> {
 
   @Override
   protected Uint8Type copy(int position) {
-    return new Uint8Type(position, constantValue, lengthExpression, assignment);
+    return new Uint8Type(position, constantValue, lengthExpression);
   }
 
   public short getUint8(Pointer<?, ? extends Type<?>> pointer) {
@@ -75,12 +75,11 @@ public final class Uint8Type extends NumberType<Uint8Type, Short> {
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithByteLengthChange(pointer, () -> {
-      checkIndexAllocate(pointer, index);
-      pointer.getByteArray().addUint8(getOffset(pointer, index), constantValue != null ? constantValue : 0);
-      if (assignment != null) {
-        assignment.assign(pointer, 1);
-      }
+    callWithArrayLengthChange(pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        pointer.getByteArray().addUint8(getOffset(pointer, index), constantValue != null ? constantValue : 0);
+      });
     });
   }
 }

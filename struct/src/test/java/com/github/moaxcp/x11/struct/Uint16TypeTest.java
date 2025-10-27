@@ -3,13 +3,12 @@ package com.github.moaxcp.x11.struct;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
 import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
-import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
 import static com.github.moaxcp.x11.struct.Primitive.UINT16;
+import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
 import static com.github.moaxcp.x11.struct.Uint16Type.uint16;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -32,13 +31,13 @@ public class Uint16TypeTest {
   void constructorEverything() {
     var struct = struct()
         .uint16()
-        .primitive().constant(5).lengthExpression(valueOf(0)).assignment(add(0)).uint16()
+        .primitive().constant(5).lengthExpression(valueOf(0)).uint16()
         .align(2)
         .build();
 
     assertThat(struct.getByteLength()).isEqualTo(UINT16.size() + 2);
     assertThat(struct.<Uint16Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(5).lengthExpression(valueOf(0)).assignment(add(0)).uint16());
+        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(5).lengthExpression(valueOf(0)).uint16());
   }
 
   @Test

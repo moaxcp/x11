@@ -21,17 +21,12 @@ public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARE
 
   public StructTypePrimitiveSubBuilder<PARENT> lengthField(int lengthFieldPosition) {
     primitiveBuilder.lengthExpression(Expression.valueOf(lengthFieldPosition));
-    primitiveBuilder.assignment(Assignment.add(lengthFieldPosition));
+    primitiveBuilder.arrayLengthChange(ArrayLengthChangeListener.lengthField(lengthFieldPosition));
     return this;
   }
 
   public StructTypePrimitiveSubBuilder<PARENT> lengthExpression(Expression lengthExpression) {
     primitiveBuilder.lengthExpression(lengthExpression);
-    return this;
-  }
-
-  public StructTypePrimitiveSubBuilder<PARENT> assignment(Assignment assignment) {
-    primitiveBuilder.assignment(assignment);
     return this;
   }
 

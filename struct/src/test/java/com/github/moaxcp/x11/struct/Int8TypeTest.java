@@ -3,7 +3,6 @@ package com.github.moaxcp.x11.struct;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.x11.struct.Assignment.add;
 import static com.github.moaxcp.x11.struct.Builders.struct;
 import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
@@ -32,13 +31,13 @@ public class Int8TypeTest {
   void constructorEverything() {
     var struct = struct()
         .int8()
-        .primitive().constant((byte) 5).lengthExpression(valueOf(0)).assignment(add(0)).int8()
+        .primitive().constant((byte) 5).lengthExpression(valueOf(0)).int8()
         .align(2)
         .build();
 
     assertThat(struct.getByteLength()).isEqualTo(INT8.size() + 2);
     assertThat(struct.<Int8Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant((byte) 5).lengthExpression(valueOf(0)).assignment(add(0)).int8());
+        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant((byte) 5).lengthExpression(valueOf(0)).int8());
   }
 
   @Test

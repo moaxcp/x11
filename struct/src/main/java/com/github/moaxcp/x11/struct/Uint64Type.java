@@ -16,8 +16,8 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
     return new Uint64Type(position);
   }
 
-  public Uint64Type(int position, @Nullable BigInteger constantValue, @Nullable Expression lengthExpression, @Nullable Assignment assignment) {
-    super(position, UINT64, constantValue, lengthExpression, assignment);
+  public Uint64Type(int position, @Nullable BigInteger constantValue, @Nullable Expression lengthExpression) {
+    super(position, UINT64, constantValue, lengthExpression);
   }
 
   public Uint64Type(int position) {
@@ -26,7 +26,7 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
 
   @Override
   protected Uint64Type copy(int position) {
-    return new Uint64Type(position, constantValue, lengthExpression, assignment);
+    return new Uint64Type(position, constantValue, lengthExpression);
   }
 
   public BigInteger getUint64(Pointer<?, ? extends Type<?>> pointer) {
@@ -77,12 +77,11 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithByteLengthChange(pointer, () -> {
-      checkIndexAllocate(pointer, index);
-      pointer.getByteArray().addUint64(getOffset(pointer, index), constantValue != null ? constantValue : BigInteger.ZERO);
-      if (assignment != null) {
-        assignment.assign(pointer, 1);
-      }
+    callWithArrayLengthChange(pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        pointer.getByteArray().addUint64(getOffset(pointer, index), constantValue != null ? constantValue : BigInteger.ZERO);
+      });
     });
   }
 }
