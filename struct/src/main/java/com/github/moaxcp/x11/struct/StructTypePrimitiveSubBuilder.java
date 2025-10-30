@@ -9,8 +9,8 @@ public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARE
     primitiveBuilder = new PrimitiveBuilder().position(position);
   }
 
-  public StructTypePrimitiveSubBuilder<PARENT> byteLengthChange(ByteLengthChangeListener byteLengthChange) {
-    primitiveBuilder.byteLengthChange(byteLengthChange);
+  public StructTypePrimitiveSubBuilder<PARENT> byteLengthChange(ByteLengthListener byteLengthChange) {
+    primitiveBuilder.byteLengthListener(byteLengthChange);
     return this;
   }
 
@@ -21,12 +21,28 @@ public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARE
 
   public StructTypePrimitiveSubBuilder<PARENT> lengthField(int lengthFieldPosition) {
     primitiveBuilder.lengthExpression(Expression.valueOf(lengthFieldPosition));
-    primitiveBuilder.arrayLengthChange(ArrayLengthChangeListener.lengthField(lengthFieldPosition));
+    primitiveBuilder.arrayLengthListener(ArrayLengthListener.lengthField(lengthFieldPosition));
+    ((ValueType<?, ?>) structTypeBuilder.getField(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(structTypeBuilder.fields()));
     return this;
   }
 
   public StructTypePrimitiveSubBuilder<PARENT> lengthExpression(Expression lengthExpression) {
     primitiveBuilder.lengthExpression(lengthExpression);
+    return this;
+  }
+
+  public StructTypePrimitiveSubBuilder<PARENT> arrayLengthListener(ArrayLengthListener arrayLengthListener) {
+    primitiveBuilder.arrayLengthListener(arrayLengthListener);
+    return this;
+  }
+
+  public StructTypePrimitiveSubBuilder<PARENT> byteLengthListener(ByteLengthListener byteLengthListener) {
+    primitiveBuilder.byteLengthListener(byteLengthListener);
+    return this;
+  }
+
+  public StructTypePrimitiveSubBuilder<PARENT> valueListener(ValueChangeListener valueChangeListener) {
+    primitiveBuilder.valueListener(valueChangeListener);
     return this;
   }
 

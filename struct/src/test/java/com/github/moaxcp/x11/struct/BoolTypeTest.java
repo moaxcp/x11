@@ -1,10 +1,10 @@
 package com.github.moaxcp.x11.struct;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Builders.struct;
-import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
+import static com.github.moaxcp.x11.struct.ByteArray.ba;
+import static com.github.moaxcp.x11.struct.ByteLengthListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Primitive.BOOL;
@@ -36,7 +36,7 @@ public class BoolTypeTest {
 
     assertThat(struct.getByteLength()).isEqualTo(BOOL.size() + 2);
     assertThat(struct.<BoolType>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(true).lengthExpression(valueOf(0)).bool());
+        .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(true).lengthExpression(valueOf(0)).bool());
   }
 
   @Test
@@ -323,16 +323,25 @@ public class BoolTypeTest {
   }
 
   @Test
-  @Disabled
-  void setBoolArray_set_length_field_without_adding_to_array() {
+  void setBoolArray_set_length_field_extends_array() {
     var struct = struct()
         .int8()
         .boolArray(0)
         .build();
 
-    assertThatThrownBy(() -> struct.setBool(0, true))
-        .isInstanceOf(AssertionError.class)
-        .hasMessage("BoolType at position 0 is being set and will not match the array it is used as a length for.");
+    struct.setInt8(0, (byte) 1);
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8((byte) 1).bool(false));
+  }
+
+  @Test
+  void setBoolArray_set_length_field_extends_array_with_constant() {
+    var struct = struct()
+        .int8()
+        .primitive().lengthField(0).constant(true).bool()
+        .build();
+
+    struct.setInt8(0, (byte) 1);
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8((byte) 1).bool(true));
   }
 
   @Test

@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11.struct;
 
+import com.github.moaxcp.x11.struct.ArrayLengthListener.Reason;
 import org.jspecify.annotations.Nullable;
 
 import static com.github.moaxcp.x11.struct.Primitive.INT16;
@@ -47,6 +48,11 @@ public final class Int16Type extends NumberType<Int16Type, Short> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
     checkConstant(pointer, index, value);
+    if (!valueChangeListeners.isEmpty()) {
+      var old = pointer.getByteArray().getInt16(getOffset(pointer, index));
+      pointer.getByteArray().setInt16(getOffset(pointer, index), value);
+      notifyValueChange(pointer, index, old, value);
+    }
     pointer.getByteArray().setInt16(getOffset(pointer, index), value);
   }
 
@@ -74,8 +80,8 @@ public final class Int16Type extends NumberType<Int16Type, Short> {
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithArrayLengthChange(pointer, 1, () -> {
+  protected void allocate(Reason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(pointer, () -> {
         checkIndexAllocate(pointer, index);
         pointer.getByteArray().addInt16(getOffset(pointer, index), constantValue != null ? constantValue : 0);

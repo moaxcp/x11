@@ -1,15 +1,15 @@
 package com.github.moaxcp.x11.struct;
 
 @FunctionalInterface
-public interface ByteLengthChangeListener {
-  static ByteLengthChangeListener align(int alignPosition) {
-    return new AlignByteChangeListener(alignPosition);
+public interface ByteLengthListener {
+  static ByteLengthListener align(int alignPosition) {
+    return new AlignByteListener(alignPosition);
   }
 
-  class AlignByteChangeListener implements ByteLengthChangeListener {
+  class AlignByteListener implements ByteLengthListener {
     private final int alignPosition;
 
-    public AlignByteChangeListener(int alignPosition) {
+    public AlignByteListener(int alignPosition) {
       this.alignPosition = alignPosition;
     }
 
@@ -29,7 +29,7 @@ public interface ByteLengthChangeListener {
     public boolean equals(Object o) {
       if (o == null || getClass() != o.getClass()) return false;
 
-      AlignByteChangeListener that = (AlignByteChangeListener) o;
+      AlignByteListener that = (AlignByteListener) o;
       return alignPosition == that.alignPosition;
     }
 

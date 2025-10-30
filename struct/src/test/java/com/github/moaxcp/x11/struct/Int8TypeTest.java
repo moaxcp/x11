@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Builders.struct;
-import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
+import static com.github.moaxcp.x11.struct.ByteLengthListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Int8Type.int8;
@@ -37,7 +37,7 @@ public class Int8TypeTest {
 
     assertThat(struct.getByteLength()).isEqualTo(INT8.size() + 2);
     assertThat(struct.<Int8Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant((byte) 5).lengthExpression(valueOf(0)).int8());
+        .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant((byte) 5).lengthExpression(valueOf(0)).int8());
   }
 
   @Test

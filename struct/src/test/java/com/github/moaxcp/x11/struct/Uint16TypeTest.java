@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Builders.struct;
-import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
+import static com.github.moaxcp.x11.struct.ByteLengthListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Primitive.UINT16;
@@ -37,7 +37,7 @@ public class Uint16TypeTest {
 
     assertThat(struct.getByteLength()).isEqualTo(UINT16.size() + 2);
     assertThat(struct.<Uint16Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(5).lengthExpression(valueOf(0)).uint16());
+        .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(5).lengthExpression(valueOf(0)).uint16());
   }
 
   @Test

@@ -5,7 +5,7 @@ import org.jspecify.annotations.Nullable;
 public class StructTypePadBuilder {
   private int position;
   @Nullable
-  private ByteLengthChangeListener byteLengthChange;
+  private ByteLengthListener byteLengthChange;
   private long length;
 
   public StructTypePadBuilder position(int position) {
@@ -13,7 +13,7 @@ public class StructTypePadBuilder {
     return this;
   }
 
-  public StructTypePadBuilder byteLengthChange(ByteLengthChangeListener byteLengthChange) {
+  public StructTypePadBuilder byteLengthChange(ByteLengthListener byteLengthChange) {
     this.byteLengthChange = byteLengthChange;
     return this;
   }

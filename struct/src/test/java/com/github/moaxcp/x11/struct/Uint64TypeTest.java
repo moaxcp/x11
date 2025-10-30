@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigInteger;
 
 import static com.github.moaxcp.x11.struct.Builders.struct;
-import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
+import static com.github.moaxcp.x11.struct.ByteLengthListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Primitive.UINT64;
@@ -39,7 +39,7 @@ public class Uint64TypeTest {
 
     assertThat(struct.getByteLength()).isEqualTo(UINT64.size() + 2);
     assertThat(struct.<Uint64Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(BigInteger.valueOf(5)).lengthExpression(valueOf(0)).uint64());
+        .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(BigInteger.valueOf(5)).lengthExpression(valueOf(0)).uint64());
   }
 
   @Test

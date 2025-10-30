@@ -1,22 +1,32 @@
 package com.github.moaxcp.x11.struct;
 
+import org.jspecify.annotations.Nullable;
+
 import java.math.BigInteger;
 
 @FunctionalInterface
-public interface ArrayLengthChangeListener {
-  static ArrayLengthChangeListener lengthField(int position) {
-    return new SetLengthFieldChangeListener(position);
+public interface ArrayLengthListener {
+  enum Reason {
+    ARRAY_LENGTH,
+    LENGTH_FIELD
   }
 
-  class SetLengthFieldChangeListener implements ArrayLengthChangeListener {
+  static ArrayLengthListener lengthField(int position) {
+    return new SetLengthFieldListener(position);
+  }
+
+  class SetLengthFieldListener implements ArrayLengthListener {
     private final int position;
 
-    public SetLengthFieldChangeListener(int position) {
+    public SetLengthFieldListener(int position) {
       this.position = position;
     }
 
     @Override
-    public void arrayLengthChanged(Pointer<?, ? extends Type<?>> pointer, long previous, long current) {
+    public void arrayLengthChanged(Reason reason, Pointer<?, ? extends Type<?>> pointer, long previous, long current) {
+      if(reason == Reason.LENGTH_FIELD) {
+        return;
+      }
       switch (((NumberType) pointer.getType(position))) {
         case Float32Type t -> t.set(pointer, (float) current);
         case Float64Type t -> t.set(pointer, (double) current);
@@ -42,7 +52,7 @@ public interface ArrayLengthChangeListener {
     public boolean equals(Object o) {
       if (o == null || getClass() != o.getClass()) return false;
 
-      SetLengthFieldChangeListener that = (SetLengthFieldChangeListener) o;
+      SetLengthFieldListener that = (SetLengthFieldListener) o;
       return position == that.position;
     }
 
@@ -52,5 +62,5 @@ public interface ArrayLengthChangeListener {
     }
   }
 
-  void arrayLengthChanged(Pointer<?, ? extends Type<?>> pointer, long previous, long current);
+  void arrayLengthChanged(@Nullable Reason reason, Pointer<?, ? extends Type<?>> pointer, long previous, long current);
 }

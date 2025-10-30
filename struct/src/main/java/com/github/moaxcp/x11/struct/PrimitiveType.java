@@ -86,7 +86,7 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
         "unitSize=" + unitSize +
         ", lengthExpression=" + lengthExpression +
         ", constantValue=" + constantValue +
-        ", byteLengthChangeListeners=" + byteLengthChangeListeners +
+        ", byteLengthChangeListeners=" + byteLengthListeners +
         ", position=" + position +
         '}';
   }

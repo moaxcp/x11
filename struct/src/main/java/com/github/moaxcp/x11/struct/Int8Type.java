@@ -1,7 +1,9 @@
 package com.github.moaxcp.x11.struct;
 
+import com.github.moaxcp.x11.struct.ArrayLengthListener.Reason;
 import org.jspecify.annotations.Nullable;
 
+import static com.github.moaxcp.x11.struct.ArrayLengthListener.Reason.ARRAY_LENGTH;
 import static com.github.moaxcp.x11.struct.Primitive.INT8;
 
 public final class Int8Type extends NumberType<Int8Type, Byte> {
@@ -47,6 +49,11 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
     checkConstant(pointer, index, value);
+    if (!valueChangeListeners.isEmpty()) {
+      var old = pointer.getByteArray().getInt8(getOffset(pointer, index));
+      pointer.getByteArray().setInt8(getOffset(pointer, index), value);
+      notifyValueChange(pointer, index, old, value);
+    }
     pointer.getByteArray().setInt8(getOffset(pointer, index), value);
   }
 
@@ -74,8 +81,8 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithArrayLengthChange(pointer, 1, () -> {
+  protected void allocate(Reason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+    callWithArrayLengthChange(ARRAY_LENGTH, pointer, 1, () -> {
       callWithByteLengthChange(pointer, () -> {
         checkIndexAllocate(pointer, index);
         pointer.getByteArray().addInt8(getOffset(pointer, index), constantValue != null ? constantValue : 0);

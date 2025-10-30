@@ -30,7 +30,7 @@ public class ByteArrayAddAllTest {
     bytes.addAll(values);
 
     long idx = 0;
-    assertThat(bytes.bool(idx)).isTrue();
+    assertThat(bytes.getBool(idx)).isTrue();
     idx += Primitive.BOOL.size();
 
     assertThat(bytes.getInt8(idx)).isEqualTo((byte) -5);
@@ -82,7 +82,7 @@ public class ByteArrayAddAllTest {
     ByteArray bytes = ByteArray.byteArray(values);
 
     long idx = 0;
-    assertThat(bytes.bool(idx)).isTrue();
+    assertThat(bytes.getBool(idx)).isTrue();
     idx += Primitive.BOOL.size();
 
     assertThat(bytes.getInt8(idx)).isEqualTo((byte) 7);

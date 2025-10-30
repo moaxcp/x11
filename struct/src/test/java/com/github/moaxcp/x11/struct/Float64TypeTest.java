@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Builders.struct;
 import static com.github.moaxcp.x11.struct.ByteArray.ba;
-import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
+import static com.github.moaxcp.x11.struct.ByteLengthListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Float64Type.float64Type;
@@ -38,7 +38,7 @@ public class Float64TypeTest {
 
     assertThat(struct.getByteLength()).isEqualTo(FLOAT64.size() + 2);
     assertThat(struct.<Float64Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(3.0d).lengthExpression(valueOf(0)).float64());
+        .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(3.0d).lengthExpression(valueOf(0)).float64());
   }
 
   @Test

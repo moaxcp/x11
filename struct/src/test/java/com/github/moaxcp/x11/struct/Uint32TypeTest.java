@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Builders.struct;
-import static com.github.moaxcp.x11.struct.ByteLengthChangeListener.align;
+import static com.github.moaxcp.x11.struct.ByteLengthListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Primitive.UINT32;
@@ -37,7 +37,7 @@ public class Uint32TypeTest {
 
     assertThat(struct.getByteLength()).isEqualTo(UINT32.size() + 2);
     assertThat(struct.<Uint32Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthChange(align(2)).constant(5L).lengthExpression(valueOf(0)).uint32());
+        .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(5L).lengthExpression(valueOf(0)).uint32());
   }
 
   @Test

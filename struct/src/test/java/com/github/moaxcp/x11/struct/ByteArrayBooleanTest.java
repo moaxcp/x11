@@ -13,11 +13,11 @@ public class ByteArrayBooleanTest {
   void bool_overwrite() {
     var bytes = new ByteArray(new byte[] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1});
     for (int i = 0; i < 10; i++) {
-      bytes.bool(i, i % 2 == 0);
+      bytes.setBool(i, i % 2 == 0);
     }
     assertThat(bytes.getBytes()).isEqualTo(new byte[] {1, 0, 1, 0, 1, 0, 1, 0, 1, 0});
     for (int i = 0; i < 10; i++) {
-      assertThat(bytes.bool(i)).isEqualTo(i % 2 == 0);
+      assertThat(bytes.getBool(i)).isEqualTo(i % 2 == 0);
     }
   }
 

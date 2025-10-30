@@ -99,18 +99,22 @@ public class ByteArray {
     return this;
   }
 
-  public boolean bool(long index) {
+  public boolean getBool(long index) {
     return serializer.readBoolean(bytes, Math.toIntExact(index));
   }
 
-  public ByteArray bool(long index, boolean value) {
+  public ByteArray setBool(long index, boolean value) {
     serializer.writeBoolean(bytes, Math.toIntExact(index), value);
     return this;
   }
 
+  public ByteArray bool(boolean value) {
+    return addBool(bytes.length, value);
+  }
+
   public ByteArray addBool(long index, boolean value) {
     shiftBytesFor(index, BOOL.size());
-    bool(index, value);
+    setBool(index, value);
     return this;
   }
 

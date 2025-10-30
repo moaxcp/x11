@@ -6,8 +6,9 @@ import java.util.List;
 public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   private int position;
-  private final List<ByteLengthChangeListener> byteLengthChangeListeners = new ArrayList<>();
-  private final List<ArrayLengthChangeListener> arrayLengthChangeListeners = new ArrayList<>();
+  private final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
+  private final List<ArrayLengthListener> arrayLengthListeners = new ArrayList<>();
+  private final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
   private Expression lengthExpression;
   private Struct constant;
   private final List<Type<?>> fields = new ArrayList<>();
@@ -16,24 +17,34 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return fields.size();
   }
 
+  public Type<?> getField(int position) {
+    return fields.get(position);
+  }
+
   public SELF position(int position) {
     this.position = position;
     return (SELF) this;
   }
 
-  public SELF byteLengthChange(ByteLengthChangeListener byteLengthChange) {
-    byteLengthChangeListeners.add(byteLengthChange);
+  public SELF byteLengthListener(ByteLengthListener listener) {
+    byteLengthListeners.add(listener);
     return (SELF) this;
   }
 
-  public SELF arrayLengthChange(ArrayLengthChangeListener arrayLengthChange) {
-    arrayLengthChangeListeners.add(arrayLengthChange);
+  public SELF arrayLengthListener(ArrayLengthListener listener) {
+    arrayLengthListeners.add(listener);
+    return (SELF) this;
+  }
+
+  public SELF valueListener(ValueChangeListener listener) {
+    valueChangeListeners.add(listener);
     return (SELF) this;
   }
 
   public SELF lengthField(int lengthFieldPosition) {
     this.lengthExpression = Expression.valueOf(lengthFieldPosition);
-    this.arrayLengthChangeListeners.add(ArrayLengthChangeListener.lengthField(lengthFieldPosition));
+    this.arrayLengthListeners.add(ArrayLengthListener.lengthField(lengthFieldPosition));
+    ((ValueType<?, ?>) fields.get(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(lengthFieldPosition));
     return (SELF) this;
   }
 
@@ -54,7 +65,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     if (type instanceof PadType p && p.isAlign()) {
       var previous = fields.getLast();
       fields.add(type);
-      previous.addByteLengthChangeListener(ByteLengthChangeListener.align(type.getPosition()));
+      previous.addByteLengthChangeListener(ByteLengthListener.align(type.getPosition()));
     } else {
       fields.add(type);
     }
@@ -213,8 +224,9 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   public StructType toStructType() {
     var type = new StructType(position, constant, lengthExpression, fields);
-    type.addByteLengthChangeListeners(byteLengthChangeListeners);
-    type.addArrayLengthChangeListeners(arrayLengthChangeListeners);
+    type.addByteLengthChangeListeners(byteLengthListeners);
+    type.addArrayLengthChangeListeners(arrayLengthListeners);
+    type.addValueChangeListeners(valueChangeListeners);
     return type;
   }
 }

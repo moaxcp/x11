@@ -1,5 +1,6 @@
 package com.github.moaxcp.x11.struct;
 
+import com.github.moaxcp.x11.struct.ArrayLengthListener.Reason;
 import org.jspecify.annotations.Nullable;
 
 import static com.github.moaxcp.x11.struct.Primitive.BOOL;
@@ -32,12 +33,12 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   }
 
   public boolean getBoolean(Pointer<?, ? extends Type<?>> pointer) {
-    return pointer.getByteArray().bool(getOffset(pointer));
+    return pointer.getByteArray().getBool(getOffset(pointer));
   }
 
   public boolean getBoolean(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
-    return pointer.getByteArray().bool(getOffset(pointer, index));
+    return pointer.getByteArray().getBool(getOffset(pointer, index));
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, boolean value) {
@@ -51,7 +52,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
 
   private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
     checkConstant(pointer, index, value);
-    pointer.getByteArray().bool(getOffset(pointer, index), value);
+    pointer.getByteArray().setBool(getOffset(pointer, index), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, boolean value) {
@@ -78,8 +79,8 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   }
 
   @Override
-  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithArrayLengthChange(pointer, 1, () -> {
+  protected void allocate(Reason reason,  Pointer<?, ? extends Type<?>> pointer, long index) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(pointer, () -> {
         checkIndexAllocate(pointer, index);
         pointer.getByteArray().addBool(getOffset(pointer, index), constantValue != null ? constantValue : false);

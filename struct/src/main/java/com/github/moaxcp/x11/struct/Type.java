@@ -6,7 +6,7 @@ import java.util.List;
 
 public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, ValueType {
   protected final int position;
-  protected List<ByteLengthChangeListener> byteLengthChangeListeners = new ArrayList<>();
+  protected List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
 
   public Type(int position) {
     this.position = position;
@@ -14,13 +14,13 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
 
   protected abstract SELF copy(int position);
 
-  public final SELF addByteLengthChangeListener(ByteLengthChangeListener listener) {
-    byteLengthChangeListeners.add(listener);
+  public final SELF addByteLengthChangeListener(ByteLengthListener listener) {
+    byteLengthListeners.add(listener);
     return (SELF) this;
   }
 
-  public final SELF addByteLengthChangeListeners(List<ByteLengthChangeListener> listeners) {
-    byteLengthChangeListeners.addAll(listeners);
+  public final SELF addByteLengthChangeListeners(List<ByteLengthListener> listeners) {
+    byteLengthListeners.addAll(listeners);
     return (SELF) this;
   }
 
@@ -49,11 +49,11 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
   public abstract void allocate(Pointer<?, ? extends Type<?>> pointer);
 
   protected final void notifyByteLengthChange(Pointer<?, ? extends Type<?>> pointer, long previousLength, long currentLength) {
-    byteLengthChangeListeners.forEach(b -> b.byteLengthChanged(pointer, previousLength, currentLength));
+    byteLengthListeners.forEach(b -> b.byteLengthChanged(pointer, previousLength, currentLength));
   }
 
   protected void callWithByteLengthChange(Pointer<?, ? extends Type<?>> pointer, Runnable runnable) {
-    if (byteLengthChangeListeners.isEmpty()) {
+    if (byteLengthListeners.isEmpty()) {
       runnable.run();
       return;
     }
@@ -68,13 +68,13 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
     if (o == null || getClass() != o.getClass()) return false;
 
     Type<?> type = (Type<?>) o;
-    return position == type.position && byteLengthChangeListeners.equals(type.byteLengthChangeListeners);
+    return position == type.position && byteLengthListeners.equals(type.byteLengthListeners);
   }
 
   @Override
   public int hashCode() {
     int result = position;
-    result = 31 * result + byteLengthChangeListeners.hashCode();
+    result = 31 * result + byteLengthListeners.hashCode();
     return result;
   }
 }
