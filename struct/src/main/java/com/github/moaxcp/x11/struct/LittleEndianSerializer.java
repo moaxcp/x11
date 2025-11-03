@@ -4,32 +4,81 @@ import java.math.BigInteger;
 
 public class LittleEndianSerializer implements Serializer {
 
-  public boolean readBoolean(byte[] bytes, int index) {
+  public boolean readBool(byte[] bytes, int index) {
     return (bytes[index] & 0xFF) != 0;
   }
+  
+  public boolean[] readBool(byte[] bytes, int index, int length) {
+    boolean[] out = new boolean[length];
+    for (int i = 0; i < length; i++) {
+      out[i] = (bytes[index + i] & 0xFF) != 0;
+    }
+    return out;
+  }
 
-  public void writeBoolean(byte[] bytes, int index, boolean value) {
+  public void writeBool(byte[] bytes, int index, boolean value) {
     bytes[index] = (byte) (value ? 1 : 0);
+  }
+
+  public void writeBool(byte[] bytes, int index, boolean[] values) {
+    for (int i = 0; i < values.length; i++) {
+      bytes[index + i] = (byte) (values[i] ? 1 : 0);
+    }
   }
 
   public byte readInt8(byte[] bytes, int index) {
     return bytes[index];
   }
 
+  public byte[] readInt8(byte[] bytes, int index, int length) {
+    byte[] out = new byte[length];
+    System.arraycopy(bytes, index, out, 0, length);
+    return out;
+  }
+
   public void writeInt8(byte[] bytes, int index, byte b) {
     bytes[index] = b;
+  }
+
+  public void writeInt8(byte[] bytes, int index, byte[] values) {
+    System.arraycopy(values, 0, bytes, index, values.length);
   }
 
   public short readUint8(byte[] bytes, int index) {
     return (short) (bytes[index] & 0xFF);
   }
 
+  public short[] readUint8(byte[] bytes, int index, int length) {
+    short[] out = new short[length];
+    for (int i = 0; i < length; i++) {
+      out[i] = (short) (bytes[index + i] & 0xFF);
+    }
+    return out;
+  }
+
   public void writeUint8(byte[] bytes, int index, short b) {
     bytes[index] = (byte) (b & 0xFF);
   }
 
+  public void writeUint8(byte[] bytes, int index, short[] values) {
+    for (int i = 0; i < values.length; i++) {
+      bytes[index + i] = (byte) (values[i] & 0xFF);
+    }
+  }
+
   public short readInt16(byte[] bytes, int index) {
     return (short) ((bytes[index] & 0xFF) | ((bytes[index + 1] & 0xFF) << 8));
+  }
+
+  public short[] readInt16(byte[] bytes, int index, int length) {
+    short[] out = new short[length];
+    int pos = index;
+    for (int i = 0; i < length; i++) {
+      int b0 = bytes[pos++] & 0xFF;
+      int b1 = bytes[pos++] & 0xFF;
+      out[i] = (short) (b0 | (b1 << 8));
+    }
+    return out;
   }
 
   public void writeInt16(byte[] bytes, int index, short s) {
@@ -37,13 +86,40 @@ public class LittleEndianSerializer implements Serializer {
     bytes[index + 1] = (byte) (s >> 8);
   }
 
+  public void writeInt16(byte[] bytes, int index, short[] values) {
+    int pos = index;
+    for (short v : values) {
+      bytes[pos++] = (byte) v;
+      bytes[pos++] = (byte) (v >> 8);
+    }
+  }
+
   public int readUint16(byte[] bytes, int index) {
     return (bytes[index] & 0xFF) | ((bytes[index + 1] & 0xFF) << 8);
+  }
+
+  public int[] readUint16(byte[] bytes, int index, int length) {
+    int[] out = new int[length];
+    int pos = index;
+    for (int i = 0; i < length; i++) {
+      int b0 = bytes[pos++] & 0xFF;
+      int b1 = bytes[pos++] & 0xFF;
+      out[i] = b0 | (b1 << 8);
+    }
+    return out;
   }
 
   public void writeUint16(byte[] bytes, int index, int value) {
     bytes[index] = (byte) value;
     bytes[index + 1] = (byte) (value >> 8);
+  }
+
+  public void writeUint16(byte[] bytes, int index, int[] values) {
+    int pos = index;
+    for (int v : values) {
+      bytes[pos++] = (byte) v;
+      bytes[pos++] = (byte) (v >> 8);
+    }
   }
 
   public int readInt32(byte[] bytes, int index) {
@@ -53,11 +129,34 @@ public class LittleEndianSerializer implements Serializer {
         | ((bytes[index + 3] & 0xFF) << 24);
   }
 
+  public int[] readInt32(byte[] bytes, int index, int length) {
+    int[] out = new int[length];
+    int pos = index;
+    for (int i = 0; i < length; i++) {
+      int b0 = bytes[pos++] & 0xFF;
+      int b1 = bytes[pos++] & 0xFF;
+      int b2 = bytes[pos++] & 0xFF;
+      int b3 = bytes[pos++] & 0xFF;
+      out[i] = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24);
+    }
+    return out;
+  }
+
   public void writeInt32(byte[] bytes, int index, int value) {
     bytes[index] = (byte) value;
     bytes[index + 1] = (byte) (value >> 8);
     bytes[index + 2] = (byte) (value >> 16);
     bytes[index + 3] = (byte) (value >> 24);
+  }
+
+  public void writeInt32(byte[] bytes, int index, int[] values) {
+    int pos = index;
+    for (int v : values) {
+      bytes[pos++] = (byte) v;
+      bytes[pos++] = (byte) (v >> 8);
+      bytes[pos++] = (byte) (v >> 16);
+      bytes[pos++] = (byte) (v >> 24);
+    }
   }
 
   public long readUint32(byte[] bytes, int index) {
@@ -67,11 +166,34 @@ public class LittleEndianSerializer implements Serializer {
         | ((long) (bytes[index + 3] & 0xFF) << 24);
   }
 
+  public long[] readUint32(byte[] bytes, int index, int length) {
+    long[] out = new long[length];
+    int pos = index;
+    for (int i = 0; i < length; i++) {
+      long b0 = bytes[pos++] & 0xFFL;
+      long b1 = bytes[pos++] & 0xFFL;
+      long b2 = bytes[pos++] & 0xFFL;
+      long b3 = bytes[pos++] & 0xFFL;
+      out[i] = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24);
+    }
+    return out;
+  }
+
   public void writeUint32(byte[] bytes, int index, long value) {
     bytes[index] = (byte) value;
     bytes[index + 1] = (byte) (value >> 8);
     bytes[index + 2] = (byte) (value >> 16);
     bytes[index + 3] = (byte) (value >> 24);
+  }
+
+  public void writeUint32(byte[] bytes, int index, long[] values) {
+    int pos = index;
+    for (long v : values) {
+      bytes[pos++] = (byte) v;
+      bytes[pos++] = (byte) (v >> 8);
+      bytes[pos++] = (byte) (v >> 16);
+      bytes[pos++] = (byte) (v >> 24);
+    }
   }
 
   public long readInt64(byte[] bytes, int index) {
@@ -85,6 +207,24 @@ public class LittleEndianSerializer implements Serializer {
         | ((long) (bytes[index + 7] & 0xFF) << 56);
   }
 
+  public long[] readInt64(byte[] bytes, int index, int length) {
+    long[] out = new long[length];
+    int pos = index;
+    for (int i = 0; i < length; i++) {
+      long b0 = bytes[pos++] & 0xFFL;
+      long b1 = bytes[pos++] & 0xFFL;
+      long b2 = bytes[pos++] & 0xFFL;
+      long b3 = bytes[pos++] & 0xFFL;
+      long b4 = bytes[pos++] & 0xFFL;
+      long b5 = bytes[pos++] & 0xFFL;
+      long b6 = bytes[pos++] & 0xFFL;
+      long b7 = bytes[pos++] & 0xFFL;
+      out[i] = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
+          | (b4 << 32) | (b5 << 40) | (b6 << 48) | (b7 << 56);
+    }
+    return out;
+  }
+
   public void writeInt64(byte[] bytes, int index, long value) {
     bytes[index] = (byte) value;
     bytes[index + 1] = (byte) (value >> 8);
@@ -96,8 +236,21 @@ public class LittleEndianSerializer implements Serializer {
     bytes[index + 7] = (byte) (value >> 56);
   }
 
+  public void writeInt64(byte[] bytes, int index, long[] values) {
+    int pos = index;
+    for (long v : values) {
+      bytes[pos++] = (byte) v;
+      bytes[pos++] = (byte) (v >> 8);
+      bytes[pos++] = (byte) (v >> 16);
+      bytes[pos++] = (byte) (v >> 24);
+      bytes[pos++] = (byte) (v >> 32);
+      bytes[pos++] = (byte) (v >> 40);
+      bytes[pos++] = (byte) (v >> 48);
+      bytes[pos++] = (byte) (v >> 56);
+    }
+  }
+
   public BigInteger readUint64(byte[] bytes, int index) {
-    // Convert little-endian 8 bytes to big-endian for BigInteger constructor
     byte[] be = new byte[8];
     for (int i = 0; i < 8; i++) {
       be[i] = bytes[index + (7 - i)];
@@ -105,13 +258,25 @@ public class LittleEndianSerializer implements Serializer {
     return new BigInteger(1, be);
   }
 
-  public void writeUint64(byte[] bytes, int index, BigInteger value) {
-    byte[] mag = value.toByteArray(); // big-endian two's-complement
-    int srcPos = Math.max(0, mag.length - 8);
-    int length = mag.length - srcPos; // up to 8
-    // Write least-significant first
+  public BigInteger[] readUint64(byte[] bytes, int index, int length) {
+    BigInteger[] out = new BigInteger[length];
+    int pos = index;
     for (int i = 0; i < length; i++) {
-      // mag[mag.length - 1 - i] is the i-th least-significant byte
+      byte[] be = new byte[8];
+      for (int j = 0; j < 8; j++) {
+        be[j] = bytes[pos + (7 - j)];
+      }
+      out[i] = new BigInteger(1, be);
+      pos += 8;
+    }
+    return out;
+  }
+
+  public void writeUint64(byte[] bytes, int index, BigInteger value) {
+    byte[] mag = value.toByteArray();
+    int srcPos = Math.max(0, mag.length - 8);
+    int length = mag.length - srcPos;
+    for (int i = 0; i < length; i++) {
       bytes[index + i] = mag[mag.length - 1 - i];
     }
     for (int i = length; i < 8; i++) {
@@ -119,23 +284,95 @@ public class LittleEndianSerializer implements Serializer {
     }
   }
 
-  public float readFloat(byte[] bytes, int index) {
-    int bits = readInt32(bytes, index);
+  public void writeUint64(byte[] bytes, int index, BigInteger[] values) {
+    int pos = index;
+    for (BigInteger v : values) {
+      writeUint64(bytes, pos, v);
+      pos += 8;
+    }
+  }
+
+  public float readFloat32(byte[] bytes, int index) {
+    int b0 = bytes[index] & 0xFF;
+    int b1 = bytes[index + 1] & 0xFF;
+    int b2 = bytes[index + 2] & 0xFF;
+    int b3 = bytes[index + 3] & 0xFF;
+    int bits = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24);
     return Float.intBitsToFloat(bits);
   }
 
-  public void writeFloat(byte[] bytes, int index, float value) {
+  public float[] readFloat32(byte[] bytes, int index, int length) {
+    float[] out = new float[length];
+    int pos = index;
+    for (int i = 0; i < length; i++) {
+      int b0 = bytes[pos++] & 0xFF;
+      int b1 = bytes[pos++] & 0xFF;
+      int b2 = bytes[pos++] & 0xFF;
+      int b3 = bytes[pos++] & 0xFF;
+      int bits = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24);
+      out[i] = Float.intBitsToFloat(bits);
+    }
+    return out;
+  }
+
+  public void writeFloat32(byte[] bytes, int index, float value) {
     int bits = Float.floatToIntBits(value);
     writeInt32(bytes, index, bits);
   }
 
-  public double readDouble(byte[] bytes, int index) {
-    long bits = readInt64(bytes, index);
+  public void writeFloat32(byte[] bytes, int index, float[] values) {
+    int pos = index;
+    for (float v : values) {
+      int bits = Float.floatToIntBits(v);
+      writeInt32(bytes, pos, bits);
+      pos += 4;
+    }
+  }
+
+  public double readFloat64(byte[] bytes, int index) {
+    long b0 = bytes[index] & 0xFFL;
+    long b1 = bytes[index + 1] & 0xFFL;
+    long b2 = bytes[index + 2] & 0xFFL;
+    long b3 = bytes[index + 3] & 0xFFL;
+    long b4 = bytes[index + 4] & 0xFFL;
+    long b5 = bytes[index + 5] & 0xFFL;
+    long b6 = bytes[index + 6] & 0xFFL;
+    long b7 = bytes[index + 7] & 0xFFL;
+    long bits = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
+        | (b4 << 32) | (b5 << 40) | (b6 << 48) | (b7 << 56);
     return Double.longBitsToDouble(bits);
   }
 
-  public void writeDouble(byte[] bytes, int index, double value) {
+  public double[] readFloat64(byte[] bytes, int index, int length) {
+    double[] out = new double[length];
+    int pos = index;
+    for (int i = 0; i < length; i++) {
+      long b0 = bytes[pos++] & 0xFFL;
+      long b1 = bytes[pos++] & 0xFFL;
+      long b2 = bytes[pos++] & 0xFFL;
+      long b3 = bytes[pos++] & 0xFFL;
+      long b4 = bytes[pos++] & 0xFFL;
+      long b5 = bytes[pos++] & 0xFFL;
+      long b6 = bytes[pos++] & 0xFFL;
+      long b7 = bytes[pos++] & 0xFFL;
+      long bits = b0 | (b1 << 8) | (b2 << 16) | (b3 << 24)
+          | (b4 << 32) | (b5 << 40) | (b6 << 48) | (b7 << 56);
+      out[i] = Double.longBitsToDouble(bits);
+    }
+    return out;
+  }
+
+  public void writeFloat64(byte[] bytes, int index, double value) {
     long bits = Double.doubleToLongBits(value);
     writeInt64(bytes, index, bits);
+  }
+
+  public void writeFloat64(byte[] bytes, int index, double[] values) {
+    int pos = index;
+    for (double v : values) {
+      long bits = Double.doubleToLongBits(v);
+      writeInt64(bytes, pos, bits);
+      pos += 8;
+    }
   }
 }

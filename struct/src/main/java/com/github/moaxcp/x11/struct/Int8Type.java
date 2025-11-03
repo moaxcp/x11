@@ -1,10 +1,12 @@
 package com.github.moaxcp.x11.struct;
 
-import com.github.moaxcp.x11.struct.ArrayLengthListener.Reason;
+import com.github.moaxcp.x11.struct.ArrayLengthListener.ArrayLengthReason;
+import com.github.moaxcp.x11.struct.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
-import static com.github.moaxcp.x11.struct.ArrayLengthListener.Reason.ARRAY_LENGTH;
 import static com.github.moaxcp.x11.struct.Primitive.INT8;
+import static com.github.moaxcp.x11.struct.ValueChangeListener.ValueChangeReason.SET_BY_ARRAY_LENGTH;
+import static com.github.moaxcp.x11.struct.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
 public final class Int8Type extends NumberType<Int8Type, Byte> {
 
@@ -39,20 +41,24 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, byte value) {
-    setUnchecked(pointer, 0, value);
+    setUnchecked(SET_VALUE, pointer, 0, value);
+  }
+
+  void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value) {
+    setUnchecked(SET_BY_ARRAY_LENGTH, pointer, 0, (byte) value);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
     checkIndex(pointer, index);
-    setUnchecked(pointer, index, value);
+    setUnchecked(SET_VALUE, pointer, index, value);
   }
 
-  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
+  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
     checkConstant(pointer, index, value);
     if (!valueChangeListeners.isEmpty()) {
       var old = pointer.getByteArray().getInt8(getOffset(pointer, index));
       pointer.getByteArray().setInt8(getOffset(pointer, index), value);
-      notifyValueChange(pointer, index, old, value);
+      notifyValueChange(reason, pointer, index, old, value);
     }
     pointer.getByteArray().setInt8(getOffset(pointer, index), value);
   }
@@ -66,7 +72,7 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition() + " index: " + index + " length: " + 1);
     }
     allocate(pointer, index);
-    setUnchecked(pointer, index, value);
+    setUnchecked(SET_VALUE, pointer, index, value);
   }
 
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
@@ -81,8 +87,8 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
   }
 
   @Override
-  protected void allocate(Reason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
-    callWithArrayLengthChange(ARRAY_LENGTH, pointer, 1, () -> {
+  protected void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(pointer, () -> {
         checkIndexAllocate(pointer, index);
         pointer.getByteArray().addInt8(getOffset(pointer, index), constantValue != null ? constantValue : 0);

@@ -8,6 +8,7 @@ public class Struct implements Pointer<Struct, StructType> {
   private long offset;
   private StructType structType;
   private ByteArray bytes;
+  private ByteArrayListener listener;
 
    public Struct(Struct struct) {
     this(struct.allocated, struct.offset, struct.structType.copy(-1), struct.bytes.copy());
@@ -37,7 +38,13 @@ public class Struct implements Pointer<Struct, StructType> {
     if (!this.allocated) {
       structType.allocate(this);
     }
-    bytes.addListener(this);
+    listener = shift -> {
+      var o = getOffset();
+      if (o >= shift.offset()) {
+        setOffset(o + shift.size());
+      }
+    };
+    bytes.addListener(listener);
   }
 
   @Override
@@ -78,9 +85,9 @@ public class Struct implements Pointer<Struct, StructType> {
 
   @Override
   public void setByteArray(ByteArray bytes) {
-    bytes.removeListener(this);
+    bytes.removeListener(listener);
     this.bytes = bytes;
-    bytes.addListener(this);
+    bytes.addListener(listener);
   }
 
   public long getByteLength() {
@@ -90,6 +97,11 @@ public class Struct implements Pointer<Struct, StructType> {
   @Override
   public long getByteLength(int position) {
     return structType.getType(position).getByteLength(this);
+  }
+
+  @Override
+  public long getArrayLength(int position) {
+    return ((ValueType) structType.getType(position)).getArrayLength(this);
   }
 
   public boolean getBool(int position) {

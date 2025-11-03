@@ -1,11 +1,13 @@
 package com.github.moaxcp.x11.struct;
 
-import com.github.moaxcp.x11.struct.ArrayLengthListener.Reason;
+import com.github.moaxcp.x11.struct.ArrayLengthListener.ArrayLengthReason;
 import org.jspecify.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.moaxcp.x11.struct.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
 public final class StructType extends ValueType<StructType, Struct> {
 
@@ -70,7 +72,7 @@ public final class StructType extends ValueType<StructType, Struct> {
     if (!valueChangeListeners.isEmpty()) {
       var old = new Struct(getOffset(pointer, index), this, pointer.getByteArray());
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index), value.getByteArray(), value.getOffset(), value.getByteLength());
-      notifyValueChange(pointer, index, old, value);
+      notifyValueChange(SET_VALUE, pointer, index, old, value);
     }
     pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index), value.getByteArray(), value.getOffset(), value.getByteLength());
   }
@@ -101,7 +103,7 @@ public final class StructType extends ValueType<StructType, Struct> {
   }
 
   @Override
-  protected void allocate(Reason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  protected void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(pointer, () -> {
         var struct = new Struct(false, getOffset(pointer, index), this, pointer.getByteArray());

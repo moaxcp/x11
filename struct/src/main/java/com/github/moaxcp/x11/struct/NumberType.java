@@ -15,4 +15,6 @@ public abstract sealed class NumberType<SELF extends NumberType<SELF, T>, T exte
   public long defaultValue() {
     return constantValue != null ? constantValue.longValue() : 0;
   }
+
+  abstract void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value);
 }

@@ -1,6 +1,6 @@
 package com.github.moaxcp.x11.struct;
 
-import com.github.moaxcp.x11.struct.ArrayLengthListener.Reason;
+import com.github.moaxcp.x11.struct.ArrayLengthListener.ArrayLengthReason;
 import org.jspecify.annotations.Nullable;
 
 import static com.github.moaxcp.x11.struct.Primitive.BOOL;
@@ -79,7 +79,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   }
 
   @Override
-  protected void allocate(Reason reason,  Pointer<?, ? extends Type<?>> pointer, long index) {
+  protected void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(pointer, () -> {
         checkIndexAllocate(pointer, index);

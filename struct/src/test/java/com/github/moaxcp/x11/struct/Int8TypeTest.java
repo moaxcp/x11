@@ -1,15 +1,15 @@
 package com.github.moaxcp.x11.struct;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.x11.struct.Builders.struct;
+import static com.github.moaxcp.x11.struct.ByteArray.ba;
 import static com.github.moaxcp.x11.struct.ByteLengthListener.align;
 import static com.github.moaxcp.x11.struct.Expression.constant;
 import static com.github.moaxcp.x11.struct.Expression.valueOf;
 import static com.github.moaxcp.x11.struct.Int8Type.int8;
-import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
 import static com.github.moaxcp.x11.struct.Primitive.INT8;
+import static com.github.moaxcp.x11.struct.PrimitiveBuilder.primitive;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -325,16 +325,30 @@ public class Int8TypeTest {
   }
 
   @Test
-  @Disabled
-  void setInt8Array_set_length_field_without_adding_to_array() {
+  void setInt8Array_set_length_field_adds_to_array() {
     var struct = struct()
         .int8()
         .int8Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(0, (byte) 2))
-        .isInstanceOf(AssertionError.class)
-        .hasMessage("Int8Type at position 0 is being set and will not match the array it is used as a length for.");
+    struct.setInt8(0, (byte) 2);
+
+    assertThat(struct.getArrayLength(1)).isEqualTo(2);
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(2).int8(0).int8(0));
+  }
+
+  @Test
+  void setInt8Array_set_length_field_removes_from_array() {
+    var struct = struct()
+        .int8()
+        .int8Array(0)
+        .fromBytes(ba().int8(3).int8(1).int8(2).int8(3))
+        .build();
+
+    struct.setInt8(0, (byte) 2);
+
+    assertThat(struct.getArrayLength(1)).isEqualTo(2);
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(2).int8(1).int8(2));
   }
 
   @Test

@@ -1,13 +1,14 @@
 package com.github.moaxcp.x11.struct;
 
-import com.github.moaxcp.x11.struct.ArrayLengthListener.Reason;
+import com.github.moaxcp.x11.struct.ArrayLengthListener.ArrayLengthReason;
+import com.github.moaxcp.x11.struct.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.github.moaxcp.x11.struct.ArrayLengthListener.Reason.ARRAY_LENGTH;
+import static com.github.moaxcp.x11.struct.ArrayLengthListener.ArrayLengthReason.*;
 
 public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> extends Type<SELF> permits PrimitiveType, StructType {
   @Nullable
@@ -128,10 +129,10 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
   }
 
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
-    allocate(ARRAY_LENGTH, pointer, index);
+    allocate(ALLOCATED, pointer, index);
   }
 
-  protected abstract void allocate(Reason reason, Pointer<?, ? extends Type<?>> pointer, long index);
+  protected abstract void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index);
 
   void checkIndexAllocate(Pointer<?, ? extends Type<?>> pointer, long index) {
     var newLength = getArrayLength(pointer) + 1;
@@ -147,21 +148,23 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     if (isFixedLength(pointer)) {
       throw new UnsupportedOperationException("Cannot remove fixed length array " + getClass().getSimpleName() + " at position " + getPosition());
     }
-    callWithArrayLengthChange(ARRAY_LENGTH, pointer, -getArrayLength(pointer), () -> callWithByteLengthChange(pointer, () -> pointer.getByteArray().remove(getOffset(pointer), getByteLength(pointer))));
+    callWithArrayLengthChange(DEALLOCATED, pointer, -getArrayLength(pointer), () -> callWithByteLengthChange(pointer, () -> pointer.getByteArray().remove(getOffset(pointer), getByteLength(pointer))));
   }
 
   public final void remove(Pointer<?, ? extends Type<?>> pointer, long index) {
-    remove(ARRAY_LENGTH, pointer, index);
+    remove(DEALLOCATED, pointer, index);
   }
 
-  public final void remove(Reason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  public final void remove(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot remove from non-array type at position " + getPosition());
     }
     if (isFixedLength(pointer)) {
       throw new UnsupportedOperationException("Cannot remove element from fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
     }
-    checkIndex(pointer, index);
+    if (reason != RESIZED_BY_LENGTH_FIELD) {
+      checkIndex(pointer, index);
+    }
     callWithArrayLengthChange(reason, pointer, -1, () -> {
       callWithByteLengthChange(pointer, () -> {
         pointer.getByteArray().remove(getOffset(pointer, index), getByteLength(pointer, index));
@@ -169,7 +172,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     });
   }
 
-  protected void callWithArrayLengthChange(@Nullable Reason reason, Pointer<?, ? extends Type<?>> pointer, long added, Runnable runnable) {
+  protected void callWithArrayLengthChange(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long added, Runnable runnable) {
     if (arrayLengthListeners.isEmpty()) {
       runnable.run();
       return;
@@ -184,9 +187,9 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     }
   }
 
-  protected void notifyValueChange(Pointer<?, ? extends Type<?>> pointer, long index, T oldValue, T newValue) {
+  protected void notifyValueChange(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, T oldValue, T newValue) {
     for(ValueChangeListener listener : valueChangeListeners) {
-      listener.valueChanged(pointer, index, oldValue, newValue);
+      listener.valueChanged(reason, pointer, index, oldValue, newValue);
     }
   }
 

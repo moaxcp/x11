@@ -2,6 +2,9 @@ package com.github.moaxcp.x11.struct;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.github.moaxcp.x11.struct.ByteArray.ba;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ByteArrayTest {
@@ -98,5 +101,29 @@ public class ByteArrayTest {
     var bytes1 = new ByteArray(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
     var bytes2 = new ByteArray(new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
     assertThat(bytes1.compareBytes(0, bytes2, 0, 10)).isTrue();
+  }
+
+  @Test
+  void addInt8Listener() {
+    var bytes = ba().int8(1).int8(3);
+    var done = new AtomicBoolean(false);
+    bytes.addListener(shift -> {
+      assertThat(shift).isEqualTo(new ShiftBytes(1, 1));
+      done.set(true);
+    });
+    bytes.addInt8(1, 2);
+    assertThat(done).isTrue();
+  }
+
+  @Test
+  void removeInt8Listener() {
+    var bytes = ba().int8(1).int8(2).int8(3);
+    var done = new AtomicBoolean(false);
+    bytes.addListener(shift -> {
+      assertThat(shift).isEqualTo(new ShiftBytes(1, -1));
+      done.set(true);
+    });
+    bytes.removeInt8(1);
+    assertThat(done).isTrue();
   }
 }
