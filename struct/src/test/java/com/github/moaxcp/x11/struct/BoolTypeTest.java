@@ -82,7 +82,7 @@ public class BoolTypeTest {
         .bool()
         .build();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
+    assertThat(struct.getByteArray()).isEqualTo(ba().bool(false));
   }
 
   @Test
@@ -91,7 +91,7 @@ public class BoolTypeTest {
         .primitive().constant(true).bool()
         .build();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1});
+    assertThat(struct.getByteArray()).isEqualTo(ba().bool(true));
   }
 
   @Test
@@ -100,7 +100,7 @@ public class BoolTypeTest {
         .primitive().constant(false).bool()
         .build();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
+    assertThat(struct.getByteArray()).isEqualTo(ba().bool(false));
   }
 
   @Test
@@ -110,7 +110,7 @@ public class BoolTypeTest {
         .boolArray(0)
         .build();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(0));
   }
 
   @Test
@@ -120,7 +120,7 @@ public class BoolTypeTest {
         .boolArray(0)
         .build();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {5, 0, 0, 0, 0, 0});
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(false, false, false, false, false));
   }
 
   @Test
@@ -142,7 +142,7 @@ public class BoolTypeTest {
 
     struct.setBool(0, true);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1});
+    assertThat(struct.getByteArray()).isEqualTo(ba().bool(true));
   }
 
   @Test
@@ -175,8 +175,8 @@ public class BoolTypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, true))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("cannot allocate more bytes allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -215,7 +215,7 @@ public class BoolTypeTest {
 
     assertThat(struct.getInt8(0)).isEqualTo((byte) 1);
     assertThat(struct.getBool(1, 0)).isFalse();
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1, 0, 0});
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(1).bool(false, false));
   }
 
   @Test
@@ -247,7 +247,7 @@ public class BoolTypeTest {
 
     assertThat(struct.getInt8(0)).isEqualTo((byte) 1);
     assertThat(struct.getBool(1, 0)).isTrue();
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1, 1, 0});
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(1).bool(true, false));
   }
 
   @Test
@@ -271,7 +271,7 @@ public class BoolTypeTest {
 
     struct.setBool(0, 0, true);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1});
+    assertThat(struct.getByteArray()).isEqualTo(ba().bool(true));
   }
 
   @Test
@@ -319,7 +319,7 @@ public class BoolTypeTest {
 
     struct.setBool(1, 1, true);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {2, 1, 1});
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(2).bool(true, true));
   }
 
   @Test
@@ -395,7 +395,7 @@ public class BoolTypeTest {
         .build();
 
     assertThat(struct.getBool(0)).isFalse();
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
+    assertThat(struct.getByteArray()).isEqualTo(ba().bool(false));
   }
 
   @Test
@@ -545,7 +545,7 @@ public class BoolTypeTest {
     struct.addBool(1, true);
     struct.addBool(1, false);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {4, 1, 0, 1, 0});
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(4).bool(true, false, true, false));
   }
 
   @Test
@@ -620,7 +620,7 @@ public class BoolTypeTest {
     struct.addBool(1, 0, true);
     struct.addBool(1, 1, false);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {4, 1, 0, 1, 0});
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(4).bool(true, false, true, false));
   }
 
   @Test
@@ -707,7 +707,7 @@ public class BoolTypeTest {
 
     struct.removeAll(1);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] { 0 });
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(0));
   }
 
   @Test
@@ -771,7 +771,7 @@ public class BoolTypeTest {
 
     assertThat(((BoolType) struct.getType(1)).getBoolean(struct, 0)).isFalse();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1, 0});
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(1).bool(false));
   }
 
   @Test
@@ -785,7 +785,7 @@ public class BoolTypeTest {
 
     struct.remove(1, 1);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {1, 1});
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(1).bool(true));
   }
 
   @Test

@@ -2,7 +2,17 @@ package com.github.moaxcp.x11.struct;
 
 import java.math.BigInteger;
 
-public class LittleEndianSerializer implements Serializer {
+public final class LittleEndianSerializer implements Serializer {
+
+  public static final LittleEndianSerializer INSTANCE = new LittleEndianSerializer();
+
+  public static LittleEndianSerializer littleEndianSerializer() {
+    return INSTANCE;
+  }
+
+  private LittleEndianSerializer() {
+
+  }
 
   public boolean readBool(byte[] bytes, int index) {
     return (bytes[index] & 0xFF) != 0;
@@ -374,5 +384,20 @@ public class LittleEndianSerializer implements Serializer {
       writeInt64(bytes, pos, bits);
       pos += 8;
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return o instanceof LittleEndianSerializer;
+  }
+
+  @Override
+  public int hashCode() {
+    return 1;
+  }
+
+  @Override
+  public String toString() {
+    return "LittleEndianSerializer";
   }
 }

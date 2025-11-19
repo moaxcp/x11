@@ -2,7 +2,17 @@ package com.github.moaxcp.x11.struct;
 
 import java.math.BigInteger;
 
-public class BigEndianSerializer implements Serializer {
+public final class BigEndianSerializer implements Serializer {
+
+  public static final BigEndianSerializer INSTANCE = new BigEndianSerializer();
+
+  public static BigEndianSerializer bigEndianSerializer() {
+    return INSTANCE;
+  }
+
+  private BigEndianSerializer() {
+
+  }
 
   public boolean readBool(byte[] bytes, int index) {
     return (bytes[index] & 0xFF) != 0;
@@ -368,5 +378,20 @@ public class BigEndianSerializer implements Serializer {
       writeInt64(bytes, pos, bits);
       pos += 8;
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return o instanceof BigEndianSerializer;
+  }
+
+  @Override
+  public int hashCode() {
+    return 1;
+  }
+
+  @Override
+  public String toString() {
+    return "BigEndianSerializer";
   }
 }

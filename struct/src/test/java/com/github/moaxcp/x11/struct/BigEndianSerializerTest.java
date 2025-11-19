@@ -4,10 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
+import static com.github.moaxcp.x11.struct.BigEndianSerializer.bigEndianSerializer;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BigEndianSerializerTest {
-  private final BigEndianSerializer ser = new BigEndianSerializer();
+  private final BigEndianSerializer ser = bigEndianSerializer();
 
   @Test
   void int8_and_uint8_roundtrip() {

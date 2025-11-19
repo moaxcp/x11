@@ -1,12 +1,11 @@
 package com.github.moaxcp.x11.struct;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import static com.github.moaxcp.x11.struct.ShiftBytes.shiftBytes;
+import static com.github.moaxcp.x11.struct.BigEndianSerializer.bigEndianSerializer;
 import static com.github.moaxcp.x11.struct.Primitive.*;
+import static com.github.moaxcp.x11.struct.ShiftBytes.shiftBytes;
 
 /**
  * A byte array that can grow beyond the max size of a java array.
@@ -14,6 +13,7 @@ import static com.github.moaxcp.x11.struct.Primitive.*;
 public class ByteArray {
 
   private byte[] bytes;
+  private int allocated;
   private final List<ByteArrayListener> listeners = new ArrayList<>();
   private final Serializer serializer;
 
@@ -31,17 +31,25 @@ public class ByteArray {
     return new ByteArray();
   }
 
+  public static ByteArray ba(int size) {
+    return new ByteArray(size);
+  }
+
+  public static ByteArray ba(byte[] bytes) {
+    return new ByteArray(bytes);
+  }
+
   // New constructors with default BigEndianSerializer
   public ByteArray() {
-    this(new BigEndianSerializer());
+    this(bigEndianSerializer());
   }
 
   public ByteArray(int size) {
-    this(size, new BigEndianSerializer());
+    this(size, bigEndianSerializer());
   }
 
   public ByteArray(byte[] bytes) {
-    this(bytes, new BigEndianSerializer());
+    this(bytes, bigEndianSerializer());
   }
 
   public ByteArray(Serializer serializer) {
@@ -57,12 +65,17 @@ public class ByteArray {
   public ByteArray(byte[] bytes, Serializer serializer) {
     this.serializer = serializer;
     this.bytes = bytes;
+    this.allocated = bytes.length;
   }
 
   public ByteArray copy() {
     var next = new byte[bytes.length];
     System.arraycopy(bytes, 0, next, 0, next.length);
     return new ByteArray(next, serializer);
+  }
+
+  public List<ByteArrayListener> getListeners() {
+    return Collections.unmodifiableList(listeners);
   }
 
   public ByteArray addListener(ByteArrayListener listener) {
@@ -84,19 +97,38 @@ public class ByteArray {
     return bytes;
   }
 
+  int getAllocated() {
+    return allocated;
+  }
+
   public ByteArray setBytes(ByteArray source, long sourceOffset, long index, long length) {
     ensureSizeFor(0, index + length);
-    System.arraycopy(source.getBytes(), Math.toIntExact(sourceOffset), bytes, Math.toIntExact(index), Math.toIntExact(length));
+    System.arraycopy(source.bytes, Math.toIntExact(sourceOffset), bytes, Math.toIntExact(index), Math.toIntExact(length));
+    if (allocated < index + length) {
+      allocated = Math.toIntExact(index + length);
+    }
     return this;
   }
 
-  public ByteArray ensureSizeFor(long index, long size) {
+  ByteArray ensureSizeFor(long index, long size) {
     if(bytes.length <= index + size) {
       byte[] newBytes = new byte[Math.toIntExact(index + size)];
       System.arraycopy(bytes, 0, newBytes, 0, bytes.length);
       bytes = newBytes;
     }
     return this;
+  }
+
+  public ByteArray allocate(long size) {
+    ensureSizeFor(allocated, size);
+    allocated += size;
+    return this;
+  }
+
+  private void checkAllocation(long index, long length) {
+    if (allocated < index + length) {
+      throw new IndexOutOfBoundsException("cannot allocate more bytes allocated: " + allocated + ", index: " + index + ", length: " + length);
+    }
   }
 
   public boolean getBool(long index) {
@@ -108,21 +140,36 @@ public class ByteArray {
   }
 
   public ByteArray setBool(long index, boolean value) {
+    checkAllocation(index, BOOL.size());
     serializer.writeBool(bytes, Math.toIntExact(index), value);
     return this;
   }
 
-  public ByteArray setBool(long index, boolean[] values) {
+  public ByteArray setBool(long index, boolean... values) {
+    checkAllocation(index, BOOL.size() * values.length);
     serializer.writeBool(bytes, Math.toIntExact(index), values);
     return this;
   }
 
+  public ByteArray setBool(long index, List<Boolean> values) {
+    checkAllocation(index, BOOL.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      serializer.writeBool(bytes, Math.toIntExact(index + i), values.get(i));
+    }
+    return this;
+  }
+
+
   public ByteArray bool(boolean value) {
-    return addBool(bytes.length, value);
+    return addBool(allocated, value);
   }
 
   public ByteArray bool(boolean... values) {
-    return addBool(bytes.length, values);
+    return addBool(allocated, values);
+  }
+
+  public ByteArray bool(List<Boolean> values) {
+    return addBool(allocated, values);
   }
 
   public ByteArray addBool(long index, boolean value) {
@@ -131,7 +178,7 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addBool(long index, boolean[] values) {
+  public ByteArray addBool(long index, boolean... values) {
     if(values == null || values.length == 0) {
       return this;
     }
@@ -139,6 +186,16 @@ public class ByteArray {
     setBool(index, values);
     return this;
   }
+
+  public ByteArray addBool(long index, List<Boolean> values) {
+    if (values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, BOOL.size() * values.size());
+    setBool(index, values);
+    return this;
+  }
+
 
   public ByteArray removeBool(long index) {
     shiftBytesFor(index, -BOOL.size());
@@ -159,17 +216,31 @@ public class ByteArray {
   }
 
   public ByteArray setInt8(long index, byte b) {
+    checkAllocation(index, INT8.size());
     serializer.writeInt8(bytes, Math.toIntExact(index), b);
     return this;
   }
 
-  public ByteArray setInt8(long index, byte[] values) {
+  public ByteArray setInt8(long index, int b) {
+    return setInt8(index, (byte) b);
+  }
+
+  public ByteArray setInt8(long index, byte... values) {
+    checkAllocation(index, INT8.size() * values.length);
     serializer.writeInt8(bytes, Math.toIntExact(index), values);
     return this;
   }
 
+  public ByteArray setInt8(long index, int... values) {
+    var b = new byte[values.length];
+    for(int i = 0; i < values.length; i++) {
+      b[i] = (byte) values[i];
+    }
+    return setInt8(index, b);
+  }
+
   public ByteArray int8(byte value) {
-    return addInt8(bytes.length, value);
+    return addInt8(allocated, value);
   }
 
   public ByteArray int8(int value) {
@@ -177,15 +248,11 @@ public class ByteArray {
   }
 
   public ByteArray int8(byte... values) {
-    return addInt8(bytes.length, values);
+    return addInt8(allocated, values);
   }
 
   public ByteArray int8(int... values) {
-    var b = new byte[values.length];
-    for(int i = 0; i < values.length; i++) {
-      b[i] = (byte) values[i];
-    }
-    return addInt8(bytes.length, b);
+    return addInt8(allocated, values);
   }
 
   public ByteArray addInt8(long index, byte b) {
@@ -194,7 +261,12 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addInt8(long index, byte[] values) {
+  public ByteArray addInt8(long index, int b) {
+    addInt8(index, (byte) b);
+    return this;
+  }
+
+  public ByteArray addInt8(long index, byte... values) {
     if(values == null || values.length == 0) {
       return this;
     }
@@ -203,9 +275,12 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addInt8(long index, int b) {
-    addInt8(index, (byte) b);
-    return this;
+  public ByteArray addInt8(long index, int... values) {
+    var b = new byte[values.length];
+    for(int i = 0; i < values.length; i++) {
+      b[i] = (byte) values[i];
+    }
+    return addInt8(index, b);
   }
 
   public ByteArray removeInt8(long index) {
@@ -790,36 +865,45 @@ public class ByteArray {
    * See addAll(long, List) for supported types.
    */
   public ByteArray addAll(List<?> values) {
-    addAll(bytes.length, values);
+    addAll(allocated, values);
     return this;
   }
 
   private ByteArray shiftBytesFor(long index, long size) {
-    byte[] newBytes = new byte[Math.toIntExact(bytes.length + size)];
-    if (newBytes.length != 0) {
-      System.arraycopy(bytes, 0, newBytes, 0, Math.toIntExact(index));
+    if (bytes.length >= allocated + size) {
       if (size > 0) {
-        System.arraycopy(bytes, Math.toIntExact(index), newBytes, Math.toIntExact(index + size), bytes.length - Math.toIntExact(index));
+        System.arraycopy(bytes, Math.toIntExact(index), bytes, Math.toIntExact(index + size), Math.toIntExact(allocated - index));
       } else {
-        System.arraycopy(bytes, Math.toIntExact(index - size), newBytes, Math.toIntExact(index), bytes.length - Math.toIntExact(index - size));
+        System.arraycopy(bytes, Math.toIntExact(index - size), bytes, Math.toIntExact(index), Math.toIntExact(allocated - (index - size)));
       }
+    } else {
+      byte[] newBytes = new byte[Math.toIntExact(allocated + size)];
+      if (newBytes.length != 0) {
+        System.arraycopy(bytes, 0, newBytes, 0, Math.toIntExact(index));
+        if (size > 0) {
+          System.arraycopy(bytes, Math.toIntExact(index), newBytes, Math.toIntExact(index + size), allocated - Math.toIntExact(index));
+        } else {
+          System.arraycopy(bytes, Math.toIntExact(index - size), newBytes, Math.toIntExact(index), allocated - Math.toIntExact(index - size));
+        }
+      }
+      bytes = newBytes;
     }
+    allocated += Math.toIntExact(size);
     notifyListeners(shiftBytes(index, size));
-    bytes = newBytes;
     return this;
   }
 
   public ByteArray replace(long index, long length, ByteArray source, long sourceIndex, long sourceLength) {
     byte[] newBytes = new byte[Math.toIntExact(bytes.length - length + sourceLength)];
     System.arraycopy(bytes, 0, newBytes, 0, Math.toIntExact(index));
-    System.arraycopy(source.getBytes(), Math.toIntExact(sourceIndex), newBytes, Math.toIntExact(index), Math.toIntExact(sourceLength));
+    System.arraycopy(source.bytes, Math.toIntExact(sourceIndex), newBytes, Math.toIntExact(index), Math.toIntExact(sourceLength));
     System.arraycopy(bytes, Math.toIntExact(index + length), newBytes, Math.toIntExact(index + sourceLength), bytes.length - Math.toIntExact(index + length));
     bytes = newBytes;
     return this;
   }
 
   public boolean compareBytes(long index, ByteArray other, long otherOffset, long length) {
-    if(bytes.length < index + length || other.bytes.length < otherOffset + length) {
+    if(allocated < index + length || other.allocated < otherOffset + length) {
       return false;
     }
     for(int i = 0; i < length; i++) {
@@ -834,16 +918,23 @@ public class ByteArray {
   public final boolean equals(Object o) {
     if (!(o instanceof ByteArray byteArray)) return false;
 
-    return Arrays.equals(bytes, byteArray.bytes);
+    return allocated == byteArray.allocated && compareBytes(0, byteArray, 0, allocated) && Objects.equals(serializer, byteArray.serializer);
   }
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(bytes);
+    int result = Arrays.hashCode(bytes);
+    result = 31 * result + allocated;
+    return result;
   }
 
   @Override
   public String toString() {
-    return Arrays.toString(bytes);
+    return "ByteArray{" +
+        "bytes=" + Arrays.toString(bytes) +
+        ", allocated=" + allocated +
+        ", serializer=" + serializer +
+        ", listeners=" + listeners.size() +
+        '}';
   }
 }

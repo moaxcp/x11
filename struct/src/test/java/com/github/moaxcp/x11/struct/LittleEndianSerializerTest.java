@@ -4,10 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
+import static com.github.moaxcp.x11.struct.LittleEndianSerializer.littleEndianSerializer;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LittleEndianSerializerTest {
-  private final LittleEndianSerializer ser = new LittleEndianSerializer();
+  private final LittleEndianSerializer ser = littleEndianSerializer();
 
   @Test
   void int8_and_uint8_roundtrip() {
